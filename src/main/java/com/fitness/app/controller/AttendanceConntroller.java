@@ -25,7 +25,7 @@ public class AttendanceConntroller {
 	
 	
 	
-	@PutMapping("mark/users/attendance")
+	@PutMapping("/mark/users/attendance")
 	public String markUserAttendance(@RequestBody MarkUserAttModel userAttendance) throws Exception
 	{
 		return attendanceService.markUsersAttendance(userAttendance);

@@ -39,14 +39,16 @@ public class AttendanceService {
 			
 			List<String> users=userAttendance.getUsers();
 		
-			Set<UserPerfomanceModel> allUser=userOrderService.allMyUser(userAttendance.getGym());
-		
-			List<String> notAttendi=allUser.stream().map(u->u.getEmail()).collect(Collectors.toList());
+			List<UserAttendance> allUser=
+					attendanceRepo.findByVendorAndGym(userAttendance.getVendor(), userAttendance.getGym());
+			
+		    List<String> allUsers=allUser.stream().map(p->p.getEmail()).collect(Collectors.toList());
+			
 			
 			List<String> notUserAtt=new ArrayList<>();
-			if(notAttendi!=null)
+			if(allUser!=null)
 			{
-				for(String user:notAttendi)
+				for(String user:allUsers)
 				{
 					if(!users.contains(user))
 					{
