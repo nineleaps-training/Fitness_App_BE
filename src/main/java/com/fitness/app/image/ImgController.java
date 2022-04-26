@@ -42,15 +42,20 @@ public class ImgController {
    
    
    @GetMapping("/downloadFile/{id}")
-   public ResponseEntity<?> getImage(@PathVariable String id) throws IOException
+   public ResponseEntity<?> getImage(@PathVariable String id) throws Exception
    {
 	   Doc docFile=imgService.getImage(id);
-	   
+	   if(docFile!=null) {
+	   System.out.println(docFile.getFileName());
 	   return  ResponseEntity.ok()
 			   .contentType(MediaType.parseMediaType(docFile.getFileType()))
 			   .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION, "attachment:filename=\""+docFile.getFileName()+"\"")
 			   .body(new ByteArrayResource(docFile.getData()));
-	   
+	   }
+	   else
+	   {
+		   return ResponseEntity.ok(null);
+	   }
 	   //
 			   
    }
