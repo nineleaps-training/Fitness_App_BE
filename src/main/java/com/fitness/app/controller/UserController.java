@@ -94,18 +94,21 @@ public class UserController {
 				 }
 			  }
 			 }
-		 
-			      String otp= sendMessage.otpBuilder();
-			      final  int code=sendMessage.sendOtpMessage("hello ", otp,user.getMobile());
-			      if(code==200) {
-			      responce.setCurrentUser(userService.registerUser(user));
-		          responce.setMessage(otp);
-		          return responce;
-			     }
-			
-				responce.setCurrentUser(null);
-				responce.setMessage("Somthing went wrong");
-				return responce;
+		 else
+		 {
+
+		      String otp= sendMessage.otpBuilder();
+		      final  int code=sendMessage.sendOtpMessage("hello ", otp,user.getMobile());
+		      if(code==200) {
+		      responce.setCurrentUser(userService.registerUser(user));
+	          responce.setMessage(otp);
+	          return responce;
+		     }
+		
+			responce.setCurrentUser(null);
+			responce.setMessage("Somthing went wrong");
+			return responce;
+		 }
 			 
 		 
 			 
