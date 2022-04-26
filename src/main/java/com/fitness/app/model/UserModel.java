@@ -14,6 +14,7 @@ public class UserModel {
     private String mobile;
     private String password;
     private String role;
+    private Boolean custom;
 
 
 }

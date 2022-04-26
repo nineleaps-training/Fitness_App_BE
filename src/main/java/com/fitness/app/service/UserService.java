@@ -48,6 +48,7 @@ public class UserService {
 			 newUser.setRole(user.getRole());
 			 newUser.setActivated(false);
 			 newUser.setLoggedin(false);
+			 newUser.setCustom(user.getCustom());
 			 return userRepo.save(newUser);
 		 }
 		 else
@@ -59,12 +60,16 @@ public class UserService {
 	}
 	
 	//Verifying user
-	public boolean verifyUser(String email)
+	public UserClass verifyUser(String email)
 	{
 		UserClass user=userRepository.findById(email).get();
-		user.setActivated(true);
-		userRepository.save(user);
-		return true;
+		if(user!=null)
+		{
+			user.setActivated(true);
+			userRepository.save(user);
+			return user;
+		}
+		return null;
 	}
 	
 	//LogIn user
