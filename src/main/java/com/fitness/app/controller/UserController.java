@@ -48,6 +48,9 @@ public class UserController {
 	 @Autowired
 	 private UserRepository userRepo;
 	 
+	 @Autowired
+	 private PasswordEncoder passwordEncoder;
+	 
 	 @GetMapping("/hello")
 	 public String hello()
 	 {
@@ -62,8 +65,9 @@ public class UserController {
 		 
 		 UserClass localUser=userRepo.findByEmail(user.getEmail());
 		 SignUpResponce responce=new SignUpResponce();
-		 if(localUser!=null)
+		 if(localUser!=null && localUser.getCustom())
 		 {
+			 localUser.setPassword(null);
 			 
 			 if(localUser.getActivated())
 			 {
@@ -90,6 +94,7 @@ public class UserController {
 				 }
 			  }
 			 }
+		 
 			      String otp= sendMessage.otpBuilder();
 			      final  int code=sendMessage.sendOtpMessage("hello ", otp,user.getMobile());
 			      if(code==200) {
@@ -108,10 +113,18 @@ public class UserController {
 	 
 	 
 	 //Verify User
-	 @PutMapping("/verify/user/{email}")
-	 public Boolean verifyTheUser(@PathVariable String email)
+	 @PutMapping("/verify/user")
+	 public ResponseEntity<?> verifyTheUser(@RequestBody Authenticate authCredential) throws Exception
 	 {
-		 return userService.verifyUser(email);
+		 UserClass user= userService.verifyUser(authCredential.getEmail());
+		 
+		 if(user!=null)
+		 {
+			 
+			 return logInFunctionality(authCredential.getEmail(), authCredential.getPassword());
+		 }
+		 
+		 return ResponseEntity.ok( new SignUpResponce(null, null));
 	 }
 	 
 	
@@ -120,19 +133,28 @@ public class UserController {
 	 @PostMapping("/login/user")
 	    public ResponseEntity<?> authenticateUser(@RequestBody Authenticate authCredential) throws Exception
 	    {
-	    	try {    		
+	    	return logInFunctionality(authCredential.getEmail(), authCredential.getPassword() );
+	    	
+	    }
+	 
+	 
+	 //function to log in and return token
+	 public ResponseEntity<?> logInFunctionality(String email, String password) throws Exception
+	 {
+		 try {    		
 	    		authenticationManager.authenticate(
-	    				new UsernamePasswordAuthenticationToken(authCredential.getEmail(), authCredential.getPassword())
+	    				new UsernamePasswordAuthenticationToken(email, password)
 	    				);   		
 	    	}catch (Exception e) {
 	    		System.out.println(e.getMessage());
 	    		throw new Exception("Error");
 			}
-	    	final UserDetails usrDetails=userDetailsService.loadUserByUsername(authCredential.getEmail());
+	    	final UserDetails usrDetails=userDetailsService.loadUserByUsername(email);
 	    	final String jwt= jwtUtils.generateToken(usrDetails);
-	    	final UserClass localUser=userRepo.findByEmail(authCredential.getEmail());
+	    	final UserClass localUser=userRepo.findByEmail(email);
 	    	if(localUser.getRole()!="ADMIN")
 	    	{
+	    		localUser.setPassword(null);
 	    	return ResponseEntity.ok( new SignUpResponce( localUser, jwt));
 	    	}
 	    	else
@@ -140,7 +162,7 @@ public class UserController {
 	    		return ResponseEntity.ok( new SignUpResponce(null, null));
 	    	}
 	    	
-	    }
+	 }
 }
 
 

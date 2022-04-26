@@ -39,7 +39,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter{
 
             "/user-performance",
             "/all-numbers",
-			
+			"/downloadFile/**",
 			
 
 		

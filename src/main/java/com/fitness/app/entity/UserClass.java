@@ -30,4 +30,6 @@ public class UserClass {
 	private Boolean activated;
 	@Field
 	private Boolean loggedin;
+	@Field
+	private Boolean custom;
 }
