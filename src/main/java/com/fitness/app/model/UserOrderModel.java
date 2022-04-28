@@ -18,4 +18,5 @@ public class UserOrderModel {
 	private List<String> services;
 	private String subscription;
 	private int amount;
+	private String slot;
 }

@@ -18,6 +18,7 @@ public class BookedGymModel {
 	private String gymName;
 	private String vendor;
 	private List<String> service;
+	private String slot;
 	private LocalDate endDate;
 	private GymAddressClass address;
 	private String contact;

@@ -32,6 +32,8 @@ public class UserOrder {
 	@Field
 	private String subscription;
 	@Field
+	private String slot;
+	@Field
 	private int amount;
     @Field
     private String status;
