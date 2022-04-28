@@ -177,6 +177,7 @@ public class UserOrderService {
 		 bookedGym.setGymName(gym.getName());
 		 bookedGym.setVendor(gym.getEmail());
 		 bookedGym.setService(order.getServices());
+		 bookedGym.setSlot(order.getSlot());
 		 bookedGym.setEndDate(order.getDate().plusDays(30));
 		 bookedGym.setAddress(gymAddressRepo.findById(gym.getId()).get());
 		 bookedGym.setContact(gym.getContact().toString());

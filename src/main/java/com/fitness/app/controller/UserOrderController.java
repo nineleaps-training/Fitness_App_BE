@@ -60,6 +60,7 @@ public class UserOrderController {
 		userOrder.setGym(order.getGym());
 		userOrder.setServices(order.getServices());
 		userOrder.setSubscription(order.getSubscription());
+		userOrder.setSlot(order.getSlot());
 		userOrder.setAmount(order.getAmount());
 		userOrder.setStatus(myOrder.get("status"));
 		userOrder.setPaymentId(null);
