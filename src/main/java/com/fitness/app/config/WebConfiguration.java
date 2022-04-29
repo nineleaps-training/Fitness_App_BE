@@ -40,7 +40,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter{
             "/user-performance",
             "/all-numbers",
 			"/downloadFile/**",
-			
+			"/google-sign-in/**",
 
 		
 
@@ -117,27 +117,28 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter{
  http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	}
      
-	 
+//	http.csrf().disable();
+//	http.authorizeRequests().antMatchers("/", "/signup", "/login", "/logout").permitAll();
+//	http.authorizeRequests().antMatchers("/userInfo").access("hasRole('" + AppRole.ROLE_USER + "')");
+//	http.authorizeRequests().antMatchers("/admin").access("hasRole('" + AppRole.ROLE_ADMIN + "')");
+//	http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
+//	http.authorizeRequests().and().formLogin()
+//			.loginProcessingUrl("/j_spring_security_check") 
+//			.loginPage("/login")
+//			.defaultSuccessUrl("/userInfo")
+//			.failureUrl("/login?error=true")
+//			.usernameParameter("username")
+//			.passwordParameter("password");
+//	http.authorizeRequests().and().logout().logoutUrl("/logout").logoutSuccessUrl("/");
+//	http.apply(new SpringSocialConfigurer()).signupUrl("/signup");
+//}
+//
+//@Override
+//public UserDetailsService userDetailsService() {
+//    return userDetailsService;
+//}
 	 
 	
 	
 	
-	 
-	/*
-    @Bean
-    public WebMvcConfigurer configur() {
-        return new WebMvcConfigurer() {
-
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-
-                registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000")
-                        .allowedHeaders("Access-Control-Allow-Origin", "Content-Type", "Authorization")
-                        .allowedMethods("GET", "POST", "PUT", "DELETE")
-                        .allowCredentials(true);
-            }
-
-        };
-    }*/
 }

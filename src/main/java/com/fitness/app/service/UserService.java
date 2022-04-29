@@ -1,5 +1,7 @@
 package com.fitness.app.service;
 
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -81,6 +83,52 @@ public class UserService {
 	}
 	
 	
+	//google sign in
+	public UserClass googleSignInMethod(UserModel user)
+	{
+		UserClass localUser=userRepo.findByEmail(user.getEmail());
+		if(localUser!=null && !localUser.getCustom())
+		{
+			return localUser;
+		}
+		else if(localUser!=null && localUser.getCustom())
+		{
+			return null;
+		}
+		else
+		{
+			String pass=randomPass();
+			UserClass newUser=new UserClass();
+			 newUser.setEmail(user.getEmail());
+			 newUser.setFullName(user.getFullName());
+			 newUser.setMobile(user.getMobile());
+			 newUser.setPassword(passwordEncoder.encode(pass));
+			 newUser.setRole(user.getRole());
+			 newUser.setActivated(true);
+			 newUser.setLoggedin(false);
+			 newUser.setCustom(user.getCustom());
+			 return userRepo.save(newUser);
+			
+			
+		}
+		
+	}
 	
+	//generate random String
+	public String randomPass()
+	{
+		int leftLimit = 97; // letter 'a'
+	    int rightLimit = 122; // letter 'z'
+	    int targetStringLength = 10;
+	    Random random = new Random();
+
+	    String generatedString = random.ints(leftLimit, rightLimit + 1)
+	      .limit(targetStringLength)
+	      .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+	      .toString();
+
+	    System.out.println(generatedString);
+	    return generatedString;
+	}
 	
 }

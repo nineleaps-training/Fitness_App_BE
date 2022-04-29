@@ -166,6 +166,41 @@ public class UserController {
 	    	}
 	    	
 	 }
+	 
+	 @PostMapping("/google-sign-in/vendor")
+	 public ResponseEntity<?> googleSignInVendor(@RequestBody UserModel user) throws Exception
+	 {
+		 UserClass localUser=userService.googleSignInMethod(user);
+		 if(localUser==null) {
+			 return ResponseEntity.ok( new SignUpResponce(null, "This email in use!"));
+		 }
+		 else if(localUser!=null && localUser.getRole().equals("USER"))
+		 {
+			 return ResponseEntity.ok( new SignUpResponce(null, "This email already in user as USER! "));
+		 }
+		 else
+		 {
+			 return logInFunctionality(localUser.getEmail(), localUser.getPassword());
+		 }
+	 }
+	 
+	 
+	 @PostMapping("/google-sign-in/user")
+	 public ResponseEntity<?> googleSignInUser(@RequestBody UserModel user) throws Exception
+	 {
+		 UserClass localUser=userService.googleSignInMethod(user);
+		 if(localUser==null) {
+			 return ResponseEntity.ok( new SignUpResponce(null, "This email in use!"));
+		 }
+		 else if(localUser!=null && localUser.getRole().equals("VENDOR"))
+		 {
+			 return ResponseEntity.ok( new SignUpResponce(null, "This email already in user as VENDOR! "));
+		 }
+		 else
+		 {
+			 return logInFunctionality(localUser.getEmail(), localUser.getPassword());
+		 }
+	 }
 }
 
 
