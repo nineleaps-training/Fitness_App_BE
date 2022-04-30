@@ -87,9 +87,11 @@ public class UserService {
 	public UserClass googleSignInMethod(UserModel user)
 	{
 		UserClass localUser=userRepo.findByEmail(user.getEmail());
+		
 		if(localUser!=null && !localUser.getCustom())
 		{
-			return localUser;
+			
+			return userRepo.save(localUser);
 		}
 		else if(localUser!=null && localUser.getCustom())
 		{
@@ -97,12 +99,12 @@ public class UserService {
 		}
 		else
 		{
-			String pass=randomPass();
+			
 			UserClass newUser=new UserClass();
 			 newUser.setEmail(user.getEmail());
 			 newUser.setFullName(user.getFullName());
 			 newUser.setMobile(user.getMobile());
-			 newUser.setPassword(passwordEncoder.encode(pass));
+			 newUser.setPassword(passwordEncoder.encode(user.getPassword()));
 			 newUser.setRole(user.getRole());
 			 newUser.setActivated(true);
 			 newUser.setLoggedin(false);
