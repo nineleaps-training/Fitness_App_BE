@@ -167,9 +167,11 @@ public class UserController {
 	    	
 	 }
 	 
-	 @PostMapping("/google-sign-in/vendor")
+	 @PutMapping("/google-sign-in/vendor")
 	 public ResponseEntity<?> googleSignInVendor(@RequestBody UserModel user) throws Exception
 	 {
+		 String pass=userService.randomPass();
+		 user.setPassword(pass);
 		 UserClass localUser=userService.googleSignInMethod(user);
 		 if(localUser==null) {
 			 return ResponseEntity.ok( new SignUpResponce(null, "This email in use!"));
@@ -180,14 +182,16 @@ public class UserController {
 		 }
 		 else
 		 {
-			 return logInFunctionality(localUser.getEmail(), localUser.getPassword());
+			 return logInFunctionality(localUser.getEmail(), user.getPassword());
 		 }
 	 }
 	 
 	 
-	 @PostMapping("/google-sign-in/user")
+	 @PutMapping("/google-sign-in/user")
 	 public ResponseEntity<?> googleSignInUser(@RequestBody UserModel user) throws Exception
 	 {
+		 String pass=userService.randomPass();
+		 user.setPassword(pass);
 		 UserClass localUser=userService.googleSignInMethod(user);
 		 if(localUser==null) {
 			 return ResponseEntity.ok( new SignUpResponce(null, "This email in use!"));
@@ -198,7 +202,7 @@ public class UserController {
 		 }
 		 else
 		 {
-			 return logInFunctionality(localUser.getEmail(), localUser.getPassword());
+			 return logInFunctionality(localUser.getEmail(), user.getPassword());
 		 }
 	 }
 }
