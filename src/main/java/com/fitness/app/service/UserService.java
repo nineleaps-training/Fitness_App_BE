@@ -90,7 +90,7 @@ public class UserService {
 		
 		if(localUser!=null && !localUser.getCustom())
 		{
-			
+			localUser.setPassword(passwordEncoder.encode(user.getPassword()));
 			return userRepo.save(localUser);
 		}
 		else if(localUser!=null && localUser.getCustom())
