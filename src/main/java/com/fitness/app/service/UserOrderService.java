@@ -45,6 +45,9 @@ public class UserOrderService {
 	@Autowired
 	private VendorPayRepo vendorOrderRepo;
 	
+	@Autowired
+	private RatingService ratingService;
+	
 	//creating order
 	public void orderNow(UserOrder userOrder)
 	{	
@@ -173,6 +176,7 @@ public class UserOrderService {
 	 {
 		 GymClass gym=gymRepo.findById(order.getGym()).get();
 		 BookedGymModel bookedGym=new BookedGymModel();
+		 Double rate= ratingService.getRating(order.getGym());
 		 bookedGym.setId(gym.getId());
 		 bookedGym.setGymName(gym.getName());
 		 bookedGym.setVendor(gym.getEmail());
@@ -181,7 +185,7 @@ public class UserOrderService {
 		 bookedGym.setEndDate(order.getDate().plusDays(30));
 		 bookedGym.setAddress(gymAddressRepo.findById(gym.getId()).get());
 		 bookedGym.setContact(gym.getContact().toString());
-		 bookedGym.setRating(gym.getRating());
+		 bookedGym.setRating(rate);
 		 
 		 gyms.add(bookedGym);
 	 }

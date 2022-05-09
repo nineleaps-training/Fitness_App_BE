@@ -72,6 +72,10 @@ public class AdminService {
 			
 		}
 		payment.setAmount(amount);
+		AdminPay oldPay=adminPayRepo.findByVendorAndStatus(vendor, "Due");
+		if(oldPay!=null && oldPay.getAmount()==amount) {
+			return oldPay;
+		}
 		adminPayRepo.save(payment);
 		
 		return adminPayRepo.findByVendorAndStatus(vendor, "Due");

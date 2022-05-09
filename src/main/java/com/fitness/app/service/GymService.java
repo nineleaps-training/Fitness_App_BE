@@ -40,6 +40,9 @@ public class GymService {
 
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired 
+	private RatingService ratingService;
 
 	// Add New Gym
 	public GymClass addNewGym(GymClassModel gymClassModel) {
@@ -107,7 +110,11 @@ public class GymService {
 
 		for (GymClass eachGym : gymList) {
 			GymRepresnt gym = new GymRepresnt();
+			Double rate= ratingService.getRating(eachGym.getId());
+			eachGym.setRating(rate);
+			gymRepository.save(eachGym);
 			String id = eachGym.getId();
+			gym.setEmail(eachGym.getEmail());
 			gym.setId(eachGym.getId());
 			gym.setGym_name(eachGym.getName());
 			gym.setGymAddress(addressRepo.findById(id).get());
@@ -115,7 +122,7 @@ public class GymService {
 			gym.setTiming(timeRepo.findById(id).get());
 			gym.setSubscription(subcriptionRepo.findById(id).get());
 			gym.setContact(eachGym.getContact());
-			gym.setRating(eachGym.getRating());
+			gym.setRating(rate);
 			gym.setCapacity(eachGym.getCapacity());
 
 			gyms.add(gym);
