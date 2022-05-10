@@ -12,7 +12,7 @@ import com.fitness.app.entity.AdminPay;
 public interface AdminPayRepo extends MongoRepository<AdminPay, String> {
 
 	
-	public AdminPay findByVendorAndStatus(String vendor, String status);
-	
+	public AdminPay findByVendorAndAmountAndStatus(String vendor, int amount, String status);
+	public AdminPay findByOrderId(String orderId);
 	public List<AdminPay> findByVendor(String vendor);
 }

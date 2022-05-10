@@ -121,6 +121,12 @@ public class AdminController {
 		return adminService.vendorPayment(vendor);
 	}
 
+	@GetMapping("/get-data-pay")
+	public AdminPay getDatapay(@RequestBody AdminPay pay)
+	{
+		return adminService.getDataPay(pay);
+	}
+	
 	@PutMapping("/pay-vendor-now")
 	@ResponseBody
 	public String payNow(@RequestBody AdminPay payment) throws Exception {
@@ -133,9 +139,14 @@ public class AdminController {
 
 		Order myOrder = razorpayClient.Orders.create(ob);
 
-		adminService.PayNow(payment, myOrder);
-
+		boolean flag= adminService.PayNow(payment, myOrder);
+        if(flag) {
 		return myOrder.toString();
+		}
+        else
+        {
+        	return "not found:" + myOrder.toString();
+        }
 	}
 
 	@PutMapping("/update-vendor-payment")

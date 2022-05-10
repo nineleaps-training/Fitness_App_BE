@@ -19,9 +19,12 @@ public class AdminPay {
 
 	@Id
 	@Field
+	private String id;
+	@Field
 	private String orderId;
 	@Field
 	private String vendor;
+	
 	@Field
 	private int amount;
 	@Field
@@ -41,6 +44,15 @@ public class AdminPay {
 		this.vendor = vendor;
 		this.amount = amount;
 	}
+
+
+	public AdminPay(String vendor, int amount, String status) {
+		super();
+		this.vendor = vendor;
+		this.amount = amount;
+		this.status = status;
+	}
+	
 	
 	
 	
