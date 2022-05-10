@@ -27,17 +27,25 @@ public class AdminService {
 	private AdminPayRepo adminPayRepo;
 	
 	
+	public AdminPay getDataPay(AdminPay payment)
+	{
+		 return adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due");
+		
+	}
 	
-	public void PayNow(AdminPay payment, Order myOrder)
+	
+	public boolean PayNow(AdminPay payment, Order myOrder)
 	{
 		LocalDate date=LocalDate.now();
 		LocalTime time=LocalTime.now();
+	    
+		AdminPay payVendor=adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due");
 		
-		AdminPay payVendor=adminPayRepo.findByVendorAndStatus(payment.getVendor(), "Due");
-		
+		if(payVendor==null)
+		{
+			return false;
+		}
 		payVendor.setOrderId(myOrder.get("id"));
-		payVendor.setVendor(payment.getVendor());
-		payVendor.setAmount(payment.getAmount());
 		payVendor.setStatus(myOrder.get("status"));
 		payVendor.setPaymentId(null);
 		payVendor.setReciept(myOrder.get("receipt"));
@@ -45,40 +53,41 @@ public class AdminService {
 		payVendor.setTime(time);
 		
 		adminPayRepo.save(payVendor);
-
-		
-		
-	
-		
-	}
+		return true;
+		}
 	
 	
 	
 	public AdminPay vendorPayment(String vendor) {
 		
 		List<VendorPayment> payments=vendorPay.findByVendor(vendor);
+		
 		payments=payments.stream().filter(p->p.getStatus().equals("Due")).collect(Collectors.toList());
 		
 		AdminPay payment=new AdminPay();
+		
 		payment.setVendor(vendor);
 		payment.setStatus("Due");
 		int amount=0;
 		if(payments!=null)
 		{
-			for(VendorPayment pay:payments)
+			for(VendorPayment pay:payments)https://nineleaps-fitness.herokuapp.com/swagger-ui/index.html#/
 			{
 				amount+=pay.getAmount();
 			}
 			
 		}
 		payment.setAmount(amount);
-		AdminPay oldPay=adminPayRepo.findByVendorAndStatus(vendor, "Due");
-		if(oldPay!=null && oldPay.getAmount()==amount) {
+		int s=adminPayRepo.findAll().size();
+		String id="P0"+ s;
+		payment.setId(id);
+		AdminPay oldPay=adminPayRepo.findByVendorAndAmountAndStatus(vendor, amount, "Due");
+		if(oldPay!=null) {
 			return oldPay;
 		}
 		adminPayRepo.save(payment);
 		
-		return adminPayRepo.findByVendorAndStatus(vendor, "Due");
+		return payment;
 	}
 
 
@@ -87,7 +96,7 @@ public class AdminService {
 		 LocalDate date=LocalDate.now();
 		 LocalTime time=LocalTime.now();
 		 
-		 AdminPay payment=adminPayRepo.findById(data.get("order_id")).get();
+		 AdminPay payment=adminPayRepo.findByOrderId(data.get("order_id"));
 		 
 		 payment.setPaymentId(data.get("payment_id"));
 		 payment.setStatus(data.get("status"));
