@@ -41,6 +41,7 @@ public class AdminService {
 	    
 		AdminPay payVendor=adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due");
 		
+		
 		if(payVendor==null)
 		{
 			return false;
