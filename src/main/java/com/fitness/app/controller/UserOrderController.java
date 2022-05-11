@@ -89,7 +89,7 @@ public class UserOrderController {
 	   return new ResponseEntity<>(userOrderService.pendingListOrder(email), HttpStatus.OK)    ;	
 	}
 	
-	@GetMapping("order/history/{email}")
+	@GetMapping("/order/history/{email}")
 	public ResponseEntity<?> orderHistory(@PathVariable String email)
 	{
 		return new ResponseEntity<> ( userOrderService.OrderListOrder(email), HttpStatus.OK);
