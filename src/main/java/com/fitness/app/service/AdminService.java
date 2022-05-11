@@ -123,7 +123,7 @@ public class AdminService {
 		try {
 			
 			List<AdminPay> allPaid=adminPayRepo.findByVendor(vendor);
-			allPaid=allPaid.stream().filter(p->p.getStatus().equals("Paid")).collect(Collectors.toList());
+			allPaid=allPaid.stream().filter(p->p.getStatus().equals("Completed")).collect(Collectors.toList());
 			return allPaid;
 		} catch (Exception e) {
 			throw new Exception(e.getMessage()+ vendor);
