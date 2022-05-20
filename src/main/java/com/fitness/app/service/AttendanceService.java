@@ -40,7 +40,7 @@ public class AttendanceService {
 			
 		    List<String> allUsers=allUser.stream().map(p->p.getEmail()).collect(Collectors.toList());
 		    
-
+            
 			
 			int att=0, nonatt=0;
 			
@@ -102,7 +102,7 @@ public class AttendanceService {
 					int s=attendenceList.size();
 					int div=s/25;
 					int count=0;
-					int i=0,j=div-1;
+					int i=0,j=25;
 					for(int k=0 ;k<div;k++)
 					{
 						count=0;
@@ -114,7 +114,8 @@ public class AttendanceService {
 						}
 						
 						perfomance.add(count);
-						j+=div;
+						j+=25;
+						k++;
 					}
 					count=0;
 				    while(i<s)
@@ -171,126 +172,3 @@ public class AttendanceService {
 	}
 }
 
-
-/*
- * try {
-			
-			List<String> users=userAttendance.getUsers();
-		
-			List<UserAttendance> allUser=
-					attendanceRepo.findByVendorAndGym(userAttendance.getVendor(), userAttendance.getGym());
-			
-		    List<String> allUsers=allUser.stream().map(p->p.getEmail()).collect(Collectors.toList());
-			
-			
-			List<String> notUserAtt=new ArrayList<>();
-			if(allUser!=null)
-			{
-				for(String user:allUsers)
-				{
-					if(!users.contains(user))
-					{
-						notUserAtt.add(user);
-					}
-				}
-			}
-			
-			if(notUserAtt!=null)
-			{
-				for(String user:notUserAtt)
-				{
-					UserAttendance notAtt=
-							attendanceRepo.findByEmailAndVendorAndGym(user, userAttendance.getVendor(), userAttendance.getGym());
-					
-					
-					if(notAtt!=null)
-					{
-						
-						List<Integer> attlist=notAtt.getAttendance();
-						notAtt.setRating(calculateRating(user));
-						int n=0, val=0;
-						if(attlist==null)
-						{
-							attlist=new ArrayList<>();
-							val=1;
-							
-						}
-						else if(attlist.size()==1) {
-							 val=attlist.get(0)-1;
-							
-							}
-						else
-						{
-						  n=attlist.size();
-						  val=attlist.get(n-1)-1;
-						}
-						
-						  
-				         if(n>notAtt.getBooked())
-				          {
-				    	       return "End of Subcription for: " +notAtt;
-				             }
-				          
-					       attlist.add(val);
-					     notAtt.setAttendance(attlist);
-				    	 attendanceRepo.save(notAtt);
-				    	 
-					}
-				}
-			}
-			for(String user:users)
-			{
-			
-				UserAttendance userAtt=
-						attendanceRepo.findByEmailAndVendorAndGym(user, userAttendance.getVendor(), userAttendance.getGym());
-				
-				
-				if(userAtt==null)
-				{
-					List<Integer> attendanceList=new ArrayList<>();
-			    	attendanceList.add(1);
-			    	UserAttendance userAt=new UserAttendance();
-			    	userAt.setEmail(user);
-			    	userAt.setGym(userAttendance.getGym());
-			    	userAt.setVendor(userAttendance.getVendor());
-			    	userAt.setAttendance(attendanceList);
-			    	attendanceRepo.save(userAt);
-			    	return "Marked";
-				}
-				else
-				{
-					List<Integer> attlist=userAtt.getAttendance();
-					userAtt.setRating(calculateRating(user));
-					int n=0, val=0;
-					if(attlist==null)
-					{
-						attlist=new ArrayList<>();
-						val=1;
-						
-					}
-					else if(attlist.size()==1) {val=attlist.get(0)+1;}
-					else
-					{
-					  n=attlist.size();
-					  val=attlist.get(n-1)+1;
-					}
-					
-			           if(n>userAtt.getBooked())
-			             {
-			    	       return "End of Subcription";
-			             }
-			       
-				       attlist.add(val);
-				     userAtt.setAttendance(attlist);
-			    	 attendanceRepo.save(userAtt);
-			    	 return "Marked";
-				}
-				
-
-			}
-			return "Marked";
-			
-		} catch (Exception e) {
-			throw new Exception(e.getMessage()+"Not Marked.");
-		}
- * */
