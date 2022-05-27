@@ -15,6 +15,7 @@ public class UserBankDetailsController {
     @Autowired
     UserBankDetailsService userBankDetailsService;
 
+    //Add or update bank details of the user.
     @PutMapping("/user-bankdetails/add")
     public ResponseEntity<?> addBankDetails(@RequestBody UserBankDetails details) {
 
@@ -26,11 +27,13 @@ public class UserBankDetailsController {
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
+    //get bank details of the user to make payment.
     @GetMapping("/user-bankdetails/get/{email}")
     public UserBankDetails getBankDetails(@PathVariable String email) {
         return userBankDetailsService.getBankDetails(email);
     }
 
+    //List of user's bank.
     @GetMapping("user-bankdetails/getall")
     public List<UserBankDetails> getAllDetails() {
         return userBankDetailsService.getAllDetails();

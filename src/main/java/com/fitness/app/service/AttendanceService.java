@@ -115,7 +115,7 @@ public class AttendanceService {
 						
 						perfomance.add(count);
 						j+=25;
-						k++;
+
 					}
 					count=0;
 				    while(i<s)
