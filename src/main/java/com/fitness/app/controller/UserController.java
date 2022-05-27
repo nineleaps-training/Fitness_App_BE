@@ -1,20 +1,17 @@
 package com.fitness.app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fitness.app.auth.AuthToken;
 import com.fitness.app.auth.Authenticate;
 import com.fitness.app.componets.Components;
 import com.fitness.app.config.JwtUtils;
@@ -51,13 +48,8 @@ public class UserController {
 	 @Autowired
 	 private PasswordEncoder passwordEncoder;
 	 
-	 @GetMapping("/hello")
-	 public String hello()
-	 {
-		 return "working";
-	 }
-	 
-	 //register user
+
+	 //register a new user by custom option.
 	 @PostMapping("/register/user")
 	 public SignUpResponce registerUser(@RequestBody UserModel user) 
 	 { 
@@ -104,10 +96,11 @@ public class UserController {
 	          responce.setMessage(otp);
 	          return responce;
 		     }
-		
-			responce.setCurrentUser(null);
-			responce.setMessage("Somthing went wrong");
-			return responce;
+		     else {
+				  responce.setCurrentUser(null);
+				  responce.setMessage("Somthing went wrong");
+				  return responce;
+			  }
 		 }
 			 
 		 
@@ -178,7 +171,7 @@ public class UserController {
 		 }
 		 else if(localUser!=null && localUser.getRole().equals("USER"))
 		 {
-			 return ResponseEntity.ok( new SignUpResponce(null, "This email already in user as USER! "));
+			 return ResponseEntity.ok( new SignUpResponce(null, "This email already in use as USER! "));
 		 }
 		 else
 		 {
@@ -198,7 +191,7 @@ public class UserController {
 		 }
 		 else if(localUser!=null && localUser.getRole().equals("VENDOR"))
 		 {
-			 return ResponseEntity.ok( new SignUpResponce(null, "This email already in user as VENDOR! "));
+			 return ResponseEntity.ok( new SignUpResponce(null, "This email already in use as VENDOR! "));
 		 }
 		 else
 		 {

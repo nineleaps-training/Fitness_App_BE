@@ -15,36 +15,23 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
-
 import com.fitness.app.auth.Authenticate;
-import com.fitness.app.componets.Components;
 import com.fitness.app.config.JwtUtils;
 import com.fitness.app.entity.AdminPay;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.UserClass;
-import com.fitness.app.entity.UserOrder;
-import com.fitness.app.entity.VenderUser;
 import com.fitness.app.model.SignUpResponce;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.UserRepository;
-import com.fitness.app.repository.VendorPayRepo;
 import com.fitness.app.repository.VendorRepository;
 import com.fitness.app.security.service.UserDetailsServiceImpl;
 import com.fitness.app.service.AdminService;
-import com.fitness.app.service.UserService;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
-import com.razorpay.RazorpayException;
-
-import okhttp3.Response;
-
 @RestController
 public class AdminController {
 
@@ -69,7 +56,7 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 
-	// log in user....
+	// log in user....with custom sign option.
 	@PostMapping("/login/admin")
 	public ResponseEntity<?> authenticateUser(@RequestBody Authenticate authCredential) throws Exception {
 		try {
@@ -90,6 +77,8 @@ public class AdminController {
 
 	}
 
+
+	//finding all user details....
 	@GetMapping("/get-all-users")
 	public List<UserClass> getAllUsers() {
 		List<UserClass> l = userRepo.findAll();
@@ -97,6 +86,7 @@ public class AdminController {
 		return l;
 	}
 
+	//finding all vendors from the database.
 	@GetMapping("/get-all-vendors")
 	public List<UserClass> getAllVendors() {
 		List<UserClass> l = userRepo.findAll();
@@ -104,29 +94,39 @@ public class AdminController {
 		return l;
 	}
 
+
+	//finding all fitness centers in the list.
 	@GetMapping("/get-all-gyms")
 	public List<GymClass> getAllGyms() {
 		List<GymClass> l = gymRepo.findAll();
 		return l;
 	}
 
+
+	//finding list of registered fitness center by email id of vendor.
 	@GetMapping("/get-all-gyms-by-email/{email}")
 	public List<GymClass> getAllGymsByEmail(@PathVariable String email) {
 		List<GymClass> l = gymRepo.findByEmail(email);
 		return l;
 	}
 
+
+	//finding total amount to pay to the vendor.
 	@GetMapping("/vendor-payment/{vendor}")
 	public AdminPay vendorPayment(@PathVariable String vendor) {
 		return adminService.vendorPayment(vendor);
 	}
 
+	//demo api for payment.
 	@GetMapping("/get-data-pay")
 	public AdminPay getDatapay(@RequestBody AdminPay pay)
 	{
 		return adminService.getDataPay(pay);
 	}
-	
+
+
+
+	//Initiating payment to the vendor
 	@PutMapping("/pay-vendor-now")
 	@ResponseBody
 	public String payNow(@RequestBody AdminPay payment) throws Exception {
@@ -149,17 +149,23 @@ public class AdminController {
         }
 	}
 
+
+	//updating status of payment maid to the vendor by admin.
 	@PutMapping("/update-vendor-payment")
 	public AdminPay updatingOrder(@RequestBody Map<String, String> data) {
 
 		return adminService.updatePayment(data);
 	}
 
+
+	//Finding payment history of the vendor.
 	@GetMapping("/paid-history/{vendor}")
 	public List<AdminPay> paidHistroy(@PathVariable String vendor) throws Exception {
 		return adminService.paidHistroyVendor(vendor);
 	}
 
+
+	//finding total registered vendors, fitness center and fitness enthusiast.
 	@GetMapping("/all-numbers")
 	public ResponseEntity<?> getAllNumber() {
 		List<UserClass> l = userRepo.findAll();
@@ -176,33 +182,5 @@ public class AdminController {
 		return new ResponseEntity<List<String>>(nums, HttpStatus.OK);
 	}
 
-	/*
-	 * @PutMapping("/edit/user/{email}")
-	 * public UserClass editUser(@RequestBody UserClass user, @PathVariable String
-	 * email)
-	 * {
-	 * UserClass u=userRepo.findByEmail(email);
-	 * u.setActivated(user.getActivated());
-	 * u.setLoggedin(user.getLoggedin());
-	 * return u;
-	 * }
-	 * 
-	 * @PutMapping("/edit/vendor/{email}")
-	 * public VenderUser editVendor(@RequestBody VenderUser user, @PathVariable
-	 * String email)
-	 * {
-	 * VenderUser v=vendorRepo.findByEmail(email);
-	 * v.setPassword(user.getPassword());
-	 * return v;
-	 * }
-	 * 
-	 * @PutMapping("/edit/gym/{name}")
-	 * public GymClass editGym(@RequestBody GymClass gym, @PathVariable String name)
-	 * {
-	 * GymClass g=gymRepo.findByName(name);
-	 * g.setRating(gym.getRating());
-	 * return g;
-	 * }
-	 */
 
 }

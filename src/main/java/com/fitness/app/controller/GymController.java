@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymClass;
-import com.fitness.app.model.DeleteGymModel;
 import com.fitness.app.model.GymClassModel;
 import com.fitness.app.model.GymRepresnt;
 import com.fitness.app.service.FilterBySubscription;
@@ -27,49 +26,44 @@ public class GymController {
 	@Autowired
 	private FilterBySubscription filterSubscriptionService;
 
-	// Adding new gym
+	// Adding new fitness center
 	@PutMapping("/add/gym")
 	public GymClass addNewGym(@RequestBody GymClassModel gymClassModel) {
 		return gymService.addNewGym(gymClassModel);
 	}
 
-	// getting all gym..
+	// getting list of all registered fitness center.
 	@GetMapping("/gym/all")
 	public List<GymClass> getAllGym() {
 		return gymService.getAllGym();
 	}
 
-	// Search gym by vendor email.
+	// Search Fitness centers by vendor email.
 	@GetMapping("/gym/email/{email}")
 	public List<GymRepresnt> getAllOfVendor(@PathVariable String email) {
 		return gymService.getGymByVendorEmail(email);
 	}
 
-	// editing gym
+	// Update details and other in the fitness center.
 	@PutMapping("gym/edit/{id}")
 	public GymClass editGym(@RequestBody GymClassModel newGym, @PathVariable String id) {
 		return gymService.editGym(newGym, id);
 	}
     
-	//get address
+	//get address of fitness center by its unique id.
 	@GetMapping("/gym/address/{id}")
 	public GymAddressClass getAddress(@PathVariable String id)
 	{
 		return gymService.findTheAddress(id);
 	}
 	
-	// Search gym by gym_id.
+	// Search Fitness center by fitness id.
 	@GetMapping("/gym/id/{id}")
 	public GymRepresnt getGymById(@PathVariable String id) {
 		return gymService.getGymByGymId(id);
 	}
 
-	/*// Delete Gym
-	@DeleteMapping("/delete/gym")
-	public String deleteAGymById(@RequestBody DeleteGymModel deleteGym) {
-		return gymService.deleteGymById(deleteGym);
-	}
-*/
+	//Remove all Fitness centers.
 	@DeleteMapping("gym/delete/every")
 	public String deletingEvery() {
 		return gymService.wipingAll();
@@ -97,31 +91,36 @@ public class GymController {
 		return gymService.getGymByCity(city);
 	}
 	
-	
+
+	//Get Fitness by Monthly price limit.
 	@GetMapping("/filter/subscription/monthly/{price}")
 	public List<GymClassModel> filterMonthly(@PathVariable int price, @RequestBody List<GymClassModel> listGym)
 	{
 		return filterSubscriptionService.filterByMonthly(price, listGym);
 	}
 
+	//Get Fitness by quarterly price limit.
 	@GetMapping("/filter/subscription/quarterly/{price}")
 	public List<GymClassModel> filterQuarterly(@PathVariable int price, @RequestBody List<GymClassModel> listGym) {
 
 		return filterSubscriptionService.filterByQuarterly(price, listGym);
 	}
 
+	//Get Fitness by halfYearly price limit.
 	@GetMapping("/filter/subscription/halfYearly/{price}")
 	public List<GymClassModel> filterHalfYearly(@PathVariable int price, @RequestBody List<GymClassModel> listGym) {
 
 		return filterSubscriptionService.filterByHalfYearly(price, listGym);
 	}
 
+	////Get Fitness by yearly price limit.
 	@GetMapping("/filter/subscription/yearly/{price}")
 	public List<GymClassModel> filterYearly(@PathVariable int price, @RequestBody List<GymClassModel> listGym) {
 
 		return filterSubscriptionService.filterByYearly(price, listGym);
 	}
 
+	//Get Fitness by one workout price limit.
 	@GetMapping("/filter/subscription/oneWorkout/{price}")
 	public List<GymClassModel> filterOneWorkout(@PathVariable int price, @RequestBody List<GymClassModel> listGym) {
 
