@@ -7,13 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 public class VendorBankDetailsController {
     @Autowired
     private VendorBankDetailsService vendorBankDetailsService;
-
+    //Adding bank details of the vendor
     @PutMapping("/vendor-bankdetails/add")
     public ResponseEntity<?> addDetails(@RequestBody VendorBankDetails details) {
         VendorBankDetails vendorBankDetails = vendorBankDetailsService.addDetails(details);
@@ -23,14 +21,14 @@ public class VendorBankDetailsController {
         }
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
-
+    //Febtching bank details of the vendor by email id
     @GetMapping("/vendor-bankdetails/get/{email}")
     public VendorBankDetails getBankDetails(@PathVariable String email) {
         return vendorBankDetailsService.getBankDetails(email);
     }
-
-    @GetMapping("/vendor-bankdetails/get")
+    //Fetching bank details of all the vendors (Testing)
+    /*@GetMapping("/vendor-bankdetails/get")
     public List<VendorBankDetails> getDetails() {
         return vendorBankDetailsService.getDetails();
-    }
+    }*/
 }

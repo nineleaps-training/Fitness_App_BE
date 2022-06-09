@@ -6,7 +6,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,7 +48,7 @@ public class UserController {
 	 private PasswordEncoder passwordEncoder;
 	 
 
-	 //register a new user by custom option.
+	 //Register a new user by custom option.
 	 @PostMapping("/register/user")
 	 public SignUpResponce registerUser(@RequestBody UserModel user) 
 	 { 
@@ -125,7 +124,7 @@ public class UserController {
 	 
 	
 	 
-	 //log in user
+	 //Log in user
 	 @PostMapping("/login/user")
 	    public ResponseEntity<?> authenticateUser(@RequestBody Authenticate authCredential) throws Exception
 	    {

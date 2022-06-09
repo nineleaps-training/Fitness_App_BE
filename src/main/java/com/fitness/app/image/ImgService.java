@@ -1,7 +1,5 @@
 package com.fitness.app.image;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,7 +27,7 @@ public class ImgService {
 		}
 	}
 	
-	
+	//Getting image with id
 	public Doc getImage(String id) throws Exception
 	{
 		try {

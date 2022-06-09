@@ -3,9 +3,7 @@ package com.fitness.app.controller;
 import com.fitness.app.auth.Authenticate;
 import com.fitness.app.componets.Components;
 import com.fitness.app.entity.UserClass;
-import com.fitness.app.model.SignUpResponce;
 import com.fitness.app.model.UserForgot;
-import com.fitness.app.model.UserModel;
 import com.fitness.app.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,7 @@ public class UserForgetPasswordController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
+	//Fetching and verifying user 
     @GetMapping("/forget/user/{email}")
 	 public UserForgot userForgot(@PathVariable String email) 
 	 { 
@@ -57,7 +55,7 @@ public class UserForgetPasswordController {
 
         }
     }
-
+	//Setting the new password for the user
     @PutMapping("/user/set-password")
     public boolean setPassword(@RequestBody Authenticate user){
         UserClass localUser=userRepo.findByEmail(user.getEmail());

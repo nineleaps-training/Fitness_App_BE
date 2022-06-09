@@ -2,17 +2,9 @@ package com.fitness.app.image;
 
 
 
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,7 +32,7 @@ public class ImgController {
 	   return imgService.saveImage(file, id);
    }
    
-   
+   //Download file with the id
    @GetMapping("/downloadFile/{id}")
    public ResponseEntity<?> getImage(@PathVariable String id) throws Exception
    {

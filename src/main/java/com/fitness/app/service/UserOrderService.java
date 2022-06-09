@@ -13,11 +13,9 @@ import org.springframework.stereotype.Service;
 
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.UserAttendance;
-import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.UserOrder;
 import com.fitness.app.entity.VendorPayment;
 import com.fitness.app.model.BookedGymModel;
-import com.fitness.app.model.GymRepresnt;
 import com.fitness.app.model.UserPerfomanceModel;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.AttendanceRepo;

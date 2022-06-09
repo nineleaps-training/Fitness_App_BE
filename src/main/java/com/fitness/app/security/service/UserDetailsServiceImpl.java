@@ -24,7 +24,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	private UserRepository userRepo;
 	
 	
-	
+	//Authenticating user information with the email id
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 	     UserClass user=	userRepo.findById(email).get();
@@ -38,7 +38,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	     return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
 	}
 
-	
+	//Defining authorities of a user (Testing)
 	private Collection<? extends GrantedAuthority> getAuthorities(List<String> roles){
 		
 		List<GrantedAuthority> authorities=new ArrayList<>();

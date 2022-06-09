@@ -14,7 +14,7 @@ public class UserDetailsController {
 
     @Autowired
     private UserDetailsService userDetailsService;
-
+    //Adding User Details
     @PutMapping("/add/user-details")
     public ResponseEntity<?> addUserDetails(@RequestBody UserDetails userDetails) {
         UserDetails userDetails1 = userDetailsService.addUserDetails(userDetails);
@@ -27,7 +27,7 @@ public class UserDetailsController {
         }
         return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
-
+    //Fetching details of user by email
     @GetMapping("/user-details/{email}")
     public UserDetails getUserDetails(@PathVariable String email) {
         return userDetailsService.getUserDetails(email);

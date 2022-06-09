@@ -1,6 +1,5 @@
 package com.fitness.app.controller;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.time.LocalDate;
@@ -18,9 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fitness.app.entity.GymClass;
-import com.fitness.app.entity.UserAttendance;
-import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.UserOrder;
 import com.fitness.app.model.BookedGymModel;
 import com.fitness.app.model.UserOrderModel;
@@ -82,26 +78,26 @@ public class UserOrderController {
 		return userOrderService.updateOrder(data);
 	}
 	
-	
+	//Check the pending orders by email id of the user
 	@GetMapping("/pending/order/{email}")
 	public ResponseEntity<?> pedingOrerList(@PathVariable String email)
 	{
 	   return new ResponseEntity<>(userOrderService.pendingListOrder(email), HttpStatus.OK)    ;	
 	}
-	
+	//Fetching the order history by email id of the user
 	@GetMapping("/order/history/{email}")
 	public ResponseEntity<?> orderHistory(@PathVariable String email)
 	{
 		return new ResponseEntity<> ( userOrderService.OrderListOrder(email), HttpStatus.OK);
 	}
-	
+	//Fetching the user of the partciular Gym by gymId
 	@GetMapping("/my/users/{gymId}")
 	public Set<UserPerfomanceModel> allMyUsers(@PathVariable String gymId)
 	{
 		return userOrderService.allMyUser(gymId);
 	}
 	
-	
+	//Fetching gyms booked by a particular user by email
 	@GetMapping("/booked/gyms/{email}")
 	public Set<BookedGymModel> bookedGym(@PathVariable String email)
 	{
