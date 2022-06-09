@@ -1,5 +1,6 @@
 package com.fitness.app.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +45,7 @@ public class LocationController {
     }
 
     @GetMapping("/get-fitness-center-by-location")
-    public Map<String, String> getAddress(@RequestParam String latlng)
+    public Map<String, List<String>> getAddress(@RequestParam String latlng)
     {
         UriComponents uri= UriComponentsBuilder.newInstance()
         .scheme("https")
@@ -61,9 +62,11 @@ public class LocationController {
         city=address.split(",");
         assert(city.length!=0);
         String address1=formated_address.getResult()[0].getAddress();
-
-        Map<String, String> res=new HashMap<>();
-        res.put(address1,city[0] );
+        List<String> adds=new ArrayList<>();
+        adds.add(address1);
+        adds.add(city[0]);
+        Map<String, List<String>> res=new HashMap<>();
+        res.put("data",adds );
 
         return res;
     }
