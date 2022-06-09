@@ -44,7 +44,7 @@ public class LocationController {
     }
 
     @GetMapping("/get-fitness-center-by-location")
-    public Map<String, List<?>> getAddress(@RequestParam String latlng)
+    public Map<String, String> getAddress(@RequestParam String latlng)
     {
         UriComponents uri= UriComponentsBuilder.newInstance()
         .scheme("https")
@@ -61,9 +61,9 @@ public class LocationController {
         city=address.split(",");
         assert(city.length!=0);
         String address1=formated_address.getResult()[0].getAddress();
-        List<GymRepresnt> allGyms=gymService.getGymByCity(city[0]);
-        Map<String, List<?>> res=new HashMap<>();
-        res.put(address1, allGyms);
+
+        Map<String, String> res=new HashMap<>();
+        res.put(address1,city[0] );
 
         return res;
     }
