@@ -7,6 +7,14 @@ public class Result {
     @JsonProperty("formatted_address")
     private String address;
     private Geo geometry;
+
+    @JsonProperty("address_components")
+    private GoogleAddress allAddress[];
+
+    public GoogleAddress[] getAllAddress() {
+        return allAddress;
+    }
+
     public String getAddress() {
         return address;
     }
