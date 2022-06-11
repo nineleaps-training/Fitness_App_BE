@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
 import com.fitness.app.model.GymRepresnt;
 import com.fitness.app.model.Response;
@@ -55,10 +56,13 @@ public class LocationController {
         .queryParam("latlng",latlng)
         .build();
         System.out.println(uri.toUriString());
+
+
+
         String[] city;
         ResponseEntity<Response> response = new RestTemplate().getForEntity(uri.toUriString(), Response.class);
         Response formated_address = response.getBody();
-        String address = formated_address.getResult()[6].getAddress();
+        String address = formated_address.getResult()[0].getAddress();
         city=address.split(",");
         assert(city.length!=0);
         String address1=formated_address.getResult()[0].getAddress();
@@ -69,6 +73,14 @@ public class LocationController {
         res.put("data",adds );
 
         return res;
+    }
+
+
+
+
+    public void getAddByLatLng()
+    {
+
     }
     
 }
