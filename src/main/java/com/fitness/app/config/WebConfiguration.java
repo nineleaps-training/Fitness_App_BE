@@ -48,7 +48,10 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter{
 			"/swagger-ui.html",
 			"/favicon.ico",
 			"/getLocation",
-			"/getAddress"
+			"/getAddress",
+			"/getDistance",
+			"/email",
+			"/emailwithattachment"
 
 
 	};

@@ -1,7 +1,6 @@
 package com.fitness.app.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.mongodb.client.model.geojson.Geometry;
 
 public class Result {
     @JsonProperty("formatted_address")
@@ -19,4 +18,5 @@ public class Result {
     public void setGeometry(Geo geometry) {
         this.geometry = geometry;
     }
+    
 }
