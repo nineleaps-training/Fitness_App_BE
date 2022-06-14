@@ -230,7 +230,7 @@ public class UserOrderService {
 
 		}
 
-		if(orders!= null && orders.size()<=1)
+		if(orders!= null && orders.size()<1)
 		{
 			return true;
 		}
