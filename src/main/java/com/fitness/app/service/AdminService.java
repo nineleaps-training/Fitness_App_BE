@@ -72,9 +72,11 @@ public class AdminService {
 		int amount=0;
 		if(payments!=null)
 		{
-			for(VendorPayment pay:payments)https://nineleaps-fitness.herokuapp.com/swagger-ui/index.html#/
+			for(VendorPayment pay:payments)
 			{
+
 				amount+=pay.getAmount();
+
 			}
 			
 		}

@@ -34,6 +34,14 @@ public class UserOrderController {
 	
 	//key_id: rzp_test_vmHcJh5Dj4v5EB
 	//sec_key: SGff6EaJ7l3RzR47hnE4dYJz
+
+
+	@GetMapping("/check-user-order/{email}")
+	public Boolean checkUserCanOrder(@PathVariable String email)
+	{
+		return userOrderService.canOrder(email);
+	}
+
 	//order now 
 	@PostMapping("/order/now")
 	@ResponseBody
@@ -58,6 +66,7 @@ public class UserOrderController {
 		userOrder.setSubscription(order.getSubscription());
 		userOrder.setSlot(order.getSlot());
 		userOrder.setAmount(order.getAmount());
+		userOrder.setBooked("");
 		userOrder.setStatus(myOrder.get("status"));
 		userOrder.setPaymentId(null);
 		userOrder.setReceipt(myOrder.get("receipt"));
