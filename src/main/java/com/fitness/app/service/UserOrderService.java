@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.fitness.app.model.GymRepresnt;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,7 +40,9 @@ public class UserOrderService {
 	
 	@Autowired
 	private AddGymRepository gymRepo;
-	
+
+	@Autowired
+	private GymService gymService;
 	
 	@Autowired
 	private VendorPayRepo vendorOrderRepo;
@@ -190,7 +194,18 @@ public class UserOrderService {
 	 
 	 return gyms;
 	}
-	
-	
-	
+
+    public GymRepresnt getCurrentGym(String email) {
+		UserOrder order= userOrderRepo.findByEmailAndBooked(email, "Current");
+  		assert(order!=null);
+  		return  gymService.getGymByGymId(order.getId());
+    }
+
+	public List<GymRepresnt> getExpiredGym(String email) {
+		List<UserOrder> orders = userOrderRepo.findByEmail(email);
+
+
+		return null;
+
+	}
 }

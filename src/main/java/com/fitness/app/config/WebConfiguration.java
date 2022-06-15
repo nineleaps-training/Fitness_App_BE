@@ -48,8 +48,8 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter{
 			"/swagger-ui.html",
 			"/favicon.ico",
 
-			"/get-fitness-center-by-location"
-
+			"/get-fitness-center-by-location",
+			"/qrcode"
 
 	};
 	

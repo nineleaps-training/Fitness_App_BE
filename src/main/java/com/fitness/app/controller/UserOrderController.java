@@ -1,10 +1,12 @@
 package com.fitness.app.controller;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import com.fitness.app.model.GymRepresnt;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -82,7 +84,7 @@ public class UserOrderController {
 	@GetMapping("/pending/order/{email}")
 	public ResponseEntity<?> pedingOrerList(@PathVariable String email)
 	{
-	   return new ResponseEntity<>(userOrderService.pendingListOrder(email), HttpStatus.OK)    ;	
+	   return new ResponseEntity<>(userOrderService.pendingListOrder(email), HttpStatus.OK)    ;
 	}
 	//Fetching the order history by email id of the user
 	@GetMapping("/order/history/{email}")
@@ -96,16 +98,28 @@ public class UserOrderController {
 	{
 		return userOrderService.allMyUser(gymId);
 	}
-	
+
 	//Fetching gyms booked by a particular user by email
 	@GetMapping("/booked/gyms/{email}")
 	public Set<BookedGymModel> bookedGym(@PathVariable String email)
 	{
 		return userOrderService.bookedGym(email);
 	}
-	
-	
+
+
 	//@GetMapping("/order-to-gym/{gymId}")
 
-	
+
+	@GetMapping("/subscription-current/{email}")
+	public GymRepresnt getCurrentGym(@PathVariable String email)
+	{
+		return userOrderService.getCurrentGym(email);
+	}
+
+	@GetMapping("subscription-expired/{email}")
+	public List<GymRepresnt> getExpiredGym(@PathVariable String email) {
+		return userOrderService.getExpiredGym(email);
+	}
+
+
 }
