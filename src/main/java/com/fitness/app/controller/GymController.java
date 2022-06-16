@@ -82,12 +82,6 @@ public class GymController {
 
 	// Search gym By Locality;
 
-	@GetMapping("/gyms/locality/{locality}")
-	public List<GymRepresnt> gymByLoaclity(@PathVariable String locality) {
-		return gymService.gymByLocality(locality);
-	}
-
-	// Search gym by City
 
 	@GetMapping("/gym/city/{city}")
 	public List<GymRepresnt> getGYmByCity(@PathVariable String city) {

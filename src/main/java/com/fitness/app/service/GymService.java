@@ -200,15 +200,7 @@ public class GymService {
 
 	}
 */
-	public Optional<GymClass> getGymByCode(int postal_code) {
 
-		GymAddressClass address = addressRepo.findByPostal(postal_code);
-		if (address != null) {
-			return gymRepository.findById(address.getId());
-		} else {
-			return null;
-		}
-	}
 
 	public String wipingAll() {
 		timeRepo.deleteAll();
@@ -225,34 +217,6 @@ public class GymService {
 
 	// Gym By City or Loacltiy..
 
-	public List<GymRepresnt> gymByLocality(String locality) {
-
-		List<GymAddressClass> addressList = addressRepo.findByLocality(locality);
-		List<GymRepresnt> gyms = new ArrayList<>();
-
-		for (GymAddressClass address : addressList) {
-			String id = address.getId();
-			GymRepresnt gym = new GymRepresnt();
-			GymClass gymClass = gymRepository.findById(id).get();
-			GymSubscriptionClass subscription = subcriptionRepo.findById(id).get();
-			GymTime time = timeRepo.findById(id).get();
-			gym.setId(gymClass.getId());
-			gym.setEmail(gymClass.getEmail());
-			gym.setGym_name(gymClass.getName());
-			gym.setGymAddress(address);
-			gym.setWorkoutList(gymClass.getWorkout());
-			gym.setTiming(time);
-			gym.setSubscription(subscription);
-			gym.setContact(gymClass.getContact());
-			gym.setRating(gymClass.getRating());
-			gym.setCapacity(gymClass.getCapacity());
-
-			gyms.add(gym);
-
-		}
-
-		return gyms;
-	}
 
 	// Find by City
 	public List<GymRepresnt> getGymByCity(String city) {

@@ -49,7 +49,15 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter{
 			"/favicon.ico",
 
 			"/get-fitness-center-by-location",
-			"/qrcode"
+
+			"/qrcode",
+
+			"/address-by-lat-lng",
+
+
+
+
+
 
 	};
 	

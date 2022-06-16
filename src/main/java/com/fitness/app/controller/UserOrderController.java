@@ -30,96 +30,88 @@ import com.razorpay.RazorpayClient;
 @RestController
 public class UserOrderController {
 
-	
-	@Autowired
-	private UserOrderService userOrderService;
-	
-	//key_id: rzp_test_vmHcJh5Dj4v5EB
-	//sec_key: SGff6EaJ7l3RzR47hnE4dYJz
-	//order now 
-	@PostMapping("/order/now")
-	@ResponseBody
-	public String orderNow(@RequestBody UserOrderModel order) throws Exception
-	{
-		RazorpayClient razorpayClient=new RazorpayClient("rzp_test_vmHcJh5Dj4v5EB", "SGff6EaJ7l3RzR47hnE4dYJz");
-		
-		LocalDate date=LocalDate.now();
-		LocalTime time=LocalTime.now();
-		JSONObject ob=new JSONObject();
-		ob.put("amount", order.getAmount()*100);
-		ob.put("currency","INR");
-		ob.put("receipt","txn_201456");
-		
-		Order myOrder=razorpayClient.Orders.create(ob);
-		UserOrder userOrder=new UserOrder();
-		
-		userOrder.setId(myOrder.get("id"));
-		userOrder.setEmail(order.getEmail());
-		userOrder.setGym(order.getGym());
-		userOrder.setServices(order.getServices());
-		userOrder.setSubscription(order.getSubscription());
-		userOrder.setSlot(order.getSlot());
-		userOrder.setAmount(order.getAmount());
-		userOrder.setStatus(myOrder.get("status"));
-		userOrder.setPaymentId(null);
-		userOrder.setReceipt(myOrder.get("receipt"));
-		userOrder.setDate(date);
-		userOrder.setTime(time);
-		
-		userOrderService.orderNow(userOrder);
-		return myOrder.toString();
-	}
-	
-	
-	//update_order after payment.
-	
-	@PutMapping("update/order")
-	public UserOrder updatingOrder(@RequestBody Map<String, String> data)
-	{
-		
-		return userOrderService.updateOrder(data);
-	}
-	
-	//Check the pending orders by email id of the user
-	@GetMapping("/pending/order/{email}")
-	public ResponseEntity<?> pedingOrerList(@PathVariable String email)
-	{
-	   return new ResponseEntity<>(userOrderService.pendingListOrder(email), HttpStatus.OK)    ;
-	}
-	//Fetching the order history by email id of the user
-	@GetMapping("/order/history/{email}")
-	public ResponseEntity<?> orderHistory(@PathVariable String email)
-	{
-		return new ResponseEntity<> ( userOrderService.OrderListOrder(email), HttpStatus.OK);
-	}
-	//Fetching the user of the partciular Gym by gymId
-	@GetMapping("/my/users/{gymId}")
-	public Set<UserPerfomanceModel> allMyUsers(@PathVariable String gymId)
-	{
-		return userOrderService.allMyUser(gymId);
-	}
 
-	//Fetching gyms booked by a particular user by email
-	@GetMapping("/booked/gyms/{email}")
-	public Set<BookedGymModel> bookedGym(@PathVariable String email)
-	{
-		return userOrderService.bookedGym(email);
-	}
+    @Autowired
+    private UserOrderService userOrderService;
+
+    //key_id: rzp_test_vmHcJh5Dj4v5EB
+    //sec_key: SGff6EaJ7l3RzR47hnE4dYJz
 
 
-	//@GetMapping("/order-to-gym/{gymId}")
+    @GetMapping("/check-user-order/{email}")
+    public Boolean checkUserCanOrder(@PathVariable String email) {
+        return userOrderService.canOrder(email);
+    }
+
+    //order now
+    @PostMapping("/order/now")
+    @ResponseBody
+    public String orderNow(@RequestBody UserOrderModel order) throws Exception {
+        RazorpayClient razorpayClient = new RazorpayClient("rzp_test_vmHcJh5Dj4v5EB", "SGff6EaJ7l3RzR47hnE4dYJz");
+
+        LocalDate date = LocalDate.now();
+        LocalTime time = LocalTime.now();
+        JSONObject ob = new JSONObject();
+        ob.put("amount", order.getAmount() * 100);
+        ob.put("currency", "INR");
+        ob.put("receipt", "txn_201456");
+
+        Order myOrder = razorpayClient.Orders.create(ob);
+        UserOrder userOrder = new UserOrder();
+
+        userOrder.setId(myOrder.get("id"));
+        userOrder.setEmail(order.getEmail());
+        userOrder.setGym(order.getGym());
+        userOrder.setServices(order.getServices());
+        userOrder.setSubscription(order.getSubscription());
+        userOrder.setSlot(order.getSlot());
+        userOrder.setAmount(order.getAmount());
+        userOrder.setBooked("");
+        userOrder.setStatus(myOrder.get("status"));
+        userOrder.setPaymentId(null);
+        userOrder.setReceipt(myOrder.get("receipt"));
+        userOrder.setDate(date);
+        userOrder.setTime(time);
+
+        userOrderService.orderNow(userOrder);
+        return myOrder.toString();
+    }
 
 
-	@GetMapping("/subscription-current/{email}")
-	public GymRepresnt getCurrentGym(@PathVariable String email)
-	{
-		return userOrderService.getCurrentGym(email);
-	}
+    //update_order after payment.
 
-	@GetMapping("subscription-expired/{email}")
-	public List<GymRepresnt> getExpiredGym(@PathVariable String email) {
-		return userOrderService.getExpiredGym(email);
-	}
+    @PutMapping("update/order")
+    public UserOrder updatingOrder(@RequestBody Map<String, String> data) {
+
+        return userOrderService.updateOrder(data);
+    }
+
+    //Check the pending orders by email id of the user
+    @GetMapping("/pending/order/{email}")
+    public ResponseEntity<?> pedingOrerList(@PathVariable String email) {
+        return new ResponseEntity<>(userOrderService.pendingListOrder(email), HttpStatus.OK);
+    }
+
+    //Fetching the order history by email id of the user
+    @GetMapping("/order/history/{email}")
+    public ResponseEntity<?> orderHistory(@PathVariable String email) {
+        return new ResponseEntity<>(userOrderService.OrderListOrder(email), HttpStatus.OK);
+    }
+
+    //Fetching the user of the particular Gym by gymId
+    @GetMapping("/my/users/{gymId}")
+    public Set<UserPerfomanceModel> allMyUsers(@PathVariable String gymId) {
+        return userOrderService.allMyUser(gymId);
+    }
+
+    //Fetching gyms booked by a particular user by email
+    @GetMapping("/booked/gyms/{email}")
+    public List<GymRepresnt> bookedGym(@PathVariable String email) {
+        return userOrderService.bookedGym(email);
+    }
+
+
+    //@GetMapping("/order-to-gym/{gymId}")
 
 
 }

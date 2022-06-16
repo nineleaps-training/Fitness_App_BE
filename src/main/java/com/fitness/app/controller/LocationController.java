@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Future;
 
+import com.fitness.app.model.GoogleAddress;
 import com.fitness.app.model.GymRepresnt;
 import com.fitness.app.model.Response;
 
@@ -55,20 +57,40 @@ public class LocationController {
         .queryParam("latlng",latlng)
         .build();
         System.out.println(uri.toUriString());
-        String[] city;
+
+
+
+        String city="";
         ResponseEntity<Response> response = new RestTemplate().getForEntity(uri.toUriString(), Response.class);
         Response formated_address = response.getBody();
-        String address = formated_address.getResult()[6].getAddress();
-        city=address.split(",");
-        assert(city.length!=0);
-        String address1=formated_address.getResult()[0].getAddress();
-        List<String> adds=new ArrayList<>();
-        adds.add(address1);
-        adds.add(city[0]);
-        Map<String, List<String>> res=new HashMap<>();
-        res.put("data",adds );
+        GoogleAddress[] address = formated_address.getResult()[1].getAllAddress();
 
-        return res;
+        String complteAddress="";
+        int size=address.length;
+       for(int i=0;i<size;i++)
+       {
+           String[] type=address[i].getType();
+           if(type[0].equals("locality"))
+           {
+               city=address[i].getLong_name();
+           }
+           complteAddress+=address[i].getShort_name()+" ";
+       }
+       List<String> addr=new ArrayList<>();
+       addr.add(complteAddress);
+       addr.add(city);
+       HashMap<String,List<String>> res=new HashMap<>();
+       res.put("data", addr);
+
+       return res;
+    }
+
+
+
+
+    public void getAddByLatLng()
+    {
+
     }
     
 }
