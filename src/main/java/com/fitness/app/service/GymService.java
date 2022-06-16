@@ -4,21 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.fitness.app.entity.*;
+import com.fitness.app.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fitness.app.entity.GymAddressClass;
-import com.fitness.app.entity.GymClass;
-import com.fitness.app.entity.GymSubscriptionClass;
-import com.fitness.app.entity.GymTime;
 import com.fitness.app.model.GymClassModel;
 import com.fitness.app.model.GymRepresnt;
-import com.fitness.app.repository.AddGymRepository;
-import com.fitness.app.repository.GymAddressRepo;
-import com.fitness.app.repository.GymSubscriptionRepo;
-import com.fitness.app.repository.GymTimeRepo;
-
-import com.fitness.app.repository.UserRepository;
 
 @Service
 public class GymService {
@@ -40,6 +32,9 @@ public class GymService {
 	
 	@Autowired 
 	private RatingService ratingService;
+
+	@Autowired
+	private UserOrderRepo userOrderRepo;
 
 	// Add New Gym
 	public GymClass addNewGym(GymClassModel gymClassModel) {
@@ -250,5 +245,9 @@ public class GymService {
 		}
 		return gyms;
 	}
+
+
+
+
 
 }
