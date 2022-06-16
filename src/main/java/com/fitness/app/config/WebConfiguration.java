@@ -61,13 +61,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter{
 
 	};
 	
-	private static String[] ADMIN_API= {
-			"/get/enthusiast",
-	};
-	private static String[] USER_API= {
-			"/get/enthusiast"
-	};
-	private static String[] VENDOR_API= {};
+
 	
 	@Autowired
 	private UserDetailsServiceImpl userDetailsServiceImpl;
