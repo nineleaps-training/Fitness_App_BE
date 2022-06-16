@@ -28,7 +28,9 @@
       <optional>true</optional>
     </dependency>
 
-		<dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.zxing/core -->
+		
+x`		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
