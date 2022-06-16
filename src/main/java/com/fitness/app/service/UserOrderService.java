@@ -6,8 +6,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
+
 import com.fitness.app.model.GymRepresnt;
-import org.apache.catalina.User;
+
 
 
 
@@ -179,7 +180,7 @@ public class UserOrderService {
         for (UserOrder order : orders) {
             gyms.add(gymService.getGymByGymId(order.getGym()));
         }
-        return gyms;
+      return  gyms;
 
     }
     
