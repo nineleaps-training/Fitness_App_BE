@@ -1,16 +1,21 @@
 package com.fitness.app.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletResponse;
 
+import com.fitness.app.pdf.PDFService;
+import com.fitness.app.qr.MyDetailsService;
 import com.fitness.app.service.EmailSenderService;
 import com.fitness.app.service.MailFormat;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -26,6 +31,11 @@ public class EmailController {
     private JavaMailSender mailSender;
     @Autowired
     private MailFormat mailFormat;
+    @Autowired
+    private MyDetailsService myDetailsService;
+    @Autowired
+    private PDFService pdfService;
+
     @RequestMapping("/email")
 	public void triggerMail() throws MessagingException {
 
@@ -35,17 +45,20 @@ public class EmailController {
 
 	}
     @RequestMapping("/emailwithattachment")
-    public void sendEmailWithAttachment(@RequestParam String toEmail,
+    public void sendEmailWithAttachment(HttpServletResponse response,@RequestParam String toEmail,
                                         @RequestParam String body,
                                         @RequestParam String subject,
-                                        @RequestParam String attachment) throws MessagingException {
-
+                                        @RequestParam String attachment) throws MessagingException,IOException {
+        
+        myDetailsService.saveMyDetails("GM6","Aishwarya Bharucha","Fitness Freak");
+        String pdfFilename = "/home/nineleaps/Downloads/Invoice.pdf";
+		pdfService.createPDF(pdfFilename);
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 
         MimeMessageHelper mimeMessageHelper
                 = new MimeMessageHelper(mimeMessage, true);
 
-        mimeMessageHelper.setFrom("pankaj.jain@nineleaps.com");
+        mimeMessageHelper.setFrom("smartychunnujain@gmail.com");
         mimeMessageHelper.setTo(toEmail);
         mimeMessageHelper.setText(mailFormat.getBillbody(),true);
         mimeMessageHelper.setSubject(subject);

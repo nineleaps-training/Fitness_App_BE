@@ -47,10 +47,11 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter{
 			"/v2/api-docs/**",
 			"/swagger-ui.html",
 			"/favicon.ico",
-			"/getLocation",
-			"/getAddress",
-			"/getDistance",
-			"/email",
+
+			"/get-fitness-center-by-location",
+			"/address-by-lat-lng",
+			"/pdf/generate",
+			"/qrcode",
 			"/emailwithattachment"
 
 

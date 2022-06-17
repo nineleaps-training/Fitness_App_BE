@@ -6,13 +6,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class ImgService {
-
-	
 	
 	@Autowired
 	private ImgRepo imgRepo;
-	
-	
+
 	//upload Image function
 	
 	public Doc saveImage(MultipartFile file, String id) throws Exception

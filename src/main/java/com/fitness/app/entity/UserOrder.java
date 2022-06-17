@@ -35,6 +35,8 @@ public class UserOrder {
 	private String slot;
 	@Field
 	private int amount;
+	@Field
+	private String booked;
     @Field
     private String status;
     @Field
@@ -45,8 +47,22 @@ public class UserOrder {
 	private LocalDate date;
 	@Field
 	private LocalTime time;
-	
-	
-	
-	
+
+
+	public UserOrder(String email, String gym, List<String> services,
+					 String subscription, String slot, int amount, String booked,
+					 String status, String paymentId, String receipt, LocalDate date, LocalTime time) {
+		this.email = email;
+		this.gym = gym;
+		this.services = services;
+		this.subscription = subscription;
+		this.slot = slot;
+		this.amount = amount;
+		this.booked = booked;
+		this.status = status;
+		this.paymentId = paymentId;
+		this.receipt = receipt;
+		this.date = date;
+		this.time = time;
+	}
 }

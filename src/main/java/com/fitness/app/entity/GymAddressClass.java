@@ -17,21 +17,20 @@ public class GymAddressClass {
 	@Id
 	@Field
 	private String id;
+
 	@Field
-	private String building;
+	private Double lat;
 	@Field
-	private String locality;
+	private Double lng;
 	@Field
+	private String address;
+
 	private String city;
-	@Field
-	private int postal;
 
-	public GymAddressClass(String building, String loaclity, String city, int postal) {
-		super();
-		this.building = building;
-		this.locality = loaclity;
+	public GymAddressClass(Double lat, Double lng, String address, String city) {
+		this.lat = lat;
+		this.lng = lng;
+		this.address = address;
 		this.city = city;
-		this.postal = postal;
 	}
-
 }

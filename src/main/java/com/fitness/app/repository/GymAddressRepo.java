@@ -12,9 +12,6 @@ import com.fitness.app.entity.GymAddressClass;
 @EnableMongoRepositories
 public interface GymAddressRepo extends MongoRepository<GymAddressClass, String> {
 
-	public GymAddressClass findByPostal(int postal);
-
 	public List<GymAddressClass> findByCity(String city);
 
-	public List<GymAddressClass> findByLocality(String locality);
 }

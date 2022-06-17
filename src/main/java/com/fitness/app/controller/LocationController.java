@@ -1,12 +1,16 @@
 package com.fitness.app.controller;
 
-import java.net.http.HttpResponse.ResponseInfo;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.fitness.app.model.DResponse;
+import com.fitness.app.model.GoogleAddress;
 import com.fitness.app.model.Response;
-import com.fitness.app.model.Rows;
 
+import com.fitness.app.service.GymService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +26,9 @@ import net.bytebuddy.dynamic.scaffold.TypeInitializer.Drain;
 @RestController
 public class LocationController {
     private static final Object API_KEY = "AIzaSyCgHNmyruLEfUzPbSoKUJrx1I-rL_NqJ2U";
+
+    @Autowired
+    public GymService gymService;
     @GetMapping("/getLocation")
     public Response getDetails(@RequestParam String address)
     {
@@ -41,8 +48,8 @@ public class LocationController {
         return lat.toString()+" , "+lng.toString();*/
     }
 
-    @GetMapping("/getAddress")
-    public String getAddress(@RequestParam String latlng)
+    @GetMapping("/get-fitness-center-by-location")
+    public Map<String, List<String>> getAddress(@RequestParam String latlng)
     {
         UriComponents uri= UriComponentsBuilder.newInstance()
         .scheme("https")
@@ -52,13 +59,40 @@ public class LocationController {
         .queryParam("latlng",latlng)
         .build();
         System.out.println(uri.toUriString());
-        String[] city;
+
+
+
+        String city="";
         ResponseEntity<Response> response = new RestTemplate().getForEntity(uri.toUriString(), Response.class);
         Response formated_address = response.getBody();
-        String address = formated_address.getResult()[6].getAddress();
-        city=address.split(",");
-        assert(city.length!=0);
-        return city[0];
+        GoogleAddress[] address = formated_address.getResult()[1].getAllAddress();
+
+        String complteAddress="";
+        int size=address.length;
+       for(int i=0;i<size;i++)
+       {
+           String[] type=address[i].getType();
+           if(type[0].equals("locality"))
+           {
+               city=address[i].getLong_name();
+           }
+           complteAddress+=address[i].getShort_name()+" ";
+       }
+       List<String> addr=new ArrayList<>();
+       addr.add(complteAddress);
+       addr.add(city);
+       HashMap<String,List<String>> res=new HashMap<>();
+       res.put("data", addr);
+
+       return res;
+    }
+
+
+
+
+    public void getAddByLatLng()
+    {
+
     }
 
     @GetMapping("/getDistance")

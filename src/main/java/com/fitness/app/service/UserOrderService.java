@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,10 +63,15 @@ public class UserOrderService {
 	     UserOrder order=userOrderRepo.findById(data.get("order_id")).get();
 	     order.setPaymentId(data.get("payment_id"));
 	     order.setStatus(data.get("status"));
+		 order.setBooked("Current");
 	     order.setDate(date);
 	     order.setTime(time);    
-	     
-	     
+
+
+		 //TODO create QR,
+         //TODO Create Invoice and Unique Id
+		 //TODO Send Invoice to User.
+
 	     
 	     //update booked...
 	     int booked=30;
@@ -190,7 +196,50 @@ public class UserOrderService {
 	 
 	 return gyms;
 	}
-	
-	
-	
+
+
+    public Boolean canOrder(String email) {
+		int count=0;
+		List<UserOrder> orders=userOrderRepo.findByEmail(email);
+		orders=orders.stream().filter(o->o.getBooked().equals("Current")).collect(Collectors.toList());
+
+		if(orders==null){return true;}
+		LocalDate localDate=LocalDate.now();
+		for(UserOrder order:orders)
+		{
+			LocalDate currentDate=order.getDate();
+			String subs=order.getSubscription();
+			switch (subs)
+			{
+				case "Monthly":
+					currentDate=currentDate.plusDays(25);
+					break;
+				case "Quaterly":
+					currentDate=currentDate.plusDays(75);
+					break;
+				case "Half":
+					currentDate=currentDate.plusDays(150);
+					break;
+				case "Yearly":
+					currentDate=currentDate.plusDays(300);
+					break;
+			}
+			int comp=localDate.compareTo(currentDate);
+            if(comp>0){
+				order.setBooked("Expired");
+				userOrderRepo.save(order);
+			}
+
+		}
+
+		if(orders!= null && orders.size()<=1)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+
+    }
 }

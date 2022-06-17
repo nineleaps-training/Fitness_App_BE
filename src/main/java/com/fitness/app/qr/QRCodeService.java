@@ -1,4 +1,4 @@
-package com.fitness.app.service;
+package com.fitness.app.qr;
 
 
 public interface QRCodeService {

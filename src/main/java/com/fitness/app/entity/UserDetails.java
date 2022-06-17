@@ -27,6 +27,24 @@ public class UserDetails {
     private String city;
 
     @Field
-    private Long postal;
+    private int postal;
+
+    @Field
+	private String pdf_fileName;
+    
+    @Field
+	private String pdf_fileType;
+
+    @Field
+    private byte[] pdf_data;
+
+    @Field
+	private String qr_fileName;
+    
+    @Field
+	private String qr_fileType;
+
+    @Field
+    private byte[] qr_data;
 
 }
