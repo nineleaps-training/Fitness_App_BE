@@ -14,10 +14,10 @@ public class VendorBankDetailsController {
     private VendorBankDetailsService vendorBankDetailsService;
     //Adding bank details of the vendor
     @PutMapping("/vendor-bankdetails/add")
-    public ResponseEntity<?> addDetails(@RequestBody VendorBankDetails details) {
+    public ResponseEntity<VendorBankDetails> addDetails(@RequestBody VendorBankDetails details) {
         VendorBankDetails vendorBankDetails = vendorBankDetailsService.addDetails(details);
         Assert.notNull(vendorBankDetails, "bank details are null");
-        return new ResponseEntity<>(vendorBankDetails, HttpStatus.OK);
+        return new ResponseEntity<VendorBankDetails>(vendorBankDetails, HttpStatus.OK);
 
     }
     //Febtching bank details of the vendor by email id

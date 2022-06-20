@@ -102,7 +102,8 @@ public class AttendanceService {
 					int s=attendenceList.size();
 					int div=s/25;
 					int count=0;
-					int i=0,j=25;
+					int i=0;
+					int j=25;
 					for(int k=0 ;k<div;k++)
 					{
 						count=0;

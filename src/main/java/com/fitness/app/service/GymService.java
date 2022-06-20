@@ -46,21 +46,18 @@ public class GymService {
 		}
 
 		// Creating address of gym
-		GymAddressClass address = new GymAddressClass();
-		address = gymClassModel.getGymAddress();
+		GymAddressClass address = gymClassModel.getGymAddress();
 		address.setId(gym_id);
 
 		addressRepo.save(address);
 
 		// set time
-		GymTime time = new GymTime();
-		time = gymClassModel.getTiming();
+		GymTime time =gymClassModel.getTiming();
 		time.setId(gym_id);
 		timeRepo.save(time);
 
 		// set subscription.
-		GymSubscriptionClass subscription = new GymSubscriptionClass();
-		subscription = gymClassModel.getSubscription();
+		GymSubscriptionClass subscription = gymClassModel.getSubscription();
 		subscription.setId(gym_id);
 		subcriptionRepo.save(subscription);
 
@@ -139,23 +136,20 @@ public class GymService {
 
 		// Creating address of gym
 		addressRepo.deleteById(theGym.getId());
-		GymAddressClass address = new GymAddressClass();
-		address = gymClassModel.getGymAddress();
+		GymAddressClass address = gymClassModel.getGymAddress();
 		address.setId(gym_id);
 		addressRepo.save(address);
 
 		// set time
 		timeRepo.deleteById(theGym.getId());
-		;
-		GymTime time = new GymTime();
-		time = gymClassModel.getTiming();
+
+		GymTime time = gymClassModel.getTiming();
 		time.setId(gym_id);
 		timeRepo.save(time);
 
 		// set subscription.
 		subcriptionRepo.deleteById(theGym.getId());
-		GymSubscriptionClass subscription = new GymSubscriptionClass();
-		subscription = gymClassModel.getSubscription();
+		GymSubscriptionClass subscription = gymClassModel.getSubscription();
 		subscription.setId(gym_id);
 		subcriptionRepo.save(subscription);
 
@@ -171,51 +165,14 @@ public class GymService {
 
 	}
 
-	// Delete The Gym...
-/*
-	public String deleteGymById(DeleteGymModel deleteGym) {
-		try {
-			GymClass gym = gymRepository.findById(deleteGym.getId()).get();
-			UserClass user = userRepository.findById((deleteGym.getEmail()).get();
-			String password;
-			if (user != null) {
-				password = user.getPassword();
-			} else {
-				return "No Vendor";
-			}
-			if (RegisterService.checkPassword(deleteGym.getPassword(), password)) {
-
-				gymRepository.deleteById(deleteGym.getId());
-				addressRepo.deleteById(deleteGym.getId());
-				timeRepo.deleteById(deleteGym.getId());
-				subcriptionRepo.deleteById(deleteGym.getId());
-
-				return "Deleted Successfully";
-			} else {
-				return "Password Incorrect";
-			}
-		} catch (Exception e) {
-			return "No info availble";
-		}
-
-	}
-*/
 
 
-	public String wipingAll() {
-		timeRepo.deleteAll();
-		subcriptionRepo.deleteAll();
-		addressRepo.deleteAll();
-		gymRepository.deleteAll();
-
-		return "done";
-	}
 
 	public GymClass getGymByGymName(String gymName) {
 		return gymRepository.findByName(gymName);
 	}
 
-	// Gym By City or Loacltiy..
+
 
 
 	// Find by City

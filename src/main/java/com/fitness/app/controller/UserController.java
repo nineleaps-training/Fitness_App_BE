@@ -110,7 +110,7 @@ public class UserController {
 	 
 	 //Verify User
 	 @PutMapping("/verify/user")
-	 public ResponseEntity<?> verifyTheUser(@RequestBody Authenticate authCredential) throws Exception
+	 public ResponseEntity<SignUpResponce> verifyTheUser(@RequestBody Authenticate authCredential) throws Exception
 	 {
 		 UserClass user= userService.verifyUser(authCredential.getEmail());
 		 
@@ -127,7 +127,7 @@ public class UserController {
 	 
 	 //Log in user
 	 @PostMapping("/login/user")
-	    public ResponseEntity<?> authenticateUser(@RequestBody Authenticate authCredential) throws Exception
+	    public ResponseEntity<SignUpResponce> authenticateUser(@RequestBody Authenticate authCredential) throws Exception
 	    {
 	    	return logInFunctionality(authCredential.getEmail(), authCredential.getPassword() );
 	    	
@@ -135,7 +135,7 @@ public class UserController {
 	 
 	 
 	 //function to log in and return token
-	 public ResponseEntity<?> logInFunctionality(String email, String password) throws Exception
+	 public ResponseEntity<SignUpResponce> logInFunctionality(String email, String password) throws Exception
 	 {
 		 try {    		
 	    		authenticationManager.authenticate(
@@ -161,7 +161,7 @@ public class UserController {
 	 }
 	 
 	 @PutMapping("/google-sign-in/vendor")
-	 public ResponseEntity<?> googleSignInVendor(@RequestBody UserModel user) throws Exception
+	 public ResponseEntity<SignUpResponce> googleSignInVendor(@RequestBody UserModel user) throws Exception
 	 {
 		 String pass=userService.randomPass();
 		 user.setPassword(pass);
@@ -181,7 +181,7 @@ public class UserController {
 	 
 	 
 	 @PutMapping("/google-sign-in/user")
-	 public ResponseEntity<?> googleSignInUser(@RequestBody UserModel user) throws Exception
+	 public ResponseEntity<SignUpResponce> googleSignInUser(@RequestBody UserModel user) throws Exception
 	 {
 		 String pass=userService.randomPass();
 		 user.setPassword(pass);
@@ -189,7 +189,7 @@ public class UserController {
 		 if(localUser==null) {
 			 return ResponseEntity.ok( new SignUpResponce(null, "This email in use!"));
 		 }
-		 else if(localUser!=null && localUser.getRole().equals("VENDOR"))
+		 if(localUser!=null && localUser.getRole().equals("VENDOR"))
 		 {
 			 return ResponseEntity.ok( new SignUpResponce(null, "This email already in use as VENDOR! "));
 		 }

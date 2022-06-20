@@ -3,7 +3,9 @@ package com.fitness.app.security.service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,7 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.repository.UserRepository;
-
+@Slf4j
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
 
@@ -27,10 +29,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	//Authenticating user information with the email id
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-	     UserClass user=	userRepo.findById(email).get();
+		Optional<UserClass> data=userRepo.findById(email);
+	     UserClass user=	data.get();
 	     
 	     if (user == null){
-	            System.out.println("User Not Found.");
+                log.info("User Not Found.");
 	            throw new UsernameNotFoundException("Invalid Credentials : "+email);
 	        }
 	     

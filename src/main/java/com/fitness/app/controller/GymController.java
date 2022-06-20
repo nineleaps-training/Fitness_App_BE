@@ -2,9 +2,7 @@ package com.fitness.app.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import com.fitness.app.entity.GymSubscriptionClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,11 +64,6 @@ public class GymController {
 		return gymService.getGymByGymId(id);
 	}
 
-	//Remove all Fitness centers.
-	@DeleteMapping("gym/delete/every")
-	public String deletingEvery() {
-		return gymService.wipingAll();
-	}
 
 	// Search gym by gymName
 	@GetMapping("/gym/gymName/{gymName}")

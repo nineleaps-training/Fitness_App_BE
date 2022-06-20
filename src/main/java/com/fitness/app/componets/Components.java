@@ -70,7 +70,8 @@ public class Components {
 			responce.append(line);
 		}
 		
-		System.out.println(code +"responce: "+ responce);
+
+		log.info("Code: {}", code, " responce: {} ",responce);
 		return code;
 		}
 		catch (Exception e) {
