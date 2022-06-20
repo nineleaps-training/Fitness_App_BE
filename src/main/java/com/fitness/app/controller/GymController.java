@@ -80,7 +80,7 @@ public class GymController {
 		return allGym;
 	}
 
-	// Search gym By Locality;
+
 
 
 	@GetMapping("/gym/city/{city}")

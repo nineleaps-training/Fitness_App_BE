@@ -1,5 +1,6 @@
 package com.fitness.app.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,7 @@ import com.fitness.app.security.service.UserDetailsServiceImpl;
 import com.fitness.app.service.AdminService;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
+@Slf4j
 @RestController
 public class AdminController {
 
@@ -58,13 +60,15 @@ public class AdminController {
 
 	// log in user....with custom sign option.
 	@PostMapping("/login/admin")
-	public ResponseEntity<?> authenticateUser(@RequestBody Authenticate authCredential) throws Exception {
+	public ResponseEntity<SignUpResponce> authenticateUser(@RequestBody Authenticate authCredential) throws Exception {
 		try {
 			authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(authCredential.getEmail(), authCredential.getPassword()));
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			throw new Exception("Error");
+            log.info("Exception found: {}", e.getMessage());
+
+			throw new RuntimeException("Error: "+ e.getMessage());
+
 		}
 		final UserDetails usrDetails = userDetailsService.loadUserByUsername(authCredential.getEmail());
 		final String jwt = jwtUtils.generateToken(usrDetails);
@@ -98,16 +102,15 @@ public class AdminController {
 	//finding all fitness centers in the list.
 	@GetMapping("/get-all-gyms")
 	public List<GymClass> getAllGyms() {
-		List<GymClass> l = gymRepo.findAll();
-		return l;
+		return gymRepo.findAll();
+
 	}
 
 
 	//finding list of registered fitness center by email id of vendor.
 	@GetMapping("/get-all-gyms-by-email/{email}")
 	public List<GymClass> getAllGymsByEmail(@PathVariable String email) {
-		List<GymClass> l = gymRepo.findByEmail(email);
-		return l;
+		return gymRepo.findByEmail(email);
 	}
 
 
@@ -167,7 +170,7 @@ public class AdminController {
 
 	//finding total registered vendors, fitness center and fitness enthusiast.
 	@GetMapping("/all-numbers")
-	public ResponseEntity<?> getAllNumber() {
+	public ResponseEntity<List<String>> getAllNumber() {
 		List<UserClass> l = userRepo.findAll();
 		int u = l.stream().filter(e -> e.getRole().equals("USER")).collect(Collectors.toList()).size();
 		int v = l.stream().filter(e -> e.getRole().equals("VENDOR")).collect(Collectors.toList()).size();

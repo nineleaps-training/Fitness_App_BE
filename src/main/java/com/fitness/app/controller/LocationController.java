@@ -11,8 +11,10 @@ import com.fitness.app.model.GymRepresnt;
 import com.fitness.app.model.Response;
 
 import com.fitness.app.service.GymService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +23,7 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /// get coordinate
-
+@Slf4j
 @RestController
 public class LocationController {
     private static final Object API_KEY = "AIzaSyCgHNmyruLEfUzPbSoKUJrx1I-rL_NqJ2U";
@@ -38,9 +40,11 @@ public class LocationController {
         .queryParam("key", API_KEY)
         .queryParam("address",address)
         .build();
-        System.out.println(uri.toUriString());
+
+        log.info("URL: {}", uri.toUriString());
         ResponseEntity<Response> response = new RestTemplate().getForEntity(uri.toUriString(), Response.class);
         Response location=response.getBody();
+        assert (location!=null); //null pointer exception shown here.
         Double lat=location.getResult()[0].getGeometry().getLocation().getLat();
         Double lng=location.getResult()[0].getGeometry().getLocation().getLng();
         return lat.toString()+" , "+lng.toString();
@@ -56,13 +60,14 @@ public class LocationController {
         .queryParam("key", API_KEY)
         .queryParam("latlng",latlng)
         .build();
-        System.out.println(uri.toUriString());
 
+        log.info("The build uri: {}", uri.toString());
 
 
         String city="";
         ResponseEntity<Response> response = new RestTemplate().getForEntity(uri.toUriString(), Response.class);
         Response formated_address = response.getBody();
+        assert (formated_address!=null);
         GoogleAddress[] address = formated_address.getResult()[1].getAllAddress();
 
         String complteAddress="";
@@ -88,10 +93,7 @@ public class LocationController {
 
 
 
-    public void getAddByLatLng()
-    {
-
-    }
+   
     
 }
 

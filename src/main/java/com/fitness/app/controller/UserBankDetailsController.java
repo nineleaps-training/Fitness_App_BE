@@ -5,6 +5,7 @@ import com.fitness.app.service.UserBankDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,14 +18,12 @@ public class UserBankDetailsController {
 
     //Add or update bank details of the user.
     @PutMapping("/user-bankdetails/add")
-    public ResponseEntity<?> addBankDetails(@RequestBody UserBankDetails details) {
+    public ResponseEntity<UserBankDetails> addBankDetails(@RequestBody UserBankDetails details) {
 
         UserBankDetails userBankDetails = userBankDetailsService.addBankDetails(details);
+        Assert.notNull(userBankDetails, "UserBankDetails is null");
+        return new ResponseEntity<UserBankDetails>(userBankDetails, HttpStatus.OK);
 
-        if (userBankDetails != null) {
-            return new ResponseEntity<>(userBankDetails, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
     //get bank details of the user to make payment.

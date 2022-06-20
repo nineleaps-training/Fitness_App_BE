@@ -163,7 +163,7 @@ public class AttendanceService {
 	        {
 	            double rate=0;
 	            for (Rating rating : ratings) {
-	                rate+=rating.getRating();
+	                rate+=rating.getRate();
 	            }
 	            rate=rate/n;
 	            rate=Math.round(rate* 100) / 100.0d;

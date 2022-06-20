@@ -25,13 +25,13 @@ public class UserRatingController {
     }
     //Fetching the rating of the gym by gymId
     @GetMapping("/get-rating/{gymId}")
-    public Double getRating(@PathVariable String gymId) throws Exception
+    public Double getRating(@PathVariable String gymId) throws myExc
     {
     	try {
         return ratingService.getRating(gymId);
     	}
     	catch (Exception e) {
-			throw new Exception("NO value found: ");
+			throw new myExc("NO value found: ");
 		}
     }
     //Fetching the rating of the user by email id
@@ -41,4 +41,12 @@ public class UserRatingController {
         return ratingService.getRatingOfPerson(email);
     }
     
+}
+
+
+class  myExc extends Exception{
+    public myExc(String e)
+    {
+        super(e);
+    }
 }

@@ -5,33 +5,46 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.Random;
 
+import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.internal.util.logging.Log_$logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class Components {
 
+    private Random random= SecureRandom.getInstanceStrong();
 
+	public Components() throws NoSuchAlgorithmException {
+		log.info("There is error in Algorithm to generate random set of integers.");
 
-    public String otpBuilder()
+	}
+
+	public String otpBuilder()
     {
-    	Random rand = new Random();
-    	return String.format("%04d",rand.nextInt(10000));
+		int randomInt=this.random.nextInt(10000);
+
+    	return String.format("%04d",randomInt);
     }
 	
 	public int  sendOtpMessage(String message,String otp, String mobile )
 	{
 		try {
 		
-		String api_key="vUSheoFsqykuK6T4P9YQMgEXpDrjC7NmR18Bz0OZlAGWd3tcJnjQftWidwxvqZSs1OyIuBMlkVpRgYeH";
-		String sender_id="&sender_id="+"FSTSMS";
+		String apiKey="vUSheoFsqykuK6T4P9YQMgEXpDrjC7NmR18Bz0OZlAGWd3tcJnjQftWidwxvqZSs1OyIuBMlkVpRgYeH";
+		String senderId="&senderId="+"FSTSMS";
 		message="&message="+URLEncoder.encode(message);
-		String  variables_values="&variables_values="+otp;	
+		String  variablesValues="&variablesValues="+otp;
 		String route="&route="+"otp";
 		String numbers="&numbers="+mobile;
 		
-		String myUrl="https://www.fast2sms.com/dev/bulkV2?authorization="+api_key+sender_id+message+variables_values+route+numbers;
+		String myUrl="https://www.fast2sms.com/dev/bulkV2?authorization="+apiKey+senderId+message+variablesValues+route+numbers;
 		
 		URL url=new URL(myUrl);
 		
@@ -43,7 +56,8 @@ public class Components {
 		
 		int code=con.getResponseCode();
 		
-		StringBuffer responce=new StringBuffer();
+
+		StringBuilder responce=new StringBuilder();
 		BufferedReader br=new BufferedReader(new InputStreamReader(con.getInputStream()));
 		
 		while(true)
@@ -60,8 +74,9 @@ public class Components {
 		return code;
 		}
 		catch (Exception e) {
-			
-			System.out.println(e.getMessage());
+
+			log.info("Exception found in {}", e.getMessage());
+
 			return 0;
 		}
 		

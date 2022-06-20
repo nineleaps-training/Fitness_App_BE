@@ -32,7 +32,7 @@ public class UserAttendance {
 	private List<Integer> attendance;
 	@Field
 	private Double rating;
-	public UserAttendance(String email, String gym, String vendor, int attended, Double rating) {
+	public UserAttendance(String email, String gym, String vendor, int attended) {
 		
 		this.email = email;
 		this.gym = gym;

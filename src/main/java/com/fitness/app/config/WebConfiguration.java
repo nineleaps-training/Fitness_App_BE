@@ -21,7 +21,7 @@ import com.fitness.app.security.service.UserDetailsServiceImpl;
 @EnableWebSecurity
 public class WebConfiguration extends WebSecurityConfigurerAdapter{
    
-	private static String[] PUBLIC_API= {
+	private static String[] publicApi = {
 			"/gyms/locality/{locality}",
 			"/gym/city/{city}",
 			"/gym/id/**",
@@ -94,7 +94,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter{
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		 super.configure(auth);
-	        auth.userDetailsService(userDetailsServiceImpl );
+	        auth.userDetailsService(userDetailsServiceImpl ).passwordEncoder(new BCryptPasswordEncoder());
 	}
 
 
@@ -108,7 +108,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter{
          .cors()
          .disable()
          .authorizeRequests()
-         .antMatchers(PUBLIC_API).permitAll()
+         .antMatchers(publicApi).permitAll()
          .antMatchers(org.springframework.http.HttpMethod.OPTIONS).permitAll()
          .anyRequest().authenticated()
          .and()
@@ -118,28 +118,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter{
 
  http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	}
-     
-//	http.csrf().disable();
-//	http.authorizeRequests().antMatchers("/", "/signup", "/login", "/logout").permitAll();
-//	http.authorizeRequests().antMatchers("/userInfo").access("hasRole('" + AppRole.ROLE_USER + "')");
-//	http.authorizeRequests().antMatchers("/admin").access("hasRole('" + AppRole.ROLE_ADMIN + "')");
-//	http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
-//	http.authorizeRequests().and().formLogin()
-//			.loginProcessingUrl("/j_spring_security_check") 
-//			.loginPage("/login")
-//			.defaultSuccessUrl("/userInfo")
-//			.failureUrl("/login?error=true")
-//			.usernameParameter("username")
-//			.passwordParameter("password");
-//	http.authorizeRequests().and().logout().logoutUrl("/logout").logoutSuccessUrl("/");
-//	http.apply(new SpringSocialConfigurer()).signupUrl("/signup");
-//}
-//
-//@Override
-//public UserDetailsService userDetailsService() {
-//    return userDetailsService;
-//}
-	 
+
 	
 	
 	

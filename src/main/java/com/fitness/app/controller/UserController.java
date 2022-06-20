@@ -1,5 +1,6 @@
 package com.fitness.app.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,7 +21,7 @@ import com.fitness.app.model.UserModel;
 import com.fitness.app.repository.UserRepository;
 import com.fitness.app.security.service.UserDetailsServiceImpl;
 import com.fitness.app.service.UserService;
-
+@Slf4j
 @RestController
 public class UserController {
 
@@ -141,8 +142,8 @@ public class UserController {
 	    				new UsernamePasswordAuthenticationToken(email, password)
 	    				);   		
 	    	}catch (Exception e) {
-	    		System.out.println(e.getMessage());
-	    		throw new Exception("Error");
+             log.info("Error found: {}", e.getMessage());
+			 throw new Exception("Error");
 			}
 	    	final UserDetails usrDetails=userDetailsService.loadUserByUsername(email);
 	    	final String jwt= jwtUtils.generateToken(usrDetails);
@@ -168,7 +169,7 @@ public class UserController {
 		 if(localUser==null) {
 			 return ResponseEntity.ok( new SignUpResponce(null, "This email in use!"));
 		 }
-		 else if(localUser!=null && localUser.getRole().equals("USER"))
+		 if(localUser!=null && localUser.getRole().equals("USER"))
 		 {
 			 return ResponseEntity.ok( new SignUpResponce(null, "This email already in use as USER! "));
 		 }

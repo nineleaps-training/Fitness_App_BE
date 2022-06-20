@@ -33,7 +33,7 @@ public class AttendanceController {
 	//Finding the total attendance of the user.
 	@GetMapping("/user-performance")
 
-	public ResponseEntity<?> userPerformance(@RequestParam String email, @RequestParam String gym) throws Exception
+	public ResponseEntity<List<Integer>> userPerformance(@RequestParam String email, @RequestParam String gym) throws Exception
 
 	{
 	
