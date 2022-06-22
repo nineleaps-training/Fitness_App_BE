@@ -20,7 +20,7 @@ public class UserBankDetailsService {
 
     public UserBankDetails addBankDetails(UserBankDetails bankDetails) {
 
-        UserClass user = userRepository.findByEmail(bankDetails.getEmail());
+        UserClass user = userRepository.findByEmail(bankDetails.getUserEmail());
 
         if (user != null && user.getActivated()) {
             return repository.save(bankDetails);
@@ -36,6 +36,6 @@ public class UserBankDetailsService {
 
     public UserBankDetails getBankDetails(String email) {
 
-        return repository.findByEmail(email);
+        return repository.findByUserEmail(email);
     }
 }

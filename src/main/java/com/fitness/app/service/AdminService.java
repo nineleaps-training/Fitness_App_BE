@@ -34,7 +34,7 @@ public class AdminService {
 	}
 	
 	
-	public boolean PayNow(AdminPay payment, Order myOrder)
+	public boolean payNow(AdminPay payment, Order myOrder)
 	{
 		LocalDate date=LocalDate.now();
 		LocalTime time=LocalTime.now();

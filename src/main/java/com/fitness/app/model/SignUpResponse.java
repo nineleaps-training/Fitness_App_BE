@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignUpResponce {
+public class SignUpResponse {
 
-	private UserClass CurrentUser;
+	private UserClass currentUser;
 	
 	private String message;
 	

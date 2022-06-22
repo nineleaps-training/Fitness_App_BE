@@ -17,7 +17,7 @@ public class GymRepresnt {
 
 	private String id;
 	private String email;
-	private String gym_name;
+	private String gymName;
 	private GymAddressClass gymAddress;
 	private List<String> workoutList;
 	private GymTime timing;

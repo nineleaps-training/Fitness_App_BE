@@ -1,6 +1,7 @@
 package com.fitness.app.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.Rating;
@@ -29,6 +30,7 @@ public class RatingService {
     public Double getRating(String target)
     {
         List<Rating> ratings = ratingRepo.findByTarget(target);
+        GymClass gym = new GymClass();
         if(ratings==null)
         {
             return 0.0;
@@ -42,7 +44,11 @@ public class RatingService {
             }
             rate=rate/n;
             rate=Math.round(rate* 100) / 100.0d;
-            GymClass gym =gymRepo.findById(target).get();
+
+            Optional<GymClass> optional = gymRepo.findById(target);
+            if(optional.isPresent()) {
+                gym = optional.get();
+            }
             gym.setRating(rate);
             gymRepo.save(gym);
             return rate%6;

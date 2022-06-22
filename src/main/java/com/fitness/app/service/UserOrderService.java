@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-
+import com.fitness.app.entity.GymClass;
 import com.fitness.app.model.GymRepresnt;
 
 
@@ -15,11 +15,9 @@ import com.fitness.app.model.GymRepresnt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.UserAttendance;
 import com.fitness.app.entity.UserOrder;
 import com.fitness.app.entity.VendorPayment;
-import com.fitness.app.model.BookedGymModel;
 import com.fitness.app.model.UserPerfomanceModel;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.AttendanceRepo;
@@ -51,6 +49,7 @@ public class UserOrderService {
 
     @Autowired
     private RatingService ratingService;
+    String current = "Current";
 
     //creating order
     public void orderNow(UserOrder userOrder) {
@@ -63,19 +62,23 @@ public class UserOrderService {
     public UserOrder updateOrder(Map<String, String> data) {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
-        UserOrder order = userOrderRepo.findById(data.get("order_id")).get();
+        UserOrder order = new UserOrder();
+
+        Optional<UserOrder> optional = userOrderRepo.findById(data.get("order_id"));
+        if(optional.isPresent()) {
+            order = optional.get();
+        }
+
         order.setPaymentId(data.get("payment_id"));
         order.setStatus(data.get("status"));
-        order.setBooked("Current");
+        order.setBooked(current);
         order.setDate(date);
         order.setTime(time);
 
-        //TODO Create Invoice and Unique Id
-        //TODO Send Invoice to User.
 
 
         //update booked...
-        int booked = 30;
+        int booked;
         if (order.getSubscription().equals("monthly")) {
             booked = 30;
         } else if (order.getSubscription().equals("quaterly")) {
@@ -131,7 +134,7 @@ public class UserOrderService {
         return orders;
     }
 
-    public List<UserOrder> OrderListOrder(String email) {
+    public List<UserOrder> orderListOrder(String email) {
         List<UserOrder> orders = userOrderRepo.findByEmail(email);
         orders = orders.stream().filter(o -> o.getStatus().equals("Completed")).collect(Collectors.toList());
         return orders;
@@ -141,7 +144,13 @@ public class UserOrderService {
         List<UserOrder> orders = userOrderRepo.findByGym(gymId);
         orders = orders.stream().filter(o -> o.getStatus().equals("Completed")).collect(Collectors.toList());
         Set<UserPerfomanceModel> users = new HashSet<>();
-        String vendor = gymRepo.findById(gymId).get().getEmail();
+
+        String vendor = "";
+        Optional<GymClass> optional = gymRepo.findById(gymId);
+        if (optional.isPresent()) {
+            vendor = optional.get().getEmail();
+        }
+
         for (UserOrder order : orders) {
             UserAttendance newAtt = attendanceRepo.findByEmailAndVendor(order.getEmail(), vendor);
             UserPerfomanceModel user = new UserPerfomanceModel();
@@ -166,12 +175,12 @@ public class UserOrderService {
 
     List<UserOrder> orders = userOrderRepo.findByEmail(email);
         if (orders == null) {
-            return null;
+            return Collections.emptyList();
         }
         List<GymRepresnt> gyms = new ArrayList<>();
         for(UserOrder order:orders)
         {
-            if(order.getBooked().equals("Current"))
+            if(order.getBooked().equals(current))
             {
                 gyms.add(gymService.getGymByGymId(order.getGym()));
             }
@@ -186,9 +195,8 @@ public class UserOrderService {
     
 
     public Boolean canOrder(String email) {
-        int count = 0;
         List<UserOrder> orders = userOrderRepo.findByEmail(email);
-        orders = orders.stream().filter(o -> o.getBooked().equals("Current")).collect(Collectors.toList());
+        orders = orders.stream().filter(o -> o.getBooked().equals(current)).collect(Collectors.toList());
 
         if (orders == null) {
             return true;
@@ -210,6 +218,8 @@ public class UserOrderService {
                 case "Yearly":
                     currentDate = currentDate.plusDays(300);
                     break;
+                default:
+                    currentDate = currentDate.plusDays(0);
             }
             int comp = localDate.compareTo(currentDate);
             if (comp > 0) {
@@ -219,11 +229,7 @@ public class UserOrderService {
 
         }
 
-        if (orders != null && orders.size() < 1) {
-            return true;
-        } else {
-            return false;
-        }
+        return orders.size() < 1;
 
     }
 

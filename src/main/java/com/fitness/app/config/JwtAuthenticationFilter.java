@@ -3,6 +3,7 @@ package com.fitness.app.config;
 
 import com.fitness.app.security.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -30,7 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         final String requestTokenHeader = request.getHeader("Authorization");
-        System.out.println(requestTokenHeader);
+        log.info(requestTokenHeader);
         String username = null;
         String jwtToken = null;
 
@@ -41,14 +43,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 username = jwtUtil.extractUsername(jwtToken);
             } catch (ExpiredJwtException e) {
                 e.printStackTrace();
-                System.out.println("JWT Token Is Expired");
+                log.info("JWT Token IS Expired");
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
         else {
-            System.out.println("Invalid Token : Not Start With Bearer");
+            log.info("Invalid Token : Not Start With Bearer");
         }
 
         // Validating Token
@@ -63,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         else
-            System.out.println("Invalid Token");
+            log.info("Invalid Token");
 
         filterChain.doFilter(request, response);
     }

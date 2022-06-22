@@ -15,8 +15,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GymClassModel {
 
-	private String vendor_email;
-	private String gym_name;
+	private String vendorEmail;
+	private String gymName;
 	private GymAddressClass gymAddress;
 	private List<String> workoutList;
 	private GymTime timing;

@@ -16,7 +16,7 @@ public class UserDetailsController {
     private UserDetailsService userDetailsService;
     //Adding User Details
     @PutMapping("/add/user-details")
-    public ResponseEntity<?> addUserDetails(@RequestBody UserDetails userDetails) {
+    public ResponseEntity<ArrayList<UserDetails>> addUserDetails(@RequestBody UserDetails userDetails) {
         UserDetails userDetails1 = userDetailsService.addUserDetails(userDetails);
 
         ArrayList<UserDetails> user  = new ArrayList<>();
@@ -25,7 +25,7 @@ public class UserDetailsController {
         if (userDetails1 != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     //Fetching details of user by email
     @GetMapping("/user-details/{email}")

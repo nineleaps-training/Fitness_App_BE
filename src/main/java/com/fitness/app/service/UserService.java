@@ -1,7 +1,11 @@
 package com.fitness.app.service;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Optional;
 import java.util.Random;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -11,6 +15,7 @@ import com.fitness.app.entity.UserClass;
 import com.fitness.app.model.UserModel;
 import com.fitness.app.repository.UserRepository;
 
+@Slf4j
 @Service
 public class UserService {
 
@@ -29,10 +34,10 @@ public class UserService {
 	 
 	 @Autowired
 	 private Components sendMessage;
-	 
-	 
-     
-	
+
+
+
+
 	//register user
 	public UserClass registerUser(UserModel user)
 	{
@@ -64,7 +69,12 @@ public class UserService {
 	//Verifying user
 	public UserClass verifyUser(String email)
 	{
-		UserClass user=userRepository.findById(email).get();
+		UserClass user = new UserClass();
+		Optional<UserClass> optional = userRepository.findById(email);
+		if (optional.isPresent()) {
+			user = optional.get();
+		}
+
 		if(user!=null)
 		{
 			user.setActivated(true);
@@ -77,7 +87,12 @@ public class UserService {
 	//LogIn user
 	public void loginUser(String email)
 	{
-		UserClass user=userRepository.findById(email).get();
+		UserClass user = new UserClass();
+		Optional<UserClass> optional = userRepository.findById(email);
+		if (optional.isPresent()) {
+			user = optional.get();
+		}
+
 		user.setLoggedin(true);
 		userRepository.save(user);
 	}
@@ -115,21 +130,31 @@ public class UserService {
 		}
 		
 	}
-	
+
+	private final Random random;
+
+	{
+		try {
+			random = SecureRandom.getInstanceStrong();
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+
 	//generate random String
 	public String randomPass()
 	{
 		int leftLimit = 97; // letter 'a'
 	    int rightLimit = 122; // letter 'z'
 	    int targetStringLength = 10;
-	    Random random = new Random();
 
 	    String generatedString = random.ints(leftLimit, rightLimit + 1)
 	      .limit(targetStringLength)
 	      .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
 	      .toString();
 
-	    System.out.println(generatedString);
+	    log.info(generatedString);
 	    return generatedString;
 	}
 	

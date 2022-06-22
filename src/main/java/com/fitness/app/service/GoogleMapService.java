@@ -1,5 +1,6 @@
 package com.fitness.app.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
 import org.json.JSONObject;
@@ -9,10 +10,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
+@Slf4j
 @Service
 public class GoogleMapService {
 
@@ -43,20 +44,20 @@ public class GoogleMapService {
             }
             else
             {
-                String inline="";
+                StringBuilder inline= new StringBuilder();
                 Scanner scanner=new Scanner(url.openStream());
                 while (scanner.hasNext())
                 {
-                    inline+=scanner.nextLine();
+                    inline.append(scanner.nextLine());
                 }
 
                 scanner.close();
 
 
-                JSONParser parse=new JSONParser(inline);
-                JSONObject data_obj=(JSONObject) parse.parse();
+                JSONParser parse=new JSONParser(inline.toString());
+                JSONObject dataObj=(JSONObject) parse.parse();
 
-                JSONObject object = (JSONObject)data_obj.get("results");
+                JSONObject object = (JSONObject)dataObj.get("results");
                 String ans=  object.toString();
 
                 System.out.println(object.get("address_components"));

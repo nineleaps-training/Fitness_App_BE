@@ -1,11 +1,12 @@
 package com.fitness.app.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
@@ -14,16 +15,16 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class UserBankDetails {
     @Id
     @Field
-    private String email;
+    private String userEmail;
     @Field
-    private String name;
+    private String userName;
     @Field
-    private String bankName;
+    private String userBankName;
     @Field
-    private String branchName;
+    private String userBranchName;
     @Field
-    private Long accountNumber;
+    private Long userAccountNumber;
     @Field
-    private String bankIFSC;
+    private String userBankIFSC;
    
 }

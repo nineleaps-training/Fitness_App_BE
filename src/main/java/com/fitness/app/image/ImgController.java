@@ -3,6 +3,7 @@ package com.fitness.app.image;
 
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @RestController
 public class ImgController {
 
@@ -34,11 +36,11 @@ public class ImgController {
    
    //Download file with the id
    @GetMapping("/downloadFile/{id}")
-   public ResponseEntity<?> getImage(@PathVariable String id) throws Exception
+   public ResponseEntity<ByteArrayResource> getImage(@PathVariable String id) throws Exception
    {
 	   Doc docFile=imgService.getImage(id);
 	   if(docFile!=null) {
-	   System.out.println(docFile.getFileName());
+	   log.info(docFile.getFileName());
 	   return  ResponseEntity.ok()
 			   .contentType(MediaType.parseMediaType(docFile.getFileType()))
 			   .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION, "attachment:filename=\""+docFile.getFileName()+"\"")

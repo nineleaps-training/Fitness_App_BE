@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fitness.app.entity.UserOrder;
-import com.fitness.app.model.BookedGymModel;
 import com.fitness.app.model.UserOrderModel;
 import com.fitness.app.model.UserPerfomanceModel;
 import com.fitness.app.service.UserOrderService;
@@ -88,14 +87,14 @@ public class UserOrderController {
 
     //Check the pending orders by email id of the user
     @GetMapping("/pending/order/{email}")
-    public ResponseEntity<?> pedingOrerList(@PathVariable String email) {
+    public ResponseEntity<List<UserOrder>> pedingOrerList(@PathVariable String email) {
         return new ResponseEntity<>(userOrderService.pendingListOrder(email), HttpStatus.OK);
     }
 
     //Fetching the order history by email id of the user
     @GetMapping("/order/history/{email}")
-    public ResponseEntity<?> orderHistory(@PathVariable String email) {
-        return new ResponseEntity<>(userOrderService.OrderListOrder(email), HttpStatus.OK);
+    public ResponseEntity<List<UserOrder>> orderHistory(@PathVariable String email) {
+        return new ResponseEntity<>(userOrderService.orderListOrder(email), HttpStatus.OK);
     }
 
     //Fetching the user of the particular Gym by gymId

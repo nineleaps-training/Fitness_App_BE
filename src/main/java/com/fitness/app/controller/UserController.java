@@ -1,5 +1,6 @@
 package com.fitness.app.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,12 +16,13 @@ import com.fitness.app.auth.Authenticate;
 import com.fitness.app.componets.Components;
 import com.fitness.app.config.JwtUtils;
 import com.fitness.app.entity.UserClass;
-import com.fitness.app.model.SignUpResponce;
+import com.fitness.app.model.SignUpResponse;
 import com.fitness.app.model.UserModel;
 import com.fitness.app.repository.UserRepository;
 import com.fitness.app.security.service.UserDetailsServiceImpl;
 import com.fitness.app.service.UserService;
 
+@Slf4j
 @RestController
 public class UserController {
 
@@ -50,12 +52,12 @@ public class UserController {
 
 	 //Register a new user by custom option.
 	 @PostMapping("/register/user")
-	 public SignUpResponce registerUser(@RequestBody UserModel user) 
+	 public SignUpResponse registerUser(@RequestBody UserModel user)
 	 { 
 		 
 		 
 		 UserClass localUser=userRepo.findByEmail(user.getEmail());
-		 SignUpResponce responce=new SignUpResponce();
+		 SignUpResponse responce=new SignUpResponse();
 		 if(localUser!=null && localUser.getCustom())
 		 {
 			 localUser.setPassword(null);
@@ -109,7 +111,7 @@ public class UserController {
 	 
 	 //Verify User
 	 @PutMapping("/verify/user")
-	 public ResponseEntity<?> verifyTheUser(@RequestBody Authenticate authCredential) throws Exception
+	 public ResponseEntity<SignUpResponse> verifyTheUser(@RequestBody Authenticate authCredential) throws Exception
 	 {
 		 UserClass user= userService.verifyUser(authCredential.getEmail());
 		 
@@ -119,14 +121,14 @@ public class UserController {
 			 return logInFunctionality(authCredential.getEmail(), authCredential.getPassword());
 		 }
 		 
-		 return ResponseEntity.ok( new SignUpResponce(null, null));
+		 return ResponseEntity.ok( new SignUpResponse(null, null));
 	 }
 	 
 	
 	 
 	 //Log in user
 	 @PostMapping("/login/user")
-	    public ResponseEntity<?> authenticateUser(@RequestBody Authenticate authCredential) throws Exception
+	    public ResponseEntity<SignUpResponse> authenticateUser(@RequestBody Authenticate authCredential) throws Exception
 	    {
 	    	return logInFunctionality(authCredential.getEmail(), authCredential.getPassword() );
 	    	
@@ -134,14 +136,14 @@ public class UserController {
 	 
 	 
 	 //function to log in and return token
-	 public ResponseEntity<?> logInFunctionality(String email, String password) throws Exception
+	 public ResponseEntity<SignUpResponse> logInFunctionality(String email, String password) throws Exception
 	 {
 		 try {    		
 	    		authenticationManager.authenticate(
 	    				new UsernamePasswordAuthenticationToken(email, password)
 	    				);   		
 	    	}catch (Exception e) {
-	    		System.out.println(e.getMessage());
+	    		log.info(e.getMessage());
 	    		throw new Exception("Error");
 			}
 	    	final UserDetails usrDetails=userDetailsService.loadUserByUsername(email);
@@ -150,27 +152,27 @@ public class UserController {
 	    	if(localUser.getRole()!="ADMIN")
 	    	{
 	    		localUser.setPassword(null);
-	    	return ResponseEntity.ok( new SignUpResponce( localUser, jwt));
+	    	return ResponseEntity.ok( new SignUpResponse( localUser, jwt));
 	    	}
 	    	else
 	    	{
-	    		return ResponseEntity.ok( new SignUpResponce(null, null));
+	    		return ResponseEntity.ok( new SignUpResponse(null, null));
 	    	}
 	    	
 	 }
 	 
 	 @PutMapping("/google-sign-in/vendor")
-	 public ResponseEntity<?> googleSignInVendor(@RequestBody UserModel user) throws Exception
+	 public ResponseEntity<SignUpResponse> googleSignInVendor(@RequestBody UserModel user) throws Exception
 	 {
 		 String pass=userService.randomPass();
 		 user.setPassword(pass);
 		 UserClass localUser=userService.googleSignInMethod(user);
 		 if(localUser==null) {
-			 return ResponseEntity.ok( new SignUpResponce(null, "This email in use!"));
+			 return ResponseEntity.ok( new SignUpResponse(null, "This email in use!"));
 		 }
-		 else if(localUser!=null && localUser.getRole().equals("USER"))
+		 else if(localUser.getRole().equals("USER"))
 		 {
-			 return ResponseEntity.ok( new SignUpResponce(null, "This email already in use as USER! "));
+			 return ResponseEntity.ok( new SignUpResponse(null, "This email already in use as USER! "));
 		 }
 		 else
 		 {
@@ -180,17 +182,17 @@ public class UserController {
 	 
 	 
 	 @PutMapping("/google-sign-in/user")
-	 public ResponseEntity<?> googleSignInUser(@RequestBody UserModel user) throws Exception
+	 public ResponseEntity<SignUpResponse> googleSignInUser(@RequestBody UserModel user) throws Exception
 	 {
 		 String pass=userService.randomPass();
 		 user.setPassword(pass);
 		 UserClass localUser=userService.googleSignInMethod(user);
 		 if(localUser==null) {
-			 return ResponseEntity.ok( new SignUpResponce(null, "This email in use!"));
+			 return ResponseEntity.ok( new SignUpResponse(null, "This email in use!"));
 		 }
-		 else if(localUser!=null && localUser.getRole().equals("VENDOR"))
+		 else if(localUser.getRole().equals("VENDOR"))
 		 {
-			 return ResponseEntity.ok( new SignUpResponce(null, "This email already in use as VENDOR! "));
+			 return ResponseEntity.ok( new SignUpResponse(null, "This email already in use as VENDOR! "));
 		 }
 		 else
 		 {

@@ -18,7 +18,7 @@ public class UserDetailsService {
 
     public UserDetails addUserDetails(UserDetails userDetails) {
 
-        UserClass user = userRepository.findByEmail(userDetails.getEmail());
+        UserClass user = userRepository.findByEmail(userDetails.getUserEmail());
 
         if (user != null && user.getActivated()) {
             return userDetailsRepository.save(userDetails);
@@ -29,6 +29,6 @@ public class UserDetailsService {
 
     public UserDetails getUserDetails(String email) {
 
-        return userDetailsRepository.findByEmail(email);
+        return userDetailsRepository.findByUserEmail(email);
     }
 }

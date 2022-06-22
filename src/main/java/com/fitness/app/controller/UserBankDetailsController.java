@@ -17,14 +17,14 @@ public class UserBankDetailsController {
 
     //Add or update bank details of the user.
     @PutMapping("/user-bankdetails/add")
-    public ResponseEntity<?> addBankDetails(@RequestBody UserBankDetails details) {
+    public ResponseEntity<UserBankDetails> addBankDetails(@RequestBody UserBankDetails details) {
 
         UserBankDetails userBankDetails = userBankDetailsService.addBankDetails(details);
 
         if (userBankDetails != null) {
             return new ResponseEntity<>(userBankDetails, HttpStatus.OK);
         }
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     //get bank details of the user to make payment.

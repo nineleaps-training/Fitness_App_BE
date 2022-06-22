@@ -5,20 +5,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class GoogleAddress {
 
     @JsonProperty("long_name")
-    private String long_name;
+    private String longName;
 
     @JsonProperty("short_name")
-    private String short_name;
+    private String shortName;
 
     @JsonProperty("types")
     private String[] type;
 
-    public String getLong_name() {
-        return long_name;
+    public String getLongName() {
+        return longName;
     }
 
-    public String getShort_name() {
-        return short_name;
+    public String getShortName() {
+        return shortName;
     }
 
     public String[] getType() {

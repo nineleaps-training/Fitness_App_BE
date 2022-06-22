@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @EnableMongoRepositories
 @Repository
 public interface UserBankDetailsRepo extends MongoRepository<UserBankDetails, String> {
-   public UserBankDetails findByEmail(String email);
+   public UserBankDetails findByUserEmail(String email);
 
 }

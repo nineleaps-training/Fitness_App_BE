@@ -2,9 +2,7 @@ package com.fitness.app.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import com.fitness.app.entity.GymSubscriptionClass;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -75,14 +73,12 @@ public class GymController {
 	// Search gym by gymName
 	@GetMapping("/gym/gymName/{gymName}")
 	public List<GymClass> getGymByGymName(@PathVariable("gymName") String gymName) {
-		List<GymClass> allGym = new ArrayList<GymClass>();
+		List<GymClass> allGym = new ArrayList<>();
 		allGym.add(gymService.getGymByGymName(gymName));
 		return allGym;
 	}
 
-	// Search gym By Locality;
-
-
+	// Search gym by City
 	@GetMapping("/gym/city/{city}")
 	public List<GymRepresnt> getGYmByCity(@PathVariable String city) {
 		return gymService.getGymByCity(city);
