@@ -14,7 +14,8 @@ import com.fitness.app.entity.GymClass;
 public interface AddGymRepository extends MongoRepository<GymClass, String> {
 
 	public List<GymClass> findByEmail(String email);
-    
+
+
 	public GymClass findByName(String name);
 
 	
