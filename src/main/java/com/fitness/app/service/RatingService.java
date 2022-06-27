@@ -1,9 +1,11 @@
 package com.fitness.app.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.Rating;
+import com.fitness.app.model.RatingModel;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.RatingRepo;
 
@@ -20,10 +22,15 @@ public class RatingService {
     @Autowired
     private AddGymRepository gymRepo;
 
-    public Rating ratingService(Rating rating)
+    public Rating ratingService(RatingModel rating)
     {
     	
-        return ratingRepo.save(rating);  
+    	Rating rtt=new Rating();
+    	rtt.setTarget(rating.getRateTaget());
+    	rtt.setRater(rating.getRateRatter());
+    	rtt.setRate(rating.getRate());
+    	
+        return ratingRepo.save(rtt);  
         
     }
     public Double getRating(String target)
@@ -42,7 +49,17 @@ public class RatingService {
             }
             rate=rate/n;
             rate=Math.round(rate* 100) / 100.0d;
-            GymClass gym =gymRepo.findById(target).get();
+            GymClass gym =new GymClass();
+            Optional<GymClass>dataGym=gymRepo.findById(target);
+            if(dataGym.isPresent())
+            {
+            	gym=dataGym.get();
+            }
+            else
+            {
+            	return 0.0; 
+            }
+           
             gym.setRating(rate);
             gymRepo.save(gym);
             return rate%6;

@@ -106,7 +106,7 @@ public class UserOrderController {
 
     //Fetching gyms booked by a particular user by email
     @GetMapping("/booked/gyms/{email}")
-    public List<GymRepresnt> bookedGym(@PathVariable String email) {
+    public List<BookedGymModel> bookedGym(@PathVariable String email) {
         return userOrderService.bookedGym(email);
     }
 

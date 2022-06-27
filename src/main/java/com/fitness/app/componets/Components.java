@@ -7,6 +7,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.util.Random;
 
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +15,11 @@ import org.hibernate.validator.internal.util.logging.Log_$logger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
+import com.fitness.app.entity.GymAddressClass;
+import com.fitness.app.entity.GymClass;
+import com.fitness.app.entity.UserOrder;
+import com.fitness.app.model.BookedGymModel;
 
 @Component
 @Slf4j
@@ -83,4 +89,10 @@ public class Components {
 		
 		
 	}
+	
+	
+	
+	
+	
+	
 }

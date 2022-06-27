@@ -15,18 +15,18 @@ public class UserDetails {
 
     @Id
     @Field
-    private String email;
+    private String userEmail;
 
     @Field
-    private String gender;
+    private String userGender;
 
     @Field
-    private String fullAddress;
+    private String userFullAddress;
 
     @Field
-    private String city;
+    private String userCity;
 
     @Field
-    private Long postal;
+    private Long useroPostal;
 
 }

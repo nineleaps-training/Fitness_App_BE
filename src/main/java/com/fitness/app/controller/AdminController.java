@@ -1,5 +1,7 @@
 package com.fitness.app.controller;
 
+import com.fitness.app.exceptions.DataNotFoundException;
+import com.fitness.app.exceptions.UserNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +27,11 @@ import com.fitness.app.config.JwtUtils;
 import com.fitness.app.entity.AdminPay;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.UserClass;
+import com.fitness.app.model.AdminPayModel;
 import com.fitness.app.model.SignUpResponce;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.UserRepository;
-import com.fitness.app.repository.VendorRepository;
+
 import com.fitness.app.security.service.UserDetailsServiceImpl;
 import com.fitness.app.service.AdminService;
 import com.razorpay.Order;
@@ -50,9 +53,6 @@ public class AdminController {
 	private UserRepository userRepo;
 
 	@Autowired
-	private VendorRepository vendorRepo;
-
-	@Autowired
 	private AddGymRepository gymRepo;
 
 	@Autowired
@@ -60,14 +60,14 @@ public class AdminController {
 
 	// log in user....with custom sign option.
 	@PostMapping("/login/admin")
-	public ResponseEntity<SignUpResponce> authenticateUser(@RequestBody Authenticate authCredential) throws Exception {
+	public ResponseEntity<SignUpResponce> authenticateUser(@RequestBody Authenticate authCredential) throws UserNotFoundException {
 		try {
 			authenticationManager.authenticate(
 					new UsernamePasswordAuthenticationToken(authCredential.getEmail(), authCredential.getPassword()));
 		} catch (Exception e) {
             log.info("Exception found: {}", e.getMessage());
 
-			throw new RuntimeException("Error: "+ e.getMessage());
+			throw new UserNotFoundException(e.getMessage());
 
 		}
 		final UserDetails usrDetails = userDetailsService.loadUserByUsername(authCredential.getEmail());
@@ -122,7 +122,7 @@ public class AdminController {
 
 	//demo api for payment.
 	@GetMapping("/get-data-pay")
-	public AdminPay getDatapay(@RequestBody AdminPay pay)
+	public AdminPay getDatapay(@RequestBody AdminPayModel pay)
 	{
 		return adminService.getDataPay(pay);
 	}
@@ -132,7 +132,7 @@ public class AdminController {
 	//Initiating payment to the vendor
 	@PutMapping("/pay-vendor-now")
 	@ResponseBody
-	public String payNow(@RequestBody AdminPay payment) throws Exception {
+	public String payNow(@RequestBody AdminPayModel payment) throws Exception {
 		RazorpayClient razorpayClient = new RazorpayClient("rzp_test_vmHcJh5Dj4v5EB", "SGff6EaJ7l3RzR47hnE4dYJz");
 
 		JSONObject ob = new JSONObject();
@@ -163,7 +163,7 @@ public class AdminController {
 
 	//Finding payment history of the vendor.
 	@GetMapping("/paid-history/{vendor}")
-	public List<AdminPay> paidHistroy(@PathVariable String vendor) throws Exception {
+	public List<AdminPay> paidHistroy(@PathVariable String vendor) throws DataNotFoundException {
 		return adminService.paidHistroyVendor(vendor);
 	}
 

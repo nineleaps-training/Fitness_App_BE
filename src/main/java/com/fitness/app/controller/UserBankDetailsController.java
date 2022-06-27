@@ -1,6 +1,7 @@
 package com.fitness.app.controller;
 
 import com.fitness.app.entity.UserBankDetails;
+import com.fitness.app.model.UserBankModel;
 import com.fitness.app.service.UserBankDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class UserBankDetailsController {
 
     //Add or update bank details of the user.
     @PutMapping("/user-bankdetails/add")
-    public ResponseEntity<UserBankDetails> addBankDetails(@RequestBody UserBankDetails details) {
+    public ResponseEntity<UserBankDetails> addBankDetails(@RequestBody UserBankModel details) {
 
         UserBankDetails userBankDetails = userBankDetailsService.addBankDetails(details);
         Assert.notNull(userBankDetails, "UserBankDetails is null");

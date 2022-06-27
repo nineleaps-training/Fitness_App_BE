@@ -2,6 +2,7 @@ package com.fitness.app.service;
 
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.UserDetails;
+import com.fitness.app.model.DetailsModel;
 import com.fitness.app.repository.UserDetailsRepository;
 import com.fitness.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +17,18 @@ public class UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserDetails addUserDetails(UserDetails userDetails) {
+    public UserDetails addUserDetails(DetailsModel userDetails) {
 
         UserClass user = userRepository.findByEmail(userDetails.getEmail());
 
         if (user != null && user.getActivated()) {
-            return userDetailsRepository.save(userDetails);
+        	UserDetails details=new UserDetails();
+        	details.setUserEmail(userDetails.getEmail());
+        	details.setUserGender(userDetails.getGender());
+        	details.setUserFullAddress(userDetails.getFullAddress());
+        	details.setUserCity(userDetails.getCity());
+        	details.setUseroPostal(userDetails.getPostal());
+            return userDetailsRepository.save(details);
         }
 
         return null;

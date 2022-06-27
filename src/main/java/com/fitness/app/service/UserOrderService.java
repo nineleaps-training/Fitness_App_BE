@@ -6,8 +6,9 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
+import com.fitness.app.entity.*;
+import com.fitness.app.model.BookedGymModel;
 
-import com.fitness.app.model.GymRepresnt;
 
 
 
@@ -15,11 +16,7 @@ import com.fitness.app.model.GymRepresnt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fitness.app.entity.GymClass;
-import com.fitness.app.entity.UserAttendance;
-import com.fitness.app.entity.UserOrder;
-import com.fitness.app.entity.VendorPayment;
-import com.fitness.app.model.BookedGymModel;
+
 import com.fitness.app.model.UserPerfomanceModel;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.AttendanceRepo;
@@ -43,30 +40,29 @@ public class UserOrderService {
     @Autowired
     private AddGymRepository gymRepo;
 
-    @Autowired
-    private GymService gymService;
 
     @Autowired
     private VendorPayRepo vendorOrderRepo;
 
-    @Autowired
-    private RatingService ratingService;
+
 
     //creating order
     public void orderNow(UserOrder userOrder) {
         userOrderRepo.save(userOrder);
     }
-
+    final String CURRENT="Current";
 
     //updating order
 
     public UserOrder updateOrder(Map<String, String> data) {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
-        UserOrder order = userOrderRepo.findById(data.get("order_id")).get();
+        
+        if(data==null) {return null;}
+        UserOrder order =userOrderRepo.findById(data.get("order_id")).get();
         order.setPaymentId(data.get("payment_id"));
         order.setStatus(data.get("status"));
-        order.setBooked("Current");
+        order.setBooked(CURRENT);
         order.setDate(date);
         order.setTime(time);
 
@@ -75,7 +71,7 @@ public class UserOrderService {
 
 
         //update booked...
-        int booked = 30;
+        int booked ;
         if (order.getSubscription().equals("monthly")) {
             booked = 30;
         } else if (order.getSubscription().equals("quaterly")) {
@@ -141,7 +137,12 @@ public class UserOrderService {
         List<UserOrder> orders = userOrderRepo.findByGym(gymId);
         orders = orders.stream().filter(o -> o.getStatus().equals("Completed")).collect(Collectors.toList());
         Set<UserPerfomanceModel> users = new HashSet<>();
-        String vendor = gymRepo.findById(gymId).get().getEmail();
+        Optional<GymClass>gymdata=gymRepo.findById(gymId);
+        String vendor="";
+        if(gymdata.isPresent()) {
+               vendor=gymdata.get().getEmail();
+        }
+        
         for (UserOrder order : orders) {
             UserAttendance newAtt = attendanceRepo.findByEmailAndVendor(order.getEmail(), vendor);
             UserPerfomanceModel user = new UserPerfomanceModel();
@@ -159,36 +160,115 @@ public class UserOrderService {
     @Autowired
     private GymAddressRepo gymAddressRepo;
 
-    public List<GymRepresnt> bookedGym(String email) {
+    public List<BookedGymModel> bookedGym(String email) {
 
 
 
 
     List<UserOrder> orders = userOrderRepo.findByEmail(email);
+        List<BookedGymModel> gyms = new ArrayList<>();
         if (orders == null) {
-            return null;
+            return gyms;
         }
-        List<GymRepresnt> gyms = new ArrayList<>();
-        for(UserOrder order:orders)
+    List<UserOrder>activeOrder=orders.stream().filter(o->o.getBooked().equals(CURRENT)).collect(Collectors.toList());
+
+        BookedGymModel gymModel = new BookedGymModel();
+        for(UserOrder order:activeOrder)
         {
-            if(order.getBooked().equals("Current"))
-            {
-                gyms.add(gymService.getGymByGymId(order.getGym()));
-            }
+            GymClass localGym=gymRepo.findById(order.getGym()).get();
+            GymAddressClass addressGym= gymAddressRepo.findById(order.getGym()).get();
+            LocalDate endDate=LocalDate.now();
+            endDate=endDate.plusDays(calculateTotalTime(order.getSubscription()));
+            gymModel.setId(order.getGym());
+            gymModel.setGymName(localGym.getName());
+            gymModel.setService(order.getServices());
+            gymModel.setSlot(order.getSlot());
+            gymModel.setRating(localGym.getRating());
+            gymModel.setEndDate(endDate);
+            gymModel.setAddress(addressGym);
+            gymModel.setContact(localGym.getContact());
+            gymModel.setRating(localGym.getRating());
         }
+        gyms.add(gymModel);
        orders = orders.stream().filter(o -> o.getBooked().equals("Expired")).collect(Collectors.toList());
+
         for (UserOrder order : orders) {
-            gyms.add(gymService.getGymByGymId(order.getGym()));
+            GymClass localGym=gymRepo.findById(order.getGym()).get();
+            GymAddressClass addressGym= gymAddressRepo.findById(order.getGym()).get();
+            LocalDate endDate=LocalDate.now();
+            endDate=endDate.plusDays(calculateTotalTime(order.getSubscription()));
+            gymModel.setId(order.getGym());
+            gymModel.setGymName(localGym.getName());
+            gymModel.setService(order.getServices());
+            gymModel.setSlot(order.getSlot());
+            gymModel.setRating(localGym.getRating());
+            gymModel.setEndDate(endDate);
+            gymModel.setAddress(addressGym);
+            gymModel.setContact(localGym.getContact());
+            gymModel.setRating(localGym.getRating());
         }
+       
+        
+        gyms.add(gymModel);
       return  gyms;
 
     }
+
     
+    
+    public BookedGymModel modelYourGym(List<UserOrder> orderLst)
+    {
+
+    	BookedGymModel gymModel = new BookedGymModel();
+        for(UserOrder order:orderLst)
+        {
+            GymClass localGym=gymRepo.findById(order.getGym()).get();
+            GymAddressClass addressGym= gymAddressRepo.findById(order.getGym()).get();
+            LocalDate endDate=LocalDate.now();
+            endDate=endDate.plusDays(calculateTotalTime(order.getSubscription()));
+            gymModel.setId(order.getGym());
+            gymModel.setGymName(localGym.getName());
+            gymModel.setService(order.getServices());
+            gymModel.setSlot(order.getSlot());
+            gymModel.setRating(localGym.getRating());
+            gymModel.setEndDate(endDate);
+            gymModel.setAddress(addressGym);
+            gymModel.setContact(localGym.getContact());
+            gymModel.setRating(localGym.getRating());
+        }
+        
+        
+        return gymModel;
+    	
+    }
+
+    int calculateTotalTime(String subs)
+    {
+        int time=0;
+        switch (subs) {
+            case "Monthly":
+                time += 25;
+                break;
+            case "Quaterly":
+                time += 75;
+                break;
+            case "Half":
+                time += 150;
+                break;
+            case "Yearly":
+                time += 300;
+                break;
+            default:
+                time=0;
+                break;
+        }
+        return time;
+    }
 
     public Boolean canOrder(String email) {
-        int count = 0;
+
         List<UserOrder> orders = userOrderRepo.findByEmail(email);
-        orders = orders.stream().filter(o -> o.getBooked().equals("Current")).collect(Collectors.toList());
+        orders = orders.stream().filter(o -> o.getBooked().equals(CURRENT)).collect(Collectors.toList());
 
         if (orders == null) {
             return true;
@@ -197,20 +277,8 @@ public class UserOrderService {
         for (UserOrder order : orders) {
             LocalDate currentDate = order.getDate();
             String subs = order.getSubscription();
-            switch (subs) {
-                case "Monthly":
-                    currentDate = currentDate.plusDays(25);
-                    break;
-                case "Quaterly":
-                    currentDate = currentDate.plusDays(75);
-                    break;
-                case "Half":
-                    currentDate = currentDate.plusDays(150);
-                    break;
-                case "Yearly":
-                    currentDate = currentDate.plusDays(300);
-                    break;
-            }
+            currentDate=currentDate.plusDays(calculateTotalTime(subs));
+
             int comp = localDate.compareTo(currentDate);
             if (comp > 0) {
                 order.setBooked("Expired");
@@ -219,7 +287,7 @@ public class UserOrderService {
 
         }
 
-        if (orders != null && orders.size() < 1) {
+        if (orders.size() < 1) {
             return true;
         } else {
             return false;

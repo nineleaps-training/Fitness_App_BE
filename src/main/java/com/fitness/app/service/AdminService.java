@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.fitness.app.exceptions.DataNotFoundException;
+import com.fitness.app.model.AdminPayModel;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,14 +30,14 @@ public class AdminService {
 	private AdminPayRepo adminPayRepo;
 	
 	
-	public AdminPay getDataPay(AdminPay payment)
+	public AdminPay getDataPay(AdminPayModel payment)
 	{
 		 return adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due");
 		
 	}
 	
 	
-	public boolean PayNow(AdminPay payment, Order myOrder)
+	public boolean PayNow(AdminPayModel  payment, Order myOrder)
 	{
 		LocalDate date=LocalDate.now();
 		LocalTime time=LocalTime.now();
@@ -120,15 +123,18 @@ public class AdminService {
 
 
 
-	public List<AdminPay> paidHistroyVendor(String vendor) throws Exception 
+	public List<AdminPay> paidHistroyVendor(String vendor) throws DataNotFoundException
 	{
 		try {
 			
 			List<AdminPay> allPaid=adminPayRepo.findByVendor(vendor);
+
 			allPaid=allPaid.stream().filter(p->p.getStatus().equals("Completed")).collect(Collectors.toList());
 			return allPaid;
-		} catch (Exception e) {
-			throw new Exception(e.getMessage()+ vendor);
+
+
+		} catch (DataNotFoundException e) {
+			throw new DataNotFoundException(vendor+" error: "+ e.getMessage());
 		}
 		
 	}

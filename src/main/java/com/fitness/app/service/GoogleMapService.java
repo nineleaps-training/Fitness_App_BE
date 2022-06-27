@@ -1,5 +1,6 @@
 package com.fitness.app.service;
 
+import com.fitness.app.exceptions.HttpMethodCodeException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
@@ -40,7 +41,7 @@ public class GoogleMapService {
 
             if(responsecode!=200)
             {
-              throw  new RuntimeException("HttpResponceCode:"+responsecode);
+              throw  new HttpMethodCodeException("HttpResponseCode: "+ responsecode);
             }
             else
             {

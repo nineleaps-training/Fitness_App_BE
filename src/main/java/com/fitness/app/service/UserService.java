@@ -1,5 +1,8 @@
 package com.fitness.app.service;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +32,12 @@ public class UserService {
 	 
 	 @Autowired
 	 private Components sendMessage;
-	 
-	 
-     
-	
+
+	public UserService() throws NoSuchAlgorithmException {
+		
+	}
+
+
 	//register user
 	public UserClass registerUser(UserModel user)
 	{
@@ -64,7 +69,12 @@ public class UserService {
 	//Verifying user
 	public UserClass verifyUser(String email)
 	{
-		UserClass user=userRepository.findById(email).get();
+		UserClass user=new UserClass();
+		Optional<UserClass> userData=userRepository.findById(email);
+		if(userData.isPresent())
+		{
+			user=userData.get();
+		}
 		if(user!=null)
 		{
 			user.setActivated(true);
@@ -77,7 +87,12 @@ public class UserService {
 	//LogIn user
 	public void loginUser(String email)
 	{
-		UserClass user=userRepository.findById(email).get();
+		UserClass user= new UserClass();
+		Optional<UserClass> userData=userRepository.findById(email);
+		if(userData.isPresent())
+		{
+			user=userData.get();
+		}
 		user.setLoggedin(true);
 		userRepository.save(user);
 	}
@@ -115,21 +130,23 @@ public class UserService {
 		}
 		
 	}
-	
+
 	//generate random String
+	private Random random = SecureRandom.getInstanceStrong();
 	public String randomPass()
 	{
+
 		int leftLimit = 97; // letter 'a'
 	    int rightLimit = 122; // letter 'z'
 	    int targetStringLength = 10;
-	    Random random = new Random();
+
 
 	    String generatedString = random.ints(leftLimit, rightLimit + 1)
 	      .limit(targetStringLength)
 	      .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
 	      .toString();
 
-	    System.out.println(generatedString);
+
 	    return generatedString;
 	}
 	

@@ -5,6 +5,8 @@ import java.util.List;
 
 import java.util.stream.Collectors;
 
+import com.fitness.app.exceptions.DataNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +17,7 @@ import com.fitness.app.model.MarkUserAttModel;
 
 import com.fitness.app.repository.AttendanceRepo;
 import com.fitness.app.repository.RatingRepo;
-
+@Slf4j
 @Service
 public class AttendanceService {
 
@@ -30,7 +32,7 @@ public class AttendanceService {
 	
 	
 	
-	public String markUsersAttendance(MarkUserAttModel userAttendance)throws Exception
+	public String markUsersAttendance(MarkUserAttModel userAttendance)throws DataNotFoundException
 	{
 		try {
 			List<String> users=userAttendance.getUsers();
@@ -74,8 +76,9 @@ public class AttendanceService {
 			
 		} 
 		
-		catch (Exception e) {
-		  throw new Exception(e.getMessage());
+		catch (DataNotFoundException e) {
+          log.info("Error by : {}",e.getMessage() );
+		  throw new DataNotFoundException("Error: "+ e.getMessage());
 		}
 		
 		
@@ -87,7 +90,7 @@ public class AttendanceService {
 	
 	
 	
-	public List<Integer> userPerfomance(String email, String gym) throws Exception
+	public List<Integer> userPerfomance(String email, String gym) throws DataNotFoundException
 	{
 		try {
 			UserAttendance user=attendanceRepo.findByEmailAndGym(email, gym);
@@ -139,8 +142,9 @@ public class AttendanceService {
 			
 			List<Integer>l=new ArrayList<>();
 			return l;
-		} catch (Exception e) {
-			throw new Exception(e.getMessage()+"/t couse: "+ e.getCause());
+		} catch (DataNotFoundException e) {
+
+			throw new DataNotFoundException("Error: "+ e.getMessage());
 		}
 	}
 	

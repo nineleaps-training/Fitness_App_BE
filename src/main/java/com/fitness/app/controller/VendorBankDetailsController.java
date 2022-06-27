@@ -1,6 +1,7 @@
 package com.fitness.app.controller;
 
 import com.fitness.app.entity.VendorBankDetails;
+import com.fitness.app.model.UserBankModel;
 import com.fitness.app.service.VendorBankDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +15,7 @@ public class VendorBankDetailsController {
     private VendorBankDetailsService vendorBankDetailsService;
     //Adding bank details of the vendor
     @PutMapping("/vendor-bankdetails/add")
-    public ResponseEntity<VendorBankDetails> addDetails(@RequestBody VendorBankDetails details) {
+    public ResponseEntity<VendorBankDetails> addDetails(@RequestBody UserBankModel details) {
         VendorBankDetails vendorBankDetails = vendorBankDetailsService.addDetails(details);
         Assert.notNull(vendorBankDetails, "bank details are null");
         return new ResponseEntity<VendorBankDetails>(vendorBankDetails, HttpStatus.OK);

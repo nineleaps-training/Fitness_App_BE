@@ -1,6 +1,7 @@
 package com.fitness.app.controller;
 
 import com.fitness.app.entity.UserDetails;
+import com.fitness.app.model.DetailsModel;
 import com.fitness.app.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ public class UserDetailsController {
     private UserDetailsService userDetailsService;
     //Adding User Details
     @PutMapping("/add/user-details")
-    public ResponseEntity<ArrayList<UserDetails>> addUserDetails(@RequestBody UserDetails userDetails) {
+    public ResponseEntity<ArrayList<UserDetails>> addUserDetails(@RequestBody DetailsModel userDetails) {
         UserDetails userDetails1 = userDetailsService.addUserDetails(userDetails);
 
         ArrayList<UserDetails> user  = new ArrayList<>();

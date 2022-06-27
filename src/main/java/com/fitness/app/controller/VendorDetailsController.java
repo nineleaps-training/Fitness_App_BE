@@ -1,6 +1,7 @@
 package com.fitness.app.controller;
 
 import com.fitness.app.entity.VendorDetails;
+import com.fitness.app.model.DetailsModel;
 import com.fitness.app.repository.UserOrderRepo;
 import com.fitness.app.service.VendorDetailsService;
 
@@ -22,11 +23,10 @@ public class VendorDetailsController {
     @Autowired
     private VendorDetailsService vendorDetailsService;
 
-    @Autowired
-    private UserOrderRepo userOrderRepo;
+  
     //Adding details of the vendor
     @PutMapping("/add/vendor-details")
-    public ResponseEntity<ArrayList<VendorDetails>> addVendorDetails(@RequestBody VendorDetails vendorDetails) {
+    public ResponseEntity<ArrayList<VendorDetails>> addVendorDetails(@RequestBody DetailsModel vendorDetails) {
         VendorDetails vendorDetails1 = vendorDetailsService.addVendorDetails(vendorDetails);
 
         ArrayList<VendorDetails> vendor  = new ArrayList<>();

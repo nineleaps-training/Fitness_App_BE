@@ -18,17 +18,17 @@ public class VendorBankDetails {
 
 	@Id
 	@Field
-	private String email;
+	private String vendorEmail;
 	@Field
-	private String name;
+	private String vendorName;
 	@Field
-    private String bankName;
+    private String vendorBankName;
 	@Field
-    private String branchName;
+    private String vendorBranchName;
 	@Field
-    private Long accountNumber;
+    private Long vendorAccountNumber;
 	@Field
-    private String bankIFSC;
+    private String vendorBankIFSC;
 	@Field
 	private String paymentSchedule;
 

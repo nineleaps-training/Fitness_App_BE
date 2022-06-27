@@ -1,5 +1,6 @@
 package com.fitness.app.controller;
 
+import com.fitness.app.exceptions.DataNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -135,15 +136,15 @@ public class UserController {
 	 
 	 
 	 //function to log in and return token
-	 public ResponseEntity<SignUpResponce> logInFunctionality(String email, String password) throws Exception
+	 public ResponseEntity<SignUpResponce> logInFunctionality(String email, String password) throws DataNotFoundException
 	 {
 		 try {    		
 	    		authenticationManager.authenticate(
 	    				new UsernamePasswordAuthenticationToken(email, password)
 	    				);   		
-	    	}catch (Exception e) {
+	    	}catch (DataNotFoundException e) {
              log.info("Error found: {}", e.getMessage());
-			 throw new Exception("Error");
+			 throw new DataNotFoundException("User Not Found");
 			}
 	    	final UserDetails usrDetails=userDetailsService.loadUserByUsername(email);
 	    	final String jwt= jwtUtils.generateToken(usrDetails);
@@ -169,7 +170,7 @@ public class UserController {
 		 if(localUser==null) {
 			 return ResponseEntity.ok( new SignUpResponce(null, "This email in use!"));
 		 }
-		 if(localUser!=null && localUser.getRole().equals("USER"))
+		 if(localUser.getRole().equals("USER"))
 		 {
 			 return ResponseEntity.ok( new SignUpResponce(null, "This email already in use as USER! "));
 		 }
@@ -189,7 +190,7 @@ public class UserController {
 		 if(localUser==null) {
 			 return ResponseEntity.ok( new SignUpResponce(null, "This email in use!"));
 		 }
-		 if(localUser!=null && localUser.getRole().equals("VENDOR"))
+		 if(localUser.getRole().equals("VENDOR"))
 		 {
 			 return ResponseEntity.ok( new SignUpResponce(null, "This email already in use as VENDOR! "));
 		 }

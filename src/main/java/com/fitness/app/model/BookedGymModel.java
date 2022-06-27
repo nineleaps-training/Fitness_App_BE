@@ -21,7 +21,7 @@ public class BookedGymModel {
 	private String slot;
 	private LocalDate endDate;
 	private GymAddressClass address;
-	private String contact;
+	private Long contact;
 	private Double rating;
 }
 
