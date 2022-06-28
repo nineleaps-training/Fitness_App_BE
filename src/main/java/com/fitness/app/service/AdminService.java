@@ -118,7 +118,8 @@ public class AdminService {
 		 }
          
 		 
-		return  adminPayRepo.save(payment);
+	 adminPayRepo.save(payment);
+	 return payment;
 	}
 
 

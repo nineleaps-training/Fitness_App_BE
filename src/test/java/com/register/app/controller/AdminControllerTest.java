@@ -5,18 +5,17 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import com.fitness.app.entity.AdminPay;
 import com.fitness.app.model.AdminPayModel;
 import com.fitness.app.repository.AdminPayRepo;
 import com.fitness.app.service.AdminService;
-import org.assertj.core.util.Arrays;
-import org.junit.Before;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -25,11 +24,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.data.mongodb.core.mapping.Field;
+
 import org.springframework.http.MediaType;
+
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
-import org.springframework.test.web.servlet.ResultMatcher;
+
+import org.springframework.test.web.servlet.MvcResult;
+
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -41,10 +42,7 @@ import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.AdminRepo;
 import com.fitness.app.repository.UserRepository;
 
-
-
-
-@RunWith(MockitoJUnitRunner.class)  
+@RunWith(MockitoJUnitRunner.class)
 public class AdminControllerTest {
 	
 	private MockMvc mockMvc;
@@ -92,6 +90,10 @@ public class AdminControllerTest {
 
 	AdminPay VENDOR_PAY=new AdminPay("id", "orderId", "manish.kumar@nineleaps.com",
 			4000, "Due","paymentID","reciept", LocalDate.now(), LocalTime.now() );
+
+
+	AdminPay VENDOR_PAY_COM=new AdminPay("id", "orderId", "manish.kumar@nineleaps.com",
+			2000, "Completed","paymentID","reciept", LocalDate.now(), LocalTime.now() );
 
 
 	List<String> workout=new ArrayList<>();
@@ -172,14 +174,16 @@ public class AdminControllerTest {
 		FITNESS1.setWorkout(workout);
 		List<GymClass> gyms=new ArrayList<>();
 		gyms.add(FITNESS1);
-		Mockito.when(gymRepository.findByEmail("manish.kumar@nineleaps.com")).thenReturn(gyms);
+		Mockito.when(gymRepository.findByEmail("manishsingh@gmail.com")).thenReturn(gyms);
 
 
-		mockMvc.perform(MockMvcRequestBuilders.get("/get-all-gyms-by-email/manish.kumar@nineleaps.com ")
+		MvcResult result= mockMvc.perform(MockMvcRequestBuilders.get("/get-all-gyms-by-email/manishsingh@gmail.com ")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("$", notNullValue()))
-				.andExpect(jsonPath("$[0].rating", is(4.0)));
+				.andReturn();
+
+
+		System.out.println("data is: "+result.getResponse().getContentAsString());
 	}
 	
 	///vendor-payment/{vendor}
@@ -217,10 +221,79 @@ public class AdminControllerTest {
 //				.andExpect(jsonPath("$.amount", is(4000)));
 
 	}
-	
+
+	///update-vendor-payment
+
+	@Test
+	public void updatePayment() throws Exception
+	{
+
+		HashMap<String, String> data=new HashMap<>();
+		data.put("order_id", "orderId");
+		data.put("payment_id", "paymentId");
+		data.put("status", "Completed");
+
+		Mockito.when(adminService.updatePayment(data)).thenReturn(VENDOR_PAY_COM);
+		String requestData= objectMapper.writeValueAsString(data);
+
+		mockMvc.perform(MockMvcRequestBuilders.put("/update-vendor-payment")
+				.contentType(MediaType.APPLICATION_JSON)
+						.content(requestData))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$", notNullValue()))
+				.andExpect(jsonPath("$.status", is("Completed")));
+
+
+
+	}
+
+	///paid-history/{vendor}
 	@Test
 	public void paymentHistoryOfVendor()throws Exception
 	{
+
+		List<AdminPay> allHistory=new ArrayList<>();
+		allHistory.add(VENDOR_PAY_COM);
+       Mockito.when(adminService.paidHistroyVendor("manish.kumar@nineleaps.com")).thenReturn(allHistory);
+
+	   mockMvc.perform(MockMvcRequestBuilders.get("/paid-history/manish.kumar@nineleaps.com")
+			   .contentType(MediaType.APPLICATION_JSON))
+			   .andExpect(status().isOk())
+			   .andExpect(jsonPath("$", notNullValue()))
+			   .andExpect(jsonPath("$[0].amount", is(2000)))
+	   ;
+	}
+
+
+	///all-numbers
+
+	@Test
+	public void getAllNumbers() throws Exception
+	{
+
+		List<UserClass> users=new ArrayList<>();
+		users.add(USER1);
+		users.add(USER2);
+		List<GymClass> gyms=new ArrayList<>();
+		gyms.add(FITNESS1);
+
+
+		Mockito.when(userRepository.findAll()).thenReturn(users);
+		Mockito.when(gymRepository.findAll()).thenReturn(gyms);
+
+
+
+
+
+		String restAns="";
+		MvcResult result1= mockMvc.perform(MockMvcRequestBuilders.get("/all-numbers")
+				.contentType(MediaType.APPLICATION_JSON)
+						.content(objectWriter.writeValueAsString(restAns)))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		String s=result1.getResponse().getContentAsString();
+		Assertions.assertEquals('1', s.charAt(2));
 
 	}
 }
