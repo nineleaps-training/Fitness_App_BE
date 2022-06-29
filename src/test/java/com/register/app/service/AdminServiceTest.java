@@ -116,9 +116,6 @@ public class AdminServiceTest {
             "rahul.kumar01@nineleaps.com",
             "GM1", 2000, "Due", LocalDate.now(), LocalTime.now());
 
-    AdminPay VENDOR_PAY_PAID=new AdminPay("id", "orderId", "manish.kumar@nineleaps.com",
-            2000, "Paid","paymentID","reciept", LocalDate.now(), LocalTime.now() );
-
 
     @Test
     public void updatingPayment()  {

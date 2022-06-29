@@ -28,7 +28,8 @@ public class UserDetailsService {
         	details.setUserFullAddress(userDetails.getFullAddress());
         	details.setUserCity(userDetails.getCity());
         	details.setUseroPostal(userDetails.getPostal());
-            return userDetailsRepository.save(details);
+            userDetailsRepository.save(details);
+            return details;
         }
 
         return null;

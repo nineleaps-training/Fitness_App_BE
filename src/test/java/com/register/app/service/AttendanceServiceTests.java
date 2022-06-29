@@ -1,5 +1,6 @@
 package com.register.app.service;
 
+import com.fitness.app.entity.Rating;
 import com.fitness.app.entity.UserAttendance;
 import com.fitness.app.model.MarkUserAttModel;
 import com.fitness.app.repository.AttendanceRepo;
@@ -8,11 +9,11 @@ import com.fitness.app.service.AttendanceService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.MockitoJUnitRunner;
+
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
@@ -41,6 +42,13 @@ public class AttendanceServiceTests {
             users
     );
 
+    Rating rating=new Rating(
+            "rId",
+            "Rahul",
+            "Manish",
+            4.0
+    );
+
     List<Integer> attendance=new ArrayList<>(Arrays.asList(1,1,1,1,1,0,0,1,0));
     UserAttendance userAttendance=new UserAttendance(
             "Rahul",
@@ -67,7 +75,31 @@ public class AttendanceServiceTests {
         Assertions.assertNotNull(ans);
     }
 
+    @Test
+    public void  userPerformance()
+    {
 
 
+        Mockito.when(attendanceRepo.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym())).thenReturn(userAttendance);
+        List<Integer> attendance1= attendanceService.userPerfomance(userAttendance.getEmail(), userAttendance.getGym());
+        Assertions.assertNotNull(attendance1);
+        Assertions.assertEquals(attendance1.get(0), 6);
+    }
+
+
+    @Test
+    public void  calculateRating()
+    {
+       List<Rating> ratingsList=new ArrayList<>();
+       ratingsList.add(rating);
+       ratingsList.add(rating);
+
+
+       Mockito.when(ratingRepo.findByTarget(rating.getTarget())).thenReturn(ratingsList);
+       Double returnedRate= attendanceService.calculateRating(rating.getTarget());
+       Assertions.assertNotNull(returnedRate);
+       Assertions.assertEquals(returnedRate, 4.0);
+
+    }
 
 }

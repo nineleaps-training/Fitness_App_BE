@@ -31,7 +31,8 @@ public class UserBankDetailsService {
         bank.setBranchName(bankDetails.getBranchName());
        
         if (user != null && user.getActivated()) {
-            return repository.save(bank);
+            repository.save(bank);
+            return bank;
         }
 
         return null;

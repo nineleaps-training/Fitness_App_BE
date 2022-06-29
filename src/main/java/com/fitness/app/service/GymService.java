@@ -69,7 +69,8 @@ public class GymService {
 		newGym.setContact(gymClassModel.getContact());
 		newGym.setCapacity(gymClassModel.getCapacity());
 
-		return gymRepository.save(newGym);
+		gymRepository.save(newGym);
+		return newGym;
 	}
 	
 	
@@ -153,64 +154,18 @@ public class GymService {
 
 	// Find gym address by gym id
 	public GymAddressClass findTheAddress(String id) {
-		return addressRepo.findById(id).orElse(null);
+		GymAddressClass address=new GymAddressClass();
+		Optional<GymAddressClass> address_cl= addressRepo.findById(id);
+		if(address_cl.isPresent())
+		{
+			address=address_cl.get();
+		}
+		return address;
 	}
 
 	// Find All gym from database..
 	public List<GymClass> getAllGym() {
 		return gymRepository.findAll();
-	}
-
-	// edit gym
-	public GymClass editGym(GymClassModel gymClassModel, String gym_id) throws DataNotFoundException{
-
-		try {
-			
-			GymClass theGym = new GymClass();
-            Optional<GymClass> gymData=gymRepository.findById(gym_id);
-            
-            
-            if(gymData.isPresent())
-            {
-              theGym=gymData.get();
-            }
-            else
-            {
-            	throw new DataNotFoundException("Data not found");
-            }
-			// Creating address of gym
-			addressRepo.deleteById(theGym.getId());
-			GymAddressClass address = gymClassModel.getGymAddress();
-			address.setId(gym_id);
-			addressRepo.save(address);
-
-			// set time
-			timeRepo.deleteById(theGym.getId());
-
-			GymTime time = gymClassModel.getTiming();
-			time.setId(gym_id);
-			timeRepo.save(time);
-
-			// set subscription.
-			subcriptionRepo.deleteById(theGym.getId());
-			GymSubscriptionClass subscription = gymClassModel.getSubscription();
-			subscription.setId(gym_id);
-			subcriptionRepo.save(subscription);
-
-			gymRepository.delete(theGym);
-			theGym.setId(gym_id);
-			theGym.setEmail(gymClassModel.getVendor_email());
-			theGym.setName(gymClassModel.getGym_name());
-			theGym.setWorkout(gymClassModel.getWorkoutList());
-			theGym.setContact(gymClassModel.getContact());
-			theGym.setCapacity(gymClassModel.getCapacity());
-
-			return gymRepository.save(theGym);
-			
-		} catch(DataNotFoundException  e) {
-			throw new  DataNotFoundException(e.getMessage());
-		}
-
 	}
 
 
@@ -233,9 +188,31 @@ public class GymService {
 			for (GymAddressClass address : addressList) {
 				String id = address.getId();
 				GymRepresnt gym = new GymRepresnt();
-				GymClass gymClass = gymRepository.findById(id).orElse(null);
-				GymSubscriptionClass subscription = subcriptionRepo.findById(id).orElse(null);
-				GymTime time = timeRepo.findById(id).orElse(null);
+				
+				GymClass gymClass=new GymClass();
+				GymTime time=new GymTime();
+				GymSubscriptionClass subscription=new GymSubscriptionClass();
+				
+				Optional<GymClass> gym_cl = gymRepository.findById(id);
+				Optional<GymSubscriptionClass> subscription_cl = subcriptionRepo.findById(id);
+				Optional<GymTime> time_cl = timeRepo.findById(id);
+				
+				if(gym_cl.isPresent())
+				{
+					gymClass=gym_cl.get();
+				}
+				if(subscription_cl.isPresent())
+				{
+					subscription=subscription_cl.get();
+				}
+				
+				if(time_cl.isPresent())
+				{
+					time=time_cl.get();
+				}
+				
+				
+				
 				gym.setId(gymClass.getId());
 				gym.setEmail(gymClass.getEmail());
 				gym.setGym_name(gymClass.getName());

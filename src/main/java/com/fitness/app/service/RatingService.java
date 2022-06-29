@@ -30,7 +30,8 @@ public class RatingService {
     	rtt.setRater(rating.getRateRatter());
     	rtt.setRate(rating.getRate());
     	
-        return ratingRepo.save(rtt);  
+        ratingRepo.save(rtt);
+        return rtt;
         
     }
     public Double getRating(String target)

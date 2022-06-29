@@ -15,7 +15,7 @@ import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.model.GymClassModel;
 import com.fitness.app.model.GymRepresnt;
-import com.fitness.app.service.FilterBySubscription;
+
 import com.fitness.app.service.GymService;
 
 @RestController
@@ -24,9 +24,7 @@ public class GymController {
 	@Autowired
 	private GymService gymService;
 	
-	@Autowired
-	private FilterBySubscription filterSubscriptionService;
-
+	
 	// Adding new fitness center
 	@PutMapping("/add/gym")
 	public GymClass addNewGym(@RequestBody GymClassModel gymClassModel) {
@@ -45,12 +43,7 @@ public class GymController {
 		return gymService.getGymByVendorEmail(email);
 	}
 
-	// Update details and other in the fitness center.
-	@PutMapping("gym/edit/{id}")
-	public GymClass editGym(@RequestBody GymClassModel newGym, @PathVariable String id) {
-		return gymService.editGym(newGym, id);
-	}
-    
+
 	//get address of fitness center by its unique id.
 	@GetMapping("/gym/address/{id}")
 	public GymAddressClass getAddress(@PathVariable String id)
@@ -82,40 +75,6 @@ public class GymController {
 	}
 	
 
-	//Get Fitness by Monthly price limit.
-	@GetMapping("/filter/subscription/monthly/{price}")
-	public List<GymClassModel> filterMonthly(@PathVariable int price, @RequestBody List<GymClassModel> listGym)
-	{
-		return filterSubscriptionService.filterByMonthly(price, listGym);
-	}
-
-	//Get Fitness by quarterly price limit.
-	@GetMapping("/filter/subscription/quarterly/{price}")
-	public List<GymClassModel> filterQuarterly(@PathVariable int price, @RequestBody List<GymClassModel> listGym) {
-
-		return filterSubscriptionService.filterByQuarterly(price, listGym);
-	}
-
-	//Get Fitness by halfYearly price limit.
-	@GetMapping("/filter/subscription/halfYearly/{price}")
-	public List<GymClassModel> filterHalfYearly(@PathVariable int price, @RequestBody List<GymClassModel> listGym) {
-
-		return filterSubscriptionService.filterByHalfYearly(price, listGym);
-	}
-
-	////Get Fitness by yearly price limit.
-	@GetMapping("/filter/subscription/yearly/{price}")
-	public List<GymClassModel> filterYearly(@PathVariable int price, @RequestBody List<GymClassModel> listGym) {
-
-		return filterSubscriptionService.filterByYearly(price, listGym);
-	}
-
-	//Get Fitness by one workout price limit.
-	@GetMapping("/filter/subscription/oneWorkout/{price}")
-	public List<GymClassModel> filterOneWorkout(@PathVariable int price, @RequestBody List<GymClassModel> listGym) {
-
-		return filterSubscriptionService.filterByOneWorkout(price, listGym);
-	}
 
 
 

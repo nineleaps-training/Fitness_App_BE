@@ -33,7 +33,8 @@ public class VendorDetailsService {
         	details.setVendorPostal(vendorDetails.getPostal());
         	
         	
-            return vendordetailsRepository.save(details);
+             vendordetailsRepository.save(details);
+             return details;
         }
         return null;
     }

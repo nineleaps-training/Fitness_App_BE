@@ -31,7 +31,8 @@ public class VendorBankDetailsService {
         	bank.setVendorBranchName(bankDetails.getBranchName());
         	bank.setVendorBankIFSC(bankDetails.getBankIFSC());
         	bank.setPaymentSchedule(bankDetails.getSchedule());
-            return repository.save(bank);
+            repository.save(bank);
+            return bank;
         }
 
         return null;
