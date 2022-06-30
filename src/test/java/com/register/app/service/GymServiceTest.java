@@ -174,11 +174,11 @@ public class GymServiceTest {
         Mockito.when(subscriptionRepo.findById(FITNESS1.getId())).thenReturn(subscriptionClass);
         Mockito.when(timeRepo.findById(FITNESS1.getId())).thenReturn(time);
 
-
         List<GymRepresnt> returnedGyms=gymService.getGymByCity(GYM_ADDRESS.getCity());
 
         Assertions.assertNotNull(returnedGyms);
-        Assertions.assertEquals(returnedGyms.get(0).getCapacity(), FITNESS1.getCapacity());
+
+        Assertions.assertEquals(returnedGyms.get(0).getGym_name(), FITNESS1.getName());
     }
 
 

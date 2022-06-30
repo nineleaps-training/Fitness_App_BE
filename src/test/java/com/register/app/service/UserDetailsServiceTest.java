@@ -54,7 +54,7 @@ public class UserDetailsServiceTest {
    @Test
     public void getUserDetails()
    {
-       Mockito.when(userDetailsRepository.findByEmail(DETAILS.getUserEmail())).thenReturn(DETAILS);
+       Mockito.when(userDetailsRepository.findByUserEmail(DETAILS.getUserEmail())).thenReturn(DETAILS);
        UserDetails userDetails=userDetailsService.getUserDetails(DETAILS.getUserEmail());
        Assertions.assertNotNull(userDetails);
        Assertions.assertEquals(userDetails.getUseroPostal(), DETAILS.getUseroPostal());

@@ -2,7 +2,6 @@ package com.register.app.service;
 
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorBankDetails;
-import com.fitness.app.entity.VendorDetails;
 import com.fitness.app.model.UserBankModel;
 import com.fitness.app.repository.BankDetailsRepository;
 import com.fitness.app.repository.UserRepository;
@@ -80,7 +79,7 @@ public class VendorBankDetailsServiceTest {
     @Test
     public void getBankDetails()
     {
-        Mockito.when(bankDetailsRepository.findByEmail(BANK_MODEL.getEmail())).thenReturn(BANK);
+        Mockito.when(bankDetailsRepository.findByVendorEmail(BANK_MODEL.getEmail())).thenReturn(BANK);
         VendorBankDetails bankDetails=vendorBankDetailsService.getBankDetails(BANK_MODEL.getEmail());
 
         Assertions.assertNotNull(bankDetails);

@@ -37,6 +37,6 @@ public class UserDetailsService {
 
     public UserDetails getUserDetails(String email) {
 
-        return userDetailsRepository.findByEmail(email);
+        return userDetailsRepository.findByUserEmail(email);
     }
 }

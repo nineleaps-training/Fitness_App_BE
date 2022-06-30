@@ -45,6 +45,6 @@ public class VendorBankDetailsService {
 
     public VendorBankDetails getBankDetails(String email) {
 
-        return repository.findByEmail(email);
+        return repository.findByVendorEmail(email);
     }
 }

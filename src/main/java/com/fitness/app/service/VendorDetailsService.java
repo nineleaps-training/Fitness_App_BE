@@ -41,6 +41,6 @@ public class VendorDetailsService {
 
     public VendorDetails getVendorDetails(String email) {
 
-        return vendordetailsRepository.findByEmail(email);
+        return vendordetailsRepository.findByVendorEmail(email);
     }
 }

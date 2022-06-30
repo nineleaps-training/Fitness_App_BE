@@ -40,9 +40,6 @@ public class ImgController {
    @GetMapping("/downloadFile/{id}")
    public ResponseEntity<ByteArrayResource> getImage(@PathVariable String id) throws FileNotFoundException
    {
-	   
-	
-	   
 	   try
 	   {
 		   Doc docFile=imgService.getImage(id);

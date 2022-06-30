@@ -11,5 +11,5 @@ import com.fitness.app.entity.VendorDetails;
 @Repository
 public interface VendorDetailsRepository  extends  MongoRepository<VendorDetails,String>{
 
-	public VendorDetails findByEmail(String email);
+	public VendorDetails findByVendorEmail(String email);
 }

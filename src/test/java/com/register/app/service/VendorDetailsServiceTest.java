@@ -58,7 +58,7 @@ public class VendorDetailsServiceTest {
     @Test
     public void getVendorDetails()
     {
-        Mockito.when(detailsRepository.findByEmail(DETAILS.getVendorEmail())).thenReturn(DETAILS);
+        Mockito.when(detailsRepository.findByVendorEmail(DETAILS.getVendorEmail())).thenReturn(DETAILS);
         VendorDetails details=vendorDetailsService.getVendorDetails(DETAILS.getVendorEmail());
         Assertions.assertNotNull(details);
         Assertions.assertEquals(details.getVendorPostal(), DETAILS.getVendorPostal());

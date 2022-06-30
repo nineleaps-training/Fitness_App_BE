@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 @EnableMongoRepositories
 @Repository
 public interface BankDetailsRepository extends MongoRepository<VendorBankDetails, String> {
-    public VendorBankDetails findByEmail(String email);
+    public VendorBankDetails findByVendorEmail(String email);
 }

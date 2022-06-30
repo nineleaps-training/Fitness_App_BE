@@ -56,7 +56,8 @@ public class UserService {
 			 newUser.setActivated(false);
 			 newUser.setLoggedin(false);
 			 newUser.setCustom(user.getCustom());
-			 return userRepo.save(newUser);
+			 userRepo.save(newUser);
+			 return newUser;
 		 }
 		 else
 		 {
@@ -70,17 +71,15 @@ public class UserService {
 	public UserClass verifyUser(String email)
 	{
 		UserClass user=new UserClass();
-		Optional<UserClass> userData=userRepository.findById(email);
+		Optional<UserClass> userData=userRepo.findById(email);
 		if(userData.isPresent())
 		{
 			user=userData.get();
-		}
-		if(user!=null)
-		{
 			user.setActivated(true);
-			userRepository.save(user);
+			userRepo.save(user);
 			return user;
 		}
+		
 		return null;
 	}
 	
@@ -88,13 +87,13 @@ public class UserService {
 	public void loginUser(String email)
 	{
 		UserClass user= new UserClass();
-		Optional<UserClass> userData=userRepository.findById(email);
+		Optional<UserClass> userData=userRepo.findById(email);
 		if(userData.isPresent())
 		{
 			user=userData.get();
 		}
 		user.setLoggedin(true);
-		userRepository.save(user);
+		userRepo.save(user);
 	}
 	
 	
@@ -106,7 +105,8 @@ public class UserService {
 		if(localUser!=null && !localUser.getCustom())
 		{
 			localUser.setPassword(passwordEncoder.encode(user.getPassword()));
-			return userRepo.save(localUser);
+		     userRepo.save(localUser);
+		     return localUser;
 		}
 		else if(localUser!=null && localUser.getCustom())
 		{
@@ -124,8 +124,8 @@ public class UserService {
 			 newUser.setActivated(true);
 			 newUser.setLoggedin(false);
 			 newUser.setCustom(user.getCustom());
-			 return userRepo.save(newUser);
-			
+			 userRepo.save(newUser);
+			 return newUser;
 			
 		}
 		
