@@ -22,7 +22,7 @@
             **/com/fitness/app/config/*,
             **/com/fitness/app/controller/*,
             **/com/fitness/app/entity/*,
-             **/com/fitness/app/entity/image/*,
+            **/com/fitness/app/image/*,
             **/com/fitness/app/exceptions/*,
             **/com/fitness/app/model/*,
             **/com/fitness/app/repository/*,

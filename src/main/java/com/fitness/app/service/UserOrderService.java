@@ -59,15 +59,18 @@ public class UserOrderService {
         LocalTime time = LocalTime.now();
         
         if(data==null) {return null;}
-        UserOrder order =userOrderRepo.findById(data.get("order_id")).get();
+        UserOrder order=new UserOrder();
+        Optional<UserOrder>order_data =userOrderRepo.findById(data.get("order_id"));
+        if(order_data.isPresent())
+        {
+        	order=order_data.get();
+        }
         order.setPaymentId(data.get("payment_id"));
         order.setStatus(data.get("status"));
         order.setBooked(CURRENT);
         order.setDate(date);
         order.setTime(time);
 
-        //TODO Create Invoice and Unique Id
-        //TODO Send Invoice to User.
 
 
         //update booked...
@@ -83,7 +86,12 @@ public class UserOrderService {
         }
 
         UserAttendance attendance = new UserAttendance();
-        String vendor = gymRepo.findById(order.getGym()).get().getEmail();
+        String vendor=null;
+        Optional<GymClass>gym_op = gymRepo.findById(order.getGym());
+        if(gym_op.isPresent())
+        {
+        	vendor=gym_op.get().getEmail();
+        }
 
         attendance.setEmail(order.getEmail());
         attendance.setGym(order.getGym());
@@ -106,7 +114,8 @@ public class UserOrderService {
 
         vendorOrderRepo.save(vendorOrder);
 
-        return userOrderRepo.save(order);
+        userOrderRepo.save(order);
+        return order;
     }
 
     //pending order list of user
@@ -146,7 +155,8 @@ public class UserOrderService {
         for (UserOrder order : orders) {
             UserAttendance newAtt = attendanceRepo.findByEmailAndVendor(order.getEmail(), vendor);
             UserPerfomanceModel user = new UserPerfomanceModel();
-            user.setName(userRepository.findByEmail(order.getEmail()).getFullName());
+            UserClass userClass=userRepository.findByEmail(order.getEmail());
+            user.setName(userClass.getFullName());
             user.setEmail(order.getEmail());
             user.setGym(gymId);
             user.setVendor(vendor);
@@ -173,10 +183,21 @@ public class UserOrderService {
     List<UserOrder>activeOrder=orders.stream().filter(o->o.getBooked().equals(CURRENT)).collect(Collectors.toList());
 
         BookedGymModel gymModel = new BookedGymModel();
+        GymClass localGym=new GymClass();
+        GymAddressClass addressGym=new GymAddressClass();
+
         for(UserOrder order:activeOrder)
         {
-            GymClass localGym=gymRepo.findById(order.getGym()).get();
-            GymAddressClass addressGym= gymAddressRepo.findById(order.getGym()).get();
+            Optional<GymClass> local_gym=gymRepo.findById(order.getGym());
+            if(local_gym.isPresent())
+            {
+                localGym=local_gym.get();
+            }
+            Optional<GymAddressClass> address_Gym= gymAddressRepo.findById(order.getGym());
+            if(address_Gym.isPresent())
+            {
+                addressGym=address_Gym.get();
+            }
             LocalDate endDate=LocalDate.now();
             endDate=endDate.plusDays(calculateTotalTime(order.getSubscription()));
             gymModel.setId(order.getGym());
@@ -193,8 +214,16 @@ public class UserOrderService {
        orders = orders.stream().filter(o -> o.getBooked().equals("Expired")).collect(Collectors.toList());
 
         for (UserOrder order : orders) {
-            GymClass localGym=gymRepo.findById(order.getGym()).get();
-            GymAddressClass addressGym= gymAddressRepo.findById(order.getGym()).get();
+            Optional<GymClass> local_gym=gymRepo.findById(order.getGym());
+            if(local_gym.isPresent())
+            {
+                localGym=local_gym.get();
+            }
+            Optional<GymAddressClass> address_Gym= gymAddressRepo.findById(order.getGym());
+            if(address_Gym.isPresent())
+            {
+                addressGym=address_Gym.get();
+            }
             LocalDate endDate=LocalDate.now();
             endDate=endDate.plusDays(calculateTotalTime(order.getSubscription()));
             gymModel.setId(order.getGym());
@@ -216,31 +245,7 @@ public class UserOrderService {
 
     
     
-    public BookedGymModel modelYourGym(List<UserOrder> orderLst)
-    {
 
-    	BookedGymModel gymModel = new BookedGymModel();
-        for(UserOrder order:orderLst)
-        {
-            GymClass localGym=gymRepo.findById(order.getGym()).get();
-            GymAddressClass addressGym= gymAddressRepo.findById(order.getGym()).get();
-            LocalDate endDate=LocalDate.now();
-            endDate=endDate.plusDays(calculateTotalTime(order.getSubscription()));
-            gymModel.setId(order.getGym());
-            gymModel.setGymName(localGym.getName());
-            gymModel.setService(order.getServices());
-            gymModel.setSlot(order.getSlot());
-            gymModel.setRating(localGym.getRating());
-            gymModel.setEndDate(endDate);
-            gymModel.setAddress(addressGym);
-            gymModel.setContact(localGym.getContact());
-            gymModel.setRating(localGym.getRating());
-        }
-        
-        
-        return gymModel;
-    	
-    }
 
     int calculateTotalTime(String subs)
     {

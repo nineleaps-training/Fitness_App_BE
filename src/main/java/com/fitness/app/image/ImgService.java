@@ -1,4 +1,4 @@
-package com.fitness.app.entity.image;
+package com.fitness.app.image;
 
 import com.fitness.app.exceptions.FileNotFoundException;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package com.fitness.app.entity.image;
+package com.fitness.app.image;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
