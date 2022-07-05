@@ -63,6 +63,15 @@ public class VendorBankDetailsServiceTest {
         Assertions.assertEquals(bankDetails.getVendorAccountNumber(), BANK.getVendorAccountNumber());
     }
 
+    @Test
+    public void addDetailsWithNull()
+    {
+        Mockito.when(userRepository.findByEmail(BANK_MODEL.getEmail())).thenReturn(null);
+        VendorBankDetails bankDetails=vendorBankDetailsService.addDetails(BANK_MODEL);
+        Assertions.assertNull(bankDetails);
+    }
+
+
 
     @Test
     public void getDetails()
@@ -75,6 +84,8 @@ public class VendorBankDetailsServiceTest {
         Assertions.assertNotNull(vendorBankDetailsList);
         Assertions.assertEquals(vendorBankDetailsList.get(0).getVendorAccountNumber(), BANK.getVendorAccountNumber());
     }
+
+
 
     @Test
     public void getBankDetails()

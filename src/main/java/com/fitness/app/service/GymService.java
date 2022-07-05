@@ -8,12 +8,13 @@ import java.util.Optional;
 import com.fitness.app.entity.*;
 import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.repository.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fitness.app.model.GymClassModel;
 import com.fitness.app.model.GymRepresnt;
-
+@Slf4j
 @Service
 public class GymService {
 
@@ -184,7 +185,12 @@ public class GymService {
 		try {
 			List<GymAddressClass> addressList = addressRepo.findByCity(city);
 			List<GymRepresnt> gyms = new ArrayList<>();
+            if(addressList==null)
+			{
 
+				throw new DataNotFoundException("Data not found for Fitness Center: ");
+
+			}
 			for (GymAddressClass address : addressList) {
 				String id = address.getId();
 				GymRepresnt gym = new GymRepresnt();
@@ -201,6 +207,7 @@ public class GymService {
 				{
 					gymClass=gym_cl.get();
 				}
+
 				if(subscription_cl.isPresent())
 				{
 					subscription=subscription_cl.get();
@@ -228,7 +235,8 @@ public class GymService {
 			}
 			return gyms;
 		} catch (DataNotFoundException e) {
-			throw new DataNotFoundException("Somthing went Wrong"+e.getMessage());
+            log.error(e.getMessage());
+			throw new DataNotFoundException(" Something went Wrong: "+e.getMessage());
 		}
 	}
 

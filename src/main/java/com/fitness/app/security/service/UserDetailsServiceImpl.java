@@ -48,17 +48,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	     return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
 	}
 
-	//Defining authorities of a user (Testing)
-	private Collection<? extends GrantedAuthority> getAuthorities(List<String> roles){
-		
-		List<GrantedAuthority> authorities=new ArrayList<>();
-		for(String role:roles)
-		{
-			authorities.add(new SimpleGrantedAuthority(role));
-		}
-		return authorities;
-	}
-	
 	
 	
 }

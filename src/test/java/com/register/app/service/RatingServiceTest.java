@@ -7,6 +7,7 @@ import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.RatingRepo;
 import com.fitness.app.service.RatingService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -77,6 +78,32 @@ public class RatingServiceTest {
 
    }
 
+    @Test
+    @DisplayName("For null gym data optional:")
+    public void getRatingNullGymData()
+    {
+        List<Rating> ratingList=new ArrayList<>(Arrays.asList(RATING_USER));
+        Optional<GymClass>gymClassOptional=Optional.empty();
+        Mockito.when(ratingRepo.findByTarget(RATING_USER.getTarget())).thenReturn(ratingList);
+        Mockito.when(gymRepository.findById(RATING_USER.getTarget())).thenReturn(gymClassOptional);
+        Double returnRate=ratingService.getRating(RATING_USER.getTarget());
+        Assertions.assertNotNull(returnRate);
+        Assertions.assertEquals(returnRate.floatValue(), 0.0);
+
+    }
+
+   @Test
+   @DisplayName("Rating getting test for null rating list:")
+    public void getRatingNullValue()
+    {
+        List<Rating> ratingList=null;
+        Mockito.when(ratingRepo.findByTarget(RATING_USER.getTarget())).thenReturn(ratingList);
+        Double returnRate=ratingService.getRating(RATING_USER.getTarget());
+        Assertions.assertNotNull(returnRate);
+        Assertions.assertEquals(returnRate.floatValue(), 0.0);
+
+    }
+
    @Test
     public void getRatingOfPerson()
    {
@@ -88,6 +115,19 @@ public class RatingServiceTest {
        Assertions.assertNotNull(ratingVal);
        Assertions.assertEquals(ratingVal.floatValue(), RATING_USER.getRate());
    }
+
+
+    @Test
+    public void getRatingOfPersonWIthNullRating()
+    {
+        List<Rating> ratingList=null;
+
+        Mockito.when(ratingRepo.findByTarget(RATING_USER.getTarget())).thenReturn(ratingList);
+        Double ratingVal=ratingService.getRatingOfPerson(RATING_USER.getTarget());
+
+        Assertions.assertNotNull(ratingVal);
+        Assertions.assertEquals(ratingVal.floatValue(), 0.0);
+    }
 
 
 

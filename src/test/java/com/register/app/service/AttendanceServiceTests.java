@@ -7,6 +7,7 @@ import com.fitness.app.repository.AttendanceRepo;
 import com.fitness.app.repository.RatingRepo;
 import com.fitness.app.service.AttendanceService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -49,7 +50,9 @@ public class AttendanceServiceTests {
             4.0
     );
 
-    List<Integer> attendance=new ArrayList<>(Arrays.asList(1,1,1,1,1,0,0,1,0));
+    List<Integer> attendance=new ArrayList<>(Arrays.asList(1,1,1,1,1,0,0,1,0,0,1,0,1,0,1,0
+            ,1,0,1,0,1,0,1,0,1,0,1,0,1,1,0,1,0,1,1,1,0,1,0,1,0,1,0,0,1,0,1,0,1,1,1,1,0,1,0,
+            1,0));
     UserAttendance userAttendance=new UserAttendance(
             "Rahul",
             "GM1",
@@ -82,9 +85,13 @@ public class AttendanceServiceTests {
 
         Mockito.when(attendanceRepo.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym())).thenReturn(userAttendance);
         List<Integer> attendance1= attendanceService.userPerfomance(userAttendance.getEmail(), userAttendance.getGym());
+
         Assertions.assertNotNull(attendance1);
-        Assertions.assertEquals(attendance1.get(0), 6);
+        Assertions.assertTrue(attendance1.size()>0);
+        Assertions.assertEquals(attendance1.get(0),14 );
     }
+
+
 
 
     @Test
@@ -99,6 +106,19 @@ public class AttendanceServiceTests {
        Double returnedRate= attendanceService.calculateRating(rating.getTarget());
        Assertions.assertNotNull(returnedRate);
        Assertions.assertEquals(returnedRate, 4.0);
+
+    }
+
+
+
+    @Test
+    public void  calculateRatingWithNullRating()
+    {
+
+        Mockito.when(ratingRepo.findByTarget(rating.getTarget())).thenReturn(null);
+        Double returnedRate= attendanceService.calculateRating(rating.getTarget());
+        Assertions.assertNotNull(returnedRate);
+        Assertions.assertEquals(returnedRate, 0.0);
 
     }
 

@@ -1,5 +1,6 @@
 package com.register.app.service;
 
+import com.fitness.app.componets.Components;
 import com.fitness.app.entity.*;
 import com.fitness.app.model.BookedGymModel;
 import com.fitness.app.model.UserPerfomanceModel;
@@ -12,7 +13,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.security.Guard;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -37,6 +40,9 @@ public class UserOrderServiceTest {
     private GymAddressRepo gymAddressRepo;
     @Mock
     private AttendanceRepo attendanceRepo;
+
+    @Mock
+    private Components components;
 
     @InjectMocks
     private com.fitness.app.service.UserOrderService userOrderService;
@@ -105,6 +111,17 @@ public class UserOrderServiceTest {
     );
     GymAddressClass GYM_ADDRESS_ID=new GymAddressClass("GM1", 1.6523589, 1.20053546478, "Varanasi, India", "Varanasi");
 
+    BookedGymModel bookedGymModel=new BookedGymModel(
+            "GM1",
+            "Fitness Cneter",
+            "Manish",
+            workout,
+            "Evening",
+            LocalDate.now(),
+            GYM_ADDRESS_ID,
+            7651977515L,
+            4.0
+    );
     @Test
     public void orderNow()
     {
@@ -201,15 +218,17 @@ public class UserOrderServiceTest {
 
     }
 
+
+
     @Test
     public void bookedGym()
     {
+        String filter="Current";
         List<UserOrder> listOrder=new ArrayList<>(Arrays.asList(USER_ORDER_COM, USER_ORDER_EX));
-        Optional<GymClass> gymClasses=Optional.of(FITNESS2);
-        Optional<GymAddressClass> gymAddresses=Optional.of(GYM_ADDRESS_ID);
         Mockito.when(userOrderRepo.findByEmail(USER_ORDER_COM.getEmail())).thenReturn(listOrder);
-        Mockito.when(gymRepo.findById("GM1")).thenReturn(gymClasses);
-        Mockito.when(gymAddressRepo.findById("GM1")).thenReturn(gymAddresses);
+        Mockito.when(components.gymModelByStatus(listOrder, "Current")).thenReturn(bookedGymModel);
+        Mockito.when(components.gymModelByStatus(listOrder, "Expired")).thenReturn(bookedGymModel);
+
 
         List<BookedGymModel> bookedGyms=userOrderService.bookedGym("rahul");
 

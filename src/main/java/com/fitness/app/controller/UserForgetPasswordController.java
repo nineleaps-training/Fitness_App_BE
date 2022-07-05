@@ -39,7 +39,7 @@ public class UserForgetPasswordController {
 		}
         else{
             String otp= sendMessage.otpBuilder();
-				 final  int code=sendMessage.sendOtpMessage("hello ", otp,userClass.getMobile()); 
+				 final  int code=sendMessage.sendOtpMessage( otp,userClass.getMobile());
 				 if(code==200)
 				 {
 					  userForgot.setBool(true);

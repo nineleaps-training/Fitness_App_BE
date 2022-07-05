@@ -60,6 +60,15 @@ public class UserBankDetailsTest {
         Assertions.assertEquals(bankDetails.getEmail(), USER1.getEmail());
 
     }
+    @Test
+    public void addBankDetailsWithNull()
+    {
+        Mockito.when(userRepository.findByEmail(BANK_MODEL.getEmail())).thenReturn(null);
+        UserBankDetails bankDetails=userBankDetailsService.addBankDetails(BANK_MODEL);
+        Assertions.assertNull(bankDetails);
+
+
+    }
 
     @Test
     public void getAllDetails()

@@ -39,7 +39,10 @@ public class AttendanceService {
 			
 			List<UserAttendance> allUser=
 					attendanceRepo.findByVendorAndGym(userAttendance.getVendor(), userAttendance.getGym());
-			
+			if(allUser==null)
+			{
+				throw new DataNotFoundException("No User is present: ");
+			}
 		    List<String> allUsers=allUser.stream().map(p->p.getEmail()).collect(Collectors.toList());
 		    
             
@@ -93,13 +96,14 @@ public class AttendanceService {
 	public List<Integer> userPerfomance(String email, String gym) throws DataNotFoundException
 	{
 		try {
+
 			UserAttendance user=attendanceRepo.findByEmailAndGym(email, gym);
 		
 			if(user!=null)
 			{	
-				List<Integer> perfomance=new ArrayList<>();
+
 				List<Integer> attendenceList=user.getAttendance();
-				
+				List<Integer> perfomance=new ArrayList<>();
 				if(attendenceList!=null)
 				{
 					int s=attendenceList.size();
@@ -132,16 +136,13 @@ public class AttendanceService {
 					
 					
 				}
-				
 				return perfomance;
 				
 			}
-			
-			
-			
-			
-			List<Integer>l=new ArrayList<>();
-			return l;
+			else
+			{
+				throw new DataNotFoundException("No attendance Found");
+			}
 		} catch (DataNotFoundException e) {
 
 			throw new DataNotFoundException("Error: "+ e.getMessage());

@@ -1,10 +1,10 @@
 package com.register.app.service;
 
-import com.fitness.app.FitnessAppApplication;
 import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.GymSubscriptionClass;
 import com.fitness.app.entity.GymTime;
+import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.model.GymClassModel;
 import com.fitness.app.model.GymRepresnt;
 import com.fitness.app.repository.AddGymRepository;
@@ -13,7 +13,9 @@ import com.fitness.app.repository.GymSubscriptionRepo;
 import com.fitness.app.repository.GymTimeRepo;
 import com.fitness.app.service.GymService;
 import com.fitness.app.service.RatingService;
+import net.bytebuddy.implementation.bytecode.Throw;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -180,6 +182,23 @@ public class GymServiceTest {
 
         Assertions.assertEquals(returnedGyms.get(0).getGym_name(), FITNESS1.getName());
     }
+
+    @Test
+    @DisplayName("Exception testing:")
+    public  void  gymByGymCityException() //throws  DataNotFoundException
+    {
+
+           Assertions.assertThrows(DataNotFoundException.class,()->{
+               List<GymAddressClass> addressClasses=null;
+               Mockito.when(addressRepo.findByCity(GYM_ADDRESS_ID.getCity())).thenReturn(addressClasses);
+               gymService.getGymByCity(GYM_ADDRESS.getCity());
+
+           }," data not found;");
+
+
+
+    }
+
 
 
     @Test

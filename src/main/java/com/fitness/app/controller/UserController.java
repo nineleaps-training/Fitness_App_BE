@@ -72,7 +72,7 @@ public class UserController {
 			 else
 			 {
 				 String otp= sendMessage.otpBuilder();
-				 final  int code=sendMessage.sendOtpMessage("hello ", otp,user.getMobile()); 
+				 final  int code=sendMessage.sendOtpMessage( otp,user.getMobile());
 				 if(code==200)
 				 {
 					  responce.setCurrentUser(localUser);
@@ -91,7 +91,7 @@ public class UserController {
 		 {
 
 		      String otp= sendMessage.otpBuilder();
-		      final  int code=sendMessage.sendOtpMessage("hello ", otp,user.getMobile());
+		      final  int code=sendMessage.sendOtpMessage( otp,user.getMobile());
 		      if(code==200) {
 		      responce.setCurrentUser(userService.registerUser(user));
 	          responce.setMessage(otp);

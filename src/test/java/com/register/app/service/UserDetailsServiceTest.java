@@ -51,6 +51,17 @@ public class UserDetailsServiceTest {
 
    }
 
+    @Test
+    public void addUserDetailsWithNull(){
+
+        Mockito.when(userRepository.findByEmail(MODEL.getEmail())).thenReturn(null);
+        UserDetails userDetails=userDetailsService.addUserDetails(MODEL);
+
+        Assertions.assertNull(userDetails);
+
+
+    }
+
    @Test
     public void getUserDetails()
    {

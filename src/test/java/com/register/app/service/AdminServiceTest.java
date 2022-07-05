@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fitness.app.entity.AdminPay;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorPayment;
+import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.model.AdminPayModel;
 import com.fitness.app.repository.AdminPayRepo;
 
@@ -17,6 +18,7 @@ import org.json.JSONObject;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.junit.runner.RunWith;
@@ -49,7 +51,9 @@ public class AdminServiceTest {
     AdminPay VENDOR_PAY=new AdminPay("id", "orderId", "manish.kumar@nineleaps.com",
             4000, "Due","paymentID","reciept", LocalDate.now(), LocalTime.now() );
 
-
+    VendorPayment VENDOR_PAYMENT=new VendorPayment("manish.kumar@nineleaps.com",
+            "rahul.kumar01@nineleaps.com",
+            "GM1", 2000, "Due", LocalDate.now(), LocalTime.now());
 
     ObjectMapper objectMapper=new ObjectMapper();
     com.fasterxml.jackson.databind.ObjectWriter objectWriter= objectMapper.writer();
@@ -98,6 +102,23 @@ public class AdminServiceTest {
         Assertions.assertTrue(expected);
     }
 
+    @Test
+    @DisplayName("Vendor payment is null")
+    public void paymentNowForNull() throws RazorpayException {
+        RazorpayClient razorpayClient = new RazorpayClient("rzp_test_vmHcJh5Dj4v5EB", "SGff6EaJ7l3RzR47hnE4dYJz");
+
+        JSONObject ob = new JSONObject();
+        ob.put("amount", VENDOR_DUE.getAmount() * 100);
+        ob.put("currency", "INR");
+        ob.put("receipt", "txn_201456");
+
+        Order myOrder = razorpayClient.Orders.create(ob);
+        when(adminPayRepo.findByVendorAndAmountAndStatus(VENDOR_DUE.getVendor(), VENDOR_DUE.getAmount(), "Due")).thenReturn(null);
+        Boolean expected=adminService.PayNow(VENDOR_DUE, myOrder);
+        Assertions.assertNotNull(expected);
+        Assertions.assertEquals(expected, false);
+    }
+
 
     @Mock
     private VendorPayRepo vendorPayRepo;
@@ -112,9 +133,24 @@ public class AdminServiceTest {
         AdminPay expected=adminService.vendorPayment("manish.kumar@nineleaps.com");
         Assertions.assertEquals(expected.getOrderId(), VENDOR_PAY.getOrderId());
     }
-    VendorPayment VENDOR_PAYMENT=new VendorPayment("manish.kumar@nineleaps.com",
-            "rahul.kumar01@nineleaps.com",
-            "GM1", 2000, "Due", LocalDate.now(), LocalTime.now());
+
+    @Test
+    @DisplayName("Saving the payment adding")
+    public void vendorPaymentForNewSave()
+    {
+
+        VendorPayment vendorPayment=new VendorPayment("manish.kumar@nineleaps.com",
+                "rahul.kumar01@nineleaps.com",
+                "GM1", 2000, "Due", LocalDate.now(), LocalTime.now());
+
+        List<VendorPayment>vendorPaymentList=new ArrayList<>();
+        vendorPaymentList.add(vendorPayment);
+        when(vendorPayRepo.findByVendor("manish.kumar@nineleaps.com")).thenReturn(vendorPaymentList);
+        when(adminPayRepo.findByVendorAndAmountAndStatus("manish.kumar@nineleaps.com", 2000, "Due")).thenReturn(null);
+        AdminPay expected=adminService.vendorPayment("manish.kumar@nineleaps.com");
+        Assertions.assertEquals(expected.getAmount(), vendorPayment.getAmount());
+    }
+
 
 
     @Test
@@ -151,5 +187,18 @@ public class AdminServiceTest {
         Assertions.assertEquals(expected.get(0).getAmount(), 2000);
 
 
+    }
+
+    @Test
+    @DisplayName("For Exception test: ")
+    public void paidHistoryVendorEx()
+    {
+
+        Assertions.assertThrows(DataNotFoundException.class, ()->{
+            AdminPay vendorPay=new AdminPay("id", "orderId", "manish.kumar@nineleaps.com",
+                    2000, "Completed","paymentID","reciept", LocalDate.now(), LocalTime.now() );
+            when(adminPayRepo.findByVendor(vendorPay.getVendor())).thenReturn(null);
+            List <AdminPay> expected=adminService.paidHistroyVendor(vendorPay.getVendor());
+        }, "Error handled");
     }
 }

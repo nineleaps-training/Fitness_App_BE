@@ -33,9 +33,7 @@ public class UserService {
 	 @Autowired
 	 private Components sendMessage;
 
-	public UserService() throws NoSuchAlgorithmException {
-		
-	}
+
 
 
 	//register user
@@ -44,7 +42,8 @@ public class UserService {
 		
 		 
 		 String otp= sendMessage.otpBuilder();
-		 final  int code=sendMessage.sendOtpMessage("hello ", otp,user.getMobile()); 
+		 String message="Hello";
+		 final  int code=sendMessage.sendOtpMessage(otp,user.getMobile());
 		 if(code==200)
 		 {
 			 UserClass newUser=new UserClass();
@@ -132,7 +131,7 @@ public class UserService {
 	}
 
 	//generate random String
-	private Random random = SecureRandom.getInstanceStrong();
+	private Random random = new Random();
 	public String randomPass()
 	{
 

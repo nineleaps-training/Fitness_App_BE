@@ -5,40 +5,44 @@ import com.fitness.app.entity.UserClass;
 import com.fitness.app.model.UserModel;
 import com.fitness.app.repository.UserRepository;
 import com.fitness.app.service.UserService;
+import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import javax.swing.text.html.Option;
 import java.security.SecureRandom;
 import java.util.Optional;
 import java.util.Random;
 
 @ExtendWith(MockitoExtension.class)
-@ExtendWith(SpringExtension.class)
 public class UserServiceTest {
 
 
-    @MockBean
+    @Mock
     private UserRepository userRepo;
 
-    @MockBean
+    @Mock
     private PasswordEncoder passwordEncoder;
 
-    @MockBean
+    @Mock
     private Components sendMessage;
 
     @InjectMocks
     private UserService userService;
 
+    @Before
+    public void setup()
+    {
+
+    }
 
 
     UserModel USER_MODEL=new UserModel(
@@ -101,12 +105,12 @@ public class UserServiceTest {
         String otp="4521";
         final int code=200;
          Mockito.when(sendMessage.otpBuilder()).thenReturn(otp);
-         Mockito.when(sendMessage.sendOtpMessage("hello", otp, USER_MODEL.getMobile())).thenReturn(code);
-         Mockito.when(userRepo.save(USER1)).thenReturn(USER1);
+         Mockito.when(sendMessage.sendOtpMessage(otp, USER_MODEL.getMobile())).thenReturn(code);
+
          UserClass userRes=userService.registerUser(USER_MODEL);
-          Assertions.assertNull(userRes);
-//        Assertions.assertNotNull(userRes);
-//        Assertions.assertEquals(userRes.getRole(), USER1.getRole());
+
+        Assertions.assertNotNull(userRes);
+        Assertions.assertEquals(userRes.getRole(), USER1.getRole());
 
     }
     @Test
@@ -115,8 +119,7 @@ public class UserServiceTest {
         String otp="4521";
         final int code=400;
         Mockito.when(sendMessage.otpBuilder()).thenReturn(otp);
-        Mockito.when(sendMessage.sendOtpMessage("hello", otp, USER_MODEL.getMobile())).thenReturn(code);
-        Mockito.when(userRepo.save(USER1)).thenReturn(USER1);
+        Mockito.when(sendMessage.sendOtpMessage(otp, USER_MODEL.getMobile())).thenReturn(code);
         UserClass userRes=userService.registerUser(USER_MODEL);
         Assertions.assertNull(userRes);
 
@@ -180,8 +183,8 @@ public class UserServiceTest {
     @Test
     public void googleSignInMethodForCustomLogIn()
     {
-        Mockito.when(userRepo.findByEmail(USER_MODEL_G.getEmail())).thenReturn(USER1);
-        Mockito.when(passwordEncoder.encode(USER_MODEL_G.getPassword())).thenReturn("PassordEncoded");
+        Mockito.lenient().when(userRepo.findByEmail(USER_MODEL_G.getEmail())).thenReturn(USER1);
+        Mockito.lenient().when(passwordEncoder.encode(USER_MODEL_G.getPassword())).thenReturn("PassordEncoded");
         UserClass returned=userService.googleSignInMethod(USER_MODEL_G);
         Assertions.assertNull(returned);
 

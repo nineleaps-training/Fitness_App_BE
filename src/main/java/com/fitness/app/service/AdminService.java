@@ -129,7 +129,10 @@ public class AdminService {
 		try {
 			
 			List<AdminPay> allPaid=adminPayRepo.findByVendor(vendor);
-
+            if(allPaid==null)
+			{
+				throw new DataNotFoundException("No Payment Is there");
+			}
 			allPaid=allPaid.stream().filter(p->p.getStatus().equals("Completed")).collect(Collectors.toList());
 			return allPaid;
 

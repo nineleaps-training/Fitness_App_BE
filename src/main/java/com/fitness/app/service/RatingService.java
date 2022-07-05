@@ -50,7 +50,7 @@ public class RatingService {
             }
             rate=rate/n;
             rate=Math.round(rate* 100) / 100.0d;
-            GymClass gym =new GymClass();
+            GymClass gym ;
             Optional<GymClass>dataGym=gymRepo.findById(target);
             if(dataGym.isPresent())
             {
