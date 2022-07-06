@@ -43,7 +43,7 @@ import com.fitness.app.repository.AdminRepo;
 import com.fitness.app.repository.UserRepository;
 
 @RunWith(MockitoJUnitRunner.class)
-public class AdminControllerTest {
+class AdminControllerTest {
 	
 	private MockMvc mockMvc;
 	
@@ -111,7 +111,7 @@ public class AdminControllerTest {
 	);
 
 	@Test
-	public void getAllVendors() throws Exception
+	 void getAllVendors() throws Exception
 	{
 
 
@@ -128,7 +128,7 @@ public class AdminControllerTest {
 	}
 
 	@Test
-	public void allUserlist() throws  Exception
+	 void allUserlist() throws  Exception
 	{
 
 		List<UserClass> users=new ArrayList<>();
@@ -147,7 +147,7 @@ public class AdminControllerTest {
 
 
 	@Test
-	public void allGyms() throws  Exception
+	 void allGyms() throws  Exception
 	{
 		workout.add("Dance");
 		workout.add("Zumba");
@@ -166,7 +166,7 @@ public class AdminControllerTest {
 
 	//
 	@Test
-	public void allGymsOfVendor() throws  Exception
+	 void allGymsOfVendor() throws  Exception
 	{
 		workout.add("Dance");
 		workout.add("Zumba");
@@ -194,7 +194,7 @@ public class AdminControllerTest {
 
 
 	@Test
-	public void vendorPayment() throws  Exception
+	 void vendorPayment() throws  Exception
 	{
 		Mockito.when(adminService.vendorPayment("manish.kumar@nineleaps.com")).thenReturn(VENDOR_PAY);
 
@@ -209,7 +209,7 @@ public class AdminControllerTest {
 	AdminPayModel VENDOR_DUE=new AdminPayModel("manish.kumar@nineleaps.com", 4000);
 	///get-data-pay
 	@Test
-	public void amountToPay() throws Exception
+	 void amountToPay() throws Exception
 	{
 
 		Mockito.when(adminService.getDataPay(VENDOR_DUE)).thenReturn(VENDOR_PAY);
@@ -225,7 +225,7 @@ public class AdminControllerTest {
 	///update-vendor-payment
 
 	@Test
-	public void updatePayment() throws Exception
+	 void updatePayment() throws Exception
 	{
 
 		HashMap<String, String> data=new HashMap<>();
@@ -249,7 +249,7 @@ public class AdminControllerTest {
 
 	///paid-history/{vendor}
 	@Test
-	public void paymentHistoryOfVendor()throws Exception
+	 void paymentHistoryOfVendor()throws Exception
 	{
 
 		List<AdminPay> allHistory=new ArrayList<>();
@@ -268,7 +268,7 @@ public class AdminControllerTest {
 	///all-numbers
 
 	@Test
-	public void getAllNumbers() throws Exception
+	 void getAllNumbers() throws Exception
 	{
 
 		List<UserClass> users=new ArrayList<>();

@@ -15,7 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class VendorDetailsServiceTest {
+class VendorDetailsServiceTest {
 
     @Mock
     private VendorDetailsRepository detailsRepository;
@@ -46,7 +46,7 @@ public class VendorDetailsServiceTest {
 
 
     @Test
-    public void addVendorDetails()
+     void addVendorDetails()
     {
         Mockito.when(userRepository.findByEmail(MODEL.getEmail())).thenReturn(USER1);
         VendorDetails vendorDetails=vendorDetailsService.addVendorDetails(MODEL);
@@ -65,7 +65,7 @@ public class VendorDetailsServiceTest {
 
 
     @Test
-    public void getVendorDetails()
+     void getVendorDetails()
     {
         Mockito.when(detailsRepository.findByVendorEmail(DETAILS.getVendorEmail())).thenReturn(DETAILS);
         VendorDetails details=vendorDetailsService.getVendorDetails(DETAILS.getVendorEmail());

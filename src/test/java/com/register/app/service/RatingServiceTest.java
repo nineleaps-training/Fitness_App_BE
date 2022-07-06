@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class RatingServiceTest {
+class RatingServiceTest {
 
 
     @Mock
@@ -58,7 +58,7 @@ public class RatingServiceTest {
 
 
     @Test
-    public void ratingService()
+     void ratingService()
     {
         Rating returnedRate=ratingService.ratingService(RATING_USER_MODEL);
         Assertions.assertNotNull(returnedRate);
@@ -66,7 +66,7 @@ public class RatingServiceTest {
     }
 
    @Test
-   public void getRating()
+    void getRating()
    {
        List<Rating> ratingList=new ArrayList<>(Arrays.asList(RATING_USER));
 
@@ -80,7 +80,7 @@ public class RatingServiceTest {
 
     @Test
     @DisplayName("For null gym data optional:")
-    public void getRatingNullGymData()
+    void getRatingNullGymData()
     {
         List<Rating> ratingList=new ArrayList<>(Arrays.asList(RATING_USER));
         Optional<GymClass>gymClassOptional=Optional.empty();
@@ -88,24 +88,24 @@ public class RatingServiceTest {
         Mockito.when(gymRepository.findById(RATING_USER.getTarget())).thenReturn(gymClassOptional);
         Double returnRate=ratingService.getRating(RATING_USER.getTarget());
         Assertions.assertNotNull(returnRate);
-        Assertions.assertEquals(returnRate.floatValue(), 0.0);
+        Assertions.assertEquals(0.0, returnRate.floatValue());
 
     }
 
    @Test
    @DisplayName("Rating getting test for null rating list:")
-    public void getRatingNullValue()
+     void getRatingNullValue()
     {
         List<Rating> ratingList=null;
         Mockito.when(ratingRepo.findByTarget(RATING_USER.getTarget())).thenReturn(ratingList);
         Double returnRate=ratingService.getRating(RATING_USER.getTarget());
         Assertions.assertNotNull(returnRate);
-        Assertions.assertEquals(returnRate.floatValue(), 0.0);
+        Assertions.assertEquals(0.0, returnRate.floatValue());
 
     }
 
    @Test
-    public void getRatingOfPerson()
+     void getRatingOfPerson()
    {
        List<Rating> ratingList=new ArrayList<>(Arrays.asList(RATING_USER));
 
@@ -118,7 +118,7 @@ public class RatingServiceTest {
 
 
     @Test
-    public void getRatingOfPersonWIthNullRating()
+    void getRatingOfPersonWIthNullRating()
     {
         List<Rating> ratingList=null;
 
@@ -126,7 +126,7 @@ public class RatingServiceTest {
         Double ratingVal=ratingService.getRatingOfPerson(RATING_USER.getTarget());
 
         Assertions.assertNotNull(ratingVal);
-        Assertions.assertEquals(ratingVal.floatValue(), 0.0);
+        Assertions.assertEquals(0.0, ratingVal.floatValue());
     }
 
 

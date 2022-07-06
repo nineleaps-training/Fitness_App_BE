@@ -42,7 +42,7 @@ public class UserService {
 		
 		 
 		 String otp= sendMessage.otpBuilder();
-		 String message="Hello";
+
 		 final  int code=sendMessage.sendOtpMessage(otp,user.getMobile());
 		 if(code==200)
 		 {
@@ -69,7 +69,7 @@ public class UserService {
 	//Verifying user
 	public UserClass verifyUser(String email)
 	{
-		UserClass user=new UserClass();
+		UserClass user=null;
 		Optional<UserClass> userData=userRepo.findById(email);
 		if(userData.isPresent())
 		{

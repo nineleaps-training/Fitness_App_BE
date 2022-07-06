@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class GymServiceTest {
+class GymServiceTest {
 
 
 
@@ -115,7 +115,7 @@ public class GymServiceTest {
 
 
     @Test
-    public void addNewGym()
+     void addNewGym()
     {
         Long idlast=1L;
         Mockito.when(gymRepository.findByName(GYM_MODEL.getGym_name())).thenReturn(FITNESS1);
@@ -132,7 +132,7 @@ public class GymServiceTest {
 
 
     @Test
-    public void getGymBYGymId()
+     void getGymBYGymId()
     {
 
        Mockito.when(gymRepository.findById(FITNESS1.getId())).thenReturn(gymClass);
@@ -149,7 +149,7 @@ public class GymServiceTest {
 
 
     @Test
-    public void gymByVendorEmail()
+     void gymByVendorEmail()
     {
        List<GymClass> gyms=new ArrayList<>( Arrays.asList(FITNESS1));
        Mockito.when(gymRepository.findByEmail(FITNESS1.getEmail())).thenReturn(gyms);
@@ -161,12 +161,12 @@ public class GymServiceTest {
         List<GymRepresnt> returnedGyms=gymService.getGymByVendorEmail(FITNESS1.getEmail());
 
         Assertions.assertNotNull(returnedGyms);
-        Assertions.assertEquals(returnedGyms.get(0).getCapacity(), 100);
+        Assertions.assertEquals(100, returnedGyms.get(0).getCapacity());
 
     }
 
     @Test
-    public  void  gymByGymCity()
+    void  gymByGymCity()
     {
 
         List<GymAddressClass> addressClasses=new ArrayList<>(Arrays.asList(GYM_ADDRESS_ID));
@@ -185,13 +185,14 @@ public class GymServiceTest {
 
     @Test
     @DisplayName("Exception testing:")
-    public  void  gymByGymCityException() //throws  DataNotFoundException
+    void  gymByGymCityException() //throws  DataNotFoundException
     {
-
+        List<GymAddressClass> addressClasses=null;
+        Mockito.when(addressRepo.findByCity(GYM_ADDRESS_ID.getCity())).thenReturn(addressClasses);
+        String city= GYM_ADDRESS.getCity();
            Assertions.assertThrows(DataNotFoundException.class,()->{
-               List<GymAddressClass> addressClasses=null;
-               Mockito.when(addressRepo.findByCity(GYM_ADDRESS_ID.getCity())).thenReturn(addressClasses);
-               gymService.getGymByCity(GYM_ADDRESS.getCity());
+
+               gymService.getGymByCity(city);
 
            }," data not found;");
 
@@ -202,7 +203,7 @@ public class GymServiceTest {
 
 
     @Test
-    public void findTheAddress(){
+     void findTheAddress(){
         Mockito.when(addressRepo.findById(GYM_ADDRESS_ID.getId())).thenReturn(addressClass);
         GymAddressClass returnedAdd=gymService.findTheAddress(GYM_ADDRESS_ID.getId());
 
@@ -211,7 +212,7 @@ public class GymServiceTest {
     }
 
     @Test
-    public void getAllGyms(){
+    void getAllGyms(){
 
         List<GymClass> gymClasses=new ArrayList<>(Arrays.asList(FITNESS1, FITNESS2));
 
@@ -225,7 +226,7 @@ public class GymServiceTest {
     }
 
     @Test
-    public void getGymsByName()
+     void getGymsByName()
     {
         Mockito.when(gymRepository.findByName(FITNESS1.getName())).thenReturn(FITNESS1);
         GymClass returnedGyms=gymService.getGymByGymName(FITNESS1.getName());

@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @ExtendWith({MockitoExtension.class})
-public class VendorBankDetailsServiceTest {
+class VendorBankDetailsServiceTest {
 
 
 
@@ -55,7 +55,7 @@ public class VendorBankDetailsServiceTest {
             "7651977515","Rahul@123","VENDOR", true, true, true );
 
     @Test
-    public void addDetails()
+     void addDetails()
     {
         Mockito.when(userRepository.findByEmail(BANK_MODEL.getEmail())).thenReturn(USER1);
         VendorBankDetails bankDetails=vendorBankDetailsService.addDetails(BANK_MODEL);
@@ -64,7 +64,7 @@ public class VendorBankDetailsServiceTest {
     }
 
     @Test
-    public void addDetailsWithNull()
+     void addDetailsWithNull()
     {
         Mockito.when(userRepository.findByEmail(BANK_MODEL.getEmail())).thenReturn(null);
         VendorBankDetails bankDetails=vendorBankDetailsService.addDetails(BANK_MODEL);
@@ -74,7 +74,7 @@ public class VendorBankDetailsServiceTest {
 
 
     @Test
-    public void getDetails()
+     void getDetails()
     {
         List<VendorBankDetails> lists=new ArrayList<>(Arrays.asList(BANK));
         Mockito.when(bankDetailsRepository.findAll()).thenReturn(lists);
@@ -88,7 +88,7 @@ public class VendorBankDetailsServiceTest {
 
 
     @Test
-    public void getBankDetails()
+     void getBankDetails()
     {
         Mockito.when(bankDetailsRepository.findByVendorEmail(BANK_MODEL.getEmail())).thenReturn(BANK);
         VendorBankDetails bankDetails=vendorBankDetailsService.getBankDetails(BANK_MODEL.getEmail());

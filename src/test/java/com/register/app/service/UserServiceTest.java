@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
 
     @Mock
@@ -38,11 +38,6 @@ public class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
-    @Before
-    public void setup()
-    {
-
-    }
 
 
     UserModel USER_MODEL=new UserModel(
@@ -94,13 +89,13 @@ public class UserServiceTest {
     );
 
     @BeforeEach
-    public void initEach()
+    void initEach()
     {
            String generatedString="generated String";
     }
 
     @Test
-    public void registerUser()
+     void registerUser()
     {
         String otp="4521";
         final int code=200;
@@ -114,7 +109,7 @@ public class UserServiceTest {
 
     }
     @Test
-    public void registerUserElsePart()
+     void registerUserElsePart()
     {
         String otp="4521";
         final int code=400;
@@ -128,7 +123,7 @@ public class UserServiceTest {
 
 
     @Test
-    public void verifyUser()
+     void verifyUser()
     {
         Optional<UserClass> users=Optional.of(USER1);
         Mockito.when(userRepo.findById(USER1.getEmail())).thenReturn(users);
@@ -139,7 +134,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void verifyUserForNUll()
+     void verifyUserForNUll()
     {
         Optional<UserClass> users=Optional.empty();
         Mockito.when(userRepo.findById(USER1.getEmail())).thenReturn(users);
@@ -151,16 +146,16 @@ public class UserServiceTest {
 
 
     @Test
-    public void loginUser()
+     void loginUser()
     {
         Optional<UserClass> userClass = Optional.of(USER1);
         Mockito.when(userRepo.findById(USER1.getEmail())).thenReturn(userClass);
         userService.loginUser(USER1.getEmail());
-        Assertions.assertEquals(userClass.get().getLoggedin(), true);
+        Assertions.assertEquals(true, userClass.get().getLoggedin());
     }
 
     @Test
-    public void googleSignInMethod()
+     void googleSignInMethod()
     {   UserClass localUser=null;
         Mockito.when(userRepo.findByEmail(USER_MODEL_G.getEmail())).thenReturn(localUser);
         Mockito.when(passwordEncoder.encode(USER_MODEL_G.getPassword())).thenReturn("PassordEncoded");
@@ -170,7 +165,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void googleSignInMethodForAgainLogIn()
+     void googleSignInMethodForAgainLogIn()
     {
         Mockito.when(userRepo.findByEmail(USER_MODEL_G.getEmail())).thenReturn(USER1_G);
         Mockito.when(passwordEncoder.encode(USER_MODEL_G.getPassword())).thenReturn("PassordEncoded");
@@ -181,7 +176,7 @@ public class UserServiceTest {
 
 
     @Test
-    public void googleSignInMethodForCustomLogIn()
+     void googleSignInMethodForCustomLogIn()
     {
         Mockito.lenient().when(userRepo.findByEmail(USER_MODEL_G.getEmail())).thenReturn(USER1);
         Mockito.lenient().when(passwordEncoder.encode(USER_MODEL_G.getPassword())).thenReturn("PassordEncoded");
@@ -192,7 +187,7 @@ public class UserServiceTest {
 
 
     @Test
-    public void randompass()throws  Exception
+     void randompass()throws  Exception
     {
         Random random= SecureRandom.getInstanceStrong();
         String pass="hello";

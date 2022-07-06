@@ -16,7 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class UserDetailsServiceTest {
+class UserDetailsServiceTest {
 
     @Mock
     private UserDetailsRepository userDetailsRepository;
@@ -41,7 +41,7 @@ public class UserDetailsServiceTest {
    UserDetails DETAILS=new UserDetails("rahul01@gmail.com", "Male", "Patna", "Patna", 221204L);
 
    @Test
-    public void addUserDetails(){
+     void addUserDetails(){
 
        Mockito.when(userRepository.findByEmail(MODEL.getEmail())).thenReturn(USER1);
        UserDetails userDetails=userDetailsService.addUserDetails(MODEL);
@@ -52,7 +52,7 @@ public class UserDetailsServiceTest {
    }
 
     @Test
-    public void addUserDetailsWithNull(){
+     void addUserDetailsWithNull(){
 
         Mockito.when(userRepository.findByEmail(MODEL.getEmail())).thenReturn(null);
         UserDetails userDetails=userDetailsService.addUserDetails(MODEL);
@@ -63,7 +63,7 @@ public class UserDetailsServiceTest {
     }
 
    @Test
-    public void getUserDetails()
+     void getUserDetails()
    {
        Mockito.when(userDetailsRepository.findByUserEmail(DETAILS.getUserEmail())).thenReturn(DETAILS);
        UserDetails userDetails=userDetailsService.getUserDetails(DETAILS.getUserEmail());

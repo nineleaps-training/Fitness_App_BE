@@ -7,6 +7,7 @@ import com.fitness.app.model.UserPerfomanceModel;
 import com.fitness.app.repository.*;
 import com.fitness.app.service.UserOrderService;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.core.userdetails.User;
 
 import java.security.Guard;
 import java.time.LocalDate;
@@ -21,7 +23,7 @@ import java.time.LocalTime;
 import java.util.*;
 
 @ExtendWith(MockitoExtension.class)
-public class UserOrderServiceTest {
+class UserOrderServiceTest {
 
 
     @Mock
@@ -123,7 +125,7 @@ public class UserOrderServiceTest {
             4.0
     );
     @Test
-    public void orderNow()
+    void orderNow()
     {
         userOrderService.orderNow(USER_ORDER);
         Assertions.assertNotNull(USER_ORDER);
@@ -131,14 +133,14 @@ public class UserOrderServiceTest {
 
 
     @Test
-    public void updateOrderForNUll()
+    void updateOrderForNUll()
     {
         UserOrder userOrder=userOrderService.updateOrder(null);
         Assertions.assertNull(userOrder);
     }
 
     @Test
-    public void updateOrder()
+     void updateOrder()
     {
         HashMap<String, String> data=new HashMap<>();
         data.put("order_id", "orderId");
@@ -157,7 +159,7 @@ public class UserOrderServiceTest {
     }
 
     @Test
-    public void pendingListOrder()
+     void pendingListOrder()
     {
         List<UserOrder> listOrder=new ArrayList<>(Arrays.asList(USER_ORDER_CREATED));
         Mockito.when(userOrderRepo.findByEmail(USER_ORDER_CREATED.getEmail())).thenReturn(listOrder);
@@ -170,7 +172,7 @@ public class UserOrderServiceTest {
     }
 
     @Test
-    public void pendingListOrderNotCompleted()
+     void pendingListOrderNotCompleted()
     {
 
         UserOrder userOrder=USER_ORDER_CREATED;
@@ -186,7 +188,7 @@ public class UserOrderServiceTest {
     }
 
     @Test
-    public void orderListOrder()
+     void orderListOrder()
     {
         List<UserOrder> listOrder=new ArrayList<>(Arrays.asList(USER_ORDER_COM));
         Mockito.when(userOrderRepo.findByEmail(USER_ORDER_COM.getEmail())).thenReturn(listOrder);
@@ -199,29 +201,58 @@ public class UserOrderServiceTest {
     }
 
 
+
+ @Test
+ @DisplayName("All my user from a fitness center")
+ void allMyUser()
+ {
+     UserOrder USER_ORDER_COM=new UserOrder("orderId", "Rahul", "GM1",
+             SERVICE,"Monthly" ,"Evening",2000, CURRENT,
+             "Completed", "paymentId", "receipt",
+             LocalDate.now(), LocalTime.now());
+     UserOrder USER_ORDER_COM1=new UserOrder("orderId", "Rahul", "GM1",
+             SERVICE,"Monthly" ,"Evening",2000, CURRENT,
+             "Completed", "paymentId", "receipt",
+             LocalDate.now(), LocalTime.now());
+     UserAttendance USER_ATT=new UserAttendance(
+             "Rahul",
+             "GM1",
+             "Manish",
+             30,
+             attendance.size(),
+             attendance,
+             4.0
+     );
+     UserClass USER1=new UserClass(
+             "Rahul",
+             "Rahul Khamperia",
+             "7651977515",
+             "Rahul@123",
+             "USER",
+             false,
+             false,
+             true
+     );
+     List<UserOrder> listOrder=new ArrayList<>(Arrays.asList(USER_ORDER_COM, USER_ORDER_COM1));
+     Optional<GymClass> optional_gym=Optional.of(FITNESS2);
+
+
+     Mockito.when(userOrderRepo.findByGym(USER_ORDER_COM.getGym())).thenReturn(listOrder);
+     Mockito.when(gymRepo.findById(USER_ORDER_COM.getGym())).thenReturn(optional_gym);
+     Mockito.when(attendanceRepo.findByEmailAndVendor(USER_ORDER_COM.getEmail(), VENDOR)).thenReturn(USER_ATT);
+     Mockito.when(userRepository.findByEmail(USER_ORDER_COM.getEmail())).thenReturn(USER1);
+
+     Set<UserPerfomanceModel> userPerfomanceModelSet1=userOrderService.allMyUser(USER_ORDER_COM.getGym());
+     UserPerfomanceModel up= userPerfomanceModelSet1.stream().findFirst().get();
+     Assertions.assertNotNull(userPerfomanceModelSet1);
+     Assertions.assertEquals("GM1", up.getGym());
+
+ }
+
+
+
     @Test
-    public void allMyUser()
-    {
-        Set<UserPerfomanceModel> userPerfomanceModelSet=new HashSet<>();
-        List<UserOrder> listOrder=new ArrayList<>(Arrays.asList(USER_ORDER_COM));
-        userPerfomanceModelSet.add(PERFORMANCE_MODEL);
-        Optional<GymClass> optional_gym=Optional.of(FITNESS2);
-        Mockito.lenient().when(userOrderRepo.findByEmail(USER_ORDER_COM.getEmail())).thenReturn(listOrder);
-        Mockito.lenient().when(gymRepo.findById("GM1")).thenReturn(optional_gym);
-        Mockito.lenient().when(attendanceRepo.findByEmailAndVendor(USER_ORDER_COM.getEmail(), VENDOR)).thenReturn(USER_ATT);
-        Mockito.lenient().when(userRepository.findByEmail(USER_ORDER_COM.getEmail())).thenReturn(USER1);
-
-        Set<UserPerfomanceModel> userPerfomanceModelSet1=userOrderService.allMyUser("GM1");
-        System.out.println(userPerfomanceModelSet1);
-        Assertions.assertNotNull(userPerfomanceModelSet1);
-
-
-    }
-
-
-
-    @Test
-    public void bookedGym()
+     void bookedGym()
     {
         String filter="Current";
         List<UserOrder> listOrder=new ArrayList<>(Arrays.asList(USER_ORDER_COM, USER_ORDER_EX));
@@ -233,13 +264,38 @@ public class UserOrderServiceTest {
         List<BookedGymModel> bookedGyms=userOrderService.bookedGym("rahul");
 
         Assertions.assertNotNull(bookedGyms);
-        Assertions.assertEquals(bookedGyms.get(0).getId(), "GM1");
+        Assertions.assertEquals( "GM1", bookedGyms.get(0).getId());
 
     }
 
+   @Test
+   void bookedGymForNullGymModel()
+   {
+       String filter="Current";
+       List<UserOrder> listOrder=new ArrayList<>(Arrays.asList(USER_ORDER_COM, USER_ORDER_EX));
+       Mockito.when(userOrderRepo.findByEmail(USER_ORDER_COM.getEmail())).thenReturn(listOrder);
+       Mockito.when(components.gymModelByStatus(listOrder, "Current")).thenReturn(null);
+       Mockito.when(components.gymModelByStatus(listOrder, "Expired")).thenReturn(null);
+
+
+       List<BookedGymModel> bookedGyms=userOrderService.bookedGym("rahul");
+       //System.out.println(bookedGyms);
+       Assertions.assertNotNull(bookedGyms);
+       Assertions.assertEquals( 2, bookedGyms.size());
+
+   }
+    @Test
+    void bookedGYmForNullOrder()
+    {
+        Mockito.when(userOrderRepo.findByEmail(USER_ORDER_COM.getEmail())).thenReturn(null);
+        List<BookedGymModel> bookedGyms=userOrderService.bookedGym("rahul");
+
+        Assertions.assertNotNull(bookedGyms);
+        Assertions.assertEquals(0, bookedGyms.size());
+    }
 
     @Test
-    public void canOrder()
+    void canOrder()
     {
         List<UserOrder> listOrder=new ArrayList<>(Arrays.asList(USER_ORDER_EX));
         Mockito.when(userOrderRepo.findByEmail(USER_ORDER_EX.getEmail())).thenReturn(listOrder);
@@ -249,9 +305,32 @@ public class UserOrderServiceTest {
         //Assertions.assertFalse(ans);
 
     }
+    @Test
+    void canOrderNew()
+    {
+        List<UserOrder> listOrder=new ArrayList<>(Arrays.asList(USER_ORDER_EX));
+        Mockito.when(userOrderRepo.findByEmail(USER_ORDER_EX.getEmail())).thenReturn(listOrder);
+
+        Boolean ans=userOrderService.canOrder(USER_ORDER_EX.getEmail());
+        Assertions.assertTrue(ans);
+    }
 
     @Test
-    public void canOrderWithFalse()
+    void canOrderSetExp()
+    {
+        UserOrder USER_ORDER_EX=new UserOrder("orderId", "rahul", "GM1",
+                SERVICE,"Monthly" ,"Evening",2000, "Expired",
+                "Expired", "paymentId", "receipt",
+                LocalDate.of(2, 5, 3), LocalTime.now());
+
+        List<UserOrder> listOrder=new ArrayList<>(Arrays.asList(USER_ORDER_EX));
+        Mockito.when(userOrderRepo.findByEmail(USER_ORDER_EX.getEmail())).thenReturn(listOrder);
+
+        Boolean ans=userOrderService.canOrder(USER_ORDER_EX.getEmail());
+        Assertions.assertTrue(ans);
+    }
+    @Test
+     void canOrderWithFalse()
     {
         List<UserOrder> listOrder=new ArrayList<>(Arrays.asList(USER_ORDER_COM,USER_ORDER_EX));
         Mockito.when(userOrderRepo.findByEmail(USER_ORDER_EX.getEmail())).thenReturn(listOrder);
@@ -262,7 +341,7 @@ public class UserOrderServiceTest {
     }
 
     @Test
-    public void canOrderWithFalseAndSetEX()
+     void canOrderWithFalseAndSetEX()
     {
         UserOrder order=USER_ORDER_COM;
         order.setDate(order.getDate().plusDays(30));

@@ -61,10 +61,10 @@ public class UserOrderService {
         
         if(data==null) {return null;}
         UserOrder order=new UserOrder();
-        Optional<UserOrder>order_data =userOrderRepo.findById(data.get("order_id"));
-        if(order_data.isPresent())
+        Optional<UserOrder>orderData =userOrderRepo.findById(data.get("order_id"));
+        if(orderData.isPresent())
         {
-        	order=order_data.get();
+        	order=orderData.get();
         }
         order.setPaymentId(data.get("payment_id"));
         order.setStatus(data.get("status"));
@@ -88,10 +88,10 @@ public class UserOrderService {
 
         UserAttendance attendance = new UserAttendance();
         String vendor=null;
-        Optional<GymClass>gym_op = gymRepo.findById(order.getGym());
-        if(gym_op.isPresent())
+        Optional<GymClass>gymOp = gymRepo.findById(order.getGym());
+        if(gymOp.isPresent())
         {
-        	vendor=gym_op.get().getEmail();
+        	vendor=gymOp.get().getEmail();
         }
 
         attendance.setEmail(order.getEmail());

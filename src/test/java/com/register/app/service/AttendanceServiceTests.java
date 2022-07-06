@@ -2,6 +2,7 @@ package com.register.app.service;
 
 import com.fitness.app.entity.Rating;
 import com.fitness.app.entity.UserAttendance;
+import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.model.MarkUserAttModel;
 import com.fitness.app.repository.AttendanceRepo;
 import com.fitness.app.repository.RatingRepo;
@@ -23,7 +24,7 @@ import java.util.List;
 
 //@RunWith(MockitoJUnitRunner.class)
 @ExtendWith(MockitoExtension.class)
-public class AttendanceServiceTests {
+class AttendanceServiceTests {
 
 
     @InjectMocks
@@ -36,7 +37,7 @@ public class AttendanceServiceTests {
     @Mock
     private RatingRepo ratingRepo;
 
-    List<String> users=new ArrayList<>(Arrays.asList("Manish", "Rahul", "Ranjit"));
+    List<String> users=new ArrayList<>(Arrays.asList("Rahul"));
     MarkUserAttModel attModel=new MarkUserAttModel(
             "GM1",
             "Manish",
@@ -50,6 +51,14 @@ public class AttendanceServiceTests {
             4.0
     );
 
+    Rating rating1=new Rating(
+            "rId",
+            "Ranjit",
+            "Manish",
+            4.0
+    );
+
+
     List<Integer> attendance=new ArrayList<>(Arrays.asList(1,1,1,1,1,0,0,1,0,0,1,0,1,0,1,0
             ,1,0,1,0,1,0,1,0,1,0,1,0,1,1,0,1,0,1,1,1,0,1,0,1,0,1,0,0,1,0,1,0,1,1,1,1,0,1,0,
             1,0));
@@ -59,13 +68,22 @@ public class AttendanceServiceTests {
             "Manish",
             30,
             60,
-            attendance,
+            null,
+            4.0
+    );
+    UserAttendance userAttendance2=new UserAttendance(
+            "Ranjit",
+            "GM1",
+            "Manish",
+            30,
+            60,
+            null,
             4.0
     );
 
 
     @Test
-    public void markUserAttendance() throws  Exception
+     void markUserAttendance()
     {
         List<UserAttendance> allusers=new ArrayList<>();
         allusers.add(userAttendance);
@@ -79,23 +97,76 @@ public class AttendanceServiceTests {
     }
 
     @Test
-    public void  userPerformance()
+    @DisplayName("adding non attending too")
+     void markUserAttendanceForNonAtt()
     {
+        List<UserAttendance> allusers=new ArrayList<>();
+        allusers.add(userAttendance);
+        allusers.add(userAttendance2);
+
+        Mockito.when(attendanceRepo.findByVendorAndGym(userAttendance.getVendor(), userAttendance.getGym())).thenReturn(allusers);
+        Mockito.when(attendanceRepo.findByEmailAndVendorAndGym(userAttendance.getEmail(), userAttendance.getVendor(), userAttendance.getGym())).thenReturn(userAttendance);
+        Mockito.when(attendanceRepo.findByEmailAndVendorAndGym(userAttendance2.getEmail(), userAttendance2.getVendor(), userAttendance2.getGym())).thenReturn(userAttendance2);
+
+        String ans=attendanceService.markUsersAttendance(attModel);
+
+        Assertions.assertNotNull(ans);
+    }
 
 
+    @Test
+    @DisplayName("With Exception for marking attendance")
+     void markAttForException()
+    {
+        Mockito.when(attendanceRepo.findByVendorAndGym(userAttendance.getVendor(), userAttendance.getGym())).thenReturn(null);
+        Assertions.assertThrows(DataNotFoundException.class, ()->{
+
+            String ans=attendanceService.markUsersAttendance(attModel);
+        }, "No data Found Exception");
+    }
+
+
+    @Test
+     void  userPerformance()
+    {
+        List<Integer> attendance=new ArrayList<>(Arrays.asList(1,1,1,1,1,0,0,1,0,0,1,0,1,0,1,0
+                ,1,0,1,0,1,0,1,0,1,0,1,0,1,1,0,1,0,1,1,1,0,1,0,1,0,1,0,0,1,0,1,0,1,1,1,1,0,1,0,
+                1,0));
+
+        UserAttendance userAttendance=new UserAttendance(
+                "Rahul",
+                "GM1",
+                "Manish",
+                30,
+                60,
+                attendance,
+                4.0
+        );
         Mockito.when(attendanceRepo.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym())).thenReturn(userAttendance);
         List<Integer> attendance1= attendanceService.userPerfomance(userAttendance.getEmail(), userAttendance.getGym());
 
         Assertions.assertNotNull(attendance1);
         Assertions.assertTrue(attendance1.size()>0);
-        Assertions.assertEquals(attendance1.get(0),14 );
+        Assertions.assertEquals(14,attendance1.get(0) );
+    }
+
+    @Test
+    @DisplayName("Exception handle")
+    void  userPerformanceForException()
+    {
+        Mockito.when(attendanceRepo.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym())).thenReturn(null);
+        String email= userAttendance.getEmail(), gym= userAttendance.getGym();
+        Assertions.assertThrows(DataNotFoundException.class, ()->{
+
+            List<Integer> attendance1= attendanceService.userPerfomance(email, gym);
+        },"Data not found any: ");
     }
 
 
 
 
     @Test
-    public void  calculateRating()
+     void  calculateRating()
     {
        List<Rating> ratingsList=new ArrayList<>();
        ratingsList.add(rating);
@@ -105,20 +176,20 @@ public class AttendanceServiceTests {
        Mockito.when(ratingRepo.findByTarget(rating.getTarget())).thenReturn(ratingsList);
        Double returnedRate= attendanceService.calculateRating(rating.getTarget());
        Assertions.assertNotNull(returnedRate);
-       Assertions.assertEquals(returnedRate, 4.0);
+       Assertions.assertEquals(4.0, returnedRate);
 
     }
 
 
 
     @Test
-    public void  calculateRatingWithNullRating()
+    void  calculateRatingWithNullRating()
     {
 
         Mockito.when(ratingRepo.findByTarget(rating.getTarget())).thenReturn(null);
         Double returnedRate= attendanceService.calculateRating(rating.getTarget());
         Assertions.assertNotNull(returnedRate);
-        Assertions.assertEquals(returnedRate, 0.0);
+        Assertions.assertEquals(0.0, returnedRate);
 
     }
 

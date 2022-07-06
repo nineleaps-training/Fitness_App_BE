@@ -115,15 +115,15 @@ public class Components {
 
 		for(UserOrder order:activeOrder)
 		{
-			Optional<GymClass> local_gym=gymRepo.findById(order.getGym());
-			if(local_gym.isPresent())
+			Optional<GymClass> localGym1=gymRepo.findById(order.getGym());
+			if(localGym1.isPresent())
 			{
-				localGym=local_gym.get();
+				localGym=localGym1.get();
 			}
-			Optional<GymAddressClass> address_Gym= gymAddressRepo.findById(order.getGym());
-			if(address_Gym.isPresent())
+			Optional<GymAddressClass> addressGym1= gymAddressRepo.findById(order.getGym());
+			if(addressGym1.isPresent())
 			{
-				addressGym=address_Gym.get();
+				addressGym=addressGym1.get();
 			}
 			LocalDate endDate=LocalDate.now();
 			endDate=endDate.plusDays(calculateTotalTime(order.getSubscription()));

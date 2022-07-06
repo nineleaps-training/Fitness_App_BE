@@ -40,8 +40,7 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-
-public class AdminServiceTest {
+class AdminServiceTest {
 
     @Mock
     private AdminPayRepo adminPayRepo;
@@ -60,7 +59,7 @@ public class AdminServiceTest {
 
 
     @BeforeEach
-    public void setUp()
+     void setUp()
     {
         MockitoAnnotations.initMocks(this);
         this.mockMvc= MockMvcBuilders.standaloneSetup(adminService ).build();
@@ -76,7 +75,7 @@ public class AdminServiceTest {
     AdminPayModel VENDOR_DUE=new AdminPayModel("manish.kumar@nineleaps.com", 4000);
 
     @Test
-    public void getDataPay()
+     void getDataPay()
     {
         when(adminPayRepo.findByVendorAndAmountAndStatus(VENDOR_PAY.getVendor(), VENDOR_PAY.getAmount(), "Due")).thenReturn(VENDOR_PAY);
         AdminPay myPay=adminService.getDataPay(VENDOR_DUE);
@@ -86,7 +85,7 @@ public class AdminServiceTest {
 
 
     @Test
-    public void paymentNow() throws RazorpayException {
+     void paymentNow() throws RazorpayException {
         RazorpayClient razorpayClient = new RazorpayClient("rzp_test_vmHcJh5Dj4v5EB", "SGff6EaJ7l3RzR47hnE4dYJz");
 
         JSONObject ob = new JSONObject();
@@ -104,7 +103,7 @@ public class AdminServiceTest {
 
     @Test
     @DisplayName("Vendor payment is null")
-    public void paymentNowForNull() throws RazorpayException {
+     void paymentNowForNull() throws RazorpayException {
         RazorpayClient razorpayClient = new RazorpayClient("rzp_test_vmHcJh5Dj4v5EB", "SGff6EaJ7l3RzR47hnE4dYJz");
 
         JSONObject ob = new JSONObject();
@@ -116,7 +115,7 @@ public class AdminServiceTest {
         when(adminPayRepo.findByVendorAndAmountAndStatus(VENDOR_DUE.getVendor(), VENDOR_DUE.getAmount(), "Due")).thenReturn(null);
         Boolean expected=adminService.PayNow(VENDOR_DUE, myOrder);
         Assertions.assertNotNull(expected);
-        Assertions.assertEquals(expected, false);
+        Assertions.assertEquals(false, expected);
     }
 
 
@@ -124,7 +123,7 @@ public class AdminServiceTest {
     private VendorPayRepo vendorPayRepo;
 
     @Test
-    public void vendorPayment()
+    void vendorPayment()
     {
         List<VendorPayment>vendorPaymentList=new ArrayList<>();
         vendorPaymentList.add(VENDOR_PAYMENT);
@@ -136,7 +135,7 @@ public class AdminServiceTest {
 
     @Test
     @DisplayName("Saving the payment adding")
-    public void vendorPaymentForNewSave()
+     void vendorPaymentForNewSave()
     {
 
         VendorPayment vendorPayment=new VendorPayment("manish.kumar@nineleaps.com",
@@ -154,7 +153,7 @@ public class AdminServiceTest {
 
 
     @Test
-    public void updatingPayment()  {
+     void updatingPayment()  {
         HashMap<String, String> data=new HashMap<>();
         data.put("order_id", "orderId");
         data.put("payment_id", "paymentId");
@@ -175,7 +174,7 @@ public class AdminServiceTest {
     }
 
     @Test
-    public void vendorPaymentHistory() throws  Exception
+    void vendorPaymentHistory() throws  Exception
     {
         AdminPay vendorPay=new AdminPay("id", "orderId", "manish.kumar@nineleaps.com",
                 2000, "Completed","paymentID","reciept", LocalDate.now(), LocalTime.now() );
@@ -184,21 +183,22 @@ public class AdminServiceTest {
         when(adminPayRepo.findByVendor(vendorPay.getVendor())).thenReturn(allPaid);
         List <AdminPay> expected=adminService.paidHistroyVendor(vendorPay.getVendor());
 
-        Assertions.assertEquals(expected.get(0).getAmount(), 2000);
+        Assertions.assertEquals(2000, expected.get(0).getAmount());
 
 
     }
 
     @Test
     @DisplayName("For Exception test: ")
-    public void paidHistoryVendorEx()
+     void paidHistoryVendorEx()
     {
-
+        AdminPay vendorPay=new AdminPay("id", "orderId", "manish.kumar@nineleaps.com",
+                2000, "Completed","paymentID","reciept", LocalDate.now(), LocalTime.now() );
+        String vendor=vendorPay.getVendor();
+        when(adminPayRepo.findByVendor(vendorPay.getVendor())).thenReturn(null);
         Assertions.assertThrows(DataNotFoundException.class, ()->{
-            AdminPay vendorPay=new AdminPay("id", "orderId", "manish.kumar@nineleaps.com",
-                    2000, "Completed","paymentID","reciept", LocalDate.now(), LocalTime.now() );
-            when(adminPayRepo.findByVendor(vendorPay.getVendor())).thenReturn(null);
-            List <AdminPay> expected=adminService.paidHistroyVendor(vendorPay.getVendor());
+
+            List <AdminPay> expected=adminService.paidHistroyVendor(vendor);
         }, "Error handled");
     }
 }
