@@ -84,12 +84,19 @@ public class AdminController {
 
 	//finding all user details....
 	@GetMapping("/get-all-users")
-	public List<UserClass> getAllUsers() {
+	public ResponseEntity<List<UserClass>> getAllUsers() {
 		List<UserClass> l = userRepo.findAll();
 		l = l.stream().filter(e -> e.getRole().equals("USER")).collect(Collectors.toList());
-		return l;
+		if(l!=null && l.size()>0)
+		{
+		   return ResponseEntity.status(HttpStatus.OK).body(l);
+		}
+		System.out.println(HttpStatus.NO_CONTENT);
+		return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 	}
 
+	
+	
 	//finding all vendors from the database.
 	@GetMapping("/get-all-vendors")
 	public List<UserClass> getAllVendors() {
