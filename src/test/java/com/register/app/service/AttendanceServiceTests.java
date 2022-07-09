@@ -114,6 +114,43 @@ class AttendanceServiceTests {
     }
 
 
+
+    @Test
+    @DisplayName("Mark attendance service for having attendance list;")
+    void markAllUserAttendance()
+    {
+        List<String> users=new ArrayList<>(Arrays.asList("Rahul"));
+        UserAttendance userAttendance=new UserAttendance(
+                "Rahul",
+                "GM1",
+                "Manish",
+                30,
+                60,
+                attendance,
+                4.0
+        );
+        UserAttendance userAttendance2=new UserAttendance(
+                "Ranjit",
+                "GM1",
+                "Manish",
+                30,
+                60,
+                attendance,
+                4.0
+        );
+        List<UserAttendance> allusers=new ArrayList<>();
+        allusers.add(userAttendance);
+        allusers.add(userAttendance2);
+
+        Mockito.when(attendanceRepo.findByVendorAndGym(userAttendance.getVendor(), userAttendance.getGym())).thenReturn(allusers);
+        Mockito.when(attendanceRepo.findByEmailAndVendorAndGym(userAttendance.getEmail(), userAttendance.getVendor(), userAttendance.getGym())).thenReturn(userAttendance);
+        Mockito.when(attendanceRepo.findByEmailAndVendorAndGym(userAttendance2.getEmail(), userAttendance2.getVendor(), userAttendance2.getGym())).thenReturn(userAttendance2);
+        String ans=attendanceService.markUsersAttendance(attModel);
+        System.out.println(ans);
+        Assertions.assertNotNull(ans);
+
+    }
+
     @Test
     @DisplayName("With Exception for marking attendance")
      void markAttForException()

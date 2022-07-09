@@ -140,13 +140,61 @@ class UserOrderServiceTest {
     }
 
     @Test
+    @DisplayName("Update order for Month case")
      void updateOrder()
     {
         HashMap<String, String> data=new HashMap<>();
         data.put("order_id", "orderId");
         data.put("payment_id", "paymentId");
         data.put("status", "Completed");
+        UserOrder USER_ORDER=new UserOrder("orderId", "rahul", "GM1",
+                SERVICE,"Monthly" ,"Evening",2000, CURRENT,
+                "Created", "paymentId", "receipt",
+                LocalDate.now(), LocalTime.now());
+        Optional<GymClass> optional_gym=Optional.of(FITNESS2);
+        Optional<UserOrder> optional_order=Optional.of(USER_ORDER);
+        Mockito.when(userOrderRepo.findById(data.get("order_id"))).thenReturn(optional_order);
+        Mockito.when(gymRepo.findById(USER_ORDER.getGym())).thenReturn(optional_gym);
 
+        UserOrder userOrder=userOrderService.updateOrder(data);
+        Assertions.assertNotNull(userOrder);
+        Assertions.assertEquals(userOrder.getStatus(), USER_ORDER_COM.getStatus());
+
+    }
+    @Test
+    @DisplayName("Update order for Quat case")
+    void updateOrderQuat()
+    {
+        HashMap<String, String> data=new HashMap<>();
+        data.put("order_id", "orderId");
+        data.put("payment_id", "paymentId");
+        data.put("status", "Completed");
+        UserOrder USER_ORDER=new UserOrder("orderId", "rahul", "GM1",
+                SERVICE,"Quaterly" ,"Evening",2000, CURRENT,
+                "Created", "paymentId", "receipt",
+                LocalDate.now(), LocalTime.now());
+        Optional<GymClass> optional_gym=Optional.of(FITNESS2);
+        Optional<UserOrder> optional_order=Optional.of(USER_ORDER);
+        Mockito.when(userOrderRepo.findById(data.get("order_id"))).thenReturn(optional_order);
+        Mockito.when(gymRepo.findById(USER_ORDER.getGym())).thenReturn(optional_gym);
+
+        UserOrder userOrder=userOrderService.updateOrder(data);
+        Assertions.assertNotNull(userOrder);
+        Assertions.assertEquals(userOrder.getStatus(), USER_ORDER_COM.getStatus());
+
+    }
+    @Test
+    @DisplayName("Update order for half case")
+    void updateOrderHalf()
+    {
+        HashMap<String, String> data=new HashMap<>();
+        data.put("order_id", "orderId");
+        data.put("payment_id", "paymentId");
+        data.put("status", "Completed");
+        UserOrder USER_ORDER=new UserOrder("orderId", "rahul", "GM1",
+                SERVICE,"Half" ,"Evening",2000, CURRENT,
+                "Created", "paymentId", "receipt",
+                LocalDate.now(), LocalTime.now());
         Optional<GymClass> optional_gym=Optional.of(FITNESS2);
         Optional<UserOrder> optional_order=Optional.of(USER_ORDER);
         Mockito.when(userOrderRepo.findById(data.get("order_id"))).thenReturn(optional_order);
@@ -158,6 +206,28 @@ class UserOrderServiceTest {
 
     }
 
+    @Test
+    @DisplayName("Update order for default case")
+    void updateOrderDefault()
+    {
+        HashMap<String, String> data=new HashMap<>();
+        data.put("order_id", "orderId");
+        data.put("payment_id", "paymentId");
+        data.put("status", "Completed");
+        UserOrder USER_ORDER=new UserOrder("orderId", "rahul", "GM1",
+                SERVICE,"Yearly" ,"Evening",2000, CURRENT,
+                "Created", "paymentId", "receipt",
+                LocalDate.now(), LocalTime.now());
+        Optional<GymClass> optional_gym=Optional.of(FITNESS2);
+        Optional<UserOrder> optional_order=Optional.of(USER_ORDER);
+        Mockito.when(userOrderRepo.findById(data.get("order_id"))).thenReturn(optional_order);
+        Mockito.when(gymRepo.findById(USER_ORDER.getGym())).thenReturn(optional_gym);
+
+        UserOrder userOrder=userOrderService.updateOrder(data);
+        Assertions.assertNotNull(userOrder);
+        Assertions.assertEquals(userOrder.getStatus(), USER_ORDER_COM.getStatus());
+
+    }
     @Test
      void pendingListOrder()
     {
@@ -302,7 +372,7 @@ class UserOrderServiceTest {
 
         Boolean ans=userOrderService.canOrder(USER_ORDER_EX.getEmail());
          Assertions.assertTrue(ans);
-        //Assertions.assertFalse(ans);
+
 
     }
     @Test
@@ -316,6 +386,7 @@ class UserOrderServiceTest {
     }
 
     @Test
+    @DisplayName("Can order if order is empty:")
     void canOrderSetExp()
     {
         UserOrder USER_ORDER_EX=new UserOrder("orderId", "rahul", "GM1",
@@ -329,14 +400,24 @@ class UserOrderServiceTest {
         Boolean ans=userOrderService.canOrder(USER_ORDER_EX.getEmail());
         Assertions.assertTrue(ans);
     }
+
+    @Test
+    @DisplayName("can order for empty order list:")
+    void canOrderForEmptyOrder()
+    {
+
+        Mockito.when(userOrderRepo.findByEmail(USER_ORDER_EX.getEmail())).thenReturn(null
+        );
+
+        Boolean ans=userOrderService.canOrder(USER_ORDER_EX.getEmail());
+        Assertions.assertTrue(ans);
+    }
     @Test
      void canOrderWithFalse()
     {
         List<UserOrder> listOrder=new ArrayList<>(Arrays.asList(USER_ORDER_COM,USER_ORDER_EX));
         Mockito.when(userOrderRepo.findByEmail(USER_ORDER_EX.getEmail())).thenReturn(listOrder);
-
         Boolean ans=userOrderService.canOrder(USER_ORDER_EX.getEmail());
-
         Assertions.assertFalse(ans);
     }
 
@@ -344,14 +425,16 @@ class UserOrderServiceTest {
      void canOrderWithFalseAndSetEX()
     {
         UserOrder order=USER_ORDER_COM;
-        order.setDate(order.getDate().plusDays(30));
-        List<UserOrder> listOrder=new ArrayList<>(Arrays.asList(USER_ORDER_COM,USER_ORDER_EX));
-        Mockito.when(userOrderRepo.findByEmail(USER_ORDER_EX.getEmail())).thenReturn(listOrder);
+        order.setDate(order.getDate().plusDays(120));
+        List<UserOrder> listOrder=new ArrayList<>(Arrays.asList(order));
+        Mockito.when(userOrderRepo.findByEmail(order.getEmail())).thenReturn(listOrder);
 
-        Boolean ans=userOrderService.canOrder(USER_ORDER_EX.getEmail());
+        Boolean ans=userOrderService.canOrder(order.getEmail());
 
         Assertions.assertFalse(ans);
     }
+
+
 
 
 

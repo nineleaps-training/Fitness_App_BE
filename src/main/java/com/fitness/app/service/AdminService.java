@@ -18,6 +18,8 @@ import com.fitness.app.repository.AdminPayRepo;
 import com.fitness.app.repository.VendorPayRepo;
 import com.razorpay.Order;
 
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Service
 public class AdminService {
 
@@ -32,6 +34,7 @@ public class AdminService {
 	
 	public AdminPay getDataPay(AdminPayModel payment)
 	{
+		 log.info("Payment to admin is being accessed");
 		 return adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due");
 		
 	}

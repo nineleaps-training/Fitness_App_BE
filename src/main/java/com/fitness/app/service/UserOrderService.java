@@ -76,15 +76,23 @@ public class UserOrderService {
 
         //update booked...
         int booked ;
-        if (order.getSubscription().equals("monthly")) {
-            booked = 30;
-        } else if (order.getSubscription().equals("quaterly")) {
-            booked = 90;
-        } else if (order.getSubscription().equals("half")) {
-            booked = 180;
-        } else {
-            booked = 360;
+        String subs=order.getSubscription();
+        switch (subs)
+        {
+            case "Monthly":
+                booked=30;
+                break;
+            case "Quaterly":
+                booked=90;
+                break;
+            case "Half":
+                booked=180;
+                break;
+            default:
+                booked=360;
+                break;
         }
+
 
         UserAttendance attendance = new UserAttendance();
         String vendor=null;
@@ -204,18 +212,19 @@ public class UserOrderService {
     public Boolean canOrder(String email) {
 
         List<UserOrder> orders = userOrderRepo.findByEmail(email);
-        orders = orders.stream().filter(o -> o.getBooked().equals(CURRENT)).collect(Collectors.toList());
-
         if (orders == null) {
             return true;
         }
+        orders = orders.stream().filter(o -> o.getBooked().equals(CURRENT)).collect(Collectors.toList());
+
+
         LocalDate localDate = LocalDate.now();
         for (UserOrder order : orders) {
             LocalDate currentDate = order.getDate();
             String subs = order.getSubscription();
             currentDate=currentDate.plusDays(components.calculateTotalTime(subs));
 
-            int comp = localDate.compareTo(currentDate);
+            int comp = currentDate.compareTo(localDate);
             if (comp > 0) {
                 order.setBooked("Expired");
                 userOrderRepo.save(order);
