@@ -81,15 +81,13 @@ Spring security for OAuth and JWT Authentication
 │   │   │           │   ├── WebConfiguration.java                                                                                                       
 │   │   │           │   ├── WebCorsConfiguration.java                                                                     
 │   │   │           ├── controller                                                                        
-│   │   │           │   ├── AdminController.java                                                                              
-│   │   │           │   ├──PhotoController.java            
+│   │   │           │   ├── AdminController.java          
 │   │   │           │   ├──UserForgetPasswordController.java                                                                       
 │   │   │           │   ├──VendorDetailsController.java                                                                   
 │   │   │           │   ├── AttendanceConntroller.java                                                                          
 │   │   │           │   ├──UserBankDetailsController.java                                                                                     
-│   │   │           │   ├──UserOrderController.java                                                                                   
-│   │   │           │   ├──VendorPayController.java                                                                           
-│   │   │           │   ├── GoogleController.java                                                                                       
+│   │   │           │   ├──UserOrderController.java  
+│   │   │           │   ├──LocationController.java                                                                                    
 │   │   │           │   ├──UserController.java                                                                                            
 │   │   │           │   ├──UserRatingController.java                                                                  
 │   │   │           │   ├── GymController.java                                                                              
@@ -111,28 +109,47 @@ Spring security for OAuth and JWT Authentication
 │   │   │           │   ├──PhotoClass.java                                                                                          
 │   │   │           │   ├──UserBankDetails.java                                                                               
 │   │   │           │   ├──UserOrder.java                                                                                       
-│   │   │           │   ├──VendorDetails.java                                                                                 
+│   │   │           │   ├──VendorDetails.java      
+│   │   │           │   ├──CustomResponse.java 
+│   │   │           ├── exception                                                                                                 
+│   │   │           │   ├── DataNotFoundException.java                                                                        
+│   │   │           │   ├── GlobalExceptionHandler.java
 │   │   │           ├── image                                                                                                 
 │   │   │           │   ├── Doc.java                                                                        
 │   │   │           │   ├──ImgController.java                                                             
 │   │   │           │   ├──ImgRepo.java                                                                             
 │   │   │           │   ├──ImgService.java                                                              
-│   │   │           ├── model                                                                           
-│   │   │           │   ├── BookedGymModel.java                                                                             
-│   │   │           │   ├──EnthusiastLoginModel.java                                                                    
-│   │   │           │   ├──GymRepresnt.java                                                                             
-│   │   │           │   ├──Role.java                                                                          
-│   │   │           │   ├──UserModel.java                                                                     
-│   │   │           │   ├──CustomOAuth2User.java                                                                
-│   │   │           │   ├──EnthusiastUserModel.java                                                                         
-│   │   │           │   ├──MarkUserAttModel.java                                                                        
-│   │   │           │   ├──SignUpResponce.java                                                                            
-│   │   │           │   ├──UserOrderModel.java                                                                            
-│   │   │           │   ├──DeleteGymModel.java                                                                                        
-│   │   │           │   ├──GymClassModel.java                                                                                           
-│   │   │           │   ├──PhotoResponse.java                                                                                                   
-│   │   │           │   ├──UserForgot.java                                                                                        
-│   │   │           │   ├──UserPerfomanceModel.java                                                                                           
+│   │   │           ├── model  
+│   │   │           │   ├── AdminPayRequestModel.java   
+│   │   │           │   ├── BookedGymModel.java        
+│   │   │           │   ├── DeleteGymModel.java 
+│   │   │           │   ├── EnthusiastLoginModel.java                                                                    
+│   │   │           │   ├── GymRepresnt.java                                                                             
+│   │   │           │   ├── Role.java                                                                          
+│   │   │           │   ├── UserModel.java                                                                     
+│   │   │           │   ├── CustomOAuth2User.java                                                                
+│   │   │           │   ├── EnthusiastUserModel.java                                                                         
+│   │   │           │   ├── MarkUserAttModel.java                                                                        
+│   │   │           │   ├── SignUpResponce.java                                                                            
+│   │   │           │   ├── UserOrderModel.java                                                                            
+│   │   │           │   ├── DeleteGymModel.java                                                                                        
+│   │   │           │   ├── GymClassModel.java                                                                                           
+│   │   │           │   ├── PhotoResponse.java   
+│   │   │           │   ├── VendorBankDetailsRequestModel.java   
+│   │   │           │   ├── VendorDetailsRequestModel.java   
+│   │   │           │   ├── UserBankDetailsRequestModel.java   
+│   │   │           │   ├── UserDetailsRequestModel.java   
+│   │   │           │   ├── Rows.java   
+│   │   │           │   ├── Result.java   
+│   │   │           │   ├── Duration.java   
+│   │   │           │   ├── Elements.java 
+│   │   │           │   ├── Distance.java   
+│   │   │           │   ├── DResponse.java   
+│   │   │           │   ├── UserForgot.java 
+│   │   │           │   ├── Geo.java
+│   │   │           │   ├── GoogleAddress.java
+│   │   │           │   ├── GymRepresnt.java
+│   │   │           │   ├── UserPerfomanceModel.java                                                                                           
 │   │   │           └── repository                                                                                                
 │   │   │           │   ├── AddGymRepository.java                                                                                             
 │   │   │           │   ├──GymAddressRepo.java                                                                                                
@@ -152,22 +169,18 @@ Spring security for OAuth and JWT Authentication
 │   │   │           │   ├──VendorRepository.java                                                                                              
 │   │   │           └── security                                                                          
 │   │   │           │          └── service                                                                                
-│   │   │           │                     ├──JwtTokenProvider.java                                                                                
 │   │   │           │                     ├──UserDetailsServiceImpl.java                                                                    
-│   │   │           │                     ├──VendorPayService.java                                                                    
 │   │   │           └── service                                                                                                 
 │   │   │           │   ├──AttendanceService.java                                                                                     
-│   │   │           │   ├──GymService.java                                                                                              
+│   │   │           │   ├──GymService.java     
+│   │   │           │   ├──PagingService.java 
 │   │   │           │   ├──RatingService.java                                                                                                   
 │   │   │           │   ├──UserDetailsService.java                                                                    
-│   │   │           │   ├──VendorBankDetailsService.java                                                                      
-│   │   │           │   ├──CustomOAuth2UserService.java                                                                                   
-│   │   │           │   ├──JwtTokenProvider.java                                                                                                        
+│   │   │           │   ├──VendorBankDetailsService.java
 │   │   │           │   ├──RegisterNewUser.java                                                                                             
 │   │   │           │   ├──UserOrderService.java                                                                                                  
 │   │   │           │   ├──VendorDetailsService.java                                                                                                
-│   │   │           │   ├──FilterBySubscription.java                                                                                
-│   │   │           │   ├──PhotoService.java                                                                                        
+│   │   │           │   ├──FilterBySubscription.java                                                                                      
 │   │   │           │   ├──UserBankDetailsService.java                                                                                    
 │   │   │           │   ├──UserService.java                                                                                                   
 │   │   │           │                                                                                                                         
