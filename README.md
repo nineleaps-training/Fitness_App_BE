@@ -110,10 +110,10 @@ Spring security for OAuth and JWT Authentication
 │   │   │           │   ├──UserBankDetails.java                                                                               
 │   │   │           │   ├──UserOrder.java                                                                                       
 │   │   │           │   ├──VendorDetails.java      
-│   │   │           │   ├──CustomResponse.java 
+│   │   │           │   ├──CustomResponse.java                                    
 │   │   │           ├── exception                                                                                                 
 │   │   │           │   ├── DataNotFoundException.java                                                                        
-│   │   │           │   ├── GlobalExceptionHandler.java
+│   │   │           │   ├── GlobalExceptionHandler.java                        
 │   │   │           ├── image                                                                                                 
 │   │   │           │   ├── Doc.java                                                                        
 │   │   │           │   ├──ImgController.java                                                             
@@ -122,7 +122,7 @@ Spring security for OAuth and JWT Authentication
 │   │   │           ├── model  
 │   │   │           │   ├── AdminPayRequestModel.java   
 │   │   │           │   ├── BookedGymModel.java        
-│   │   │           │   ├── DeleteGymModel.java 
+│   │   │           │   ├── DeleteGymModel.java                                                      
 │   │   │           │   ├── EnthusiastLoginModel.java                                                                    
 │   │   │           │   ├── GymRepresnt.java                                                                             
 │   │   │           │   ├── Role.java                                                                          
@@ -141,15 +141,15 @@ Spring security for OAuth and JWT Authentication
 │   │   │           │   ├── UserDetailsRequestModel.java   
 │   │   │           │   ├── Rows.java   
 │   │   │           │   ├── Result.java   
-│   │   │           │   ├── Duration.java   
-│   │   │           │   ├── Elements.java 
-│   │   │           │   ├── Distance.java   
-│   │   │           │   ├── DResponse.java   
-│   │   │           │   ├── UserForgot.java 
-│   │   │           │   ├── Geo.java
-│   │   │           │   ├── GoogleAddress.java
-│   │   │           │   ├── GymRepresnt.java
-│   │   │           │   ├── UserPerfomanceModel.java                                                                                           
+│   │   │           │   ├── Duration.java                                 
+│   │   │           │   ├── Elements.java                                       
+│   │   │           │   ├── Distance.java                                              
+│   │   │           │   ├── DResponse.java                                                
+│   │   │           │   ├── UserForgot.java                                            
+│   │   │           │   ├── Geo.java                                                            
+│   │   │           │   ├── GoogleAddress.java                                                      
+│   │   │           │   ├── GymRepresnt.java                                                       
+│   │   │           │   ├── UserPerfomanceModel.java                                                                                            
 │   │   │           └── repository                                                                                                
 │   │   │           │   ├── AddGymRepository.java                                                                                             
 │   │   │           │   ├──GymAddressRepo.java                                                                                                
@@ -172,11 +172,11 @@ Spring security for OAuth and JWT Authentication
 │   │   │           │                     ├──UserDetailsServiceImpl.java                                                                    
 │   │   │           └── service                                                                                                 
 │   │   │           │   ├──AttendanceService.java                                                                                     
-│   │   │           │   ├──GymService.java     
-│   │   │           │   ├──PagingService.java 
+│   │   │           │   ├──GymService.java                                                          
+│   │   │           │   ├──PagingService.java                                                      
 │   │   │           │   ├──RatingService.java                                                                                                   
-│   │   │           │   ├──UserDetailsService.java                                                                    
-│   │   │           │   ├──VendorBankDetailsService.java
+│   │   │           │   ├──UserDetailsService.java                                                                                
+│   │   │           │   ├──VendorBankDetailsService.java                                              
 │   │   │           │   ├──RegisterNewUser.java                                                                                             
 │   │   │           │   ├──UserOrderService.java                                                                                                  
 │   │   │           │   ├──VendorDetailsService.java                                                                                                
