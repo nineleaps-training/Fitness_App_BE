@@ -13,4 +13,5 @@ public class PhotoResponse {
     private String downloadURL;
     private String fileType;
     private long fileSize;
+
 }

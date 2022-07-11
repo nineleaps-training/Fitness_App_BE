@@ -14,23 +14,21 @@ import lombok.NoArgsConstructor;
 @Document(value = "gym_address")
 public class GymAddressClass {
 
-	@Id
-	@Field
-	private String id;
+    @Id
+    @Field
+    private String id;
+    @Field
+    private Double lat;
+    @Field
+    private Double lng;
+    @Field
+    private String address;
+    private String city;
 
-	@Field
-	private Double lat;
-	@Field
-	private Double lng;
-	@Field
-	private String address;
-
-	private String city;
-
-	public GymAddressClass(Double lat, Double lng, String address, String city) {
-		this.lat = lat;
-		this.lng = lng;
-		this.address = address;
-		this.city = city;
-	}
+    public GymAddressClass(Double lat, Double lng, String address, String city) {
+        this.lat = lat;
+        this.lng = lng;
+        this.address = address;
+        this.city = city;
+    }
 }

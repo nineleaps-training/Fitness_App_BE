@@ -15,20 +15,20 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(value = "vendor_details")
 public class VendorDetails {
 
-	@Id
-	@Field
-	private String email;
+    @Id
+    @Field
+    private String email;
 
-	@Field
-	private String gender;
+    @Field
+    private String gender;
 
-	@Field
-	private String fullAddress;
+    @Field
+    private String fullAddress;
 
-	@Field
-	private String city;
+    @Field
+    private String city;
 
-	@Field
-	private Long postal;
+    @Field
+    private Long postal;
 
 }

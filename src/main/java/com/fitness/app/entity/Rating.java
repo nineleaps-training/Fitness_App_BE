@@ -1,4 +1,5 @@
 package com.fitness.app.entity;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -16,12 +17,10 @@ public class Rating {
     @Field
     private String rid;
     @Field
-	private String target;
-	@Field
-	private String rater;
-	@Field
-	private double rating;
-   
-   
-    
+    private String target;
+    @Field
+    private String rater;
+    @Field
+    private double rate;
+
 }

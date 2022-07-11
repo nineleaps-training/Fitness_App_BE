@@ -26,5 +26,5 @@ public class UserBankDetails {
     private Long userAccountNumber;
     @Field
     private String userBankIFSC;
-   
+
 }

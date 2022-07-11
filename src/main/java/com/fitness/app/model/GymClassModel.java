@@ -15,12 +15,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class GymClassModel {
 
-	private String vendorEmail;
-	private String gymName;
-	private GymAddressClass gymAddress;
-	private List<String> workoutList;
-	private GymTime timing;
-	private GymSubscriptionClass subscription;
-	private Long contact;
-	private int capacity;
+    private String vendorEmail;
+    private String gymName;
+    private GymAddressClass gymAddress;
+    private List<String> workoutList;
+    private GymTime timing;
+    private GymSubscriptionClass subscription;
+    private Long contact;
+    private int capacity;
+
 }

@@ -19,109 +19,92 @@ import com.fitness.app.security.service.UserDetailsServiceImpl;
 
 @Configuration
 @EnableWebSecurity
-public class WebConfiguration extends WebSecurityConfigurerAdapter{
+public class WebConfiguration extends WebSecurityConfigurerAdapter {
 
-	private static String[] publicApi = {
-			"/gyms/locality/{locality}",
-			"/gym/city/{city}",
-			"/gym/id/**",
+    private static String[] publicApi = {
+            "/gyms/locality/{locality}",
+            "/gym/city/{city}",
+            "/gym/id/**",
 
-			"/login/user",
-			"/verify/user/**",
-			"/register/user",
-			"/hello",
-			"/login/admin",
+            "/login/user",
+            "/verify/user/**",
+            "/register/user",
+            "/hello",
+            "/login/admin",
 
-			"/forget/user/**",
-			"/user/set-password",
+            "/forget/user/**",
+            "/user/set-password",
 
             "/user-performance",
             "/all-numbers",
-			"/downloadFile/**",
-			"/google-sign-in/**",
+            "/downloadFile/**",
+            "/google-sign-in/**",
 
 
+            "/swagger-ui/*",
+            "/swagger-resources/**",
+            "/v2/api-docs/**",
+            "/swagger-ui.html",
+            "/favicon.ico",
 
-			"/swagger-ui/*",
-			"/swagger-resources/**",
-			"/v2/api-docs/**",
-			"/swagger-ui.html",
-			"/favicon.ico",
+            "/get-fitness-center-by-location",
 
-			"/get-fitness-center-by-location",
+            "/qrcode",
 
-			"/qrcode",
-
-			"/address-by-lat-lng",
-
+            "/address-by-lat-lng",
 
 
+    };
 
 
+    @Autowired
+    private UserDetailsServiceImpl userDetailsServiceImpl;
 
-	};
-
-
-
-	@Autowired
-	private UserDetailsServiceImpl userDetailsServiceImpl;
-
-	@Autowired
+    @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
 
-	@Bean
-	public PasswordEncoder passwordEncoder()
-	{
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
 
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
 
-	 @Override
-	    @Bean
-	    public AuthenticationManager authenticationManagerBean() throws Exception {
-	        return super.authenticationManagerBean();
-	    }
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        super.configure(auth);
+        auth.userDetailsService(userDetailsServiceImpl).passwordEncoder(new BCryptPasswordEncoder());
+    }
 
 
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .csrf()
+                .disable()
+                .cors()
+                .disable()
+                .authorizeRequests()
+                .antMatchers(publicApi).permitAll()
+                .antMatchers(org.springframework.http.HttpMethod.OPTIONS).permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		 super.configure(auth);
-	        auth.userDetailsService(userDetailsServiceImpl );
-	}
-
-
-
-
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		 http
-         .csrf()
-         .disable()
-         .cors()
-         .disable()
-         .authorizeRequests()
-         .antMatchers(publicApi).permitAll()
-         .antMatchers(org.springframework.http.HttpMethod.OPTIONS).permitAll()
-         .anyRequest().authenticated()
-         .and()
-         .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-         .and()
-         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
- http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-	}
-
-
-
-
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+    }
 
 
 }

@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SignUpResponse {
 
-	private UserClass currentUser;
-	
-	private String message;
-	
+    private UserClass currentUser;
+
+    private String message;
+
 }

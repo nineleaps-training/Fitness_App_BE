@@ -17,12 +17,15 @@ public class Result {
     public String getAddress() {
         return address;
     }
+
     public void setAddress(String address) {
         this.address = address;
     }
+
     public Geo getGeometry() {
         return geometry;
     }
+
     public void setGeometry(Geo geometry) {
         this.geometry = geometry;
     }

@@ -21,48 +21,43 @@ public class GoogleMapService {
     //API Key for accessing google location.
     private static final Object API_KEY = "AIzaSyCgHNmyruLEfUzPbSoKUJrx1I-rL_NqJ2U";
 
-
     //function to get full address with city.
     public String getAddressByLatLag(String latlng) throws IOException, ParseException {
-        UriComponents uri= UriComponentsBuilder.newInstance()
+        UriComponents uri = UriComponentsBuilder.newInstance()
                 .scheme("https")
                 .host("maps.googleapis.com")
                 .path("/maps/api/geocode/json")
                 .queryParam("key", API_KEY)
-                .queryParam("latlng",latlng)
+                .queryParam("latlng", latlng)
                 .build();
 
-            URL url= new URL( uri.toString());
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.connect();
-            int responsecode = conn.getResponseCode();
+        URL url = new URL(uri.toString());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.connect();
+        int responseCode = conn.getResponseCode();
 
-            if(responsecode!=200)
-            {
-              throw  new RuntimeException("HttpResponceCode:"+responsecode);
+        if (responseCode != 200) {
+            throw new ParseException("HttpResponseCode:" + responseCode);
+        } else {
+            StringBuilder inline = new StringBuilder();
+            Scanner scanner = new Scanner(url.openStream());
+            while (scanner.hasNext()) {
+                inline.append(scanner.nextLine());
             }
-            else
-            {
-                StringBuilder inline= new StringBuilder();
-                Scanner scanner=new Scanner(url.openStream());
-                while (scanner.hasNext())
-                {
-                    inline.append(scanner.nextLine());
-                }
 
-                scanner.close();
+            scanner.close();
 
 
-                JSONParser parse=new JSONParser(inline.toString());
-                JSONObject dataObj=(JSONObject) parse.parse();
+            JSONParser parse = new JSONParser(inline.toString());
+            JSONObject dataObj = (JSONObject) parse.parse();
 
-                JSONObject object = (JSONObject)dataObj.get("results");
-                String ans=  object.toString();
+            JSONObject object = (JSONObject) dataObj.get("results");
+            String ans = object.toString();
 
-                System.out.println(object.get("address_components"));
-                return ans;
+            log.info(String.valueOf(object.get("address_components")));
+            return ans;
 
-            }
+        }
     }
 }

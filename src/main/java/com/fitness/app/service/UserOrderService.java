@@ -7,9 +7,7 @@ import java.util.stream.Collectors;
 
 
 import com.fitness.app.entity.GymClass;
-import com.fitness.app.model.GymRepresnt;
-
-
+import com.fitness.app.model.GymRepresent;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +63,7 @@ public class UserOrderService {
         UserOrder order = new UserOrder();
 
         Optional<UserOrder> optional = userOrderRepo.findById(data.get("order_id"));
-        if(optional.isPresent()) {
+        if (optional.isPresent()) {
             order = optional.get();
         }
 
@@ -76,17 +74,21 @@ public class UserOrderService {
         order.setTime(time);
 
 
-
         //update booked...
         int booked;
-        if (order.getSubscription().equals("monthly")) {
-            booked = 30;
-        } else if (order.getSubscription().equals("quaterly")) {
-            booked = 90;
-        } else if (order.getSubscription().equals("half")) {
-            booked = 180;
-        } else {
-            booked = 360;
+        switch (order.getSubscription()) {
+            case "monthly":
+                booked = 30;
+                break;
+            case "quarterly":
+                booked = 90;
+                break;
+            case "half":
+                booked = 180;
+                break;
+            default:
+                booked = 360;
+                break;
         }
 
         UserAttendance attendance = new UserAttendance();
@@ -113,7 +115,8 @@ public class UserOrderService {
 
         vendorOrderRepo.save(vendorOrder);
 
-        return userOrderRepo.save(order);
+        userOrderRepo.save(order);
+        return order;
     }
 
     //pending order list of user
@@ -125,8 +128,8 @@ public class UserOrderService {
         for (UserOrder eachOrder : orders) {
             LocalDate date = eachOrder.getDate();
             date = date.plusDays(5);
-            LocalDate currenDate = LocalDate.now();
-            int ans = currenDate.compareTo(date);
+            LocalDate currentDate = LocalDate.now();
+            int ans = currentDate.compareTo(date);
             if (ans < 0) {
                 userOrderRepo.delete(eachOrder);
             }
@@ -168,37 +171,32 @@ public class UserOrderService {
     @Autowired
     private GymAddressRepo gymAddressRepo;
 
-    public List<GymRepresnt> bookedGym(String email) {
+    public List<GymRepresent> bookedGym(String email) {
 
-
-
-
-    List<UserOrder> orders = userOrderRepo.findByEmail(email);
+        List<UserOrder> orders = userOrderRepo.findByEmail(email);
         if (orders == null) {
             return Collections.emptyList();
         }
-        List<GymRepresnt> gyms = new ArrayList<>();
-        for(UserOrder order:orders)
-        {
-            if(order.getBooked().equals(current))
-            {
+        List<GymRepresent> gyms = new ArrayList<>();
+        for (UserOrder order : orders) {
+            if (order.getBooked().equals(current)) {
                 gyms.add(gymService.getGymByGymId(order.getGym()));
             }
         }
-       orders = orders.stream().filter(o -> o.getBooked().equals("Expired")).collect(Collectors.toList());
+        orders = orders.stream().filter(o -> o.getBooked().equals("Expired")).collect(Collectors.toList());
         for (UserOrder order : orders) {
             gyms.add(gymService.getGymByGymId(order.getGym()));
         }
-      return  gyms;
+        return gyms;
 
     }
-    
+
 
     public Boolean canOrder(String email) {
         List<UserOrder> orders = userOrderRepo.findByEmail(email);
         orders = orders.stream().filter(o -> o.getBooked().equals(current)).collect(Collectors.toList());
 
-        if (orders == null) {
+        if (orders.isEmpty()) {
             return true;
         }
         LocalDate localDate = LocalDate.now();
@@ -209,7 +207,7 @@ public class UserOrderService {
                 case "Monthly":
                     currentDate = currentDate.plusDays(25);
                     break;
-                case "Quaterly":
+                case "Quarterly":
                     currentDate = currentDate.plusDays(75);
                     break;
                 case "Half":
@@ -226,11 +224,7 @@ public class UserOrderService {
                 order.setBooked("Expired");
                 userOrderRepo.save(order);
             }
-
         }
-
-        return orders.size() < 1;
-
+        return orders.isEmpty();
     }
-
 }

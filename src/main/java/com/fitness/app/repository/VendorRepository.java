@@ -9,10 +9,7 @@ import com.fitness.app.entity.VenderUser;
 @Repository
 @EnableMongoRepositories
 public interface VendorRepository extends MongoRepository<VenderUser, String> {
-	
-	
-	public VenderUser findByEmail(String email); 
-	
-	
+
+    public VenderUser findByEmail(String email);
 
 }

@@ -16,19 +16,19 @@ import lombok.NoArgsConstructor;
 @Document(value = "gym_collection")
 public class GymClass {
 
-	@Id
-	@Field
-	private String id;
-	@Field
-	private String email;
-	@Field
-	private String name;
-	@Field
-	private List<String> workout;
-	@Field
-	private Long contact;
-	@Field
-	private Double rating;
-	@Field
-	private int capacity;
+    @Id
+    @Field
+    private String id;
+    @Field
+    private String email;
+    @Field
+    private String name;
+    @Field
+    private List<String> workout;
+    @Field
+    private Long contact;
+    @Field
+    private Double rate;
+    @Field
+    private int capacity;
 }

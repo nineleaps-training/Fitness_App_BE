@@ -15,21 +15,21 @@ import lombok.NoArgsConstructor;
 @Document(value = "vendor_bank")
 public class VendorBankDetails {
 
-	@Id
-	@Field
-	private String email;
-	@Field
-	private String name;
-	@Field
+    @Id
+    @Field
+    private String email;
+    @Field
+    private String name;
+    @Field
     private String bankName;
-	@Field
+    @Field
     private String branchName;
-	@Field
+    @Field
     private Long accountNumber;
-	@Field
+    @Field
     private String bankIFSC;
-	@Field
-	private String paymentSchedule;
+    @Field
+    private String paymentSchedule;
 
 
 }

@@ -11,25 +11,25 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection =  "all_users")
+@Document(collection = "all_users")
 public class UserClass {
 
-	
-	@Id
-	@Field
-	private String email;
-	@Field
-	private String fullName;
-	@Field
-	private String mobile;
-	@Field
-	private String password;
-	@Field
-	private String role;
-	@Field
-	private Boolean activated;
-	@Field
-	private Boolean loggedin;
-	@Field
-	private Boolean custom;
+    @Id
+    @Field
+    private String email;
+    @Field
+    private String fullName;
+    @Field
+    private String mobile;
+    @Field
+    private String password;
+    @Field
+    private String role;
+    @Field
+    private Boolean activated;
+    @Field
+    private Boolean loggedIn;
+    @Field
+    private Boolean custom;
+
 }

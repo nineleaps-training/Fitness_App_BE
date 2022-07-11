@@ -14,21 +14,21 @@ import lombok.NoArgsConstructor;
 @Document(value = "gym_time")
 public class GymTime {
 
-	@Id
-	@Field
-	private String id;
-	@Field
-	private String morning;
-	@Field
-	private String evening;
-	@Field
-	private String weeklyOff;
+    @Id
+    @Field
+    private String id;
+    @Field
+    private String morning;
+    @Field
+    private String evening;
+    @Field
+    private String weeklyOff;
 
-	public GymTime(String morning, String evening, String weeklyOff) {
-		super();
-		this.morning = morning;
-		this.evening = evening;
-		this.weeklyOff = weeklyOff;
-	}
+    public GymTime(String morning, String evening, String weeklyOff) {
+        super();
+        this.morning = morning;
+        this.evening = evening;
+        this.weeklyOff = weeklyOff;
+    }
 
 }

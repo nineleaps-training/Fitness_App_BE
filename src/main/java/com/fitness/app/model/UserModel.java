@@ -16,5 +16,4 @@ public class UserModel {
     private String role;
     private Boolean custom;
 
-
 }

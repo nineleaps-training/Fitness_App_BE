@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 public class UserForgot {
 
     private String otp;
-	private boolean bool;
-	
+    private boolean bool;
+
 }

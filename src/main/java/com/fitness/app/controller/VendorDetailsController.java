@@ -1,6 +1,6 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.entity.VendorDetails;
+import com.fitness.app.model.VendorDetailsModel;
 import com.fitness.app.repository.UserOrderRepo;
 import com.fitness.app.service.VendorDetailsService;
 
@@ -23,12 +23,13 @@ public class VendorDetailsController {
 
     @Autowired
     private UserOrderRepo userOrderRepo;
+
     //Adding details of the vendor
     @PutMapping("/add/vendor-details")
-    public ResponseEntity<ArrayList<VendorDetails>> addVendorDetails(@RequestBody VendorDetails vendorDetails) {
-        VendorDetails vendorDetails1 = vendorDetailsService.addVendorDetails(vendorDetails);
+    public ResponseEntity<ArrayList<VendorDetailsModel>> addVendorDetails(@RequestBody VendorDetailsModel vendorDetails) {
+        VendorDetailsModel vendorDetails1 = vendorDetailsService.addVendorDetails(vendorDetails);
 
-        ArrayList<VendorDetails> vendor  = new ArrayList<>();
+        ArrayList<VendorDetailsModel> vendor = new ArrayList<>();
         vendor.add(vendorDetails1);
 
         if (vendorDetails1 != null) {
@@ -36,9 +37,10 @@ public class VendorDetailsController {
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
+
     //Fetching the details of the vendor by his email id
     @GetMapping("/vendor-details/{email}")
-    public VendorDetails getVendorDetails(@PathVariable String email) {
+    public VendorDetailsModel getVendorDetails(@PathVariable String email) {
         return vendorDetailsService.getVendorDetails(email);
     }
 

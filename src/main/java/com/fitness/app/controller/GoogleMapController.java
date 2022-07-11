@@ -16,7 +16,6 @@ public class GoogleMapController {
     @Autowired
     private GoogleMapService googleMapService;
 
-
     @GetMapping("/address-by-lat-lng")
     public String getAddressByLatLng(@RequestParam String latlng) throws IOException, ParseException {
         return googleMapService.getAddressByLatLag(latlng);

@@ -28,63 +28,61 @@ public class LocationController {
 
     @Autowired
     public GymService gymService;
+
     @GetMapping("/getLocation")
-    public String getDetails(@RequestParam String address)
-    {
-        UriComponents uri= UriComponentsBuilder.newInstance()
-        .scheme("https")
-        .host("maps.googleapis.com")
-        .path("/maps/api/geocode/json")
-        .queryParam("key", API_KEY)
-        .queryParam("address",address)
-        .build();
+    public String getDetails(@RequestParam String address) {
+        UriComponents uri = UriComponentsBuilder.newInstance()
+                .scheme("https")
+                .host("maps.googleapis.com")
+                .path("/maps/api/geocode/json")
+                .queryParam("key", API_KEY)
+                .queryParam("address", address)
+                .build();
         log.info(uri.toUriString());
         ResponseEntity<Response> response = new RestTemplate().getForEntity(uri.toUriString(), Response.class);
-        Response location=response.getBody();
+        Response location = response.getBody();
         assert location != null;
-        Double lat=location.getResult()[0].getGeometry().getLocation().getLat();
-        Double lng=location.getResult()[0].getGeometry().getLocation().getLng();
-        return lat.toString()+" , "+lng.toString();
+        Double lat = location.getResult()[0].getGeometry().getLocation().getLat();
+        Double lng = location.getResult()[0].getGeometry().getLocation().getLng();
+        return lat.toString() + " , " + lng.toString();
     }
 
     @GetMapping("/get-fitness-center-by-location")
-    public Map<String, List<String>> getAddress(@RequestParam String latlng)
-    {
-        UriComponents uri= UriComponentsBuilder.newInstance()
-        .scheme("https")
-        .host("maps.googleapis.com")
-        .path("/maps/api/geocode/json")
-        .queryParam("key", API_KEY)
-        .queryParam("latlng",latlng)
-        .build();
+    public Map<String, List<String>> getAddress(@RequestParam String latlng) {
+        UriComponents uri = UriComponentsBuilder.newInstance()
+                .scheme("https")
+                .host("maps.googleapis.com")
+                .path("/maps/api/geocode/json")
+                .queryParam("key", API_KEY)
+                .queryParam("latlng", latlng)
+                .build();
         log.info(uri.toUriString());
 
 
-
-        String city="";
+        String city = "";
         ResponseEntity<Response> response = new RestTemplate().getForEntity(uri.toUriString(), Response.class);
         Response formattedAddress = response.getBody();
         assert formattedAddress != null;
         GoogleAddress[] address = formattedAddress.getResult()[1].getAllAddress();
 
-        StringBuilder complteAddress= new StringBuilder();
+        StringBuilder completeAddress = new StringBuilder();
         for (GoogleAddress googleAddress : address) {
             String[] type = googleAddress.getType();
             if (type[0].equals("locality")) {
                 city = googleAddress.getLongName();
             }
-            complteAddress.append(googleAddress.getShortName()).append(" ");
+            completeAddress.append(googleAddress.getShortName()).append(" ");
         }
-       List<String> addr=new ArrayList<>();
-       addr.add(complteAddress.toString());
-       addr.add(city);
-       HashMap<String,List<String>> res=new HashMap<>();
-       res.put("data", addr);
+        List<String> addr = new ArrayList<>();
+        addr.add(completeAddress.toString());
+        addr.add(city);
+        HashMap<String, List<String>> res = new HashMap<>();
+        res.put("data", addr);
 
-       return res;
+        return res;
     }
 
-    
+
 }
 
 

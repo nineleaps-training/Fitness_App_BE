@@ -1,7 +1,7 @@
 package com.fitness.app.service;
 
 import com.fitness.app.entity.UserClass;
-import com.fitness.app.entity.UserDetails;
+import com.fitness.app.model.UserDetailsModel;
 import com.fitness.app.repository.UserDetailsRepository;
 import com.fitness.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +16,19 @@ public class UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserDetails addUserDetails(UserDetails userDetails) {
+    public UserDetailsModel addUserDetails(UserDetailsModel userDetails) {
 
         UserClass user = userRepository.findByEmail(userDetails.getUserEmail());
 
         if (user != null && user.getActivated()) {
-            return userDetailsRepository.save(userDetails);
+            userDetailsRepository.save(userDetails);
+            return userDetails;
         }
 
         return null;
     }
 
-    public UserDetails getUserDetails(String email) {
+    public UserDetailsModel getUserDetails(String email) {
 
         return userDetailsRepository.findByUserEmail(email);
     }

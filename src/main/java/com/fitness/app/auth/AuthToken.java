@@ -9,7 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AuthToken {
 
-	
-	
-	private String jwt;
+    private String jwt;
 }

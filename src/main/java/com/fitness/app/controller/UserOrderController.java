@@ -6,7 +6,7 @@ import java.util.Set;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import com.fitness.app.model.GymRepresnt;
+import com.fitness.app.model.GymRepresent;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -78,8 +78,7 @@ public class UserOrderController {
 
 
     //update_order after payment.
-
-    @PutMapping("update/order")
+    @PutMapping("/update/order")
     public UserOrder updatingOrder(@RequestBody Map<String, String> data) {
 
         return userOrderService.updateOrder(data);
@@ -87,7 +86,7 @@ public class UserOrderController {
 
     //Check the pending orders by email id of the user
     @GetMapping("/pending/order/{email}")
-    public ResponseEntity<List<UserOrder>> pedingOrerList(@PathVariable String email) {
+    public ResponseEntity<List<UserOrder>> pendingOrderList(@PathVariable String email) {
         return new ResponseEntity<>(userOrderService.pendingListOrder(email), HttpStatus.OK);
     }
 
@@ -105,7 +104,7 @@ public class UserOrderController {
 
     //Fetching gyms booked by a particular user by email
     @GetMapping("/booked/gyms/{email}")
-    public List<GymRepresnt> bookedGym(@PathVariable String email) {
+    public List<GymRepresent> bookedGym(@PathVariable String email) {
         return userOrderService.bookedGym(email);
     }
 

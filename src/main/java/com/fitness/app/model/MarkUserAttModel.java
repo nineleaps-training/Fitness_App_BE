@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MarkUserAttModel {
 
-	
-	private String gym;
-	private String vendor;
-	private List<String> users;
+    private String gym;
+    private String vendor;
+    private List<String> users;
 }

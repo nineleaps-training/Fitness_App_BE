@@ -15,33 +15,25 @@ import com.fitness.app.service.AttendanceService;
 
 @RestController
 public class AttendanceController {
-	
-	
-	@Autowired
-	private AttendanceService attendanceService;
-	
-	
-	//Mark attendance of the user for a specific fitness center.
-	@PutMapping("/mark/users/attendance")
-	public String markUserAttendance(@RequestBody MarkUserAttModel userAttendance) throws Exception
-	{
-		return attendanceService.markUsersAttendance(userAttendance);
-	}
-	
 
 
-	//Finding the total attendance of the user.
-	@GetMapping("/user-performance")
+    @Autowired
+    private AttendanceService attendanceService;
 
-	public ResponseEntity<List<Integer>> userPerformance(@RequestParam String email, @RequestParam String gym) throws Exception
+    //Mark attendance of the user for a specific fitness center.
+    @PutMapping("/mark/users/attendance")
+    public String markUserAttendance(@RequestBody MarkUserAttModel userAttendance) {
 
-	{
-	
-		return new ResponseEntity<>(attendanceService.userPerfomance(email, gym), HttpStatus.OK);
-	
-	}
+        return attendanceService.markUsersAttendance(userAttendance);
+    }
 
-	
-	
-	
+    //Finding the total attendance of the user.
+    @GetMapping("/user-performance")
+    public ResponseEntity<List<Integer>> userPerformance(@RequestParam String email, @RequestParam String gym) {
+
+        return new ResponseEntity<>(attendanceService.userPerformance(email, gym), HttpStatus.OK);
+
+    }
+
+
 }

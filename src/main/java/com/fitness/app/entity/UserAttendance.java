@@ -16,38 +16,35 @@ import lombok.NoArgsConstructor;
 @Document("user_attendence")
 public class UserAttendance {
 
-	
-	@Id
-	@Field
-	private String email;
-	@Field
-	private String gym;
-	@Field
-	private String vendor;
-	@Field
-	private int booked;
-	@Field
-	private int attended;
-	@Field
-	private List<Integer> attendance;
-	@Field
-	private Double rating;
-	public UserAttendance(String email, String gym, String vendor, int attended) {
-		
-		this.email = email;
-		this.gym = gym;
-		this.vendor = vendor;
-		this.attended = attended;
-	}
-	public UserAttendance(String email, String gym, String vendor) {
-		this.email = email;
-		this.gym = gym;
-		this.vendor = vendor;
-	}
-	
-	
-	
-	
-	
-	
+
+    @Id
+    @Field
+    private String email;
+    @Field
+    private String gym;
+    @Field
+    private String vendor;
+    @Field
+    private int booked;
+    @Field
+    private int attended;
+    @Field
+    private List<Integer> attendance;
+    @Field
+    private Double rating;
+
+    public UserAttendance(String email, String gym, String vendor, int attended) {
+
+        this.email = email;
+        this.gym = gym;
+        this.vendor = vendor;
+        this.attended = attended;
+    }
+
+    public UserAttendance(String email, String gym, String vendor) {
+        this.email = email;
+        this.gym = gym;
+        this.vendor = vendor;
+    }
+
 }

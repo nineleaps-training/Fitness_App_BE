@@ -1,7 +1,7 @@
 package com.fitness.app.controller;
 
 
-import com.fitness.app.entity.Rating;
+import com.fitness.app.model.RatingModel;
 import com.fitness.app.service.RatingService;
 
 
@@ -17,28 +17,27 @@ public class UserRatingController {
 
     @Autowired
     private RatingService ratingService;
+
     //Rating Controller for vendor, user and gym
     @PostMapping("/rating")
-    public Rating rateVendor(@RequestBody Rating rating)
-    {
+    public RatingModel rateVendor(@RequestBody RatingModel rating) {
+
         return ratingService.ratingService(rating);
     }
+
     //Fetching the rating of the gym by gymId
     @GetMapping("/get-rating/{gymId}")
-    public Double getRating(@PathVariable String gymId) throws Exception
-    {
-    	try {
+    public Double getRating(@PathVariable String gymId) {
+
         return ratingService.getRating(gymId);
-    	}
-    	catch (Exception e) {
-			throw new Exception("NO value found: ");
-		}
+
     }
+
     //Fetching the rating of the user by email id
     @GetMapping("/get-rating-person/{email}")
-    public Double getRatingOfPerson(@PathVariable String email)
-    {
+    public Double getRatingOfPerson(@PathVariable String email) {
+
         return ratingService.getRatingOfPerson(email);
     }
-    
+
 }

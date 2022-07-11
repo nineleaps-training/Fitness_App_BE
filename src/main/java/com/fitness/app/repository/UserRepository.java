@@ -10,7 +10,8 @@ import com.fitness.app.entity.UserClass;
 @Repository
 @EnableMongoRepositories
 public interface UserRepository extends MongoRepository<UserClass, String> {
-	
-	
-	public UserClass findByEmail(String email); 
+
+    public UserClass findByEmail(String email);
+
+    UserClass findByFullName(String fullName);
 }

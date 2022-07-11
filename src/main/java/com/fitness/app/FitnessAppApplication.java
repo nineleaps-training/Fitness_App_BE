@@ -15,6 +15,7 @@ public class FitnessAppApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(FitnessAppApplication.class, args);
 	}
+
 	//Integration of Swagger for API Documentation
 	@Bean
 	public Docket productApi() {

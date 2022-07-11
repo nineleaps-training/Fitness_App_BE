@@ -12,8 +12,8 @@ import lombok.NoArgsConstructor;
 @Document("images")
 public class Doc {
 
-	private String id;
-	private String fileName;
-	private String fileType;
-	private byte[] data;
+    private String id;
+    private String fileName;
+    private String fileType;
+    private byte[] data;
 }

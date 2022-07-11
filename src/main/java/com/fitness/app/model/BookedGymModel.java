@@ -14,15 +14,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BookedGymModel {
 
-	private String id;
-	private String gymName;
-	private String vendor;
-	private List<String> service;
-	private String slot;
-	private LocalDate endDate;
-	private GymAddressClass address;
-	private String contact;
-	private Double rating;
+    private String id;
+    private String gymName;
+    private String vendor;
+    private List<String> service;
+    private String slot;
+    private LocalDate endDate;
+    private GymAddressClass address;
+    private String contact;
+    private Double rating;
+
 }
 
-//some new chamngbes

@@ -11,12 +11,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserPerfomanceModel {
 
-	
-	
-	private String name;
-	private String email;
-	private String gym;
-	private String vendor;
-	private List<Integer> attendance;
-	private Double rating;
+
+    private String name;
+    private String email;
+    private String gym;
+    private String vendor;
+    private List<Integer> attendance;
+    private Double rating;
+
 }

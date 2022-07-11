@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DeleteGymModel {
 
-	
-	private String email;
-	private String id;
-	private String password;
+    private String email;
+    private String id;
+    private String password;
 }

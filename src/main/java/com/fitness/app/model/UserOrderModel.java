@@ -12,11 +12,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserOrderModel {
 
-	
-	private String email;
-	private String gym;
-	private List<String> services;
-	private String subscription;
-	private int amount;
-	private String slot;
+
+    private String email;
+    private String gym;
+    private List<String> services;
+    private String subscription;
+    private int amount;
+    private String slot;
+
 }

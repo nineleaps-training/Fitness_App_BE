@@ -10,277 +10,275 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fitness.app.model.GymClassModel;
-import com.fitness.app.model.GymRepresnt;
+import com.fitness.app.model.GymRepresent;
 
 @Service
 public class GymService {
 
-	@Autowired
-	private AddGymRepository gymRepository;
+    @Autowired
+    private AddGymRepository gymRepository;
 
-	@Autowired
-	private GymAddressRepo addressRepo;
+    @Autowired
+    private GymAddressRepo addressRepo;
 
-	@Autowired
-	private GymTimeRepo timeRepo;
+    @Autowired
+    private GymTimeRepo timeRepo;
 
-	@Autowired
-	private GymSubscriptionRepo subcriptionRepo;
+    @Autowired
+    private GymSubscriptionRepo subscriptionRepo;
 
-	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired 
-	private RatingService ratingService;
+    @Autowired
+    private UserRepository userRepository;
 
-	@Autowired
-	private UserOrderRepo userOrderRepo;
+    @Autowired
+    private RatingService ratingService;
 
-	// Add New Gym
-	public GymClass addNewGym(GymClassModel gymClassModel) {
-		GymClass gym = gymRepository.findByName(gymClassModel.getGymName());
-		Long idLast = gymRepository.count() + 1;
-		String gymId = "GM" + idLast;
-		if (gym != null) {
-			gymId = gym.getId();
-		}
+    @Autowired
+    private UserOrderRepo userOrderRepo;
 
-		// Creating address of gym
-		GymAddressClass address;
-		address = gymClassModel.getGymAddress();
-		address.setId(gymId);
+    // Add New Gym
+    public GymClass addNewGym(GymClassModel gymClassModel) {
+        GymClass gym = gymRepository.findByName(gymClassModel.getGymName());
+        Long idLast = gymRepository.count() + 1;
+        String gymId = "GM" + idLast;
+        if (gym != null) {
+            gymId = gym.getId();
+        }
 
-		addressRepo.save(address);
+        // Creating address of gym
+        GymAddressClass address;
+        address = gymClassModel.getGymAddress();
+        address.setId(gymId);
 
-		// set time
-		GymTime time;
-		time = gymClassModel.getTiming();
-		time.setId(gymId);
-		timeRepo.save(time);
+        addressRepo.save(address);
 
-		// set subscription.
-		GymSubscriptionClass subscription;
-		subscription = gymClassModel.getSubscription();
-		subscription.setId(gymId);
-		subcriptionRepo.save(subscription);
+        // set time
+        GymTime time;
+        time = gymClassModel.getTiming();
+        time.setId(gymId);
+        timeRepo.save(time);
 
-		GymClass newGym = new GymClass();
-		newGym.setId(gymId);
-		newGym.setEmail(gymClassModel.getVendorEmail());
-		newGym.setName(gymClassModel.getGymName());
-		newGym.setWorkout(gymClassModel.getWorkoutList());
-		newGym.setContact(gymClassModel.getContact());
-		newGym.setCapacity(gymClassModel.getCapacity());
+        // set subscription.
+        GymSubscriptionClass subscription;
+        subscription = gymClassModel.getSubscription();
+        subscription.setId(gymId);
+        subscriptionRepo.save(subscription);
 
-		return gymRepository.save(newGym);
-	}
+        GymClass newGym = new GymClass();
+        newGym.setId(gymId);
+        newGym.setEmail(gymClassModel.getVendorEmail());
+        newGym.setName(gymClassModel.getGymName());
+        newGym.setWorkout(gymClassModel.getWorkoutList());
+        newGym.setContact(gymClassModel.getContact());
+        newGym.setCapacity(gymClassModel.getCapacity());
 
-	// Find gym by Gym_id
-	public GymRepresnt getGymByGymId(String gymId) {
-		GymRepresnt gym = new GymRepresnt();
-		GymClass gymClass;
-		GymAddressClass gymAddressClass;
-		GymTime gymTime;
-		GymSubscriptionClass gymSubscriptionClass;
+        gymRepository.save(newGym);
+        return newGym;
+    }
 
-		Optional<GymClass> optional = gymRepository.findById(gymId);
-		if(optional.isPresent()) {
-			gymClass = optional.get();
-			gym.setId(gymClass.getId());
-			gym.setEmail(gymClass.getEmail());
-			gym.setGymName(gymClass.getName());
+    // Find gym by Gym_id
+    public GymRepresent getGymByGymId(String gymId) {
+        GymRepresent gym = new GymRepresent();
+        GymClass gymClass;
+        GymAddressClass gymAddressClass;
+        GymTime gymTime;
+        GymSubscriptionClass gymSubscriptionClass;
 
-			Optional<GymAddressClass> optional1 = addressRepo.findById(gymId);
-			if (optional1.isPresent()) {
-				gymAddressClass = optional1.get();
-				gym.setGymAddress(gymAddressClass);
-			}
+        Optional<GymClass> optional = gymRepository.findById(gymId);
+        if (optional.isPresent()) {
+            gymClass = optional.get();
+            gym.setId(gymClass.getId());
+            gym.setEmail(gymClass.getEmail());
+            gym.setGymName(gymClass.getName());
 
-			gym.setWorkoutList(gymClass.getWorkout());
+            Optional<GymAddressClass> optional1 = addressRepo.findById(gymId);
+            if (optional1.isPresent()) {
+                gymAddressClass = optional1.get();
+                gym.setGymAddress(gymAddressClass);
+            }
 
-			Optional<GymTime> optional2 = timeRepo.findById(gymId);
-			if (optional2.isPresent()) {
-				gymTime = optional2.get();
-				gym.setTiming(gymTime);
-			}
+            gym.setWorkoutList(gymClass.getWorkout());
 
-			Optional<GymSubscriptionClass> optional3 = subcriptionRepo.findById(gymId);
-			if (optional3.isPresent()) {
-				gymSubscriptionClass = optional3.get();
-				gym.setSubscription(gymSubscriptionClass);
-			}
+            Optional<GymTime> optional2 = timeRepo.findById(gymId);
+            if (optional2.isPresent()) {
+                gymTime = optional2.get();
+                gym.setTiming(gymTime);
+            }
 
-			gym.setContact(gymClass.getContact());
-			gym.setCapacity(gymClass.getCapacity());
-			gym.setRating(gymClass.getRating());
-		}
-		return gym;
-	}
+            Optional<GymSubscriptionClass> optional3 = subscriptionRepo.findById(gymId);
+            if (optional3.isPresent()) {
+                gymSubscriptionClass = optional3.get();
+                gym.setSubscription(gymSubscriptionClass);
+            }
 
-	// Find All gym of a vendor by email id..
-	public List<GymRepresnt> getGymByVendorEmail(String email) {
+            gym.setContact(gymClass.getContact());
+            gym.setCapacity(gymClass.getCapacity());
+            gym.setRating(gymClass.getRate());
+        }
+        return gym;
+    }
 
-		List<GymClass> gymList = gymRepository.findByEmail(email);
-		List<GymRepresnt> gyms = new ArrayList<>();
+    // Find All gym of a vendor by email id..
+    public List<GymRepresent> getGymByVendorEmail(String email) {
 
-		GymAddressClass gymAddressClass;
-		GymTime gymTime;
-		GymSubscriptionClass gymSubscriptionClass;
+        List<GymClass> gymList = gymRepository.findByEmail(email);
+        List<GymRepresent> gyms = new ArrayList<>();
 
-		for (GymClass eachGym : gymList) {
-			GymRepresnt gym = new GymRepresnt();
-			Double rate= ratingService.getRating(eachGym.getId());
-			eachGym.setRating(rate);
-			gymRepository.save(eachGym);
-			String id = eachGym.getId();
-			gym.setEmail(eachGym.getEmail());
-			gym.setId(eachGym.getId());
-			gym.setGymName(eachGym.getName());
+        GymAddressClass gymAddressClass;
+        GymTime gymTime;
+        GymSubscriptionClass gymSubscriptionClass;
 
-			Optional<GymAddressClass> optional = addressRepo.findById(id);
-			if (optional.isPresent()) {
-				gymAddressClass = optional.get();
-				gym.setGymAddress(gymAddressClass);
-			}
+        for (GymClass eachGym : gymList) {
+            GymRepresent gym = new GymRepresent();
+            Double rate = ratingService.getRating(eachGym.getId());
+            eachGym.setRate(rate);
+            gymRepository.save(eachGym);
+            String id = eachGym.getId();
+            gym.setEmail(eachGym.getEmail());
+            gym.setId(eachGym.getId());
+            gym.setGymName(eachGym.getName());
 
-			gym.setWorkoutList(eachGym.getWorkout());
+            Optional<GymAddressClass> optional = addressRepo.findById(id);
+            if (optional.isPresent()) {
+                gymAddressClass = optional.get();
+                gym.setGymAddress(gymAddressClass);
+            }
 
-			Optional<GymTime> optional1 = timeRepo.findById(id);
-			if (optional1.isPresent()) {
-				gymTime = optional1.get();
-				gym.setTiming(gymTime);
-			}
+            gym.setWorkoutList(eachGym.getWorkout());
 
-			Optional<GymSubscriptionClass> optional2 = subcriptionRepo.findById(id);
-			if (optional2.isPresent()) {
-				gymSubscriptionClass = optional2.get();
-				gym.setSubscription(gymSubscriptionClass);
-			}
-			gym.setContact(eachGym.getContact());
-			gym.setRating(rate);
-			gym.setCapacity(eachGym.getCapacity());
+            Optional<GymTime> optional1 = timeRepo.findById(id);
+            if (optional1.isPresent()) {
+                gymTime = optional1.get();
+                gym.setTiming(gymTime);
+            }
 
-			gyms.add(gym);
-		}
-		return gyms;
-	}
+            Optional<GymSubscriptionClass> optional2 = subscriptionRepo.findById(id);
+            if (optional2.isPresent()) {
+                gymSubscriptionClass = optional2.get();
+                gym.setSubscription(gymSubscriptionClass);
+            }
+            gym.setContact(eachGym.getContact());
+            gym.setRating(rate);
+            gym.setCapacity(eachGym.getCapacity());
 
-	// Find gym address by gym id
-	public GymAddressClass findTheAddress(String id) {
-		Optional<GymAddressClass> optional = addressRepo.findById(id);
-		return optional.orElse(null);
-	}
+            gyms.add(gym);
+        }
+        return gyms;
+    }
 
-	// Find All gym from database..
-	public List<GymClass> getAllGym() {
-		return gymRepository.findAll();
-	}
+    // Find gym address by gym id
+    public GymAddressClass findTheAddress(String id) {
+        Optional<GymAddressClass> optional = addressRepo.findById(id);
+        return optional.orElse(null);
+    }
 
-	// edit gym
-	public GymClass editGym(GymClassModel gymClassModel, String gymId) {
+    // Find All gym from database..
+    public List<GymClass> getAllGym() {
+        return gymRepository.findAll();
+    }
 
-		Optional<GymClass> optional = gymRepository.findById(gymId);
-		GymClass theGym = new GymClass();
-		if(optional.isPresent()) {
-			theGym = optional.get();
-		}
+    // edit gym
+    public GymClass editGym(GymClassModel gymClassModel, String gymId) {
 
-		// Creating address of gym
-		addressRepo.deleteById(theGym.getId());
-		GymAddressClass address;
-		address = gymClassModel.getGymAddress();
-		address.setId(gymId);
-		addressRepo.save(address);
+        Optional<GymClass> optional = gymRepository.findById(gymId);
+        GymClass theGym = new GymClass();
+        if (optional.isPresent()) {
+            theGym = optional.get();
+        }
 
-		// set time
-		timeRepo.deleteById(theGym.getId());
+        // Creating address of gym
+        addressRepo.deleteById(theGym.getId());
+        GymAddressClass address;
+        address = gymClassModel.getGymAddress();
+        address.setId(gymId);
+        addressRepo.save(address);
 
-		GymTime time;
-		time = gymClassModel.getTiming();
-		time.setId(gymId);
-		timeRepo.save(time);
+        // set time
+        timeRepo.deleteById(theGym.getId());
 
-		// set subscription.
-		subcriptionRepo.deleteById(theGym.getId());
-		GymSubscriptionClass subscription;
-		subscription = gymClassModel.getSubscription();
-		subscription.setId(gymId);
-		subcriptionRepo.save(subscription);
+        GymTime time;
+        time = gymClassModel.getTiming();
+        time.setId(gymId);
+        timeRepo.save(time);
 
-		gymRepository.delete(theGym);
-		theGym.setId(gymId);
-		theGym.setEmail(gymClassModel.getVendorEmail());
-		theGym.setName(gymClassModel.getGymName());
-		theGym.setWorkout(gymClassModel.getWorkoutList());
-		theGym.setContact(gymClassModel.getContact());
-		theGym.setCapacity(gymClassModel.getCapacity());
+        // set subscription.
+        subscriptionRepo.deleteById(theGym.getId());
+        GymSubscriptionClass subscription;
+        subscription = gymClassModel.getSubscription();
+        subscription.setId(gymId);
+        subscriptionRepo.save(subscription);
 
-		return gymRepository.save(theGym);
+        gymRepository.delete(theGym);
+        theGym.setId(gymId);
+        theGym.setEmail(gymClassModel.getVendorEmail());
+        theGym.setName(gymClassModel.getGymName());
+        theGym.setWorkout(gymClassModel.getWorkoutList());
+        theGym.setContact(gymClassModel.getContact());
+        theGym.setCapacity(gymClassModel.getCapacity());
 
-	}
-	
-	public String wipingAll() {
-		timeRepo.deleteAll();
-		subcriptionRepo.deleteAll();
-		addressRepo.deleteAll();
-		gymRepository.deleteAll();
+        gymRepository.save(theGym);
+        return theGym;
+    }
 
-		return "done";
-	}
+    public String wipingAll() {
+        timeRepo.deleteAll();
+        subscriptionRepo.deleteAll();
+        addressRepo.deleteAll();
+        gymRepository.deleteAll();
 
-	public GymClass getGymByGymName(String gymName) {
-		return gymRepository.findByName(gymName);
-	}
+        return "done";
+    }
 
-	// Gym By City or Loacltiy..
+    public GymClass getGymByGymName(String gymName) {
+        return gymRepository.findByName(gymName);
+    }
 
-
-	// Find by City
-	public List<GymRepresnt> getGymByCity(String city) {
-
-		List<GymAddressClass> addressList = addressRepo.findByCity(city);
-		List<GymRepresnt> gyms = new ArrayList<>();
-		GymClass gymClass = new GymClass();
-		GymSubscriptionClass subscription = new GymSubscriptionClass();
-		GymTime time = new GymTime();
-
-		for (GymAddressClass address : addressList) {
-			String id = address.getId();
-			GymRepresnt gym = new GymRepresnt();
-
-			Optional<GymClass> optional = gymRepository.findById(id);
-			if (optional.isPresent()) {
-				gymClass = optional.get();
-			}
-
-			Optional<GymSubscriptionClass> optional1 = subcriptionRepo.findById(id);
-			if (optional1.isPresent()) {
-				subscription = optional1.get();
-			}
-
-			Optional<GymTime> optional2 = timeRepo.findById(id);
-			if (optional2.isPresent()) {
-				time = optional2.get();
-			}
-
-			gym.setId(gymClass.getId());
-			gym.setEmail(gymClass.getEmail());
-			gym.setGymName(gymClass.getName());
-			gym.setGymAddress(address);
-			gym.setWorkoutList(gymClass.getWorkout());
-			gym.setTiming(time);
-			gym.setSubscription(subscription);
-			gym.setContact(gymClass.getContact());
-			gym.setRating(gymClass.getRating());
-			gym.setCapacity(gymClass.getCapacity());
-
-			gyms.add(gym);
-		}
-		return gyms;
-	}
+    // Gym By City or Loacltiy..
 
 
+    // Find by City
+    public List<GymRepresent> getGymByCity(String city) {
 
+        List<GymAddressClass> addressList = addressRepo.findByCity(city);
+        List<GymRepresent> gyms = new ArrayList<>();
+        GymClass gymClass = new GymClass();
+        GymSubscriptionClass subscription = new GymSubscriptionClass();
+        GymTime time = new GymTime();
+
+        for (GymAddressClass address : addressList) {
+            String id = address.getId();
+            GymRepresent gym = new GymRepresent();
+
+            Optional<GymClass> optional = gymRepository.findById(id);
+            if (optional.isPresent()) {
+                gymClass = optional.get();
+            }
+
+            Optional<GymSubscriptionClass> optional1 = subscriptionRepo.findById(id);
+            if (optional1.isPresent()) {
+                subscription = optional1.get();
+            }
+
+            Optional<GymTime> optional2 = timeRepo.findById(id);
+            if (optional2.isPresent()) {
+                time = optional2.get();
+            }
+
+            gym.setId(gymClass.getId());
+            gym.setEmail(gymClass.getEmail());
+            gym.setGymName(gymClass.getName());
+            gym.setGymAddress(address);
+            gym.setWorkoutList(gymClass.getWorkout());
+            gym.setTiming(time);
+            gym.setSubscription(subscription);
+            gym.setContact(gymClass.getContact());
+            gym.setRating(gymClass.getRate());
+            gym.setCapacity(gymClass.getCapacity());
+
+            gyms.add(gym);
+        }
+        return gyms;
+    }
 
 
 }
