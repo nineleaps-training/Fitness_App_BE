@@ -157,7 +157,6 @@ class AttendanceServiceTests {
     {
         Mockito.when(attendanceRepo.findByVendorAndGym(userAttendance.getVendor(), userAttendance.getGym())).thenReturn(null);
         Assertions.assertThrows(DataNotFoundException.class, ()->{
-
             String ans=attendanceService.markUsersAttendance(attModel);
         }, "No data Found Exception");
     }

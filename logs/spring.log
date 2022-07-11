@@ -323,3 +323,68 @@ You may wish to exclude one of them to ensure predictable runtime behavior
 2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
 2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
 2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-09 [main] WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer - 
+
+Found multiple occurrences of org.json.JSONObject on the class path:
+
+	jar:file:/home/nineleaps/.m2/repository/org/json/json/20180130/json-20180130.jar!/org/json/JSONObject.class
+	jar:file:/home/nineleaps/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
+
+You may wish to exclude one of them to ensure predictable runtime behavior
+
+2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - Starting FitnessAppApplicationTests using Java 11.0.15 on nineleaps-ThinkPad-E490 with PID 26996 (started by nineleaps in /home/nineleaps/NineLeaps/Fitness_App_BE)
+2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - No active profile set, falling back to default profiles: default
+2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - Started FitnessAppApplicationTests in 0.706 seconds (JVM running for 2.121)
+2022-07-09 [main] ERROR com.fitness.app.service.GymService - Data not found for Fitness Center: 
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-09 [main] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public com.fitness.app.entity.AdminPay com.fitness.app.controller.AdminController.getDatapay(com.fitness.app.model.AdminPayModel)]
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
