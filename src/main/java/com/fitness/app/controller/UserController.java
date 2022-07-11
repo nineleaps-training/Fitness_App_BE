@@ -1,16 +1,26 @@
 package com.fitness.app.controller;
 
+import javax.security.auth.message.AuthException;
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.MediaType;
+import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.NotFoundException;
+import org.springframework.security.core.AuthenticationException;
 import com.fitness.app.auth.Authenticate;
 import com.fitness.app.componets.Components;
 import com.fitness.app.config.JwtUtils;
@@ -20,47 +30,50 @@ import com.fitness.app.model.UserModel;
 import com.fitness.app.repository.UserRepository;
 import com.fitness.app.security.service.UserDetailsServiceImpl;
 import com.fitness.app.service.UserService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class UserController {
 
-	
-	
 	@Autowired
 	private UserService userService;
 	
-	 @Autowired
-	 private AuthenticationManager authenticationManager;
+	@Autowired
+	private AuthenticationManager authenticationManager;
 	    
-	 @Autowired
-	 private UserDetailsServiceImpl userDetailsService;
+	@Autowired
+	private UserDetailsServiceImpl userDetailsService;
 	    
-	 @Autowired
-	  private JwtUtils jwtUtils;
+	@Autowired
+	private JwtUtils jwtUtils;
 	 
-	 @Autowired
-	 private Components sendMessage;
+	@Autowired
+	private Components sendMessage;
 	
-	 @Autowired
-	 private UserRepository userRepo;
-	 
-	 @Autowired
-	 private PasswordEncoder passwordEncoder;
+	@Autowired
+	private UserRepository userRepo;
 	 
 
 	 //Register a new user by custom option.
-	 @PostMapping("/register/user")
-	 public SignUpResponce registerUser(@RequestBody UserModel user) 
+	 @ApiOperation(value = "Registering User", notes = "Registering new user")
+	 @ApiResponses(value = { @ApiResponse(code=200, message = "User Registered", response = SignUpResponce.class),
+	 @ApiResponse(code = 404, message ="Not Found", response=NotFoundException.class),@ApiResponse(code = 403, message ="Forbidden", response=ForbiddenException.class),
+	 @ApiResponse(code = 401, message ="Unauthorized", response=AuthenticationException.class)})
+	 @PostMapping(value = "/v1/register/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	 @ResponseStatus(HttpStatus.CREATED)
+	 @Validated
+	 public SignUpResponce registerUser(@Valid @RequestBody UserModel user) 
 	 { 
-		 
-		 
 		 UserClass localUser=userRepo.findByEmail(user.getEmail());
 		 SignUpResponce responce=new SignUpResponce();
 		 if(localUser!=null && localUser.getCustom())
 		 {
 			 localUser.setPassword(null);
 			 
-			 if(localUser.getActivated())
+			 if(Boolean.TRUE.equals(localUser.getActivated()))
 			 {
 			      
 			      responce.setCurrentUser(localUser);
@@ -108,14 +121,20 @@ public class UserController {
 	 
 	 
 	 //Verify User
-	 @PutMapping("/verify/user")
-	 public ResponseEntity<?> verifyTheUser(@RequestBody Authenticate authCredential) throws Exception
+	 @ApiOperation(value = "Verifying user", notes = "Verifying the user from his credentials")
+	 @ApiResponses(value = { @ApiResponse(code=200, message = "User Verified", response = ResponseEntity.class),
+	 @ApiResponse(code = 404, message ="Not Found", response=NotFoundException.class),@ApiResponse(code = 403, message ="Forbidden", response=ForbiddenException.class),
+	 @ApiResponse(code = 401, message ="Unauthorized", response=AuthenticationException.class)})
+	 @PutMapping(value = "/v1/verify/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	 @ResponseStatus(HttpStatus.OK)
+	 @Retryable(value = AuthException.class, maxAttempts = 2)
+	 @Validated
+	 public ResponseEntity<SignUpResponce> verifyTheUser(@Valid @RequestBody Authenticate authCredential)
 	 {
 		 UserClass user= userService.verifyUser(authCredential.getEmail());
 		 
 		 if(user!=null)
-		 {
-			 
+		 { 
 			 return logInFunctionality(authCredential.getEmail(), authCredential.getPassword());
 		 }
 		 
@@ -125,42 +144,48 @@ public class UserController {
 	
 	 
 	 //Log in user
-	 @PostMapping("/login/user")
-	    public ResponseEntity<?> authenticateUser(@RequestBody Authenticate authCredential) throws Exception
+	 @ApiOperation(value = "Logging in", notes = "User can log in")
+	 @ApiResponses(value = { @ApiResponse(code=200, message = "User Logged in", response = ResponseEntity.class),
+	 @ApiResponse(code = 404, message ="Not Found", response=NotFoundException.class),
+	 @ApiResponse(code = 401, message ="Unauthorized", response=AuthenticationException.class)})
+	 @PostMapping(value = "/v1/login/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	 @ResponseStatus(HttpStatus.CREATED)
+	 @Retryable(value = AuthException.class, maxAttempts = 2)
+	 @Validated
+	    public ResponseEntity<SignUpResponce> authenticateUser(@Valid @RequestBody Authenticate authCredential)
 	    {
-	    	return logInFunctionality(authCredential.getEmail(), authCredential.getPassword() );
-	    	
+	    	return logInFunctionality(authCredential.getEmail(), authCredential.getPassword() );   	
 	    }
 	 
 	 
 	 //function to log in and return token
-	 public ResponseEntity<?> logInFunctionality(String email, String password) throws Exception
-	 {
-		 try {    		
-	    		authenticationManager.authenticate(
-	    				new UsernamePasswordAuthenticationToken(email, password)
-	    				);   		
-	    	}catch (Exception e) {
-	    		System.out.println(e.getMessage());
-	    		throw new Exception("Error");
-			}
-	    	final UserDetails usrDetails=userDetailsService.loadUserByUsername(email);
-	    	final String jwt= jwtUtils.generateToken(usrDetails);
-	    	final UserClass localUser=userRepo.findByEmail(email);
-	    	if(localUser.getRole()!="ADMIN")
-	    	{
-	    		localUser.setPassword(null);
+	 public ResponseEntity<SignUpResponce> logInFunctionality(String email, String password) 
+	 {	
+	    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));	
+	    final UserDetails usrDetails=userDetailsService.loadUserByUsername(email);
+	    final String jwt= jwtUtils.generateToken(usrDetails);
+	    final UserClass localUser=userRepo.findByEmail(email);
+	    if(!"ADMIN".equals(localUser.getRole()))
+	    {
+	    	localUser.setPassword(null);
 	    	return ResponseEntity.ok( new SignUpResponce( localUser, jwt));
-	    	}
-	    	else
-	    	{
-	    		return ResponseEntity.ok( new SignUpResponce(null, null));
-	    	}
+	    }
+	    else
+	    {
+	    	return ResponseEntity.ok( new SignUpResponce(null, null));
+	    }
 	    	
 	 }
 	 
-	 @PutMapping("/google-sign-in/vendor")
-	 public ResponseEntity<?> googleSignInVendor(@RequestBody UserModel user) throws Exception
+	 @ApiOperation(value = "Google Sign In(Vendor)", notes = "Logging in through google by vendor")
+	 @ApiResponses(value = { @ApiResponse(code=200, message = "Vendor Logged In", response = ResponseEntity.class),
+	 @ApiResponse(code = 404, message ="Not Found", response=NotFoundException.class),@ApiResponse(code = 403, message ="Forbidden", response=ForbiddenException.class),
+	 @ApiResponse(code = 401, message ="Unauthorized", response=AuthenticationException.class)})
+	 @PutMapping(value = "/v1/google-sign-in/vendor", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	 @ResponseStatus(HttpStatus.OK)
+	 @Retryable(value = AuthException.class, maxAttempts = 2)
+	 @Validated
+	 public ResponseEntity<SignUpResponce> googleSignInVendor(@Valid @RequestBody UserModel user)
 	 {
 		 String pass=userService.randomPass();
 		 user.setPassword(pass);
@@ -168,7 +193,7 @@ public class UserController {
 		 if(localUser==null) {
 			 return ResponseEntity.ok( new SignUpResponce(null, "This email in use!"));
 		 }
-		 else if(localUser!=null && localUser.getRole().equals("USER"))
+		 else if(localUser.getRole().equals("USER"))
 		 {
 			 return ResponseEntity.ok( new SignUpResponce(null, "This email already in use as USER! "));
 		 }
@@ -178,9 +203,15 @@ public class UserController {
 		 }
 	 }
 	 
-	 
-	 @PutMapping("/google-sign-in/user")
-	 public ResponseEntity<?> googleSignInUser(@RequestBody UserModel user) throws Exception
+	 @ApiOperation(value = "Google Sign In(User)", notes = "Logging in through google by user")
+	 @ApiResponses(value = { @ApiResponse(code=200, message = "User Logged In", response = ResponseEntity.class),
+	 @ApiResponse(code = 404, message ="Not Found", response=NotFoundException.class),@ApiResponse(code = 403, message ="Forbidden", response=ForbiddenException.class),
+	 @ApiResponse(code = 401, message ="Unauthorized", response=AuthenticationException.class)})
+	 @PutMapping(value = "/v1/google-sign-in/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	 @ResponseStatus(HttpStatus.OK)
+	 @Retryable(value = AuthException.class, maxAttempts = 2)
+	 @Validated
+	 public ResponseEntity<SignUpResponce> googleSignInUser(@Valid @RequestBody UserModel user)
 	 {
 		 String pass=userService.randomPass();
 		 user.setPassword(pass);
@@ -188,7 +219,7 @@ public class UserController {
 		 if(localUser==null) {
 			 return ResponseEntity.ok( new SignUpResponce(null, "This email in use!"));
 		 }
-		 else if(localUser!=null && localUser.getRole().equals("VENDOR"))
+		 else if(localUser.getRole().equals("VENDOR"))
 		 {
 			 return ResponseEntity.ok( new SignUpResponce(null, "This email already in use as VENDOR! "));
 		 }

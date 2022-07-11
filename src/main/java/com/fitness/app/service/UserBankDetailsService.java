@@ -1,7 +1,6 @@
 package com.fitness.app.service;
-
-import com.fitness.app.entity.UserBankDetails;
 import com.fitness.app.entity.UserClass;
+import com.fitness.app.model.UserBankDetailsRequestModel;
 import com.fitness.app.repository.UserBankDetailsRepo;
 import com.fitness.app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +17,14 @@ public class UserBankDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserBankDetails addBankDetails(UserBankDetails bankDetails) {
+    public UserBankDetailsService(UserBankDetailsRepo userBankDetailsRepo, UserRepository userRepository2) {
+        this.repository=userBankDetailsRepo;
+        this.userRepository=userRepository2;
+    }
 
-        UserClass user = userRepository.findByEmail(bankDetails.getEmail());
+    public UserBankDetailsRequestModel addBankDetails(UserBankDetailsRequestModel bankDetails) {
+
+        UserClass user = userRepository.findByEmail(bankDetails.getUEmail());
 
         if (user != null && user.getActivated()) {
             return repository.save(bankDetails);
@@ -29,13 +33,13 @@ public class UserBankDetailsService {
         return null;
     }
 
-    public List<UserBankDetails> getAllDetails() {
+    public List<UserBankDetailsRequestModel> getAllDetails() {
 
         return repository.findAll();
     }
 
-    public UserBankDetails getBankDetails(String email) {
+    public UserBankDetailsRequestModel getBankDetails(String email) {
 
-        return repository.findByEmail(email);
+        return repository.findByUEmail(email);
     }
 }

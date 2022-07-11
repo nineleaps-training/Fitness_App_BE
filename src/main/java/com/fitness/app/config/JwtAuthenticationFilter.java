@@ -2,7 +2,9 @@ package com.fitness.app.config;
 
 
 import com.fitness.app.security.service.UserDetailsServiceImpl;
-import io.jsonwebtoken.ExpiredJwtException;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
@@ -26,36 +29,32 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtils jwtUtil;
 
+    public JwtAuthenticationFilter(UserDetailsServiceImpl customUserDetailsService, JwtUtils jutil) {
+
+        this.userDetailsService = customUserDetailsService;
+        this.jwtUtil= jutil;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         final String requestTokenHeader = request.getHeader("Authorization");
-        System.out.println(requestTokenHeader);
         String username = null;
         String jwtToken = null;
 
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")){
 
             jwtToken = requestTokenHeader.substring(7);
-            try {
-                username = jwtUtil.extractUsername(jwtToken);
-            } catch (ExpiredJwtException e) {
-                e.printStackTrace();
-                System.out.println("JWT Token Is Expired");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        else {
-            System.out.println("Invalid Token : Not Start With Bearer");
+            username = jwtUtil.extractUsername(jwtToken);
+            
         }
 
         // Validating Token
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if (jwtUtil.validateToken(jwtToken, userDetails)) {
 
+            if(Boolean.TRUE.equals(jwtUtil.validateToken(jwtToken, userDetails)))
+            {
                 UsernamePasswordAuthenticationToken usernamePasswordAuthentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
@@ -63,7 +62,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         else
-            System.out.println("Invalid Token");
+        {
+            log.error("Invalid Token");
+        }
 
         filterChain.doFilter(request, response);
     }

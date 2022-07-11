@@ -1,25 +1,34 @@
 package com.fitness.app.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel(description = "GoogleAddress")
 public class GoogleAddress {
 
     @JsonProperty("long_name")
-    private String long_name;
+    @ApiModelProperty(name = "longName", notes = "Long Name of Address")
+    private String longName;
 
     @JsonProperty("short_name")
-    private String short_name;
+    @ApiModelProperty(name = "shortName", notes = "Short Name of Address")
+    private String shortName;
 
     @JsonProperty("types")
+    @ApiModelProperty(name = "type", notes = "Types of Address")
     private String[] type;
 
-    public String getLong_name() {
-        return long_name;
+    
+    public String getLongName() {
+        return longName;
     }
 
-    public String getShort_name() {
-        return short_name;
+
+    public String getShortName() {
+        return shortName;
     }
+
 
     public String[] getType() {
         return type;

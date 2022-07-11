@@ -1,4 +1,6 @@
 package com.fitness.app.image;
+import java.io.IOException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,31 +12,42 @@ public class ImgService {
 	@Autowired
 	private ImgRepo imgRepo;
 
+	Doc doc;
+
 	//upload Image function
 	
-	public Doc saveImage(MultipartFile file, String id) throws Exception
+	public ImgService(ImgRepo imgRepo2) {
+		this.imgRepo=imgRepo2;
+	}
+
+	public Doc saveImage(MultipartFile file, String id) throws IOException
 	{
-		String docName=file.getOriginalFilename();
-		try {
+		if("image/png".equals(file.getContentType()) || "image/jpg".equals(file.getContentType()) || "image/jpeg".equals(file.getContentType()))
+		{
+			String docName=file.getOriginalFilename();
 			Doc docFile=new Doc(id, docName, file.getContentType(), file.getBytes());
-			return imgRepo.save(docFile);
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			throw new Exception("File Not uploaded");
+			imgRepo.save(docFile);
+			return docFile;		
 		}
+		else
+		{
+			return doc;
+		}
+		
 	}
 	
 	//Getting image with id
-	public Doc getImage(String id) throws Exception
+	public Doc getImage(String id)
 	{
-		try {
-			return imgRepo.findById(id).get();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-			throw new Exception(e.getMessage());
-		
+		Optional<Doc> optional=imgRepo.findById(id);
+		if(optional.isPresent())
+		{
+			doc=optional.get();
+			return doc;
 		}
-		
-		
+		else
+		{
+			return null;
+		}
 	}
 }

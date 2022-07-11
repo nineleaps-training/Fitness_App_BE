@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
-import com.fitness.app.entity.VendorDetails;
+import com.fitness.app.model.VendorDetailsRequestModel;
 import com.fitness.app.repository.VendorDetailsRepository;
 
 @Service
@@ -18,10 +18,15 @@ public class VendorDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    // register new vendor service function.
-    public VendorDetails addVendorDetails(VendorDetails vendorDetails) {
+    public VendorDetailsService(UserRepository userRepository2, VendorDetailsRepository vendorDetailsRepository2) {
+        this.userRepository=userRepository2;
+        this.vendordetailsRepository=vendorDetailsRepository2;
+    }
 
-        UserClass user = userRepository.findByEmail(vendorDetails.getEmail());
+    // register new vendor service function.
+    public VendorDetailsRequestModel addVendorDetails(VendorDetailsRequestModel vendorDetails) {
+
+        UserClass user = userRepository.findByEmail(vendorDetails.getVEmail());
 
         if (user != null && user.getActivated()) {
             return vendordetailsRepository.save(vendorDetails);
@@ -29,8 +34,8 @@ public class VendorDetailsService {
         return null;
     }
 
-    public VendorDetails getVendorDetails(String email) {
+    public VendorDetailsRequestModel getVendorDetails(String email) {
 
-        return vendordetailsRepository.findByEmail(email);
+        return vendordetailsRepository.findByVEmail(email);
     }
 }

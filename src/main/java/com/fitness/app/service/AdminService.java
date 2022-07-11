@@ -8,17 +8,14 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.fitness.app.entity.AdminPay;
 import com.fitness.app.entity.VendorPayment;
+import com.fitness.app.model.AdminPayRequestModel;
 import com.fitness.app.repository.AdminPayRepo;
 import com.fitness.app.repository.VendorPayRepo;
 import com.razorpay.Order;
 
 @Service
 public class AdminService {
-
-	
 	
 	@Autowired 
 	private VendorPayRepo vendorPay;
@@ -27,24 +24,31 @@ public class AdminService {
 	private AdminPayRepo adminPayRepo;
 	
 	
-	public AdminPay getDataPay(AdminPay payment)
+	public AdminService(AdminPayRepo adminPayRepo2, VendorPayRepo vendorPayRepo) {
+
+		this.adminPayRepo=adminPayRepo2;
+		this.vendorPay=vendorPayRepo;
+    }
+
+
+    public AdminPayRequestModel getDataPay(AdminPayRequestModel payment)
 	{
 		 return adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due");
 		
 	}
 	
 	
-	public boolean PayNow(AdminPay payment, Order myOrder)
+	public AdminPayRequestModel payNow(AdminPayRequestModel payment, Order myOrder)
 	{
 		LocalDate date=LocalDate.now();
 		LocalTime time=LocalTime.now();
 	    
-		AdminPay payVendor=adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due");
+		AdminPayRequestModel payVendor=adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due");
 		
 		
 		if(payVendor==null)
 		{
-			return false;
+			return payVendor;
 		}
 		payVendor.setOrderId(myOrder.get("id"));
 		payVendor.setStatus(myOrder.get("status"));
@@ -54,24 +58,18 @@ public class AdminService {
 		payVendor.setTime(time);
 		
 		adminPayRepo.save(payVendor);
-		return true;
+		return payVendor;
 		}
 	
 	
 	
-	public AdminPay vendorPayment(String vendor) {
+	public AdminPayRequestModel vendorPayment(String vendor) {
 		
 		List<VendorPayment> payments=vendorPay.findByVendor(vendor);
-		
-		payments=payments.stream().filter(p->p.getStatus().equals("Due")).collect(Collectors.toList());
-		
-		AdminPay payment=new AdminPay();
-		
-		payment.setVendor(vendor);
-		payment.setStatus("Due");
 		int amount=0;
 		if(payments!=null)
 		{
+			payments=payments.stream().filter(p->p.getStatus().equals("Due")).collect(Collectors.toList());
 			for(VendorPayment pay:payments)
 			{
 
@@ -80,11 +78,16 @@ public class AdminService {
 			}
 			
 		}
+		
+		AdminPayRequestModel payment=new AdminPayRequestModel();
+		payment.setVendor(vendor);
+		payment.setStatus("Due");
 		payment.setAmount(amount);
+
 		int s=adminPayRepo.findAll().size();
 		String id="P0"+ s;
 		payment.setId(id);
-		AdminPay oldPay=adminPayRepo.findByVendorAndAmountAndStatus(vendor, amount, "Due");
+		AdminPayRequestModel oldPay=adminPayRepo.findByVendorAndAmountAndStatus(vendor, amount, "Due");
 		if(oldPay!=null) {
 			return oldPay;
 		}
@@ -95,11 +98,11 @@ public class AdminService {
 
 
 
-	public AdminPay updatePayment(Map<String, String> data) {
+	public AdminPayRequestModel updatePayment(Map<String, String> data) {
 		 LocalDate date=LocalDate.now();
 		 LocalTime time=LocalTime.now();
 		 
-		 AdminPay payment=adminPayRepo.findByOrderId(data.get("order_id"));
+		 AdminPayRequestModel payment=adminPayRepo.findByOrderId(data.get("order_id"));
 		 
 		 payment.setPaymentId(data.get("payment_id"));
 		 payment.setStatus(data.get("status"));
@@ -115,24 +118,16 @@ public class AdminService {
 		 }
          
 		 
-		return  adminPayRepo.save(payment);
+		adminPayRepo.save(payment);
+		return payment;
 	}
 
 
 
-	public List<AdminPay> paidHistroyVendor(String vendor) throws Exception 
+	public List<AdminPayRequestModel> paidHistroyVendor(String vendor)
 	{
-		try {
-			
-			List<AdminPay> allPaid=adminPayRepo.findByVendor(vendor);
-			allPaid=allPaid.stream().filter(p->p.getStatus().equals("Completed")).collect(Collectors.toList());
-			return allPaid;
-		} catch (Exception e) {
-			throw new Exception(e.getMessage()+ vendor);
-		}
-		
+		List<AdminPayRequestModel> allPaid=adminPayRepo.findByVendor(vendor);
+		allPaid=allPaid.stream().filter(p->p.getStatus().equals("Completed")).collect(Collectors.toList());
+		return allPaid;	
 	}
-
-
-
 }

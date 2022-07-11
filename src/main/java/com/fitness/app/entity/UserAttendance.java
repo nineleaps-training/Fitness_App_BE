@@ -32,22 +32,5 @@ public class UserAttendance {
 	private List<Integer> attendance;
 	@Field
 	private Double rating;
-	public UserAttendance(String email, String gym, String vendor, int attended, Double rating) {
-		
-		this.email = email;
-		this.gym = gym;
-		this.vendor = vendor;
-		this.attended = attended;
-	}
-	public UserAttendance(String email, String gym, String vendor) {
-		this.email = email;
-		this.gym = gym;
-		this.vendor = vendor;
-	}
-	
-	
-	
-	
-	
 	
 }

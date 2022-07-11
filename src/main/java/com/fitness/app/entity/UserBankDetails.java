@@ -14,16 +14,16 @@ import org.springframework.data.mongodb.core.mapping.Field;
 public class UserBankDetails {
     @Id
     @Field
-    private String email;
+    private String uEmail;
     @Field
-    private String name;
+    private String uName;
     @Field
-    private String bankName;
+    private String ubankName;
     @Field
-    private String branchName;
+    private String ubranchName;
     @Field
-    private Long accountNumber;
+    private Long uaccountNumber;
     @Field
-    private String bankIFSC;
+    private String ubankIFSC;
    
 }

@@ -1,19 +1,26 @@
 package com.fitness.app.model;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+@ApiModel(description = "Distance")
 public class Distance {
-    private String text;
-    private int value;
-    public String getText() {
-        return text;
+
+    @ApiModelProperty(name = "dtext", notes = "distance")
+    private String dtext;
+    @ApiModelProperty(name = "dvalue", notes = "distance value")
+    private int dvalue;
+    public String getDtext() {
+        return dtext;
     }
-    public void setText(String text) {
-        this.text = text;
+    public void setDtext(String dtext) {
+        this.dtext = dtext;
     }
-    public int getValue() {
-        return value;
+    public int getDvalue() {
+        return dvalue;
     }
-    public void setValue(int value) {
-        this.value = value;
+    public void setDvalue(int dvalue) {
+        this.dvalue = dvalue;
     }
 
 }

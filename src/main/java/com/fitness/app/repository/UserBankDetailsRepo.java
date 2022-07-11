@@ -1,13 +1,13 @@
 package com.fitness.app.repository;
 
-import com.fitness.app.entity.UserBankDetails;
+import com.fitness.app.model.UserBankDetailsRequestModel;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Repository;
 
 @EnableMongoRepositories
 @Repository
-public interface UserBankDetailsRepo extends MongoRepository<UserBankDetails, String> {
-   public UserBankDetails findByEmail(String email);
-
+public interface UserBankDetailsRepo extends MongoRepository<UserBankDetailsRequestModel, String> {
+   public UserBankDetailsRequestModel findByUEmail(String email);
 }

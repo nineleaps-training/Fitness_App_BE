@@ -15,36 +15,18 @@ public class UserDetails {
 
     @Id
     @Field
-    private String email;
+    private String uEmail;
 
     @Field
-    private String gender;
+    private String uGender;
 
     @Field
-    private String fullAddress;
+    private String uFullAddress;
 
     @Field
-    private String city;
+    private String uCity;
 
     @Field
-    private int postal;
-
-    @Field
-	private String pdf_fileName;
-    
-    @Field
-	private String pdf_fileType;
-
-    @Field
-    private byte[] pdf_data;
-
-    @Field
-	private String qr_fileName;
-    
-    @Field
-	private String qr_fileType;
-
-    @Field
-    private byte[] qr_data;
+    private long uPostal;
 
 }

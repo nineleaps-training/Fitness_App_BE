@@ -5,14 +5,14 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Repository;
-import com.fitness.app.entity.AdminPay;
+import com.fitness.app.model.AdminPayRequestModel;
 
 @Repository
 @EnableMongoRepositories
-public interface AdminPayRepo extends MongoRepository<AdminPay, String> {
+public interface AdminPayRepo extends MongoRepository<AdminPayRequestModel, String> {
 
 	
-	public AdminPay findByVendorAndAmountAndStatus(String vendor, int amount, String status);
-	public AdminPay findByOrderId(String orderId);
-	public List<AdminPay> findByVendor(String vendor);
+	public AdminPayRequestModel findByVendorAndAmountAndStatus(String vendor, int amount, String status);
+	public AdminPayRequestModel findByOrderId(String orderId);
+	public List<AdminPayRequestModel> findByVendor(String vendor);
 }

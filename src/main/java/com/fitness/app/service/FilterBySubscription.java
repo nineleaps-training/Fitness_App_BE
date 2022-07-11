@@ -10,10 +10,6 @@ import com.fitness.app.model.GymClassModel;
 
 @Service
 public class FilterBySubscription {
-
-	
-	
-	
 	
 	//Filter based on monthly subscription
 	public List<GymClassModel> filterByMonthly(int price, List<GymClassModel> listGym)
@@ -22,7 +18,7 @@ public class FilterBySubscription {
 		List<GymClassModel> newList=new ArrayList<>();
 		for(GymClassModel gym: listGym)
 		{
-			GymSubscriptionClass subscription=gym.getSubscription();
+			GymSubscriptionClass subscription=gym.getMSubscription();
 			if((subscription.getMonthly()<=price) || (subscription.getMonthly()<=(price+200)))
 			{
 				newList.add(gym);
@@ -38,7 +34,7 @@ public class FilterBySubscription {
 		List<GymClassModel> list = new ArrayList<>();
 		for(GymClassModel gym: listGym) {
 
-			GymSubscriptionClass subscription = gym.getSubscription();
+			GymSubscriptionClass subscription = gym.getMSubscription();
 			if(subscription.getQuaterly()<=price || subscription.getQuaterly()<=(price+500)) {
 				list.add(gym);
 			}
@@ -52,7 +48,7 @@ public class FilterBySubscription {
 		List<GymClassModel> list = new ArrayList<>();
 		for(GymClassModel gym: listGym) {
 
-			GymSubscriptionClass subscription = gym.getSubscription();
+			GymSubscriptionClass subscription = gym.getMSubscription();
 			if(subscription.getHalf()<=price || subscription.getHalf()<=(price+1000)) {
 				list.add(gym);
 			}
@@ -65,7 +61,7 @@ public class FilterBySubscription {
 		List<GymClassModel> list = new ArrayList<>();
 		for(GymClassModel gym: listGym) {
 
-			GymSubscriptionClass subscription = gym.getSubscription();
+			GymSubscriptionClass subscription = gym.getMSubscription();
 			if(subscription.getYearly()<=price || subscription.getYearly()<=(price+1500)) {
 				list.add(gym);
 			}
@@ -78,7 +74,7 @@ public class FilterBySubscription {
 		List<GymClassModel> list = new ArrayList<>();
 		for(GymClassModel gym: listGym) {
 
-			GymSubscriptionClass subscription = gym.getSubscription();
+			GymSubscriptionClass subscription = gym.getMSubscription();
 			if(subscription.getOneWorkout()<=price || subscription.getOneWorkout()<=(price+200)) {
 				list.add(gym);
 			}

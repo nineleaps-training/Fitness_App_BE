@@ -1,10 +1,16 @@
 package com.fitness.app.model;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@ApiModel(description = "Elements")
 public class Elements {
+
     @JsonProperty("distance")
-    private Distance distance;
+    @ApiModelProperty(name = "distance", notes = "Distance")
+    private Distance distance; 
+    @ApiModelProperty(name = "duration", notes = "Duration")
     private Duration duration;
 
     public Distance getDistance() {

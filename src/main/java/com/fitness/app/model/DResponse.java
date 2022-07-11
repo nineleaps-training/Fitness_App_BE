@@ -1,29 +1,36 @@
 package com.fitness.app.model;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel(description = "DResponse")
 public class DResponse {
+
     @JsonProperty("destination_addresses")
-    private String destination_addresses[];
+    @ApiModelProperty(name = "destinationAddresses", notes = "Address of destination")
+    private String[] destinationAddresses;
     @JsonProperty("origin_addresses")
-    private String origin_addresses[];
+    @ApiModelProperty(name = "originAddresses", notes = "Address of origin")
+    private String[] originAddresses;
     @JsonProperty("rows")
+    @ApiModelProperty(name = "rows", notes = "List of rows")
     private Rows[] rows;
+    
 
-    public String[] getDestination_addresses() {
-        return destination_addresses;
+    public String[] getDestinationAddresses() {
+        return destinationAddresses;
     }
 
-    public void setDestination_addresses(String[] destination_addresses) {
-        this.destination_addresses = destination_addresses;
+    public void setDestinationAddresses(String[] destinationAddresses) {
+        this.destinationAddresses = destinationAddresses;
     }
 
-    public String[] getOrigin_addresses() {
-        return origin_addresses;
+    public String[] getOriginAddresses() {
+        return originAddresses;
     }
 
-    public void setOrigin_addresses(String[] origin_addresses) {
-        this.origin_addresses = origin_addresses;
+    public void setOriginAddresses(String[] originAddresses) {
+        this.originAddresses = originAddresses;
     }
 
     public Rows[] getRows() {

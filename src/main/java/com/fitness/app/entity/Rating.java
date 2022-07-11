@@ -20,8 +20,6 @@ public class Rating {
 	@Field
 	private String rater;
 	@Field
-	private double rating;
-   
-   
+	private double rate;  
     
 }
