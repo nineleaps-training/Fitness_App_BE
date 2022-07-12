@@ -23,7 +23,6 @@ import static org.mockito.Mockito.when;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class UserBankDetailsServiceTest {
 
-
     @MockBean
     private UserBankDetailsRepo repository;
 
@@ -46,7 +45,6 @@ class UserBankDetailsServiceTest {
         when(userRepository.findByEmail(userBankDetailsModel.getUserEmail())).thenReturn(userClass);
 
         UserBankDetailsModel actual = userBankDetailsService.addBankDetails(userBankDetailsModel);
-
         assertEquals(userBankDetailsModel, actual);
 
     }
@@ -63,7 +61,6 @@ class UserBankDetailsServiceTest {
         when(userRepository.findByEmail(userBankDetailsModel.getUserEmail())).thenReturn(userClass);
 
         UserBankDetailsModel actual = userBankDetailsService.addBankDetails(userBankDetailsModel);
-
         assertNull(actual);
 
     }
@@ -80,7 +77,6 @@ class UserBankDetailsServiceTest {
         when(userRepository.findByEmail(userBankDetailsModel.getUserEmail())).thenReturn(userClass);
 
         UserBankDetailsModel actual = userBankDetailsService.addBankDetails(userBankDetailsModel);
-
         assertNull(actual);
 
     }
@@ -95,7 +91,6 @@ class UserBankDetailsServiceTest {
         userClass.setActivated(true);
 
         UserBankDetailsModel actual = userBankDetailsService.addBankDetails(userBankDetailsModel);
-
         assertNull(actual);
 
     }
@@ -113,7 +108,6 @@ class UserBankDetailsServiceTest {
         when(repository.findAll()).thenReturn(userBankDetailsModels);
 
         List<UserBankDetailsModel> actual = userBankDetailsService.getAllDetails();
-
         assertEquals(userBankDetailsModels, actual);
     }
 
@@ -126,7 +120,6 @@ class UserBankDetailsServiceTest {
         when(repository.findByUserEmail(userBankDetailsModel.getUserEmail())).thenReturn(userBankDetailsModel);
 
         UserBankDetailsModel actual = userBankDetailsService.getBankDetails(userBankDetailsModel.getUserEmail());
-
         assertEquals(userBankDetailsModel, actual);
     }
 }

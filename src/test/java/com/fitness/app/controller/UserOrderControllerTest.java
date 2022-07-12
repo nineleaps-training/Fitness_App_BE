@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fitness.app.entity.UserOrder;
 import com.fitness.app.model.GymRepresent;
 import com.fitness.app.model.UserOrderModel;
-import com.fitness.app.model.UserPerfomanceModel;
+import com.fitness.app.model.UserPerformanceModel;
 import com.fitness.app.service.UserOrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -43,7 +42,7 @@ class UserOrderControllerTest {
     List<String> services = new ArrayList<>();
     UserOrderModel userOrderModel;
     Map<String, String> data = new HashMap<>();
-    Set<UserPerfomanceModel> userPerfomanceModels = new HashSet<>();
+    Set<UserPerformanceModel> userPerformanceModels = new HashSet<>();
     List<GymRepresent> gymRepresents = new ArrayList<>();
 
 
@@ -92,7 +91,7 @@ class UserOrderControllerTest {
     }
 
     @Test
-    void pedingOrerList() throws Exception {
+    void pendingOrderList() throws Exception {
         when(userOrderService.pendingListOrder(userOrder.getEmail())).thenReturn(userOrders);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/pending/order/priyanshi.chaturvedi@nineleaps.com").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
@@ -109,7 +108,7 @@ class UserOrderControllerTest {
 
     @Test
     void allMyUsers() throws Exception {
-        when(userOrderService.allMyUser(userOrder.getId())).thenReturn(userPerfomanceModels);
+        when(userOrderService.allMyUser(userOrder.getId())).thenReturn(userPerformanceModels);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/my/users/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }

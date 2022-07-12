@@ -68,9 +68,11 @@ class GymControllerTest {
 
         gymClassModel = new GymClassModel("priyanshi.chaturvedi@nineleaps.com", "Fitness",
                 gymAddressClass, workout, gymTime, gymSubscriptionClass, 9685903290L, 100);
+
         gymClassModels.add(gymClassModel);
 
-        gymClass = new GymClass("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", workout, 9685903290L, 4.2, 100);
+        gymClass = new GymClass("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", workout,
+                9685903290L, 4.2, 100);
 
         gymAddressClass = new GymAddressClass("1", 12345.0, 67890.1, "24cd", "Bangalore");
     }
@@ -116,6 +118,7 @@ class GymControllerTest {
         when(gymService.findTheAddress(gymClass.getId())).thenReturn(gymAddressClass);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/gym/address/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+
     }
 
     @Test
@@ -123,6 +126,7 @@ class GymControllerTest {
         when(gymService.getGymByGymId(gymClass.getId())).thenReturn(gymRepresent);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/gym/id/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+
     }
 
     @Test
@@ -130,6 +134,7 @@ class GymControllerTest {
         when(gymService.wipingAll()).thenReturn("done");
 
         mockMvc.perform(MockMvcRequestBuilders.delete("/gym/delete/every").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+
     }
 
     @Test
@@ -137,6 +142,7 @@ class GymControllerTest {
         when(gymService.getGymByGymName(gymClass.getName())).thenReturn(gymClass);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/gym/gymName/Fitness").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+
     }
 
     @Test
@@ -164,6 +170,7 @@ class GymControllerTest {
         when(filterBySubscription.filterByQuarterly(300, gymClassModels)).thenReturn(gymClassModels);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/filter/subscription/quarterly/200").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
+
     }
 
     @Test
@@ -173,6 +180,7 @@ class GymControllerTest {
         when(filterBySubscription.filterByHalfYearly(600, gymClassModels)).thenReturn(gymClassModels);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/filter/subscription/halfYearly/500").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
+
     }
 
     @Test
@@ -182,6 +190,7 @@ class GymControllerTest {
         when(filterBySubscription.filterByYearly(1200, gymClassModels)).thenReturn(gymClassModels);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/filter/subscription/yearly/1000").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
+
     }
 
     @Test
@@ -191,5 +200,6 @@ class GymControllerTest {
         when(filterBySubscription.filterByOneWorkout(300, gymClassModels)).thenReturn(gymClassModels);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/filter/subscription/oneWorkout/100").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
+
     }
 }

@@ -123,7 +123,7 @@ public class AdminController {
 
     //demo api for payment.
     @GetMapping("/get-data-pay")
-    public AdminPayModel getDatapay(@RequestBody AdminPayModel pay) {
+    public AdminPayModel getDataPay(@RequestBody AdminPayModel pay) {
 
         return adminService.getDataPay(pay);
     }

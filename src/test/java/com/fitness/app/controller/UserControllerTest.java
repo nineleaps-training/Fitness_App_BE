@@ -39,9 +39,6 @@ class UserControllerTest {
     UserClass userClass;
     Authenticate authenticate;
 
-    SignUpResponse signUpResponse;
-
-    UserDetails userDetails;
 
     @MockBean
     private UserService userService;
@@ -59,10 +56,11 @@ class UserControllerTest {
     public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(userController).build();
 
-        userModel = new UserModel("priyanshi.chaturvedi@nineleaps.com", "Priyanshi", "9685903290", "password", "Enthusiast", true);
+        userModel = new UserModel("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
+                "9685903290", "password", "Enthusiast", true);
 
         userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
-        "9685903290", "12345", "Enthusiast", false, false, true);
+                "9685903290", "12345", "Enthusiast", false, false, true);
 
         authenticate = new Authenticate("priyanshi.chaturvedi@nineleaps.com", "password");
 

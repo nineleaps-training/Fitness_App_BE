@@ -45,7 +45,6 @@ class GoogleMapControllerTest {
     public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(googleMapController).build();
 
-
     }
 
     @Test

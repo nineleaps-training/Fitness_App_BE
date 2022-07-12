@@ -45,8 +45,6 @@ class UserRatingControllerTest {
 
         ratingModel = new RatingModel("1", "4", "Priyanshi", 4.2);
 
-
-
     }
 
     @Test
@@ -63,7 +61,6 @@ class UserRatingControllerTest {
         when(ratingService.getRating(ratingModel.getTarget())).thenReturn(4.2);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/get-rating/4").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-
     }
 
     @Test

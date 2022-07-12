@@ -1,6 +1,5 @@
 package com.fitness.app.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fitness.app.auth.Authenticate;
 import com.fitness.app.config.JwtUtils;
@@ -13,6 +12,7 @@ import com.fitness.app.repository.VendorRepository;
 import com.fitness.app.security.service.UserDetailsServiceImpl;
 import com.fitness.app.service.AdminService;
 import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,9 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -60,7 +62,6 @@ class AdminControllerTest {
     GymClass gymClass;
     List<GymClass> gymClasses = new ArrayList<>();
     List<String> workout = new ArrayList<>();
-
 
 
     @MockBean
@@ -120,12 +121,12 @@ class AdminControllerTest {
     @Test
     void authenticateUser() throws Exception {
 
-        Authentication authentication = null;
         UserClass userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
                 "9685903290", "12345", "ADMIN", false, false, true);
 
         String content = objectMapper.writeValueAsString(authenticate);
-        when(authenticationManager.authenticate(authentication)).thenReturn(authentication);
+
+        when(authenticationManager.authenticate(null)).thenReturn(null);
         when(userDetailsService.loadUserByUsername(authenticate.getEmail())).thenReturn(userDetails);
         when(jwtUtils.generateToken(userDetails)).thenReturn("");
         when(userRepo.findByEmail(authenticate.getEmail())).thenReturn(userClass);
@@ -142,6 +143,7 @@ class AdminControllerTest {
                 "9685903290", "12345", "Enthusiast", false, false, true);
 
         String content = objectMapper.writeValueAsString(authenticate);
+
         when(authenticationManager.authenticate(authentication)).thenReturn(authentication);
         when(userDetailsService.loadUserByUsername(authenticate.getEmail())).thenReturn(userDetails);
         when(jwtUtils.generateToken(userDetails)).thenReturn("");
@@ -151,20 +153,6 @@ class AdminControllerTest {
 
     }
 
-//    @Test
-//    void authenticateUser() throws Exception {
-//        UserClass userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
-//                "9685903290", "12345", "ADMIN", false, false, true);
-//
-//        String content = objectMapper.writeValueAsString(authenticate);
-//
-//        when(userDetailsService.loadUserByUsername(authenticate.getEmail())).thenReturn(userDetails);
-//        when(jwtUtils.generateToken(userDetails)).thenReturn("");
-//        when(userRepo.findByEmail(authenticate.getEmail())).thenReturn(userClass);
-//
-//        mockMvc.perform(MockMvcRequestBuilders.post("/login/admin").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isBadRequest());
-//
-//    }
 
     @Test
     void getAllUsers() throws Exception {
@@ -227,7 +215,7 @@ class AdminControllerTest {
     }
 
     @Test
-    void getDatapay() throws Exception {
+    void getDataPay() throws Exception {
 
         AdminPayModel adminPayModel = new AdminPayModel("P00", "123456", "Priyanshi",
                 100, "Due", "54321", "XYZ", null, null);
@@ -272,7 +260,6 @@ class AdminControllerTest {
 
     @Test
     void paidHistory() throws Exception {
-
         when(adminService.paidHistoryVendor(adminPayModel.getVendor())).thenReturn(adminPayModels);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/paid-history/Priyanshi").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
@@ -283,7 +270,6 @@ class AdminControllerTest {
     void getAllNumber() throws Exception {
 
         when(userRepo.findAll()).thenReturn(userClasses);
-
         when(gymRepo.findAll()).thenReturn(gymClasses);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/all-numbers").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());

@@ -49,7 +49,6 @@ class UserDetailsControllerTest {
                 "80 Feet Road, Koramangala", "Bangalore", 560034L);
         userDetailsModelList.add(userDetailsModel);
 
-
     }
 
     @Test

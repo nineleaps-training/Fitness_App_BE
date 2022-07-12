@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fitness.app.entity.UserOrder;
 import com.fitness.app.model.UserOrderModel;
-import com.fitness.app.model.UserPerfomanceModel;
+import com.fitness.app.model.UserPerformanceModel;
 import com.fitness.app.service.UserOrderService;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
@@ -98,7 +98,7 @@ public class UserOrderController {
 
     //Fetching the user of the particular Gym by gymId
     @GetMapping("/my/users/{gymId}")
-    public Set<UserPerfomanceModel> allMyUsers(@PathVariable String gymId) {
+    public Set<UserPerformanceModel> allMyUsers(@PathVariable String gymId) {
         return userOrderService.allMyUser(gymId);
     }
 

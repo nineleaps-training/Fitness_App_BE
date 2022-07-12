@@ -31,11 +31,8 @@ class UserBankDetailsControllerTest {
     ObjectMapper objectMapper = new ObjectMapper();
     MockMvc mockMvc;
 
-
-
     UserBankDetailsModel userBankDetailsModel;
     List<UserBankDetailsModel> userBankDetailsModelList = new ArrayList<>();
-
 
     @MockBean
     UserBankDetailsService userBankDetailsService;
@@ -46,7 +43,6 @@ class UserBankDetailsControllerTest {
     @BeforeEach
     public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(userBankDetailsController).build();
-
 
         userBankDetailsModel = new UserBankDetailsModel("priyanshi.chaturvedi@nineleaps.com",
                 "Priyanshi", "HDFC Bank", "Bangalore",

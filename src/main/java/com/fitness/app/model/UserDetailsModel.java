@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserDetailsModel {
 
-
     private String userEmail;
     private String userGender;
     private String userFullAddress;

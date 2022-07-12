@@ -49,7 +49,7 @@ class AttendanceControllerTest {
     public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(attendanceController).build();
 
-        users.add("Geet");
+        users.add("Aarohi");
         markUserAttModel = new MarkUserAttModel("Fitness", "Priyanshi", users);
         attendanceList.add(1);
         userAttendance = new UserAttendance("priyanshi.chaturvedi@nineleaps.com", "Fitness", "Priyanshi", 2, 1, attendanceList, 4.2);

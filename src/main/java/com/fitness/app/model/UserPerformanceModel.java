@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserPerfomanceModel {
+public class UserPerformanceModel {
 
 
     private String name;

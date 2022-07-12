@@ -37,6 +37,7 @@ class UserForgetPasswordControllerTest {
 
     UserClass userClass;
     Authenticate authenticate;
+    String otp = "2468";
 
 
     @MockBean
@@ -64,11 +65,9 @@ class UserForgetPasswordControllerTest {
 
     @Test
     void userForgotPasswordIfStatusCodeIs200() throws Exception {
-
-        String otp = "2468";
         when(userRepo.findByEmail(userClass.getEmail())).thenReturn(userClass);
         when(components.otpBuilder()).thenReturn(otp);
-        when(components.sendOtpMessage("hello ", otp,userClass.getMobile())).thenReturn(200);
+        when(components.sendOtpMessage("hello ", otp, userClass.getMobile())).thenReturn(200);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/forget/user/priyanshi.chaturvedi@nineleaps.com").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
@@ -77,10 +76,8 @@ class UserForgetPasswordControllerTest {
 
     @Test
     void userForgotPasswordIfStatusCodeIS400() throws Exception {
-        String otp = "2468";
         when(userRepo.findByEmail(userClass.getEmail())).thenReturn(userClass);
-
-        when(components.sendOtpMessage("hello ", otp,userClass.getMobile())).thenReturn(400);
+        when(components.sendOtpMessage("hello ", otp, userClass.getMobile())).thenReturn(400);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/forget/user/priyanshi.chaturvedi@nineleaps.com").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
@@ -88,11 +85,8 @@ class UserForgetPasswordControllerTest {
 
     @Test
     void returnUserForgotIfUserClassIsNull() throws Exception {
-        UserClass userClassNull = null;
-        String otp = "2468";
-        when(userRepo.findByEmail(userClass.getEmail())).thenReturn(userClassNull);
-
-        when(components.sendOtpMessage("hello ", otp,userClass.getMobile())).thenReturn(200);
+        when(userRepo.findByEmail(userClass.getEmail())).thenReturn(null);
+        when(components.sendOtpMessage("hello ", otp, userClass.getMobile())).thenReturn(200);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/forget/user/priyanshi.chaturvedi@nineleaps.com").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 

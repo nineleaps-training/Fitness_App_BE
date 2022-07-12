@@ -32,28 +32,6 @@ class VendorBankDetailsServiceTest {
     @Autowired
     private  VendorBankDetailsService vendorBankDetailsService;
 
-//    @BeforeAll
-//    public void setUp() {
-//        vendorBankDetailsModel = new VendorBankDetailsModel();
-//        vendorBankDetailsModel.setEmail("priyanshi.chaturvedi@nineleaps.com");
-//        vendorBankDetailsModel.setName("Priyanshi");
-//        vendorBankDetailsModel.setBankName("HDFC Bank");
-//        vendorBankDetailsModel.setBranchName("Bangalore");
-//        vendorBankDetailsModel.setAccountNumber(59109876543211L);
-//        vendorBankDetailsModel.setBankIFSC("HDFC0000036");
-//
-//        userClass = new UserClass();
-//        userClass.setEmail("priyanshi.chaturvedi@nineleaps.com");
-//        userClass.setFullName("Priyanshi");
-//        userClass.setMobile("9685903290");
-//        userClass.setPassword("12345");
-//        userClass.setRole("Vendor");
-//        userClass.setActivated(true);
-//        userClass.setLoggedin(true);
-//        userClass.setCustom(true);
-//    }
-
-
     @Test
     void addBankDetailsIfUserIsNotNullAndStatusIsActivated() {
         VendorBankDetailsModel vendorBankDetailsModel = new VendorBankDetailsModel("priyanshi.chaturvedi@nineleaps.com",
@@ -66,7 +44,6 @@ class VendorBankDetailsServiceTest {
         when(userRepository.findByEmail(vendorBankDetailsModel.getEmail())).thenReturn(userClass);
 
         VendorBankDetailsModel actual = vendorBankDetailsService.addDetails(vendorBankDetailsModel);
-
         assertEquals(vendorBankDetailsModel, actual);
     }
 
@@ -82,7 +59,6 @@ class VendorBankDetailsServiceTest {
         when(userRepository.findByEmail(vendorBankDetailsModel.getEmail())).thenReturn(userClass);
 
         VendorBankDetailsModel actual = vendorBankDetailsService.addDetails(vendorBankDetailsModel);
-
         assertNull(actual);
     }
 
@@ -98,7 +74,6 @@ class VendorBankDetailsServiceTest {
         when(userRepository.findByEmail(vendorBankDetailsModel.getEmail())).thenReturn(userClass);
 
         VendorBankDetailsModel actual = vendorBankDetailsService.addDetails(vendorBankDetailsModel);
-
         assertNull(actual);
     }
 
@@ -112,7 +87,6 @@ class VendorBankDetailsServiceTest {
         userClass.setActivated(true);
 
         VendorBankDetailsModel actual = vendorBankDetailsService.addDetails(vendorBankDetailsModel);
-
         assertNull(actual);
     }
 
@@ -128,7 +102,6 @@ class VendorBankDetailsServiceTest {
         when(repository.findAll()).thenReturn(vendorBankDetailsModels);
 
         List<VendorBankDetailsModel> actual = vendorBankDetailsService.getDetails();
-
         assertEquals(vendorBankDetailsModels, actual);
 
     }
@@ -141,6 +114,7 @@ class VendorBankDetailsServiceTest {
 
         when(repository.findByEmail(vendorBankDetailsModel.getEmail())).thenReturn(vendorBankDetailsModel);
 
-        assertEquals(vendorBankDetailsModel, vendorBankDetailsService.getBankDetails(vendorBankDetailsModel.getEmail()));
+        VendorBankDetailsModel actual = vendorBankDetailsService.getBankDetails(vendorBankDetailsModel.getEmail());
+        assertEquals(vendorBankDetailsModel, actual);
     }
 }

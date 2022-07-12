@@ -41,7 +41,6 @@ class UserDetailsServiceTest {
         when(userRepository.findByEmail(userDetailsModel.getUserEmail())).thenReturn(userClass);
 
         UserDetailsModel actual = userDetailsService.addUserDetails(userDetailsModel);
-
         assertEquals(userDetailsModel, actual);
     }
 
@@ -56,7 +55,6 @@ class UserDetailsServiceTest {
         when(userRepository.findByEmail(userDetailsModel.getUserEmail())).thenReturn(userClass);
 
         UserDetailsModel actual = userDetailsService.addUserDetails(userDetailsModel);
-
         assertNull(actual);
     }
 
@@ -71,7 +69,6 @@ class UserDetailsServiceTest {
         when(userRepository.findByEmail(userDetailsModel.getUserEmail())).thenReturn(userClass);
 
         UserDetailsModel actual = userDetailsService.addUserDetails(userDetailsModel);
-
         assertNull(actual);
     }
 
@@ -84,7 +81,6 @@ class UserDetailsServiceTest {
         userClass.setActivated(true);
 
         UserDetailsModel actual = userDetailsService.addUserDetails(userDetailsModel);
-
         assertNull(actual);
     }
 
@@ -95,6 +91,7 @@ class UserDetailsServiceTest {
 
         when(userDetailsRepository.findByUserEmail(userDetailsModel.getUserEmail())).thenReturn(userDetailsModel);
 
-        assertEquals(userDetailsModel, userDetailsService.getUserDetails(userDetailsModel.getUserEmail()));
+        UserDetailsModel actual = userDetailsService.getUserDetails(userDetailsModel.getUserEmail());
+        assertEquals(userDetailsModel, actual);
     }
 }

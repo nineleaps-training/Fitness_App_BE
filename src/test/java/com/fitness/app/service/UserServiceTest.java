@@ -25,13 +25,11 @@ class UserServiceTest {
     @MockBean
     private UserRepository userRepository;
 
-
     @Autowired
     UserService userService;
 
     @MockBean
     private Components components;
-
 
     @Test
     void registerUserIfStatusCodeIs400() {
@@ -42,12 +40,13 @@ class UserServiceTest {
         UserModel userModel = new UserModel("priyanshi.chaturvei@nineleaps.com", "Priyanshi",
                 "9685903290", "12345", "Enthusiast", true);
 
-        String otp = "12345";
+        String otp = "1234";
 
         when(components.sendOtpMessage("hello ", otp, userModel.getMobile())).thenReturn(400);
         when(userRepository.save(userClass)).thenReturn(userClass);
 
-        assertNull(userService.registerUser(userModel));
+        UserClass actual = userService.registerUser(userModel);
+        assertNull(actual);
     }
 
     @Test
@@ -63,7 +62,8 @@ class UserServiceTest {
         when(components.otpBuilder()).thenReturn(otp);
         when(components.sendOtpMessage("hello ", otp, userModel.getMobile())).thenReturn(200);
 
-        assertEquals(userClass.getEmail(), userService.registerUser(userModel).getEmail());
+        String actual = userService.registerUser(userModel).getEmail();
+        assertEquals(userClass.getEmail(), actual);
     }
 
     @Test
@@ -74,7 +74,6 @@ class UserServiceTest {
         when(userRepository.findById(userClass.getEmail())).thenReturn(Optional.of(userClass));
 
         UserClass actual = userService.verifyUser(userClass.getEmail());
-
         assertEquals(userClass, actual);
 
     }
@@ -99,6 +98,7 @@ class UserServiceTest {
                 "9685903290", "12345", "Enthusiast", true, true, true);
 
         when(userRepository.findById(userClass.getEmail())).thenReturn(Optional.of(userClass));
+
         userService.loginUser(userClass.getEmail());
         assertNotNull(userClass);
 
@@ -111,6 +111,7 @@ class UserServiceTest {
         Optional<UserClass> userClassOptional = Optional.empty();
 
         when(userRepository.findById(userClass.getEmail())).thenReturn(userClassOptional);
+
         userService.loginUser(userClass.getEmail());
         assertNotNull(userClass);
 
@@ -118,7 +119,6 @@ class UserServiceTest {
 
     @Test
     void signInWithGoogleIfUserIsNotNullAndCustomIsFalse() {
-
         UserModel userModel = new UserModel("priyanshi.chaturvedi@nineleaps.com", "Priyanshi", "9685903290", "password", "Enthusiast", false);
 
         UserClass userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
@@ -126,7 +126,8 @@ class UserServiceTest {
 
         when(userRepository.findByEmail(userClass.getEmail())).thenReturn(userClass);
 
-        assertEquals(userClass, userService.googleSignInMethod(userModel));
+        UserClass actual = userService.googleSignInMethod(userModel);
+        assertEquals(userClass, actual);
     }
 
     @Test
@@ -139,7 +140,8 @@ class UserServiceTest {
 
         when(userRepository.findByEmail(userClass.getEmail())).thenReturn(userClass);
 
-        assertNull(userService.googleSignInMethod(userModel));
+        UserClass actual = userService.googleSignInMethod(userModel);
+        assertNull(actual);
     }
 
     @Test
@@ -154,7 +156,8 @@ class UserServiceTest {
         UserClass newUser = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
                 "9685903290", "password", "Enthusiast", true, false, false);
 
-        assertEquals(newUser.getCustom(), userService.googleSignInMethod(userModel).getCustom());
+        Boolean actual = userService.googleSignInMethod(userModel).getCustom();
+        assertEquals(newUser.getCustom(), actual);
     }
 
     @Test
@@ -169,7 +172,8 @@ class UserServiceTest {
         UserClass newUser = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
                 "9685903290", "password", "Enthusiast", true, false, true);
 
-        assertEquals(newUser.getCustom(), userService.googleSignInMethod(userModel).getCustom());
+        Boolean actual = userService.googleSignInMethod(userModel).getCustom();
+        assertEquals(newUser.getCustom(), actual);
     }
 
     @Test

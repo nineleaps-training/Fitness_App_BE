@@ -25,14 +25,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 class LocationControllerTest {
 
-    ObjectMapper objectMapper = new ObjectMapper();
     MockMvc mockMvc;
 
     @Autowired
     LocationController locationController;
 
     @BeforeEach
-    public  void setUp() {
+    public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(locationController).build();
 
     }
@@ -45,8 +44,6 @@ class LocationControllerTest {
 
     @Test
     void getDetailsWhenResponseIsNull() throws Exception {
-        Response response = null;
-
         mockMvc.perform(MockMvcRequestBuilders.get("/getLocation?address=Bangalore").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }

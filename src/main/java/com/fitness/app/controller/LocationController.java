@@ -1,9 +1,6 @@
 package com.fitness.app.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.fitness.app.model.GoogleAddress;
 import com.fitness.app.model.Response;
@@ -18,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /// get coordinate
 
@@ -41,8 +41,7 @@ public class LocationController {
         log.info(uri.toUriString());
         ResponseEntity<Response> response = new RestTemplate().getForEntity(uri.toUriString(), Response.class);
         Response location = response.getBody();
-        assert location != null;
-        Double lat = location.getResult()[0].getGeometry().getLocation().getLat();
+        Double lat = Objects.requireNonNull(location).getResult()[0].getGeometry().getLocation().getLat();
         Double lng = location.getResult()[0].getGeometry().getLocation().getLng();
         return lat.toString() + " , " + lng.toString();
     }
@@ -62,8 +61,7 @@ public class LocationController {
         String city = "";
         ResponseEntity<Response> response = new RestTemplate().getForEntity(uri.toUriString(), Response.class);
         Response formattedAddress = response.getBody();
-        assert formattedAddress != null;
-        GoogleAddress[] address = formattedAddress.getResult()[1].getAllAddress();
+        GoogleAddress[] address = Objects.requireNonNull(formattedAddress).getResult()[1].getAllAddress();
 
         StringBuilder completeAddress = new StringBuilder();
         for (GoogleAddress googleAddress : address) {

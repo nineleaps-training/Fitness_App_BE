@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import com.fitness.app.entity.UserAttendance;
 import com.fitness.app.entity.UserOrder;
 import com.fitness.app.entity.VendorPayment;
-import com.fitness.app.model.UserPerfomanceModel;
+import com.fitness.app.model.UserPerformanceModel;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.AttendanceRepo;
 import com.fitness.app.repository.GymAddressRepo;
@@ -143,10 +143,10 @@ public class UserOrderService {
         return orders;
     }
 
-    public Set<UserPerfomanceModel> allMyUser(String gymId) {
+    public Set<UserPerformanceModel> allMyUser(String gymId) {
         List<UserOrder> orders = userOrderRepo.findByGym(gymId);
         orders = orders.stream().filter(o -> o.getStatus().equals("Completed")).collect(Collectors.toList());
-        Set<UserPerfomanceModel> users = new HashSet<>();
+        Set<UserPerformanceModel> users = new HashSet<>();
 
         String vendor = "";
         Optional<GymClass> optional = gymRepo.findById(gymId);
@@ -156,7 +156,7 @@ public class UserOrderService {
 
         for (UserOrder order : orders) {
             UserAttendance newAtt = attendanceRepo.findByEmailAndVendor(order.getEmail(), vendor);
-            UserPerfomanceModel user = new UserPerfomanceModel();
+            UserPerformanceModel user = new UserPerformanceModel();
             user.setName(userRepository.findByEmail(order.getEmail()).getFullName());
             user.setEmail(order.getEmail());
             user.setGym(gymId);

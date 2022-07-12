@@ -31,7 +31,6 @@ class FilterBySubscriptionTest {
         GymSubscriptionClass subscription1 = new GymSubscriptionClass("123", 100, 500, 1500, 3000, 6000, 100);
         GymSubscriptionClass subscription2 = new GymSubscriptionClass("123", 100, 200, 1500, 3000, 6000, 100);
 
-
         GymClassModel gymClassModel1 = new GymClassModel("priyanshi.chturvedi@nineleaps.com",
                 "Fitness Centre", gymAddress, workoutList, timing, subscription1,
                 9685903290L, 500);
@@ -58,7 +57,6 @@ class FilterBySubscriptionTest {
         GymTime timing = new GymTime("123", "8 AM", "6 PM", "Sunday");
         GymSubscriptionClass subscription1 = new GymSubscriptionClass("123", 100, 500, 1500, 3000, 6000, 100);
         GymSubscriptionClass subscription2 = new GymSubscriptionClass("123", 100, 700, 1500, 3000, 6000, 100);
-
 
         GymClassModel gymClassModel1 = new GymClassModel("priyanshi.chturvedi@nineleaps.com",
                 "Fitness Centre", gymAddress, workoutList, timing, subscription1,
@@ -88,7 +86,6 @@ class FilterBySubscriptionTest {
         GymTime timing = new GymTime("123", "8 AM", "6 PM", "Sunday");
         GymSubscriptionClass subscription1 = new GymSubscriptionClass("123", 100, 500, 1500, 3000, 6000, 100);
         GymSubscriptionClass subscription2 = new GymSubscriptionClass("123", 100, 700, 1500, 3000, 6000, 100);
-
 
         GymClassModel gymClassModel1 = new GymClassModel("priyanshi.chturvedi@nineleaps.com",
                 "Fitness Centre", gymAddress, workoutList, timing, subscription1,
@@ -129,7 +126,6 @@ class FilterBySubscriptionTest {
         GymSubscriptionClass subscription1 = new GymSubscriptionClass("123", 100, 500, 1500, 3000, 6000, 100);
         GymSubscriptionClass subscription2 = new GymSubscriptionClass("123", 100, 200, 1200, 2400, 4800, 100);
 
-
         GymClassModel gymClassModel1 = new GymClassModel("priyanshi.chturvedi@nineleaps.com",
                 "Fitness Centre", gymAddress, workoutList, timing, subscription1,
                 9685903290L, 500);
@@ -157,7 +153,6 @@ class FilterBySubscriptionTest {
         GymSubscriptionClass subscription1 = new GymSubscriptionClass("123", 100, 500, 1500, 3000, 6000, 100);
         GymSubscriptionClass subscription2 = new GymSubscriptionClass("123", 100, 200, 1200, 2400, 4800, 100);
 
-
         GymClassModel gymClassModel1 = new GymClassModel("priyanshi.chturvedi@nineleaps.com",
                 "Fitness Centre", gymAddress, workoutList, timing, subscription1,
                 9685903290L, 500);
@@ -171,7 +166,6 @@ class FilterBySubscriptionTest {
         gymClassModels.add(gymClassModel2);
 
         List<GymClassModel> gymClassModelNull = new ArrayList<>();
-
 
         List<GymClassModel> actual = filterBySubscription.filterByQuarterly(600, gymClassModels);
         assertEquals(gymClassModelNull, actual);
@@ -188,7 +182,6 @@ class FilterBySubscriptionTest {
         GymSubscriptionClass subscription1 = new GymSubscriptionClass("123", 100, 500, 1500, 3000, 6000, 100);
         GymSubscriptionClass subscription2 = new GymSubscriptionClass("123", 100, 200, 1200, 2400, 4800, 100);
 
-
         GymClassModel gymClassModel1 = new GymClassModel("priyanshi.chturvedi@nineleaps.com",
                 "Fitness Centre", gymAddress, workoutList, timing, subscription1,
                 9685903290L, 500);
@@ -203,8 +196,6 @@ class FilterBySubscriptionTest {
 
         List<GymClassModel> gymClassModelList = new ArrayList<>();
         gymClassModelList.add(gymClassModel2);
-
-
 
         List<GymClassModel> actual = filterBySubscription.filterByQuarterly(800, gymClassModels);
         assertEquals(gymClassModelList, actual);
@@ -229,7 +220,6 @@ class FilterBySubscriptionTest {
         GymTime timing = new GymTime("123", "8 AM", "6 PM", "Sunday");
         GymSubscriptionClass subscription1 = new GymSubscriptionClass("123", 100, 500, 1500, 3000, 6000, 100);
         GymSubscriptionClass subscription2 = new GymSubscriptionClass("123", 100, 200, 1200, 2400, 4800, 100);
-
 
         GymClassModel gymClassModel1 = new GymClassModel("priyanshi.chturvedi@nineleaps.com",
                 "Fitness Centre", gymAddress, workoutList, timing, subscription1,
@@ -258,7 +248,6 @@ class FilterBySubscriptionTest {
         GymSubscriptionClass subscription1 = new GymSubscriptionClass("123", 100, 500, 1500, 3000, 6000, 100);
         GymSubscriptionClass subscription2 = new GymSubscriptionClass("123", 100, 200, 1200, 2400, 4800, 100);
 
-
         GymClassModel gymClassModel1 = new GymClassModel("priyanshi.chturvedi@nineleaps.com",
                 "Fitness Centre", gymAddress, workoutList, timing, subscription1,
                 9685903290L, 500);
@@ -272,7 +261,6 @@ class FilterBySubscriptionTest {
         gymClassModels.add(gymClassModel2);
 
         List<GymClassModel> gymClassModelNull = new ArrayList<>();
-
 
         List<GymClassModel> actual = filterBySubscription.filterByHalfYearly(1200, gymClassModels);
         assertEquals(gymClassModelNull, actual);
@@ -288,7 +276,6 @@ class FilterBySubscriptionTest {
         GymSubscriptionClass subscription1 = new GymSubscriptionClass("123", 100, 500, 1500, 3000, 6000, 100);
         GymSubscriptionClass subscription2 = new GymSubscriptionClass("123", 100, 200, 1200, 2400, 4800, 100);
 
-
         GymClassModel gymClassModel1 = new GymClassModel("priyanshi.chturvedi@nineleaps.com",
                 "Fitness Centre", gymAddress, workoutList, timing, subscription1,
                 9685903290L, 500);
@@ -303,8 +290,6 @@ class FilterBySubscriptionTest {
 
         List<GymClassModel> gymClassModelList = new ArrayList<>();
         gymClassModelList.add(gymClassModel2);
-
-
 
         List<GymClassModel> actual = filterBySubscription.filterByHalfYearly(1800, gymClassModels);
         assertEquals(gymClassModelList, actual);
@@ -329,7 +314,6 @@ class FilterBySubscriptionTest {
         GymTime timing = new GymTime("123", "8 AM", "6 PM", "Sunday");
         GymSubscriptionClass subscription1 = new GymSubscriptionClass("123", 100, 500, 1500, 3000, 6000, 100);
         GymSubscriptionClass subscription2 = new GymSubscriptionClass("123", 100, 200, 1200, 2400, 4800, 100);
-
 
         GymClassModel gymClassModel1 = new GymClassModel("priyanshi.chturvedi@nineleaps.com",
                 "Fitness Centre", gymAddress, workoutList, timing, subscription1,
@@ -358,7 +342,6 @@ class FilterBySubscriptionTest {
         GymSubscriptionClass subscription1 = new GymSubscriptionClass("123", 100, 500, 1500, 3000, 6000, 100);
         GymSubscriptionClass subscription2 = new GymSubscriptionClass("123", 100, 200, 1200, 2400, 4800, 100);
 
-
         GymClassModel gymClassModel1 = new GymClassModel("priyanshi.chturvedi@nineleaps.com",
                 "Fitness Centre", gymAddress, workoutList, timing, subscription1,
                 9685903290L, 500);
@@ -372,7 +355,6 @@ class FilterBySubscriptionTest {
         gymClassModels.add(gymClassModel2);
 
         List<GymClassModel> gymClassModelNull = new ArrayList<>();
-
 
         List<GymClassModel> actual = filterBySubscription.filterByYearly(3000, gymClassModels);
         assertEquals(gymClassModelNull, actual);
@@ -388,7 +370,6 @@ class FilterBySubscriptionTest {
         GymSubscriptionClass subscription1 = new GymSubscriptionClass("123", 100, 500, 1500, 3000, 6000, 100);
         GymSubscriptionClass subscription2 = new GymSubscriptionClass("123", 100, 200, 1200, 2400, 4800, 100);
 
-
         GymClassModel gymClassModel1 = new GymClassModel("priyanshi.chturvedi@nineleaps.com",
                 "Fitness Centre", gymAddress, workoutList, timing, subscription1,
                 9685903290L, 500);
@@ -403,8 +384,6 @@ class FilterBySubscriptionTest {
 
         List<GymClassModel> gymClassModelList = new ArrayList<>();
         gymClassModelList.add(gymClassModel2);
-
-
 
         List<GymClassModel> actual = filterBySubscription.filterByYearly(4000, gymClassModels);
         assertEquals(gymClassModelList, actual);
@@ -428,7 +407,6 @@ class FilterBySubscriptionTest {
         GymTime timing = new GymTime("123", "8 AM", "6 PM", "Sunday");
         GymSubscriptionClass subscription1 = new GymSubscriptionClass("123", 300, 500, 1500, 3000, 6000, 100);
         GymSubscriptionClass subscription2 = new GymSubscriptionClass("123", 100, 200, 1200, 2400, 4800, 100);
-
 
         GymClassModel gymClassModel1 = new GymClassModel("priyanshi.chturvedi@nineleaps.com",
                 "Fitness Centre", gymAddress, workoutList, timing, subscription1,
@@ -457,7 +435,6 @@ class FilterBySubscriptionTest {
         GymSubscriptionClass subscription1 = new GymSubscriptionClass("123", 300, 500, 1500, 3000, 6000, 100);
         GymSubscriptionClass subscription2 = new GymSubscriptionClass("123", 100, 200, 1200, 2400, 4800, 100);
 
-
         GymClassModel gymClassModel1 = new GymClassModel("priyanshi.chturvedi@nineleaps.com",
                 "Fitness Centre", gymAddress, workoutList, timing, subscription1,
                 9685903290L, 500);
@@ -471,7 +448,6 @@ class FilterBySubscriptionTest {
         gymClassModels.add(gymClassModel2);
 
         List<GymClassModel> gymClassModelNull = new ArrayList<>();
-
 
         List<GymClassModel> actual = filterBySubscription.filterByOneWorkout(40, gymClassModels);
         assertEquals(gymClassModelNull, actual);
@@ -502,8 +478,6 @@ class FilterBySubscriptionTest {
 
         List<GymClassModel> gymClassModelList = new ArrayList<>();
         gymClassModelList.add(gymClassModel2);
-
-
 
         List<GymClassModel> actual = filterBySubscription.filterByOneWorkout(80, gymClassModels);
         assertEquals(gymClassModelList, actual);

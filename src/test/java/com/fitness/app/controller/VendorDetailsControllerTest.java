@@ -73,7 +73,7 @@ class VendorDetailsControllerTest {
     @Test
     void getVendorDetails() throws Exception {
         when(vendorDetailsService.getVendorDetails(vendorDetailsModel.getEmail())).thenReturn(vendorDetailsModel);
-        mockMvc.perform(MockMvcRequestBuilders.get("/vendor-details/priyanshi.chaturvedi@nineleaps.com").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
+        mockMvc.perform(MockMvcRequestBuilders.get("/vendor-details/priyanshi.chaturvedi@nineleaps.com").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 }

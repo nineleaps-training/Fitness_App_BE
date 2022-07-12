@@ -46,7 +46,7 @@ class VendorBankDetailsControllerTest {
         this.mockMvc = MockMvcBuilders.standaloneSetup(vendorBankDetailsController).build();
 
         vendorBankDetailsModel = new VendorBankDetailsModel("priyanshi.chaturvedi@nineleaps.com",
-                "Priyanshi", "HDFC Bank", "Banalore", 59109876543211L,
+                "Priyanshi", "HDFC Bank", "Bangalore", 59109876543211L,
                 "HDFC0000036", "Monthly");
 
     }
