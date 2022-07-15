@@ -3,6 +3,7 @@ package com.fitness.app.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fitness.app.auth.Authenticate;
 import com.fitness.app.config.JwtUtils;
+import com.fitness.app.entity.AdminPay;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.model.AdminPayModel;
@@ -56,6 +57,9 @@ class AdminControllerTest {
     Authenticate authenticate;
     AdminPayModel adminPayModel;
     List<AdminPayModel> adminPayModels = new ArrayList<>();
+    AdminPay adminPay;
+    List<AdminPay> adminPays = new ArrayList<>();
+
 
     UserClass userClass;
     List<UserClass> userClasses = new ArrayList<>();
@@ -109,8 +113,12 @@ class AdminControllerTest {
                 "created", "54321", "XYZ", null, null);
         adminPayModels.add(adminPayModel);
 
+        adminPay = new AdminPay("1", "123456", "Priyanshi", 100,
+                "Completed", "54321", "XYZ", LocalDate.now(), LocalTime.now());
+        adminPays.add(adminPay);
+
         userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
-                "9685903290", "12345", "Enthusiast", false, false, true);
+                "9685903290", "12345", "ADMIN", false, false, true);
         userClasses.add(userClass);
 
         gymClass = new GymClass("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", workout, 9685903290L, 4.2, 100);
@@ -120,10 +128,6 @@ class AdminControllerTest {
 
     @Test
     void authenticateUser() throws Exception {
-
-        UserClass userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
-                "9685903290", "12345", "ADMIN", false, false, true);
-
         String content = objectMapper.writeValueAsString(authenticate);
 
         when(authenticationManager.authenticate(null)).thenReturn(null);
@@ -137,11 +141,9 @@ class AdminControllerTest {
 
     @Test
     void authenticateUserIfRoleIsNotAdmin() throws Exception {
-
         Authentication authentication = null;
-        UserClass userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
+        userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
                 "9685903290", "12345", "Enthusiast", false, false, true);
-
         String content = objectMapper.writeValueAsString(authenticate);
 
         when(authenticationManager.authenticate(authentication)).thenReturn(authentication);
@@ -156,24 +158,14 @@ class AdminControllerTest {
 
     @Test
     void getAllUsers() throws Exception {
-        UserClass userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
-                "9685903290", "12345", "USER", false, false, true);
-        List<UserClass> userClassList = new ArrayList<>();
-        userClassList.add(userClass);
-
-        when(userRepo.findAll()).thenReturn(userClassList);
+        when(userRepo.findAll()).thenReturn(userClasses);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/get-all-users").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
     void getAllVendors() throws Exception {
-        UserClass userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
-                "9685903290", "12345", "VENDOR", false, false, true);
-        List<UserClass> userClassList = new ArrayList<>();
-        userClassList.add(userClass);
-
-        when(userRepo.findAll()).thenReturn(userClassList);
+        when(userRepo.findAll()).thenReturn(userClasses);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/get-all-vendors").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
@@ -181,11 +173,6 @@ class AdminControllerTest {
 
     @Test
     void getAllGyms() throws Exception {
-        List<String> workout = new ArrayList<>();
-        GymClass gymClass = new GymClass("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", workout, 9685903290L, 4.2, 100);
-        List<GymClass> gymClasses = new ArrayList<>();
-        gymClasses.add(gymClass);
-
         when(gymRepo.findAll()).thenReturn(gymClasses);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/get-all-gyms").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
@@ -193,11 +180,6 @@ class AdminControllerTest {
 
     @Test
     void getAllGymsByEmail() throws Exception {
-        List<String> workout = new ArrayList<>();
-        GymClass gymClass = new GymClass("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", workout, 9685903290L, 4.2, 100);
-        List<GymClass> gymClasses = new ArrayList<>();
-        gymClasses.add(gymClass);
-
         when(gymRepo.findByEmail(gymClass.getEmail())).thenReturn(gymClasses);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/get-all-gyms-by-email/priyanshi.chaturvedi@nineleaps.com").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
@@ -205,10 +187,7 @@ class AdminControllerTest {
 
     @Test
     void vendorPayment() throws Exception {
-        AdminPayModel adminPayModel = new AdminPayModel("P00", "123456", "Priyanshi",
-                100, "Due", "54321", "XYZ", LocalDate.now(), LocalTime.now());
-
-        when(adminService.vendorPayment(adminPayModel.getVendor())).thenReturn(adminPayModel);
+        when(adminService.vendorPayment(adminPayModel.getVendor())).thenReturn(adminPay);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/vendor-payment/Priyanshi").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
@@ -216,13 +195,12 @@ class AdminControllerTest {
 
     @Test
     void getDataPay() throws Exception {
-
-        AdminPayModel adminPayModel = new AdminPayModel("P00", "123456", "Priyanshi",
+        AdminPay adminPay = new AdminPay("P00", "123456", "Priyanshi",
                 100, "Due", "54321", "XYZ", null, null);
 
         String content = objectMapper.writeValueAsString(adminPayModel);
 
-        when(adminService.getDataPay(adminPayModel)).thenReturn(adminPayModel);
+        when(adminService.getDataPay(adminPayModel)).thenReturn(adminPay);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/get-data-pay").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
@@ -252,7 +230,7 @@ class AdminControllerTest {
     void updatingOrder() throws Exception {
         String content = objectMapper.writeValueAsString(data);
 
-        when(adminService.updatePayment(data)).thenReturn(adminPayModel);
+        when(adminService.updatePayment(data)).thenReturn(adminPay);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/update-vendor-payment").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
@@ -260,7 +238,7 @@ class AdminControllerTest {
 
     @Test
     void paidHistory() throws Exception {
-        when(adminService.paidHistoryVendor(adminPayModel.getVendor())).thenReturn(adminPayModels);
+        when(adminService.paidHistoryVendor(adminPay.getVendor())).thenReturn(adminPays);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/paid-history/Priyanshi").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 

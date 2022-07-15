@@ -1,5 +1,6 @@
 package com.fitness.app.service;
 
+import com.fitness.app.entity.UserBankDetails;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.model.UserBankDetailsModel;
 import com.fitness.app.repository.UserBankDetailsRepo;
@@ -18,24 +19,32 @@ public class UserBankDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserBankDetailsModel addBankDetails(UserBankDetailsModel bankDetails) {
+    public UserBankDetails addBankDetails(UserBankDetailsModel bankDetailsModel) {
 
-        UserClass user = userRepository.findByEmail(bankDetails.getUserEmail());
+        UserClass user = userRepository.findByEmail(bankDetailsModel.getUserEmail());
 
         if (user != null && user.getActivated()) {
-            repository.save(bankDetails);
-            return bankDetails;
+            UserBankDetails userBankDetails = new UserBankDetails();
+            userBankDetails.setUserEmail(bankDetailsModel.getUserEmail());
+            userBankDetails.setUserName(bankDetailsModel.getUserName());
+            userBankDetails.setUserBankName(bankDetailsModel.getUserBankName());
+            userBankDetails.setUserBranchName(bankDetailsModel.getUserBranchName());
+            userBankDetails.setUserAccountNumber(bankDetailsModel.getUserAccountNumber());
+            userBankDetails.setUserBankIFSC(bankDetailsModel.getUserBankIFSC());
+
+            repository.save(userBankDetails);
+            return userBankDetails;
         }
 
         return null;
     }
 
-    public List<UserBankDetailsModel> getAllDetails() {
+    public List<UserBankDetails> getAllDetails() {
 
         return repository.findAll();
     }
 
-    public UserBankDetailsModel getBankDetails(String email) {
+    public UserBankDetails getBankDetails(String email) {
 
         return repository.findByUserEmail(email);
     }

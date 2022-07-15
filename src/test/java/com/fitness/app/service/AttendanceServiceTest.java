@@ -1,11 +1,11 @@
 package com.fitness.app.service;
 
+import com.fitness.app.entity.Rating;
 import com.fitness.app.entity.UserAttendance;
 import com.fitness.app.model.MarkUserAttModel;
 import com.fitness.app.model.RatingModel;
 import com.fitness.app.repository.AttendanceRepo;
 import com.fitness.app.repository.RatingRepo;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.function.Executable;
@@ -200,9 +200,12 @@ class AttendanceServiceTest {
     void calculateRating() {
         RatingModel ratingModel = new RatingModel("1", "4", "Priyanshi", 4.2);
         List<RatingModel> ratings = new ArrayList<>();
-        ratings.add(ratingModel);
 
-        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(ratings);
+        Rating rating = new Rating("1", "4", "Priyanshi", 4.2);
+        List<Rating> ratingList = new ArrayList<>();
+        ratingList.add(rating);
+
+        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(ratingList);
 
         Double actual = attendanceService.calculateRating(ratingModel.getTarget());
         assertEquals(ratingModel.getRate(), actual);
@@ -214,7 +217,10 @@ class AttendanceServiceTest {
         RatingModel ratingModel = new RatingModel("1", "4", "Priyanshi", 4.2);
         List<RatingModel> ratings = null;
 
-        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(ratings);
+        Rating rating = new Rating("1", "4", "Priyanshi", 4.2);
+        List<Rating> ratingList = null;
+
+        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(ratingList);
 
         Double actual = attendanceService.calculateRating(ratingModel.getTarget());
         assertEquals(0.0, actual);

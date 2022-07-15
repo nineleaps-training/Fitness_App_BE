@@ -1,5 +1,6 @@
 package com.fitness.app.service;
 
+import com.fitness.app.entity.AdminPay;
 import com.fitness.app.entity.VendorPayment;
 import com.fitness.app.model.AdminPayModel;
 import com.fitness.app.repository.AdminPayRepo;
@@ -59,10 +60,13 @@ class AdminServiceTest {
         AdminPayModel adminPayModel = new AdminPayModel("1", "123456", "Priyanshi", 100,
                 "Completed", "54321", "XYZ", LocalDate.now(), LocalTime.now());
 
-        when(adminPayRepo.findByVendorAndAmountAndStatus(adminPayModel.getVendor(), adminPayModel.getAmount(), "Due")).thenReturn(adminPayModel);
+        AdminPay adminPay = new AdminPay("1", "123456", "Priyanshi", 100,
+                "Completed", "54321", "XYZ", LocalDate.now(), LocalTime.now());
 
-        AdminPayModel dataPay = adminService.getDataPay(adminPayModel);
-        assertEquals(adminPayModel, dataPay);
+        when(adminPayRepo.findByVendorAndAmountAndStatus(adminPayModel.getVendor(), adminPayModel.getAmount(), "Due")).thenReturn(adminPay);
+
+        AdminPay dataPay = adminService.getDataPay(adminPayModel);
+        assertEquals(adminPay, dataPay);
 
     }
 
@@ -71,7 +75,10 @@ class AdminServiceTest {
         AdminPayModel adminPayModel = new AdminPayModel("1", "123456", "Priyanshi", 100,
                 "Completed", "54321", "XYZ", LocalDate.now(), LocalTime.now());
 
-        when(adminPayRepo.findByVendorAndAmountAndStatus(adminPayModel.getVendor(), adminPayModel.getAmount(), "Due")).thenReturn(adminPayModel);
+        AdminPay adminPay = new AdminPay("1", "123456", "Priyanshi", 100,
+                "Completed", "54321", "XYZ", LocalDate.now(), LocalTime.now());
+
+        when(adminPayRepo.findByVendorAndAmountAndStatus(adminPayModel.getVendor(), adminPayModel.getAmount(), "Due")).thenReturn(adminPay);
 
         boolean condition = adminService.payNow(adminPayModel, order);
         assertTrue(condition);
@@ -87,8 +94,9 @@ class AdminServiceTest {
 
     @Test
     void vendorPayment() {
-        AdminPayModel adminPayModel = new AdminPayModel("P00", "123456", "Priyanshi",
-                100, "Due", "54321", "XYZ", LocalDate.now(), LocalTime.now());
+
+        AdminPay adminPay = new AdminPay("P00", "123456", "Priyanshi", 100,
+                "Due", "54321", "XYZ", LocalDate.now(), LocalTime.now());
 
         VendorPayment vendorPayment = new VendorPayment("Priyanshi", "Geet", "Fitness",
                 0, "Due", LocalDate.now(), LocalTime.now());
@@ -96,32 +104,31 @@ class AdminServiceTest {
         List<VendorPayment> vendorPayments = new ArrayList<>();
         vendorPayments.add(vendorPayment);
 
-        when(vendorPay.findByVendor(adminPayModel.getVendor())).thenReturn(vendorPayments);
-        when(adminPayRepo.findByVendorAndAmountAndStatus(adminPayModel.getVendor(), adminPayModel.getAmount(), "Due")).thenReturn(adminPayModel);
+        when(vendorPay.findByVendor(adminPay.getVendor())).thenReturn(vendorPayments);
+        when(adminPayRepo.findByVendorAndAmountAndStatus(adminPay.getVendor(), adminPay.getAmount(), "Due")).thenReturn(adminPay);
 
-        String actual = adminService.vendorPayment(adminPayModel.getVendor()).getVendor();
-        assertEquals(adminPayModel.getVendor(), actual);
+        String actual = adminService.vendorPayment(adminPay.getVendor()).getVendor();
+        assertEquals(adminPay.getVendor(), actual);
     }
 
     @Test
     void returnAdminPayModelIfAdminPayModelIsNull() {
-        AdminPayModel adminPayModel = new AdminPayModel();
-
+        AdminPay adminPay = new AdminPay();
         VendorPayment vendorPayment = new VendorPayment("Priyanshi", "Geet", "Fitness", 0,
                 "Due", LocalDate.now(), LocalTime.now());
         List<VendorPayment> vendorPayments = new ArrayList<>();
         vendorPayments.add(vendorPayment);
 
-        when(vendorPay.findByVendor(adminPayModel.getVendor())).thenReturn(vendorPayments);
-        when(adminPayRepo.findByVendorAndAmountAndStatus(adminPayModel.getVendor(), adminPayModel.getAmount(), "Due")).thenReturn(adminPayModel);
+        when(vendorPay.findByVendor(adminPay.getVendor())).thenReturn(vendorPayments);
+        when(adminPayRepo.findByVendorAndAmountAndStatus(adminPay.getVendor(), adminPay.getAmount(), "Due")).thenReturn(adminPay);
 
-        AdminPayModel actual = adminService.vendorPayment(adminPayModel.getVendor());
-        assertEquals(adminPayModel, actual);
+        AdminPay actual = adminService.vendorPayment(adminPay.getVendor());
+        assertEquals(adminPay, actual);
     }
 
     @Test
     void updatePayment() {
-        AdminPayModel adminPayModel = new AdminPayModel("1", "123456", "Priyanshi", 100,
+        AdminPay adminPay = new AdminPay("1", "123456", "Priyanshi", 100,
                 "Completed", "54321", "XYZ", LocalDate.now(), LocalTime.now());
 
         VendorPayment vendorPayment = new VendorPayment("Priyanshi", "Geet", "Fitness", 100,
@@ -129,83 +136,83 @@ class AdminServiceTest {
         List<VendorPayment> vendorPayments = new ArrayList<>();
         vendorPayments.add(vendorPayment);
 
-        when(adminPayRepo.findByOrderId(data.get("order_id"))).thenReturn(adminPayModel);
-        when(vendorPay.findByVendorAndStatus(adminPayModel.getVendor(), "Due")).thenReturn(vendorPayments);
+        when(adminPayRepo.findByOrderId(data.get("order_id"))).thenReturn(adminPay);
+        when(vendorPay.findByVendorAndStatus(adminPay.getVendor(), "Due")).thenReturn(vendorPayments);
 
-        AdminPayModel actual = adminService.updatePayment(data);
-        assertEquals(adminPayModel, actual);
+        AdminPay actual = adminService.updatePayment(data);
+        assertEquals(adminPay, actual);
     }
 
     @Test
     void returnAllAdminPayModelWhenStatusIsCompleted() {
 
-        AdminPayModel adminPayModel1 = new AdminPayModel("1", "123456", "Priyanshi", 100,
+        AdminPay adminPay1 = new AdminPay("1", "123456", "Priyanshi", 100,
                 "Completed", "54321", "XYZ", LocalDate.now(), LocalTime.now());
-        AdminPayModel adminPayModel2 = new AdminPayModel("2", "234567", "Priyanshi", 200,
+        AdminPay adminPay2 = new AdminPay("2", "234567", "Priyanshi", 200,
                 "Completed", "43210", "ABC", LocalDate.now(), LocalTime.now());
 
-        List<AdminPayModel> adminPayModelList = new ArrayList<>();
-        adminPayModelList.add(adminPayModel1);
-        adminPayModelList.add(adminPayModel2);
+        List<AdminPay> adminPayList = new ArrayList<>();
+        adminPayList.add(adminPay1);
+        adminPayList.add(adminPay2);
 
-        when(adminPayRepo.findByVendor(adminPayModel1.getVendor())).thenReturn(adminPayModelList);
-        when(adminPayRepo.findByVendor(adminPayModel2.getVendor())).thenReturn(adminPayModelList);
+        when(adminPayRepo.findByVendor(adminPay1.getVendor())).thenReturn(adminPayList);
+        when(adminPayRepo.findByVendor(adminPay2.getVendor())).thenReturn(adminPayList);
 
-        List<AdminPayModel> actual = adminService.paidHistoryVendor(adminPayModel1.getVendor());
-        assertEquals(adminPayModelList, actual);
+        List<AdminPay> actual = adminService.paidHistoryVendor(adminPay1.getVendor());
+        assertEquals(adminPayList, actual);
 
     }
 
     @Test
     void doNotReturnAdminPayModelWhenStatusIsNotCompleted() {
 
-        AdminPayModel adminPayModel1 = new AdminPayModel("1", "123456", "Priyanshi", 100,
+        AdminPay adminPay1 = new AdminPay("1", "123456", "Priyanshi", 100,
                 "Due", "54321", "XYZ", LocalDate.now(), LocalTime.now());
-        AdminPayModel adminPayModel2 = new AdminPayModel("2", "234567", "Priyanshi", 200,
+        AdminPay adminPay2 = new AdminPay("2", "234567", "Priyanshi", 200,
                 "Processing", "43210", "ABC", LocalDate.now(), LocalTime.now());
 
-        List<AdminPayModel> adminPayModelList = new ArrayList<>();
-        adminPayModelList.add(adminPayModel1);
-        adminPayModelList.add(adminPayModel2);
+        List<AdminPay> adminPayList = new ArrayList<>();
+        adminPayList.add(adminPay1);
+        adminPayList.add(adminPay2);
 
-        List<AdminPayModel> adminPayModelNull = new ArrayList<>();
+        List<AdminPay> adminPayNull = new ArrayList<>();
 
-        when(adminPayRepo.findByVendor(adminPayModel1.getVendor())).thenReturn(adminPayModelList);
-        when(adminPayRepo.findByVendor(adminPayModel2.getVendor())).thenReturn(adminPayModelList);
+        when(adminPayRepo.findByVendor(adminPay1.getVendor())).thenReturn(adminPayList);
+        when(adminPayRepo.findByVendor(adminPay2.getVendor())).thenReturn(adminPayList);
 
-        List<AdminPayModel> actual = adminService.paidHistoryVendor(adminPayModel1.getVendor());
-        assertEquals(adminPayModelNull, actual);
+        List<AdminPay> actual = adminService.paidHistoryVendor(adminPay1.getVendor());
+        assertEquals(adminPayNull, actual);
 
     }
 
     @Test
     void returnOnlyThoseAdminPayModelWhoseStatusIsCompleted() {
 
-        AdminPayModel adminPayModel1 = new AdminPayModel("1", "123456", "Priyanshi", 100,
+        AdminPay adminPay1 = new AdminPay("1", "123456", "Priyanshi", 100,
                 "Due", "54321", "XYZ", LocalDate.now(), LocalTime.now());
-        AdminPayModel adminPayModel2 = new AdminPayModel("2", "234567", "Priyanshi", 200,
+        AdminPay adminPay2 = new AdminPay("2", "234567", "Priyanshi", 200,
                 "Completed", "43210", "ABC", LocalDate.now(), LocalTime.now());
 
-        List<AdminPayModel> adminPayModelList = new ArrayList<>();
-        adminPayModelList.add(adminPayModel1);
-        adminPayModelList.add(adminPayModel2);
+        List<AdminPay> adminPayList = new ArrayList<>();
+        adminPayList.add(adminPay1);
+        adminPayList.add(adminPay2);
 
-        List<AdminPayModel> adminPayModels = new ArrayList<>();
-        adminPayModels.add(adminPayModel2);
+        List<AdminPay> adminPays = new ArrayList<>();
+        adminPays.add(adminPay2);
 
-        when(adminPayRepo.findByVendor(adminPayModel1.getVendor())).thenReturn(adminPayModelList);
-        when(adminPayRepo.findByVendor(adminPayModel2.getVendor())).thenReturn(adminPayModelList);
+        when(adminPayRepo.findByVendor(adminPay1.getVendor())).thenReturn(adminPayList);
+        when(adminPayRepo.findByVendor(adminPay2.getVendor())).thenReturn(adminPayList);
 
-        List<AdminPayModel> actual = adminService.paidHistoryVendor(adminPayModel1.getVendor());
-        assertEquals(adminPayModels, actual);
+        List<AdminPay> actual = adminService.paidHistoryVendor(adminPay1.getVendor());
+        assertEquals(adminPays, actual);
 
     }
 
     @Test
     void returnNullWhenAdminPayModelIsNull() {
-        List<AdminPayModel> adminPayModels = new ArrayList<>();
+        List<AdminPay> adminPay = new ArrayList<>();
 
-        List<AdminPayModel> actual = adminService.paidHistoryVendor("Priyanshi");
-        assertEquals(adminPayModels, actual);
+        List<AdminPay> actual = adminService.paidHistoryVendor("Priyanshi");
+        assertEquals(adminPay, actual);
     }
 }

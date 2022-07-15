@@ -1,6 +1,6 @@
 package com.fitness.app.repository;
 
-import com.fitness.app.model.VendorDetailsModel;
+import com.fitness.app.entity.VendorDetails;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Repository;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @EnableMongoRepositories
 @Repository
-public interface VendorDetailsRepository extends MongoRepository<VendorDetailsModel, String> {
+public interface VendorDetailsRepository extends MongoRepository<VendorDetails, String> {
 
-    public VendorDetailsModel findByEmail(String email);
+    public VendorDetails findByEmail(String email);
 }

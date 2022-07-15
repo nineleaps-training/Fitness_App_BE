@@ -5,6 +5,7 @@ import java.util.List;
 
 import java.util.stream.Collectors;
 
+import com.fitness.app.entity.Rating;
 import com.fitness.app.model.RatingModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -122,7 +123,7 @@ public class AttendanceService {
 
 
     public Double calculateRating(String target) {
-        List<RatingModel> ratings = ratingRepo.findByTarget(target);
+        List<Rating> ratings = ratingRepo.findByTarget(target);
 
         int n = 0;
         if (ratings != null) {
@@ -132,7 +133,7 @@ public class AttendanceService {
             return 0.0;
         } else {
             double rate = 0;
-            for (RatingModel rating : ratings) {
+            for (Rating rating : ratings) {
                 rate += rating.getRate();
             }
             rate = rate / n;

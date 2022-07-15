@@ -1,5 +1,6 @@
 package com.fitness.app.service;
 
+import com.fitness.app.entity.UserBankDetails;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.model.UserBankDetailsModel;
 import com.fitness.app.repository.UserBankDetailsRepo;
@@ -38,14 +39,17 @@ class UserBankDetailsServiceTest {
         UserBankDetailsModel userBankDetailsModel = new UserBankDetailsModel("priyanshi.chaturvedi@nineleaps.com",
                 "Priyanshi", "HDFC Bank", "Bangalore",
                 59109876543211L, "HDFC0000036");
+        UserBankDetails userBankDetails = new UserBankDetails("priyanshi.chaturvedi@nineleaps.com",
+                "Priyanshi", "HDFC Bank", "Bangalore",
+                59109876543211L, "HDFC0000036");
 
         UserClass userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
                 "9685903290", "12345", "Enthusiast", true, true, true);
 
         when(userRepository.findByEmail(userBankDetailsModel.getUserEmail())).thenReturn(userClass);
 
-        UserBankDetailsModel actual = userBankDetailsService.addBankDetails(userBankDetailsModel);
-        assertEquals(userBankDetailsModel, actual);
+        UserBankDetails actual = userBankDetailsService.addBankDetails(userBankDetailsModel);
+        assertEquals(userBankDetails, actual);
 
     }
 
@@ -60,7 +64,7 @@ class UserBankDetailsServiceTest {
 
         when(userRepository.findByEmail(userBankDetailsModel.getUserEmail())).thenReturn(userClass);
 
-        UserBankDetailsModel actual = userBankDetailsService.addBankDetails(userBankDetailsModel);
+        UserBankDetails actual = userBankDetailsService.addBankDetails(userBankDetailsModel);
         assertNull(actual);
 
     }
@@ -76,7 +80,7 @@ class UserBankDetailsServiceTest {
 
         when(userRepository.findByEmail(userBankDetailsModel.getUserEmail())).thenReturn(userClass);
 
-        UserBankDetailsModel actual = userBankDetailsService.addBankDetails(userBankDetailsModel);
+        UserBankDetails actual = userBankDetailsService.addBankDetails(userBankDetailsModel);
         assertNull(actual);
 
     }
@@ -90,7 +94,7 @@ class UserBankDetailsServiceTest {
         UserClass userClass = new UserClass();
         userClass.setActivated(true);
 
-        UserBankDetailsModel actual = userBankDetailsService.addBankDetails(userBankDetailsModel);
+        UserBankDetails actual = userBankDetailsService.addBankDetails(userBankDetailsModel);
         assertNull(actual);
 
     }
@@ -102,13 +106,17 @@ class UserBankDetailsServiceTest {
                 "Priyanshi", "HDFC Bank", "Bangalore",
                 59109876543211L, "HDFC0000036");
 
-        List<UserBankDetailsModel> userBankDetailsModels = new ArrayList<>();
-        userBankDetailsModels.add(userBankDetailsModel);
+        UserBankDetails userBankDetails = new UserBankDetails("priyanshi.chaturvedi@nineleaps.com",
+                "Priyanshi", "HDFC Bank", "Bangalore",
+                59109876543211L, "HDFC0000036");
 
-        when(repository.findAll()).thenReturn(userBankDetailsModels);
+        List<UserBankDetails> userBankDetailsList = new ArrayList<>();
+        userBankDetailsList.add(userBankDetails);
 
-        List<UserBankDetailsModel> actual = userBankDetailsService.getAllDetails();
-        assertEquals(userBankDetailsModels, actual);
+        when(repository.findAll()).thenReturn(userBankDetailsList);
+
+        List<UserBankDetails> actual = userBankDetailsService.getAllDetails();
+        assertEquals(userBankDetailsList, actual);
     }
 
     @Test
@@ -116,10 +124,13 @@ class UserBankDetailsServiceTest {
         UserBankDetailsModel userBankDetailsModel = new UserBankDetailsModel("priyanshi.chaturvedi@nineleaps.com",
                 "Priyanshi", "HDFC Bank", "Bangalore",
                 59109876543211L, "HDFC0000036");
+        UserBankDetails userBankDetails = new UserBankDetails("priyanshi.chaturvedi@nineleaps.com",
+                "Priyanshi", "HDFC Bank", "Bangalore",
+                59109876543211L, "HDFC0000036");
 
-        when(repository.findByUserEmail(userBankDetailsModel.getUserEmail())).thenReturn(userBankDetailsModel);
+        when(repository.findByUserEmail(userBankDetailsModel.getUserEmail())).thenReturn(userBankDetails);
 
-        UserBankDetailsModel actual = userBankDetailsService.getBankDetails(userBankDetailsModel.getUserEmail());
-        assertEquals(userBankDetailsModel, actual);
+        UserBankDetails actual = userBankDetailsService.getBankDetails(userBankDetailsModel.getUserEmail());
+        assertEquals(userBankDetails, actual);
     }
 }

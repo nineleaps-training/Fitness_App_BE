@@ -124,7 +124,6 @@ class GymServiceTest {
         Optional<GymAddressClass> gymAddressClassOptional = Optional.empty();
         Optional<GymTime> gymTimeOptional = Optional.empty();
         Optional<GymSubscriptionClass> gymSubscriptionClassOptional = Optional.empty();
-        GymRepresent gymRepresent1 = new GymRepresent();
 
         when(gymRepository.findById(gymClass.getId())).thenReturn(Optional.of(gymClass));
         when(gymAddressRepo.findById(gymAddressClass.getId())).thenReturn(gymAddressClassOptional);

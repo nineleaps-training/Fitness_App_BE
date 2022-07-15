@@ -1,6 +1,7 @@
 package com.fitness.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fitness.app.entity.VendorBankDetails;
 import com.fitness.app.model.VendorBankDetailsModel;
 import com.fitness.app.service.VendorBankDetailsService;
 import com.fitness.app.service.VendorDetailsService;
@@ -35,6 +36,8 @@ class VendorBankDetailsControllerTest {
     VendorBankDetailsModel vendorBankDetailsModel;
     List<VendorBankDetailsModel> vendorBankDetailsModelList = new ArrayList<>();
 
+    VendorBankDetails vendorBankDetails;
+
     @MockBean
     VendorBankDetailsService vendorBankDetailsService;
 
@@ -49,13 +52,17 @@ class VendorBankDetailsControllerTest {
                 "Priyanshi", "HDFC Bank", "Bangalore", 59109876543211L,
                 "HDFC0000036", "Monthly");
 
+        vendorBankDetails = new VendorBankDetails("priyanshi.chaturvedi@nineleaps.com",
+                "Priyanshi", "HDFC Bank", "Bangalore", 59109876543211L,
+                "HDFC0000036", "Monthly");
+
     }
 
     @Test
     void addDetails() throws Exception {
         String content = objectMapper.writeValueAsString(vendorBankDetailsModel);
 
-        when(vendorBankDetailsService.addDetails(vendorBankDetailsModel)).thenReturn(vendorBankDetailsModel);
+        when(vendorBankDetailsService.addDetails(vendorBankDetailsModel)).thenReturn(vendorBankDetails);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/vendor-bankdetails/add").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
     }
@@ -73,7 +80,7 @@ class VendorBankDetailsControllerTest {
 
     @Test
     void getBankDetails() throws Exception {
-        when(vendorBankDetailsService.getBankDetails(vendorBankDetailsModel.getEmail())).thenReturn(vendorBankDetailsModel);
+        when(vendorBankDetailsService.getBankDetails(vendorBankDetailsModel.getEmail())).thenReturn(vendorBankDetails);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/vendor-bankdetails/get/priyanshi.chaturvedi@nineleaps.com").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }

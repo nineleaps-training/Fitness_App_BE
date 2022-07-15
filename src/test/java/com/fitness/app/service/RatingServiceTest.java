@@ -1,6 +1,7 @@
 package com.fitness.app.service;
 
 import com.fitness.app.entity.GymClass;
+import com.fitness.app.entity.Rating;
 import com.fitness.app.model.RatingModel;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.RatingRepo;
@@ -38,25 +39,28 @@ class RatingServiceTest {
     @Test
     void ratingService() {
         RatingModel ratingModel = new RatingModel("1", "4", "Priyanshi", 4.2);
+        Rating rating = new Rating("1", "4", "Priyanshi", 4.2);
 
-        RatingModel actual = ratingService.ratingService(ratingModel);
-        assertEquals(ratingModel, actual);
+        Rating actual = ratingService.ratingService(ratingModel);
+        assertEquals(rating, actual);
     }
 
     @Test
     void returnRatingOfGym() {
         RatingModel ratingModel = new RatingModel("1", "4", "Priyanshi", 4.2);
-        List<RatingModel> ratings = new ArrayList<>();
-        ratings.add(ratingModel);
+
+        Rating rating = new Rating("1", "4", "Priyanshi", 4.2);
+        List<Rating> ratingList = new ArrayList<>();
+        ratingList.add(rating);
 
         List<String> workout = new ArrayList<>();
         GymClass gymClass = new GymClass("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", workout, 9685903290L, 4.2, 100);
 
         when(gymRepo.findById(ratingModel.getTarget())).thenReturn(Optional.of(gymClass));
-        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(ratings);
+        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(ratingList);
 
         Double actual = ratingService.getRating(ratingModel.getTarget());
-        assertEquals(ratingModel.getRate(), actual);
+        assertEquals(rating.getRate(), actual);
     }
 
     @Test
@@ -74,31 +78,34 @@ class RatingServiceTest {
     @Test
     void returnRatingOfGymIfOptionalIsPresent() {
         RatingModel ratingModel = new RatingModel("1", "4", "Priyanshi", 4.2);
-        List<RatingModel> ratings = new ArrayList<>();
-        ratings.add(ratingModel);
+
+        Rating rating = new Rating("1", "4", "Priyanshi", 4.2);
+        List<Rating> ratingList = new ArrayList<>();
+        ratingList.add(rating);
 
         List<String> workout = new ArrayList<>();
-        GymClass gymClass = new GymClass("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", workout, 9685903290L, 4.2, 100);
 
         Optional<GymClass> optional = Optional.of(new GymClass("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", workout, 9685903290L, 4.2, 100));
 
-        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(ratings);
+        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(ratingList);
         when(gymRepo.findById(ratingModel.getTarget())).thenReturn(optional);
 
         Double actual = ratingService.getRating(ratingModel.getTarget());
-        assertEquals(ratingModel.getRate(), actual);
+        assertEquals(rating.getRate(), actual);
     }
 
     @Test
     void returnRatingOfPerson() {
         RatingModel ratingModel = new RatingModel("1", "4", "Priyanshi", 4.2);
-        List<RatingModel> ratings = new ArrayList<>();
-        ratings.add(ratingModel);
 
-        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(ratings);
+        Rating rating = new Rating("1", "4", "Priyanshi", 4.2);
+        List<Rating> ratingList = new ArrayList<>();
+        ratingList.add(rating);
+
+        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(ratingList);
 
         Double actual = ratingService.getRatingOfPerson(ratingModel.getTarget());
-        assertEquals(ratingModel.getRate(), actual);
+        assertEquals(rating.getRate(), actual);
 
     }
 

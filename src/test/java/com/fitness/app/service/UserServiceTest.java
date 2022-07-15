@@ -25,11 +25,11 @@ class UserServiceTest {
     @MockBean
     private UserRepository userRepository;
 
-    @Autowired
-    UserService userService;
-
     @MockBean
     private Components components;
+
+    @Autowired
+    UserService userService;
 
     @Test
     void registerUserIfStatusCodeIs400() {
@@ -87,7 +87,6 @@ class UserServiceTest {
         when(userRepository.findById(userClass.getEmail())).thenReturn(userClassOptional);
 
         UserClass actual = userService.verifyUser(userClass.getEmail());
-
         assertEquals(userClass, actual);
 
     }
@@ -139,6 +138,7 @@ class UserServiceTest {
                 "9685903290", "12345", "Enthusiast", true);
 
         when(userRepository.findByEmail(userClass.getEmail())).thenReturn(userClass);
+        when(userRepository.save(userClass)).thenReturn(userClass);
 
         UserClass actual = userService.googleSignInMethod(userModel);
         assertNull(actual);
@@ -164,7 +164,6 @@ class UserServiceTest {
     void signInWithGoogleIfUserIsNullAndCustomIsTrue() {
 
         UserModel userModel = new UserModel("priyanshi.chaturvedi@nineleaps.com", "Priyanshi", "9685903290", "password", "Enthusiast", true);
-
         UserClass userClass = new UserClass();
 
         when(userRepository.findByEmail(userClass.getEmail())).thenReturn(userClass);

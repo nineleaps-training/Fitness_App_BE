@@ -76,7 +76,6 @@ class UserOrderServiceTest {
         assertNotNull(userOrder);
     }
 
-
     @Test
     void updateOrderIfSubscriptionIsMonthly() {
         List<String> workout = new ArrayList<>();
@@ -394,7 +393,6 @@ class UserOrderServiceTest {
 
     @Test
     void returnTrueIfUserOrderIsNull() {
-        List<String> services = new ArrayList<>();
         List<UserOrder> orders = new ArrayList<>();
 
         UserOrder userOrder = new UserOrder();

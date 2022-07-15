@@ -1,5 +1,6 @@
 package com.fitness.app.controller;
 
+import com.fitness.app.entity.VendorBankDetails;
 import com.fitness.app.model.VendorBankDetailsModel;
 import com.fitness.app.service.VendorBankDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,10 @@ public class VendorBankDetailsController {
     @Autowired
     private VendorBankDetailsService vendorBankDetailsService;
 
-    //Adding bank details of the vendor
+    //Adding bank bankDetailsModel of the vendor
     @PutMapping("/vendor-bankdetails/add")
-    public ResponseEntity<VendorBankDetailsModel> addDetails(@RequestBody VendorBankDetailsModel details) {
-        VendorBankDetailsModel vendorBankDetails = vendorBankDetailsService.addDetails(details);
+    public ResponseEntity<VendorBankDetails> addDetails(@RequestBody VendorBankDetailsModel bankDetailsModel) {
+        VendorBankDetails vendorBankDetails = vendorBankDetailsService.addDetails(bankDetailsModel);
 
         if (vendorBankDetails != null) {
             return new ResponseEntity<>(vendorBankDetails, HttpStatus.OK);
@@ -25,7 +26,7 @@ public class VendorBankDetailsController {
 
     //Fetching bank details of the vendor by email id
     @GetMapping("/vendor-bankdetails/get/{email}")
-    public VendorBankDetailsModel getBankDetails(@PathVariable String email) {
+    public VendorBankDetails getBankDetails(@PathVariable String email) {
         return vendorBankDetailsService.getBankDetails(email);
     }
 

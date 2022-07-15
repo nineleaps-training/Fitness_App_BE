@@ -1,6 +1,7 @@
 package com.fitness.app.controller;
 
 
+import com.fitness.app.entity.Rating;
 import com.fitness.app.model.RatingModel;
 import com.fitness.app.service.RatingService;
 
@@ -20,7 +21,7 @@ public class UserRatingController {
 
     //Rating Controller for vendor, user and gym
     @PostMapping("/rating")
-    public RatingModel rateVendor(@RequestBody RatingModel rating) {
+    public Rating rateVendor(@RequestBody RatingModel rating) {
 
         return ratingService.ratingService(rating);
     }

@@ -1,6 +1,7 @@
 package com.fitness.app.service;
 
 import com.fitness.app.entity.UserClass;
+import com.fitness.app.entity.UserDetails;
 import com.fitness.app.model.UserDetailsModel;
 import com.fitness.app.repository.UserDetailsRepository;
 import com.fitness.app.repository.UserRepository;
@@ -29,7 +30,6 @@ class UserDetailsServiceTest {
     @Autowired
     UserDetailsService userDetailsService;
 
-
     @Test
     void addUserDetailsIfUserIsNotNullAndStatusIsActivated() {
         UserDetailsModel userDetailsModel = new UserDetailsModel("priyanshi.chaturvedi@nineleaps.com", "Female",
@@ -38,10 +38,13 @@ class UserDetailsServiceTest {
         UserClass userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
                 "9685903290", "12345", "Enthusiast", true, true, true);
 
+        UserDetails userDetails = new UserDetails("priyanshi.chaturvedi@nineleaps.com", "Female",
+                "80 Feet Road, Koramangala", "Bangalore", 560034L);
+
         when(userRepository.findByEmail(userDetailsModel.getUserEmail())).thenReturn(userClass);
 
-        UserDetailsModel actual = userDetailsService.addUserDetails(userDetailsModel);
-        assertEquals(userDetailsModel, actual);
+        UserDetails actual = userDetailsService.addUserDetails(userDetailsModel);
+        assertEquals(userDetails, actual);
     }
 
     @Test
@@ -54,7 +57,7 @@ class UserDetailsServiceTest {
 
         when(userRepository.findByEmail(userDetailsModel.getUserEmail())).thenReturn(userClass);
 
-        UserDetailsModel actual = userDetailsService.addUserDetails(userDetailsModel);
+        UserDetails actual = userDetailsService.addUserDetails(userDetailsModel);
         assertNull(actual);
     }
 
@@ -68,7 +71,7 @@ class UserDetailsServiceTest {
 
         when(userRepository.findByEmail(userDetailsModel.getUserEmail())).thenReturn(userClass);
 
-        UserDetailsModel actual = userDetailsService.addUserDetails(userDetailsModel);
+        UserDetails actual = userDetailsService.addUserDetails(userDetailsModel);
         assertNull(actual);
     }
 
@@ -80,7 +83,7 @@ class UserDetailsServiceTest {
         UserClass userClass = new UserClass();
         userClass.setActivated(true);
 
-        UserDetailsModel actual = userDetailsService.addUserDetails(userDetailsModel);
+        UserDetails actual = userDetailsService.addUserDetails(userDetailsModel);
         assertNull(actual);
     }
 
@@ -89,9 +92,12 @@ class UserDetailsServiceTest {
         UserDetailsModel userDetailsModel = new UserDetailsModel("priyanshi.chaturvedi@nineleaps.com", "Female",
                 "80 Feet Road, Koramangala", "Bangalore", 560034L);
 
-        when(userDetailsRepository.findByUserEmail(userDetailsModel.getUserEmail())).thenReturn(userDetailsModel);
+        UserDetails userDetails = new UserDetails("priyanshi.chaturvedi@nineleaps.com", "Female",
+                "80 Feet Road, Koramangala", "Bangalore", 560034L);
 
-        UserDetailsModel actual = userDetailsService.getUserDetails(userDetailsModel.getUserEmail());
-        assertEquals(userDetailsModel, actual);
+        when(userDetailsRepository.findByUserEmail(userDetailsModel.getUserEmail())).thenReturn(userDetails);
+
+        UserDetails actual = userDetailsService.getUserDetails(userDetailsModel.getUserEmail());
+        assertEquals(userDetails, actual);
     }
 }

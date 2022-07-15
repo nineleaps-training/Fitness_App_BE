@@ -1,6 +1,7 @@
 package com.fitness.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fitness.app.entity.Rating;
 import com.fitness.app.model.RatingModel;
 import com.fitness.app.service.RatingService;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +33,7 @@ class UserRatingControllerTest {
     MockMvc mockMvc;
 
     RatingModel ratingModel;
+    Rating rating;
 
     @MockBean
     private RatingService ratingService;
@@ -45,13 +47,15 @@ class UserRatingControllerTest {
 
         ratingModel = new RatingModel("1", "4", "Priyanshi", 4.2);
 
+        rating = new Rating("1", "4", "Priyanshi", 4.2);
+
     }
 
     @Test
     void rateVendor() throws Exception {
         String content = objectMapper.writeValueAsString(ratingModel);
 
-        when(ratingService.ratingService(ratingModel)).thenReturn(ratingModel);
+        when(ratingService.ratingService(ratingModel)).thenReturn(rating);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/rating").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
     }

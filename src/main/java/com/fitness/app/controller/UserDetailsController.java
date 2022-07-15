@@ -1,5 +1,6 @@
 package com.fitness.app.controller;
 
+import com.fitness.app.entity.UserDetails;
 import com.fitness.app.model.UserDetailsModel;
 import com.fitness.app.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,13 @@ public class UserDetailsController {
 
     //Adding User Details
     @PutMapping("/add/user-details")
-    public ResponseEntity<ArrayList<UserDetailsModel>> addUserDetails(@RequestBody UserDetailsModel userDetails) {
-        UserDetailsModel userDetails1 = userDetailsService.addUserDetails(userDetails);
+    public ResponseEntity<ArrayList<UserDetails>> addUserDetails(@RequestBody UserDetailsModel userDetailsModel) {
+        UserDetails userDetails = userDetailsService.addUserDetails(userDetailsModel);
 
-        ArrayList<UserDetailsModel> user = new ArrayList<>();
-        user.add(userDetails1);
+        ArrayList<UserDetails> user = new ArrayList<>();
+        user.add(userDetails);
 
-        if (userDetails1 != null) {
+        if (userDetails != null) {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -31,7 +32,7 @@ public class UserDetailsController {
 
     //Fetching details of user by email
     @GetMapping("/user-details/{email}")
-    public UserDetailsModel getUserDetails(@PathVariable String email) {
+    public UserDetails getUserDetails(@PathVariable String email) {
         return userDetailsService.getUserDetails(email);
     }
 

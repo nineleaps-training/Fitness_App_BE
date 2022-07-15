@@ -1,6 +1,7 @@
 package com.fitness.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fitness.app.entity.UserDetails;
 import com.fitness.app.model.UserDetailsModel;
 import com.fitness.app.service.UserDetailsService;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,8 +33,10 @@ class UserDetailsControllerTest {
     MockMvc mockMvc;
 
     UserDetailsModel userDetailsModel;
-
     List<UserDetailsModel> userDetailsModelList = new ArrayList<>();
+    UserDetails userDetails;
+    List<UserDetails> userDetailsList = new ArrayList<>();
+
 
     @MockBean
     private UserDetailsService userDetailsService;
@@ -49,13 +52,18 @@ class UserDetailsControllerTest {
                 "80 Feet Road, Koramangala", "Bangalore", 560034L);
         userDetailsModelList.add(userDetailsModel);
 
+        userDetails = new UserDetails("priyanshi.chaturvedi@nineleaps.com", "Female",
+                "80 Feet Road, Koramangala", "Bangalore", 560034L);
+        userDetailsList.add(userDetails);
+
+
     }
 
     @Test
     void addUserDetails() throws Exception {
         String content = objectMapper.writeValueAsString(userDetailsModel);
 
-        when(userDetailsService.addUserDetails(userDetailsModel)).thenReturn(userDetailsModel);
+        when(userDetailsService.addUserDetails(userDetailsModel)).thenReturn(userDetails);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/add/user-details").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
@@ -75,7 +83,7 @@ class UserDetailsControllerTest {
 
     @Test
     void getUserDetails() throws Exception {
-        when(userDetailsService.getUserDetails(userDetailsModel.getUserEmail())).thenReturn(userDetailsModel);
+        when(userDetailsService.getUserDetails(userDetailsModel.getUserEmail())).thenReturn(userDetails);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/user-details/priyansi.chaturvedi@nineleaps.com").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 

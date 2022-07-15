@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.fitness.app.entity.AdminPay;
 import com.fitness.app.model.AdminPayModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class AdminService {
     @Autowired
     private AdminPayRepo adminPayRepo;
 
-    public AdminPayModel getDataPay(AdminPayModel payment) {
+    public AdminPay getDataPay(AdminPayModel payment) {
         return adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due");
 
     }
@@ -33,7 +34,7 @@ public class AdminService {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
 
-        AdminPayModel payVendor = adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due");
+        AdminPay payVendor = adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due");
 
         if (payVendor == null) {
             return false;
@@ -41,7 +42,7 @@ public class AdminService {
         payVendor.setOrderId(myOrder.get("id"));
         payVendor.setStatus(myOrder.get("status"));
         payVendor.setPaymentId(null);
-        payVendor.setReceipt(myOrder.get("receipt"));
+        payVendor.setReciept(myOrder.get("receipt"));
         payVendor.setDate(date);
         payVendor.setTime(time);
 
@@ -50,13 +51,13 @@ public class AdminService {
     }
 
 
-    public AdminPayModel vendorPayment(String vendor) {
+    public AdminPay vendorPayment(String vendor) {
 
         List<VendorPayment> payments = vendorPay.findByVendor(vendor);
 
         payments = payments.stream().filter(p -> p.getStatus().equals("Due")).collect(Collectors.toList());
 
-        AdminPayModel payment = new AdminPayModel();
+        AdminPay payment = new AdminPay();
 
         payment.setVendor(vendor);
         payment.setStatus("Due");
@@ -71,7 +72,7 @@ public class AdminService {
         int s = adminPayRepo.findAll().size();
         String id = "P0" + s;
         payment.setId(id);
-        AdminPayModel oldPay = adminPayRepo.findByVendorAndAmountAndStatus(vendor, amount, "Due");
+        AdminPay oldPay = adminPayRepo.findByVendorAndAmountAndStatus(vendor, amount, "Due");
         if (oldPay != null) {
             return oldPay;
         }
@@ -81,11 +82,11 @@ public class AdminService {
     }
 
 
-    public AdminPayModel updatePayment(Map<String, String> data) {
+    public AdminPay updatePayment(Map<String, String> data) {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
 
-        AdminPayModel payment = adminPayRepo.findByOrderId(data.get("order_id"));
+        AdminPay payment = adminPayRepo.findByOrderId(data.get("order_id"));
 
         payment.setPaymentId(data.get("payment_id"));
         payment.setStatus(data.get("status"));
@@ -105,9 +106,9 @@ public class AdminService {
     }
 
 
-    public List<AdminPayModel> paidHistoryVendor(String vendor) {
+    public List<AdminPay> paidHistoryVendor(String vendor) {
 
-        List<AdminPayModel> allPaid = adminPayRepo.findByVendor(vendor);
+        List<AdminPay> allPaid = adminPayRepo.findByVendor(vendor);
         return allPaid.stream().filter(p -> p.getStatus().equals("Completed")).collect(Collectors.toList());
 
     }

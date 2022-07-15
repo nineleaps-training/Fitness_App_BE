@@ -1,6 +1,7 @@
 package com.fitness.app.service;
 
 import com.fitness.app.entity.UserClass;
+import com.fitness.app.entity.VendorBankDetails;
 import com.fitness.app.model.VendorBankDetailsModel;
 import com.fitness.app.repository.BankDetailsRepository;
 import com.fitness.app.repository.UserRepository;
@@ -35,7 +36,11 @@ class VendorBankDetailsServiceTest {
     @Test
     void addBankDetailsIfUserIsNotNullAndStatusIsActivated() {
         VendorBankDetailsModel vendorBankDetailsModel = new VendorBankDetailsModel("priyanshi.chaturvedi@nineleaps.com",
-                "Priyanshi", "HDFC Bank", "Banalore", 59109876543211L,
+                "Priyanshi", "HDFC Bank", "Bangalore", 59109876543211L,
+                "HDFC0000036", "Monthly");
+
+        VendorBankDetails vendorBankDetails = new VendorBankDetails("priyanshi.chaturvedi@nineleaps.com",
+                "Priyanshi", "HDFC Bank", "Bangalore", 59109876543211L,
                 "HDFC0000036", "Monthly");
 
         UserClass userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
@@ -43,14 +48,14 @@ class VendorBankDetailsServiceTest {
 
         when(userRepository.findByEmail(vendorBankDetailsModel.getEmail())).thenReturn(userClass);
 
-        VendorBankDetailsModel actual = vendorBankDetailsService.addDetails(vendorBankDetailsModel);
-        assertEquals(vendorBankDetailsModel, actual);
+        VendorBankDetails actual = vendorBankDetailsService.addDetails(vendorBankDetailsModel);
+        assertEquals(vendorBankDetails, actual);
     }
 
     @Test
     void doNotAddBankDetailsIfUserIsNotNullAndStatusIsNotActivated() {
         VendorBankDetailsModel vendorBankDetailsModel = new VendorBankDetailsModel("priyanshi.chaturvedi@nineleaps.com",
-                "Priyanshi", "HDFC Bank", "Banalore", 59109876543211L,
+                "Priyanshi", "HDFC Bank", "Bangalore", 59109876543211L,
                 "HDFC0000036", "Monthly");
 
         UserClass userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
@@ -58,14 +63,14 @@ class VendorBankDetailsServiceTest {
 
         when(userRepository.findByEmail(vendorBankDetailsModel.getEmail())).thenReturn(userClass);
 
-        VendorBankDetailsModel actual = vendorBankDetailsService.addDetails(vendorBankDetailsModel);
+        VendorBankDetails actual = vendorBankDetailsService.addDetails(vendorBankDetailsModel);
         assertNull(actual);
     }
 
     @Test
     void doNotAddBankDetailsIfUserIsNullAndStatusIsNotActivated() {
         VendorBankDetailsModel vendorBankDetailsModel = new VendorBankDetailsModel("priyanshi.chaturvedi@nineleaps.com",
-                "Priyanshi", "HDFC Bank", "Banalore", 59109876543211L,
+                "Priyanshi", "HDFC Bank", "Bangalore", 59109876543211L,
                 "HDFC0000036", "Monthly");
 
         UserClass userClass = new UserClass();
@@ -73,48 +78,56 @@ class VendorBankDetailsServiceTest {
 
         when(userRepository.findByEmail(vendorBankDetailsModel.getEmail())).thenReturn(userClass);
 
-        VendorBankDetailsModel actual = vendorBankDetailsService.addDetails(vendorBankDetailsModel);
+        VendorBankDetails actual = vendorBankDetailsService.addDetails(vendorBankDetailsModel);
         assertNull(actual);
     }
 
     @Test
     void doNotAddBankDetailsIfUserIsNullAndStatusIsActivated() {
         VendorBankDetailsModel vendorBankDetailsModel = new VendorBankDetailsModel("priyanshi.chaturvedi@nineleaps.com",
-                "Priyanshi", "HDFC Bank", "Banalore", 59109876543211L,
+                "Priyanshi", "HDFC Bank", "Bangalore", 59109876543211L,
                 "HDFC0000036", "Monthly");
 
         UserClass userClass = new UserClass();
         userClass.setActivated(true);
 
-        VendorBankDetailsModel actual = vendorBankDetailsService.addDetails(vendorBankDetailsModel);
+        VendorBankDetails actual = vendorBankDetailsService.addDetails(vendorBankDetailsModel);
         assertNull(actual);
     }
 
     @Test
     void getDetails() {
         VendorBankDetailsModel vendorBankDetailsModel = new VendorBankDetailsModel("priyanshi.chaturvedi@nineleaps.com",
-                "Priyanshi", "HDFC Bank", "Banalore", 59109876543211L,
+                "Priyanshi", "HDFC Bank", "Bangalore", 59109876543211L,
                 "HDFC0000036", "Monthly");
 
-        List<VendorBankDetailsModel> vendorBankDetailsModels = new ArrayList<>();
-        vendorBankDetailsModels.add(vendorBankDetailsModel);
+        VendorBankDetails vendorBankDetails = new VendorBankDetails("priyanshi.chaturvedi@nineleaps.com",
+                "Priyanshi", "HDFC Bank", "Bangalore", 59109876543211L,
+                "HDFC0000036", "Monthly");
 
-        when(repository.findAll()).thenReturn(vendorBankDetailsModels);
+        List<VendorBankDetails> vendorBankDetailsList = new ArrayList<>();
+        vendorBankDetailsList.add(vendorBankDetails);
 
-        List<VendorBankDetailsModel> actual = vendorBankDetailsService.getDetails();
-        assertEquals(vendorBankDetailsModels, actual);
+        when(repository.findAll()).thenReturn(vendorBankDetailsList);
+
+        List<VendorBankDetails> actual = vendorBankDetailsService.getDetails();
+        assertEquals(vendorBankDetailsList, actual);
 
     }
 
     @Test
     void getBankDetails() {
         VendorBankDetailsModel vendorBankDetailsModel = new VendorBankDetailsModel("priyanshi.chaturvedi@nineleaps.com",
-                "Priyanshi", "HDFC Bank", "Banalore", 59109876543211L,
+                "Priyanshi", "HDFC Bank", "Bangalore", 59109876543211L,
                 "HDFC0000036", "Monthly");
 
-        when(repository.findByEmail(vendorBankDetailsModel.getEmail())).thenReturn(vendorBankDetailsModel);
+        VendorBankDetails vendorBankDetails = new VendorBankDetails("priyanshi.chaturvedi@nineleaps.com",
+                "Priyanshi", "HDFC Bank", "Bangalore", 59109876543211L,
+                "HDFC0000036", "Monthly");
 
-        VendorBankDetailsModel actual = vendorBankDetailsService.getBankDetails(vendorBankDetailsModel.getEmail());
-        assertEquals(vendorBankDetailsModel, actual);
+        when(repository.findByEmail(vendorBankDetailsModel.getEmail())).thenReturn(vendorBankDetails);
+
+        VendorBankDetails actual = vendorBankDetailsService.getBankDetails(vendorBankDetailsModel.getEmail());
+        assertEquals(vendorBankDetails, actual);
     }
 }

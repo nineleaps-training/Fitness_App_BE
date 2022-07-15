@@ -1,5 +1,6 @@
 package com.fitness.app.controller;
 
+import com.fitness.app.entity.AdminPay;
 import com.fitness.app.model.AdminPayModel;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -117,13 +118,13 @@ public class AdminController {
 
     //finding total amount to pay to the vendor.
     @GetMapping("/vendor-payment/{vendor}")
-    public AdminPayModel vendorPayment(@PathVariable String vendor) {
+    public AdminPay vendorPayment(@PathVariable String vendor) {
         return adminService.vendorPayment(vendor);
     }
 
     //demo api for payment.
     @GetMapping("/get-data-pay")
-    public AdminPayModel getDataPay(@RequestBody AdminPayModel pay) {
+    public AdminPay getDataPay(@RequestBody AdminPayModel pay) {
 
         return adminService.getDataPay(pay);
     }
@@ -153,7 +154,7 @@ public class AdminController {
 
     //updating status of payment maid to the vendor by admin.
     @PutMapping("/update-vendor-payment")
-    public AdminPayModel updatingOrder(@RequestBody Map<String, String> data) {
+    public AdminPay updatingOrder(@RequestBody Map<String, String> data) {
 
         return adminService.updatePayment(data);
     }
@@ -161,7 +162,7 @@ public class AdminController {
 
     //Finding payment history of the vendor.
     @GetMapping("/paid-history/{vendor}")
-    public List<AdminPayModel> paidHistory(@PathVariable String vendor) {
+    public List<AdminPay> paidHistory(@PathVariable String vendor) {
         return adminService.paidHistoryVendor(vendor);
     }
 

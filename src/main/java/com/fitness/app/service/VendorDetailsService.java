@@ -20,18 +20,25 @@ public class VendorDetailsService {
     private UserRepository userRepository;
 
     // register new vendor service function.
-    public VendorDetailsModel addVendorDetails(VendorDetailsModel vendorDetails) {
+    public VendorDetails addVendorDetails(VendorDetailsModel vendorDetailsModel) {
 
-        UserClass user = userRepository.findByEmail(vendorDetails.getEmail());
+        UserClass user = userRepository.findByEmail(vendorDetailsModel.getEmail());
 
         if (user != null && user.getActivated()) {
+            VendorDetails vendorDetails = new VendorDetails();
+            vendorDetails.setEmail(vendorDetailsModel.getEmail());
+            vendorDetails.setGender(vendorDetailsModel.getGender());
+            vendorDetails.setFullAddress(vendorDetailsModel.getFullAddress());
+            vendorDetails.setCity(vendorDetailsModel.getCity());
+            vendorDetails.setPostal(vendorDetailsModel.getPostal());
+
             vendordetailsRepository.save(vendorDetails);
             return vendorDetails;
         }
         return null;
     }
 
-    public VendorDetailsModel getVendorDetails(String email) {
+    public VendorDetails getVendorDetails(String email) {
 
         return vendordetailsRepository.findByEmail(email);
     }

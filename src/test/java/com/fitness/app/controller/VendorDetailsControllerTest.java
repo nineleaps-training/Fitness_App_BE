@@ -1,6 +1,7 @@
 package com.fitness.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fitness.app.entity.VendorDetails;
 import com.fitness.app.model.VendorDetailsModel;
 import com.fitness.app.service.VendorDetailsService;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,8 +32,10 @@ class VendorDetailsControllerTest {
     MockMvc mockMvc;
 
     VendorDetailsModel vendorDetailsModel;
-
     List<VendorDetailsModel> vendorDetailsModelList = new ArrayList<>();
+    VendorDetails vendorDetails;
+    List<VendorDetails> vendorDetailsList = new ArrayList<>();
+
 
     @MockBean
     VendorDetailsService vendorDetailsService;
@@ -48,13 +51,18 @@ class VendorDetailsControllerTest {
                 "Female", "80 Feet Road, Koramangala", "Bangalore", 560034L);
         vendorDetailsModelList.add(vendorDetailsModel);
 
+        vendorDetails = new VendorDetails("priyanshi.chaturvedi@nineleaps.com",
+                "Female", "80 Feet Road, Koramangala", "Bangalore", 560034L);
+        vendorDetailsList.add(vendorDetails);
+
+
     }
 
     @Test
     void addVendorDetails() throws Exception {
         String content = objectMapper.writeValueAsString(vendorDetailsModel);
 
-        when(vendorDetailsService.addVendorDetails(vendorDetailsModel)).thenReturn(vendorDetailsModel);
+        when(vendorDetailsService.addVendorDetails(vendorDetailsModel)).thenReturn(vendorDetails);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/add/vendor-details").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
     }
@@ -72,7 +80,7 @@ class VendorDetailsControllerTest {
 
     @Test
     void getVendorDetails() throws Exception {
-        when(vendorDetailsService.getVendorDetails(vendorDetailsModel.getEmail())).thenReturn(vendorDetailsModel);
+        when(vendorDetailsService.getVendorDetails(vendorDetailsModel.getEmail())).thenReturn(vendorDetails);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/vendor-details/priyanshi.chaturvedi@nineleaps.com").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.fitness.app.entity.GymClass;
+import com.fitness.app.entity.Rating;
 import com.fitness.app.model.RatingModel;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.RatingRepo;
@@ -21,22 +22,26 @@ public class RatingService {
     @Autowired
     private AddGymRepository gymRepo;
 
-    public RatingModel ratingService(RatingModel rating) {
-
+    public Rating ratingService(RatingModel ratingModel) {
+        Rating rating = new Rating();
+        rating.setRid(ratingModel.getRid());
+        rating.setRate(ratingModel.getRate());
+        rating.setRater(ratingModel.getRater());
+        rating.setTarget(ratingModel.getTarget());
         ratingRepo.save(rating);
         return rating;
 
     }
 
     public Double getRating(String target) {
-        List<RatingModel> ratings = ratingRepo.findByTarget(target);
+        List<Rating> ratings = ratingRepo.findByTarget(target);
         GymClass gym = new GymClass();
         if (ratings == null) {
             return 0.0;
         } else {
             int n = ratings.size();
             double rate = 0;
-            for (RatingModel rating : ratings) {
+            for (Rating rating : ratings) {
                 rate += rating.getRate();
             }
             rate = rate / n;
@@ -53,13 +58,13 @@ public class RatingService {
     }
 
     public Double getRatingOfPerson(String email) {
-        List<RatingModel> ratings = ratingRepo.findByTarget(email);
+        List<Rating> ratings = ratingRepo.findByTarget(email);
         if (ratings == null) {
             return 0.0;
         } else {
             int n = ratings.size();
             double rate = 0;
-            for (RatingModel rating : ratings) {
+            for (Rating rating : ratings) {
                 rate += rating.getRate();
             }
             rate = rate / n;

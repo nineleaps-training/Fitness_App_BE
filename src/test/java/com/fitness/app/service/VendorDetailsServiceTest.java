@@ -1,6 +1,7 @@
 package com.fitness.app.service;
 
 import com.fitness.app.entity.UserClass;
+import com.fitness.app.entity.VendorDetails;
 import com.fitness.app.model.VendorDetailsModel;
 import com.fitness.app.repository.UserRepository;
 import com.fitness.app.repository.VendorDetailsRepository;
@@ -34,12 +35,16 @@ class VendorDetailsServiceTest {
         VendorDetailsModel vendorDetailsModel = new VendorDetailsModel("priyanshi.chaturvedi@nineleaps.com",
                 "Female", "80 Feet Road, Koramangala", "Bangalore", 560034L);
 
+        VendorDetails vendorDetails = new VendorDetails("priyanshi.chaturvedi@nineleaps.com",
+                "Female", "80 Feet Road, Koramangala", "Bangalore", 560034L);
+
         UserClass userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
                 "9685903290", "12345", "Enthusiast", true, true, true);
+
         when(userRepository.findByEmail(vendorDetailsModel.getEmail())).thenReturn(userClass);
 
-        VendorDetailsModel actual = vendorDetailsService.addVendorDetails(vendorDetailsModel);
-        assertEquals(vendorDetailsModel, actual);
+        VendorDetails actual = vendorDetailsService.addVendorDetails(vendorDetailsModel);
+        assertEquals(vendorDetails, actual);
     }
 
     @Test
@@ -51,7 +56,7 @@ class VendorDetailsServiceTest {
                 "9685903290", "12345", "Enthusiast", false, true, true);
         when(userRepository.findByEmail(vendorDetailsModel.getEmail())).thenReturn(userClass);
 
-        VendorDetailsModel actual = vendorDetailsService.addVendorDetails(vendorDetailsModel);
+        VendorDetails actual = vendorDetailsService.addVendorDetails(vendorDetailsModel);
         assertNull(actual);
     }
 
@@ -65,7 +70,7 @@ class VendorDetailsServiceTest {
 
         when(userRepository.findByEmail(vendorDetailsModel.getEmail())).thenReturn(userClass);
 
-        VendorDetailsModel actual = vendorDetailsService.addVendorDetails(vendorDetailsModel);
+        VendorDetails actual = vendorDetailsService.addVendorDetails(vendorDetailsModel);
         assertNull(actual);
 
     }
@@ -78,7 +83,7 @@ class VendorDetailsServiceTest {
         UserClass userClass = new UserClass();
         userClass.setActivated(true);
 
-        VendorDetailsModel actual = vendorDetailsService.addVendorDetails(vendorDetailsModel);
+        VendorDetails actual = vendorDetailsService.addVendorDetails(vendorDetailsModel);
         assertNull(actual);
 
     }
@@ -87,10 +92,12 @@ class VendorDetailsServiceTest {
     void getVendorDetails() {
         VendorDetailsModel vendorDetailsModel = new VendorDetailsModel("priyanshi.chaturvedi@nineleaps.com",
                 "Female", "80 Feet Road, Koramangala", "Bangalore", 560034L);
+        VendorDetails vendorDetails = new VendorDetails("priyanshi.chaturvedi@nineleaps.com",
+                "Female", "80 Feet Road, Koramangala", "Bangalore", 560034L);
 
-        when(vendordetailsRepository.findByEmail(vendorDetailsModel.getEmail())).thenReturn(vendorDetailsModel);
+        when(vendordetailsRepository.findByEmail(vendorDetailsModel.getEmail())).thenReturn(vendorDetails);
 
-        VendorDetailsModel actual = vendorDetailsService.getVendorDetails(vendorDetailsModel.getEmail());
-        assertEquals(vendorDetailsModel, actual);
+        VendorDetails actual = vendorDetailsService.getVendorDetails(vendorDetailsModel.getEmail());
+        assertEquals(vendorDetails, actual);
     }
 }
