@@ -1,4 +1,68 @@
-2022-07-09 [main] WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer - 
+2022-07-14 [restartedMain] INFO  c.fitness.app.FitnessAppApplication - Starting FitnessAppApplication using Java 17.0.3 on nineleaps-ThinkPad-E490 with PID 54541 (/home/nineleaps/NineLeaps/Fitness_App_BE/target/classes started by nineleaps in /home/nineleaps/NineLeaps/Fitness_App_BE)
+2022-07-14 [restartedMain] INFO  c.fitness.app.FitnessAppApplication - No active profile set, falling back to default profiles: default
+2022-07-14 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-07-14 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-07-14 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2022-07-14 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 97 ms. Found 17 MongoDB repository interfaces.
+2022-07-14 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2022-07-14 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2022-07-14 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-07-14 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2022-07-14 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1956 ms
+2022-07-14 [restartedMain] INFO  org.mongodb.driver.cluster - Cluster created with settings {hosts=[127.0.0.1:27017], srvHost=cluster0.whpjz.mongodb.net, mode=MULTIPLE, requiredClusterType=REPLICA_SET, serverSelectionTimeout='30000 ms', requiredReplicaSetName='atlas-1y9z2o-shard-0'}
+2022-07-14 [cluster-ClusterId{value='62cfae23bd475a4b4525e802', description='null'}-srv-cluster0.whpjz.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server cluster0-shard-00-02.whpjz.mongodb.net:27017 to client view of cluster
+2022-07-14 [cluster-ClusterId{value='62cfae23bd475a4b4525e802', description='null'}-srv-cluster0.whpjz.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server cluster0-shard-00-01.whpjz.mongodb.net:27017 to client view of cluster
+2022-07-14 [cluster-ClusterId{value='62cfae23bd475a4b4525e802', description='null'}-srv-cluster0.whpjz.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server cluster0-shard-00-00.whpjz.mongodb.net:27017 to client view of cluster
+2022-07-14 [cluster-rtt-ClusterId{value='62cfae23bd475a4b4525e802', description='null'}-cluster0-shard-00-02.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.connection - Opened connection [connectionId{localValue:1, serverValue:137208}] to cluster0-shard-00-02.whpjz.mongodb.net:27017
+2022-07-14 [cluster-ClusterId{value='62cfae23bd475a4b4525e802', description='null'}-cluster0-shard-00-00.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.connection - Opened connection [connectionId{localValue:5, serverValue:134606}] to cluster0-shard-00-00.whpjz.mongodb.net:27017
+2022-07-14 [cluster-ClusterId{value='62cfae23bd475a4b4525e802', description='null'}-cluster0-shard-00-02.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.connection - Opened connection [connectionId{localValue:2, serverValue:137213}] to cluster0-shard-00-02.whpjz.mongodb.net:27017
+2022-07-14 [cluster-rtt-ClusterId{value='62cfae23bd475a4b4525e802', description='null'}-cluster0-shard-00-01.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.connection - Opened connection [connectionId{localValue:4, serverValue:133605}] to cluster0-shard-00-01.whpjz.mongodb.net:27017
+2022-07-14 [cluster-ClusterId{value='62cfae23bd475a4b4525e802', description='null'}-cluster0-shard-00-00.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=cluster0-shard-00-00.whpjz.mongodb.net:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=13, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=236991696, setName='atlas-1y9z2o-shard-0', canonicalAddress=cluster0-shard-00-00.whpjz.mongodb.net:27017, hosts=[cluster0-shard-00-02.whpjz.mongodb.net:27017, cluster0-shard-00-01.whpjz.mongodb.net:27017, cluster0-shard-00-00.whpjz.mongodb.net:27017], passives=[], arbiters=[], primary='cluster0-shard-00-02.whpjz.mongodb.net:27017', tagSet=TagSet{[Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=7, topologyVersion=TopologyVersion{processId=62cd94a1620ca6e93c2345ef, counter=4}, lastWriteDate=Thu Jul 14 11:18:20 IST 2022, lastUpdateTimeNanos=13732394259413}
+2022-07-14 [cluster-ClusterId{value='62cfae23bd475a4b4525e802', description='null'}-cluster0-shard-00-02.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=cluster0-shard-00-02.whpjz.mongodb.net:27017, type=REPLICA_SET_PRIMARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=13, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=237073828, setName='atlas-1y9z2o-shard-0', canonicalAddress=cluster0-shard-00-02.whpjz.mongodb.net:27017, hosts=[cluster0-shard-00-02.whpjz.mongodb.net:27017, cluster0-shard-00-01.whpjz.mongodb.net:27017, cluster0-shard-00-00.whpjz.mongodb.net:27017], passives=[], arbiters=[], primary='cluster0-shard-00-02.whpjz.mongodb.net:27017', tagSet=TagSet{[Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=7fffffff0000000000000119, setVersion=7, topologyVersion=TopologyVersion{processId=62cd95d0408d52833497cf6b, counter=6}, lastWriteDate=Thu Jul 14 11:18:20 IST 2022, lastUpdateTimeNanos=13732394336275}
+2022-07-14 [cluster-ClusterId{value='62cfae23bd475a4b4525e802', description='null'}-cluster0-shard-00-02.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Setting max election id to 7fffffff0000000000000119 from replica set primary cluster0-shard-00-02.whpjz.mongodb.net:27017
+2022-07-14 [cluster-ClusterId{value='62cfae23bd475a4b4525e802', description='null'}-cluster0-shard-00-02.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Setting max set version to 7 from replica set primary cluster0-shard-00-02.whpjz.mongodb.net:27017
+2022-07-14 [cluster-ClusterId{value='62cfae23bd475a4b4525e802', description='null'}-cluster0-shard-00-02.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Discovered replica set primary cluster0-shard-00-02.whpjz.mongodb.net:27017
+2022-07-14 [cluster-rtt-ClusterId{value='62cfae23bd475a4b4525e802', description='null'}-cluster0-shard-00-00.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.connection - Opened connection [connectionId{localValue:6, serverValue:134606}] to cluster0-shard-00-00.whpjz.mongodb.net:27017
+2022-07-14 [cluster-ClusterId{value='62cfae23bd475a4b4525e802', description='null'}-cluster0-shard-00-01.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.connection - Opened connection [connectionId{localValue:3, serverValue:133605}] to cluster0-shard-00-01.whpjz.mongodb.net:27017
+2022-07-14 [cluster-ClusterId{value='62cfae23bd475a4b4525e802', description='null'}-cluster0-shard-00-01.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=cluster0-shard-00-01.whpjz.mongodb.net:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=13, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=221631373, setName='atlas-1y9z2o-shard-0', canonicalAddress=cluster0-shard-00-01.whpjz.mongodb.net:27017, hosts=[cluster0-shard-00-02.whpjz.mongodb.net:27017, cluster0-shard-00-01.whpjz.mongodb.net:27017, cluster0-shard-00-00.whpjz.mongodb.net:27017], passives=[], arbiters=[], primary='cluster0-shard-00-02.whpjz.mongodb.net:27017', tagSet=TagSet{[Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=7, topologyVersion=TopologyVersion{processId=62cd970869f60d7106e7d969, counter=3}, lastWriteDate=Thu Jul 14 11:18:20 IST 2022, lastUpdateTimeNanos=13732406493806}
+2022-07-14 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2022-07-14 [restartedMain] INFO  com.fitness.app.componets.Components - There is error in Algorithm to generate random set of integers.
+2022-07-14 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6ffcb3b9, org.springframework.security.web.context.SecurityContextPersistenceFilter@535f1af9, org.springframework.security.web.header.HeaderWriterFilter@3a30eba0, org.springframework.security.web.authentication.logout.LogoutFilter@5ae59b1f, com.fitness.app.config.JwtAuthenticationFilter@18a5d7dd, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@108bcd84, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@239a63f0, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@c34534d, org.springframework.security.web.session.SessionManagementFilter@7f397743, org.springframework.security.web.access.ExceptionTranslationFilter@8649945, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@395a1424]
+2022-07-14 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2022-07-14 [restartedMain] INFO  c.fitness.app.FitnessAppApplication - Started FitnessAppApplication in 5.039 seconds (JVM running for 5.587)
+2022-07-14 [restartedMain] INFO  c.fitness.app.FitnessAppApplication - Starting FitnessAppApplication using Java 17.0.3 on nineleaps-ThinkPad-E490 with PID 55067 (/home/nineleaps/NineLeaps/Fitness_App_BE/target/classes started by nineleaps in /home/nineleaps/NineLeaps/Fitness_App_BE)
+2022-07-14 [restartedMain] INFO  c.fitness.app.FitnessAppApplication - No active profile set, falling back to default profiles: default
+2022-07-14 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-07-14 [restartedMain] INFO  o.s.b.d.e.DevToolsPropertyDefaultsPostProcessor - For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-07-14 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2022-07-14 [restartedMain] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 86 ms. Found 17 MongoDB repository interfaces.
+2022-07-14 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+2022-07-14 [restartedMain] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2022-07-14 [restartedMain] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.56]
+2022-07-14 [restartedMain] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2022-07-14 [restartedMain] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1684 ms
+2022-07-14 [restartedMain] INFO  org.mongodb.driver.cluster - Cluster created with settings {hosts=[127.0.0.1:27017], srvHost=cluster0.whpjz.mongodb.net, mode=MULTIPLE, requiredClusterType=REPLICA_SET, serverSelectionTimeout='30000 ms', requiredReplicaSetName='atlas-1y9z2o-shard-0'}
+2022-07-14 [cluster-ClusterId{value='62cfae91dab50a0f06431013', description='null'}-srv-cluster0.whpjz.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server cluster0-shard-00-02.whpjz.mongodb.net:27017 to client view of cluster
+2022-07-14 [cluster-ClusterId{value='62cfae91dab50a0f06431013', description='null'}-srv-cluster0.whpjz.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server cluster0-shard-00-01.whpjz.mongodb.net:27017 to client view of cluster
+2022-07-14 [cluster-ClusterId{value='62cfae91dab50a0f06431013', description='null'}-srv-cluster0.whpjz.mongodb.net] INFO  org.mongodb.driver.cluster - Adding discovered server cluster0-shard-00-00.whpjz.mongodb.net:27017 to client view of cluster
+2022-07-14 [restartedMain] INFO  o.s.b.d.a.OptionalLiveReloadServer - LiveReload server is running on port 35729
+2022-07-14 [restartedMain] INFO  com.fitness.app.componets.Components - There is error in Algorithm to generate random set of integers.
+2022-07-14 [cluster-rtt-ClusterId{value='62cfae91dab50a0f06431013', description='null'}-cluster0-shard-00-02.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.connection - Opened connection [connectionId{localValue:6, serverValue:137209}] to cluster0-shard-00-02.whpjz.mongodb.net:27017
+2022-07-14 [cluster-ClusterId{value='62cfae91dab50a0f06431013', description='null'}-cluster0-shard-00-02.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.connection - Opened connection [connectionId{localValue:1, serverValue:137288}] to cluster0-shard-00-02.whpjz.mongodb.net:27017
+2022-07-14 [cluster-ClusterId{value='62cfae91dab50a0f06431013', description='null'}-cluster0-shard-00-02.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=cluster0-shard-00-02.whpjz.mongodb.net:27017, type=REPLICA_SET_PRIMARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=13, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=299318026, setName='atlas-1y9z2o-shard-0', canonicalAddress=cluster0-shard-00-02.whpjz.mongodb.net:27017, hosts=[cluster0-shard-00-02.whpjz.mongodb.net:27017, cluster0-shard-00-01.whpjz.mongodb.net:27017, cluster0-shard-00-00.whpjz.mongodb.net:27017], passives=[], arbiters=[], primary='cluster0-shard-00-02.whpjz.mongodb.net:27017', tagSet=TagSet{[Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=7fffffff0000000000000119, setVersion=7, topologyVersion=TopologyVersion{processId=62cd95d0408d52833497cf6b, counter=6}, lastWriteDate=Thu Jul 14 11:20:10 IST 2022, lastUpdateTimeNanos=13842292524413}
+2022-07-14 [cluster-rtt-ClusterId{value='62cfae91dab50a0f06431013', description='null'}-cluster0-shard-00-01.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.connection - Opened connection [connectionId{localValue:4, serverValue:133712}] to cluster0-shard-00-01.whpjz.mongodb.net:27017
+2022-07-14 [cluster-rtt-ClusterId{value='62cfae91dab50a0f06431013', description='null'}-cluster0-shard-00-00.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.connection - Opened connection [connectionId{localValue:3, serverValue:134714}] to cluster0-shard-00-00.whpjz.mongodb.net:27017
+2022-07-14 [cluster-ClusterId{value='62cfae91dab50a0f06431013', description='null'}-cluster0-shard-00-01.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.connection - Opened connection [connectionId{localValue:2, serverValue:133712}] to cluster0-shard-00-01.whpjz.mongodb.net:27017
+2022-07-14 [cluster-ClusterId{value='62cfae91dab50a0f06431013', description='null'}-cluster0-shard-00-01.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=cluster0-shard-00-01.whpjz.mongodb.net:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=13, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=303435607, setName='atlas-1y9z2o-shard-0', canonicalAddress=cluster0-shard-00-01.whpjz.mongodb.net:27017, hosts=[cluster0-shard-00-02.whpjz.mongodb.net:27017, cluster0-shard-00-01.whpjz.mongodb.net:27017, cluster0-shard-00-00.whpjz.mongodb.net:27017], passives=[], arbiters=[], primary='cluster0-shard-00-02.whpjz.mongodb.net:27017', tagSet=TagSet{[Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=7, topologyVersion=TopologyVersion{processId=62cd970869f60d7106e7d969, counter=3}, lastWriteDate=Thu Jul 14 11:20:10 IST 2022, lastUpdateTimeNanos=13842296643191}
+2022-07-14 [cluster-ClusterId{value='62cfae91dab50a0f06431013', description='null'}-cluster0-shard-00-00.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.connection - Opened connection [connectionId{localValue:5, serverValue:134714}] to cluster0-shard-00-00.whpjz.mongodb.net:27017
+2022-07-14 [cluster-ClusterId{value='62cfae91dab50a0f06431013', description='null'}-cluster0-shard-00-00.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=cluster0-shard-00-00.whpjz.mongodb.net:27017, type=REPLICA_SET_SECONDARY, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=13, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=310873698, setName='atlas-1y9z2o-shard-0', canonicalAddress=cluster0-shard-00-00.whpjz.mongodb.net:27017, hosts=[cluster0-shard-00-02.whpjz.mongodb.net:27017, cluster0-shard-00-01.whpjz.mongodb.net:27017, cluster0-shard-00-00.whpjz.mongodb.net:27017], passives=[], arbiters=[], primary='cluster0-shard-00-02.whpjz.mongodb.net:27017', tagSet=TagSet{[Tag{name='nodeType', value='ELECTABLE'}, Tag{name='provider', value='AWS'}, Tag{name='region', value='AP_SOUTH_1'}, Tag{name='workloadType', value='OPERATIONAL'}]}, electionId=null, setVersion=7, topologyVersion=TopologyVersion{processId=62cd94a1620ca6e93c2345ef, counter=4}, lastWriteDate=Thu Jul 14 11:20:10 IST 2022, lastUpdateTimeNanos=13842304079516}
+2022-07-14 [cluster-ClusterId{value='62cfae91dab50a0f06431013', description='null'}-cluster0-shard-00-02.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Setting max election id to 7fffffff0000000000000119 from replica set primary cluster0-shard-00-02.whpjz.mongodb.net:27017
+2022-07-14 [cluster-ClusterId{value='62cfae91dab50a0f06431013', description='null'}-cluster0-shard-00-02.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Setting max set version to 7 from replica set primary cluster0-shard-00-02.whpjz.mongodb.net:27017
+2022-07-14 [cluster-ClusterId{value='62cfae91dab50a0f06431013', description='null'}-cluster0-shard-00-02.whpjz.mongodb.net:27017] INFO  org.mongodb.driver.cluster - Discovered replica set primary cluster0-shard-00-02.whpjz.mongodb.net:27017
+2022-07-14 [restartedMain] INFO  o.s.s.web.DefaultSecurityFilterChain - Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7b4ab219, org.springframework.security.web.context.SecurityContextPersistenceFilter@7d8829ff, org.springframework.security.web.header.HeaderWriterFilter@6b39b023, org.springframework.security.web.authentication.logout.LogoutFilter@212e6d52, com.fitness.app.config.JwtAuthenticationFilter@2fa9bc0f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@298d8bf0, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@19d739f0, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@26a89528, org.springframework.security.web.session.SessionManagementFilter@13107644, org.springframework.security.web.access.ExceptionTranslationFilter@2411eae, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@49f653ae]
+2022-07-14 [restartedMain] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path ''
+2022-07-14 [restartedMain] INFO  c.fitness.app.FitnessAppApplication - Started FitnessAppApplication in 5.096 seconds (JVM running for 5.796)
+2022-07-14 [main] WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer - 
 
 Found multiple occurrences of org.json.JSONObject on the class path:
 
@@ -7,63 +71,63 @@ Found multiple occurrences of org.json.JSONObject on the class path:
 
 You may wish to exclude one of them to ensure predictable runtime behavior
 
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - Starting FitnessAppApplicationTests using Java 11.0.15 on nineleaps-ThinkPad-E490 with PID 11867 (started by nineleaps in /home/nineleaps/NineLeaps/Fitness_App_BE)
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - No active profile set, falling back to default profiles: default
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - Started FitnessAppApplicationTests in 0.776 seconds (JVM running for 2.51)
-2022-07-09 [main] ERROR com.fitness.app.service.GymService - Data not found for Fitness Center: 
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public com.fitness.app.entity.AdminPay com.fitness.app.controller.AdminController.getDatapay(com.fitness.app.model.AdminPayModel)]
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer - 
+2022-07-14 [main] INFO  c.r.app.FitnessAppApplicationTests - Starting FitnessAppApplicationTests using Java 17.0.3 on nineleaps-ThinkPad-E490 with PID 55259 (started by nineleaps in /home/nineleaps/NineLeaps/Fitness_App_BE)
+2022-07-14 [main] INFO  c.r.app.FitnessAppApplicationTests - No active profile set, falling back to default profiles: default
+2022-07-14 [main] INFO  c.r.app.FitnessAppApplicationTests - Started FitnessAppApplicationTests in 1.093 seconds (JVM running for 3.055)
+2022-07-14 [main] ERROR com.fitness.app.service.GymService - Data not found for Fitness Center: 
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public com.fitness.app.entity.AdminPay com.fitness.app.controller.AdminController.getDatapay(com.fitness.app.model.AdminPayModel)]
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer - 
 
 Found multiple occurrences of org.json.JSONObject on the class path:
 
@@ -72,63 +136,63 @@ Found multiple occurrences of org.json.JSONObject on the class path:
 
 You may wish to exclude one of them to ensure predictable runtime behavior
 
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - Starting FitnessAppApplicationTests using Java 11.0.15 on nineleaps-ThinkPad-E490 with PID 12865 (started by nineleaps in /home/nineleaps/NineLeaps/Fitness_App_BE)
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - No active profile set, falling back to default profiles: default
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - Started FitnessAppApplicationTests in 0.901 seconds (JVM running for 2.621)
-2022-07-09 [main] ERROR com.fitness.app.service.GymService - Data not found for Fitness Center: 
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public com.fitness.app.entity.AdminPay com.fitness.app.controller.AdminController.getDatapay(com.fitness.app.model.AdminPayModel)]
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2022-07-09 [main] WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer - 
+2022-07-14 [main] INFO  c.r.app.FitnessAppApplicationTests - Starting FitnessAppApplicationTests using Java 17.0.3 on nineleaps-ThinkPad-E490 with PID 55819 (started by nineleaps in /home/nineleaps/NineLeaps/Fitness_App_BE)
+2022-07-14 [main] INFO  c.r.app.FitnessAppApplicationTests - No active profile set, falling back to default profiles: default
+2022-07-14 [main] INFO  c.r.app.FitnessAppApplicationTests - Started FitnessAppApplicationTests in 0.984 seconds (JVM running for 2.713)
+2022-07-14 [main] ERROR com.fitness.app.service.GymService - Data not found for Fitness Center: 
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public com.fitness.app.entity.AdminPay com.fitness.app.controller.AdminController.getDatapay(com.fitness.app.model.AdminPayModel)]
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2022-07-14 [main] WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer - 
 
 Found multiple occurrences of org.json.JSONObject on the class path:
 
@@ -137,254 +201,59 @@ Found multiple occurrences of org.json.JSONObject on the class path:
 
 You may wish to exclude one of them to ensure predictable runtime behavior
 
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - Starting FitnessAppApplicationTests using Java 11.0.15 on nineleaps-ThinkPad-E490 with PID 15245 (started by nineleaps in /home/nineleaps/NineLeaps/Fitness_App_BE)
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - No active profile set, falling back to default profiles: default
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - Started FitnessAppApplicationTests in 1.149 seconds (JVM running for 2.951)
-2022-07-09 [main] ERROR com.fitness.app.service.GymService - Data not found for Fitness Center: 
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public com.fitness.app.entity.AdminPay com.fitness.app.controller.AdminController.getDatapay(com.fitness.app.model.AdminPayModel)]
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer - 
-
-Found multiple occurrences of org.json.JSONObject on the class path:
-
-	jar:file:/home/nineleaps/.m2/repository/org/json/json/20180130/json-20180130.jar!/org/json/JSONObject.class
-	jar:file:/home/nineleaps/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
-
-You may wish to exclude one of them to ensure predictable runtime behavior
-
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - Starting FitnessAppApplicationTests using Java 11.0.15 on nineleaps-ThinkPad-E490 with PID 16043 (started by nineleaps in /home/nineleaps/NineLeaps/Fitness_App_BE)
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - No active profile set, falling back to default profiles: default
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - Started FitnessAppApplicationTests in 1.144 seconds (JVM running for 3.24)
-2022-07-09 [main] ERROR com.fitness.app.service.GymService - Data not found for Fitness Center: 
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public com.fitness.app.entity.AdminPay com.fitness.app.controller.AdminController.getDatapay(com.fitness.app.model.AdminPayModel)]
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer - 
-
-Found multiple occurrences of org.json.JSONObject on the class path:
-
-	jar:file:/home/nineleaps/.m2/repository/org/json/json/20180130/json-20180130.jar!/org/json/JSONObject.class
-	jar:file:/home/nineleaps/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
-
-You may wish to exclude one of them to ensure predictable runtime behavior
-
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - Starting FitnessAppApplicationTests using Java 11.0.15 on nineleaps-ThinkPad-E490 with PID 24362 (started by nineleaps in /home/nineleaps/NineLeaps/Fitness_App_BE)
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - No active profile set, falling back to default profiles: default
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - Started FitnessAppApplicationTests in 0.661 seconds (JVM running for 2.099)
-2022-07-09 [main] ERROR com.fitness.app.service.GymService - Data not found for Fitness Center: 
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public com.fitness.app.entity.AdminPay com.fitness.app.controller.AdminController.getDatapay(com.fitness.app.model.AdminPayModel)]
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] WARN  o.s.b.t.j.DuplicateJsonObjectContextCustomizerFactory$DuplicateJsonObjectContextCustomizer - 
-
-Found multiple occurrences of org.json.JSONObject on the class path:
-
-	jar:file:/home/nineleaps/.m2/repository/org/json/json/20180130/json-20180130.jar!/org/json/JSONObject.class
-	jar:file:/home/nineleaps/.m2/repository/com/vaadin/external/google/android-json/0.0.20131108.vaadin1/android-json-0.0.20131108.vaadin1.jar!/org/json/JSONObject.class
-
-You may wish to exclude one of them to ensure predictable runtime behavior
-
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - Starting FitnessAppApplicationTests using Java 11.0.15 on nineleaps-ThinkPad-E490 with PID 26996 (started by nineleaps in /home/nineleaps/NineLeaps/Fitness_App_BE)
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - No active profile set, falling back to default profiles: default
-2022-07-09 [main] INFO  c.r.app.FitnessAppApplicationTests - Started FitnessAppApplicationTests in 0.706 seconds (JVM running for 2.121)
-2022-07-09 [main] ERROR com.fitness.app.service.GymService - Data not found for Fitness Center: 
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public com.fitness.app.entity.AdminPay com.fitness.app.controller.AdminController.getDatapay(com.fitness.app.model.AdminPayModel)]
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-09 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
-2022-07-09 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  c.r.app.FitnessAppApplicationTests - Starting FitnessAppApplicationTests using Java 17.0.3 on nineleaps-ThinkPad-E490 with PID 22945 (started by nineleaps in /home/nineleaps/NineLeaps/Fitness_App_BE)
+2022-07-14 [main] INFO  c.r.app.FitnessAppApplicationTests - No active profile set, falling back to default profiles: default
+2022-07-14 [main] INFO  c.r.app.FitnessAppApplicationTests - Started FitnessAppApplicationTests in 1.055 seconds (JVM running for 2.726)
+2022-07-14 [main] ERROR com.fitness.app.service.GymService - Data not found for Fitness Center: 
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] WARN  o.s.w.s.m.s.DefaultHandlerExceptionResolver - Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: public com.fitness.app.entity.AdminPay com.fitness.app.controller.AdminController.getDatapay(com.fitness.app.model.AdminPayModel)]
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
+2022-07-14 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
+2022-07-14 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 1 ms

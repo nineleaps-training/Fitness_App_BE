@@ -78,19 +78,6 @@ class RatingServiceTest {
 
    }
 
-    @Test
-    @DisplayName("For null gym data optional:")
-    void getRatingNullGymData()
-    {
-        List<Rating> ratingList=new ArrayList<>(Arrays.asList(RATING_USER));
-        Optional<GymClass>gymClassOptional=Optional.empty();
-        Mockito.when(ratingRepo.findByTarget(RATING_USER.getTarget())).thenReturn(ratingList);
-        Mockito.when(gymRepository.findById(RATING_USER.getTarget())).thenReturn(gymClassOptional);
-        Double returnRate=ratingService.getRating(RATING_USER.getTarget());
-        Assertions.assertNotNull(returnRate);
-        Assertions.assertEquals(0.0, returnRate.floatValue());
-
-    }
 
    @Test
    @DisplayName("Rating getting test for null rating list:")
