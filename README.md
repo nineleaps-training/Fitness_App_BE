@@ -11,9 +11,9 @@ The name of our app is Fitness App which is a platform for vendors of various ci
 
 ## Features ##
 
-*Sign up or Register yourself as a user if you want to book any gym or sign up as a vendor if you have single or multiple gyms acquired.
+* Sign up or Register yourself as a user if you want to book any gym or sign up as a vendor if you have single or multiple gyms acquired.
 
-Create your own personalized profile for both user and vendor where you can fill in your details.
+* Create your own personalized profile for both user and vendor where you can fill in your details.
 
 Register your gyms and their prices of subscriptions and discounts with the activities that can be provided to the consumer.
 
