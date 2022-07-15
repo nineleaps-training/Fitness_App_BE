@@ -61,121 +61,217 @@ Spring security for OAuth and JWT Authentication
 
 **Folder Structure for Backend**
 
-├── src                                                                                                                                             
-│   ├── main                                                                                      
-│   │   ├── java                                                                            
-│   │   │   └── com                                                                                               
-│   │   │       └── fitness                                                                                                     
-│   │   │       └── app                                                                                                     
-│   │   │           ├── FitnessAppApplication.java                                                                            
-│   │   │           ├── auth                                                                                        
-│   │   │           │   ├── Authenticate.java                                                                                   
-│   │   │           │   ├── AuthToken.java                                                                                                          
-│   │   │           ├── components                                                                                                    
-│   │   │           │   ├── Components.java                                                                                                 
-│   │   │           ├── config                                                                    
-│   │   │           │   ├── JwtAuthenticationEntryPoint.java                                                                  
-│   │   │           │   ├── JwtAuthenticationFilter.java                                                                              
-│   │   │           │   ├── JwtConfig.java                                                                                                        
-│   │   │           │   ├── JwtUtils.java                                                                                             
-│   │   │           │   ├── WebConfiguration.java                                                                                                       
-│   │   │           │   ├── WebCorsConfiguration.java                                                                     
-│   │   │           ├── controller                                                                        
-│   │   │           │   ├── AdminController.java                                                                              
-│   │   │           │   ├──PhotoController.java            
-│   │   │           │   ├──UserForgetPasswordController.java                                                                       
-│   │   │           │   ├──VendorDetailsController.java                                                                   
-│   │   │           │   ├── AttendanceConntroller.java                                                                          
-│   │   │           │   ├──UserBankDetailsController.java                                                                                     
-│   │   │           │   ├──UserOrderController.java                                                                                   
-│   │   │           │   ├──VendorPayController.java                                                                           
-│   │   │           │   ├── GoogleController.java                                                                                       
-│   │   │           │   ├──UserController.java                                                                                            
-│   │   │           │   ├──UserRatingController.java                                                                  
-│   │   │           │   ├── GymController.java                                                                              
-│   │   │           │   ├──UserDetailsController.java                                                                                                     
-│   │   │           │   ├──VendorBankDetailsController.java                                                                               
-│   │   │           ├── entity                                                                                    
-│   │   │           │   ├── AdminClass.java                                                                                   
-│   │   │           │   ├──GymSubscriptionClass.java                                                                
-│   │   │           │   ├──Rating.java                                                                  
-│   │   │           │   ├──UserClass.java                                                                         
-│   │   │           │   ├──VenderUser.java                                                                  
-│   │   │           │   ├──VendorPayment.java                                                                             
-│   │   │           │   ├──GymAddressClass.java                                                                                   
-│   │   │           │   ├──GymTime.java                                                                                         
-│   │   │           │   ├──UserAttendance.java                                                                      
-│   │   │           │   ├──UserDetails.java                                                                                   
-│   │   │           │   ├──VendorBankDetails.java                                                                           
-│   │   │           │   ├──GymClass.java                                                                                                
-│   │   │           │   ├──PhotoClass.java                                                                                          
-│   │   │           │   ├──UserBankDetails.java                                                                               
-│   │   │           │   ├──UserOrder.java                                                                                       
-│   │   │           │   ├──VendorDetails.java                                                                                 
-│   │   │           ├── image                                                                                                 
-│   │   │           │   ├── Doc.java                                                                        
-│   │   │           │   ├──ImgController.java                                                             
-│   │   │           │   ├──ImgRepo.java                                                                             
-│   │   │           │   ├──ImgService.java                                                              
-│   │   │           ├── model                                                                           
-│   │   │           │   ├── BookedGymModel.java                                                                             
-│   │   │           │   ├──EnthusiastLoginModel.java                                                                    
-│   │   │           │   ├──GymRepresnt.java                                                                             
-│   │   │           │   ├──Role.java                                                                          
-│   │   │           │   ├──UserModel.java                                                                     
-│   │   │           │   ├──CustomOAuth2User.java                                                                
-│   │   │           │   ├──EnthusiastUserModel.java                                                                         
-│   │   │           │   ├──MarkUserAttModel.java                                                                        
-│   │   │           │   ├──SignUpResponce.java                                                                            
-│   │   │           │   ├──UserOrderModel.java                                                                            
-│   │   │           │   ├──DeleteGymModel.java                                                                                        
-│   │   │           │   ├──GymClassModel.java                                                                                           
-│   │   │           │   ├──PhotoResponse.java                                                                                                   
-│   │   │           │   ├──UserForgot.java                                                                                        
-│   │   │           │   ├──UserPerfomanceModel.java                                                                                           
-│   │   │           └── repository                                                                                                
-│   │   │           │   ├── AddGymRepository.java                                                                                             
-│   │   │           │   ├──GymAddressRepo.java                                                                                                
-│   │   │           │   ├──RatingRepo.java                                                                                                
-│   │   │           │   ├──UserRepository.java                                                              
-│   │   │           │   ├──AdminRepo.java                                                                         
-│   │   │           │   ├──GymSubscriptionRepo.java                                                                       
-│   │   │           │   ├──UserBankDetailsRepo.java                                                                                     
-│   │   │           │   ├──VendorDetailsRepository.java                                                                                           
-│   │   │           │   ├──AttendanceRepo.java                                                                                  
-│   │   │           │   ├──GymTimeRepo.java                                                                                                     
-│   │   │           │   ├──UserDetailsRepository.java                                                                                       
-│   │   │           │   ├──VendorPayRepo.java                                                                                                             
-│   │   │           │   ├──BankDetailsRepository.java                                                                                           
-│   │   │           │   ├──PhotoRepository.java                                                                                               
-│   │   │           │   ├──UserOrderRepo.java                                                                                         
-│   │   │           │   ├──VendorRepository.java                                                                                              
-│   │   │           └── security                                                                          
-│   │   │           │          └── service                                                                                
-│   │   │           │                     ├──JwtTokenProvider.java                                                                                
-│   │   │           │                     ├──UserDetailsServiceImpl.java                                                                    
-│   │   │           │                     ├──VendorPayService.java                                                                    
-│   │   │           └── service                                                                                                 
-│   │   │           │   ├──AttendanceService.java                                                                                     
-│   │   │           │   ├──GymService.java                                                                                              
-│   │   │           │   ├──RatingService.java                                                                                                   
-│   │   │           │   ├──UserDetailsService.java                                                                    
-│   │   │           │   ├──VendorBankDetailsService.java                                                                      
-│   │   │           │   ├──CustomOAuth2UserService.java                                                                                   
-│   │   │           │   ├──JwtTokenProvider.java                                                                                                        
-│   │   │           │   ├──RegisterNewUser.java                                                                                             
-│   │   │           │   ├──UserOrderService.java                                                                                                  
-│   │   │           │   ├──VendorDetailsService.java                                                                                                
-│   │   │           │   ├──FilterBySubscription.java                                                                                
-│   │   │           │   ├──PhotoService.java                                                                                        
-│   │   │           │   ├──UserBankDetailsService.java                                                                                    
-│   │   │           │   ├──UserService.java                                                                                                   
-│   │   │           │                                                                                                                         
-│   │   └── resources                                                                                                                         
-│   │       └── application.properties                                                                                                    
-│   └── test                                                                                                                              
-│       └── java                                                                                                                              
-│           └── com                                                                                                                         
-│               └── register                                                                                                                        
-│                   └── app                                                                                                                         
-                          └──FitnessAppApplicationTests.java                                                                                      
+.
+├── bin
+│   ├── mvnw
+│   ├── mvnw.cmd
+│   ├── pom.xml
+│   └── src
+│       ├── main
+│       │   ├── java
+│       │   │   └── com
+│       │   │       └── fitness
+│       │   │           └── app
+│       │   │               ├── config
+│       │   │               │   └── WebConfiguration.class
+│       │   │               ├── controller
+│       │   │               │   ├── LoginController.class
+│       │   │               │   └── RegisterController.class
+│       │   │               ├── entity
+│       │   │               │   ├── BankDetails.class
+│       │   │               │   ├── PersonalDetails.class
+│       │   │               │   └── VenderUser.class
+│       │   │               ├── FitnessAppApplication.class
+│       │   │               ├── model
+│       │   │               │   ├── LoginUserModel.class
+│       │   │               │   └── UserModel.class
+│       │   │               ├── repository
+│       │   │               │   └── RegisterRepository.class
+│       │   │               └── service
+│       │   │                   ├── LoginService.class
+│       │   │                   └── RegisterService.class
+│       │   └── resources
+│       │       └── application.properties
+│       └── test
+│           └── java
+│               └── com
+│                   └── register
+│                       └── app
+│                           └── FitnessAppApplicationTests.class
+├── Dockerfile
+├── -Dsonar.projectKey=Fitness_App_Backend
+├── fitness.log
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+├── README.md
+├── src
+   ├── main
+   │   ├── java
+   │   │   └── com
+   │   │       └── fitness
+   │   │           └── app
+   │   │               ├── auth
+   │   │               │   ├── Authenticate.java
+   │   │               │   └── AuthToken.java
+   │   │               ├── componets
+   │   │               │   └── Components.java
+   │   │               ├── config
+   │   │               │   ├── JwtAuthenticationEntryPoint.java
+   │   │               │   ├── JwtAuthenticationFilter.java
+   │   │               │   ├── JwtUtils.java
+   │   │               │   ├── WebConfiguration.java
+   │   │               │   └── WebCorsConfiguration.java
+   │   │               ├── controller
+   │   │               │   ├── AdminController.java
+   │   │               │   ├── AttendanceController.java
+   │   │               │   ├── GymController.java
+   │   │               │   ├── LocationController.java
+   │   │               │   ├── UserBankDetailsController.java
+   │   │               │   ├── UserController.java
+   │   │               │   ├── UserDetailsController.java
+   │   │               │   ├── UserForgetPasswordController.java
+   │   │               │   ├── UserOrderController.java
+   │   │               │   ├── UserRatingController.java
+   │   │               │   ├── VendorBankDetailsController.java
+   │   │               │   └── VendorDetailsController.java
+   │   │               ├── entity
+   │   │               │   ├── AdminClass.java
+   │   │               │   ├── AdminPay.java
+   │   │               │   ├── CustomResponse.java
+   │   │               │   ├── GymAddressClass.java
+   │   │               │   ├── GymClass.java
+   │   │               │   ├── GymSubscriptionClass.java
+   │   │               │   ├── GymTime.java
+   │   │               │   ├── Rating.java
+   │   │               │   ├── UserAttendance.java
+   │   │               │   ├── UserBankDetails.java
+   │   │               │   ├── UserClass.java
+   │   │               │   ├── UserDetails.java
+   │   │               │   ├── UserOrder.java
+   │   │               │   ├── VenderUser.java
+   │   │               │   ├── VendorBankDetails.java
+   │   │               │   ├── VendorDetails.java
+   │   │               │   └── VendorPayment.java
+   │   │               ├── exception
+   │   │               │   ├── DataNotFoundException.java
+   │   │               │   ├── GlobalExceptionHandler.java
+   │   │               │   └── IncorrectFileUploadException.java
+   │   │               ├── FitnessAppApplication.java
+   │   │               ├── image
+   │   │               │   ├── Doc.java
+   │   │               │   ├── ImgController.java
+   │   │               │   ├── ImgRepo.java
+   │   │               │   └── ImgService.java
+   │   │               ├── model
+   │   │               │   ├── AdminPayRequestModel.java
+   │   │               │   ├── BookedGymModel.java
+   │   │               │   ├── DeleteGymModel.java
+   │   │               │   ├── Distance.java
+   │   │               │   ├── DResponse.java
+   │   │               │   ├── Duration.java
+   │   │               │   ├── Elements.java
+   │   │               │   ├── EnthusiastLoginModel.java
+   │   │               │   ├── EnthusiastUserModel.java
+   │   │               │   ├── Geo.java
+   │   │               │   ├── GoogleAddress.java
+   │   │               │   ├── GymClassModel.java
+   │   │               │   ├── GymRepresnt.java
+   │   │               │   ├── Location.java
+   │   │               │   ├── MarkUserAttModel.java
+   │   │               │   ├── PhotoResponse.java
+   │   │               │   ├── RatingRequestModel.java
+   │   │               │   ├── Response.java
+   │   │               │   ├── ResponseModel.java
+   │   │               │   ├── Result.java
+   │   │               │   ├── Rows.java
+   │   │               │   ├── SignUpResponce.java
+   │   │               │   ├── UserBankDetailsRequestModel.java
+   │   │               │   ├── UserDetailsRequestModel.java
+   │   │               │   ├── UserForgot.java
+   │   │               │   ├── UserModel.java
+   │   │               │   ├── UserOrderModel.java
+   │   │               │   └── UserPerfomanceModel.java
+   │   │               ├── repository
+   │   │               │   ├── AddGymRepository.java
+   │   │               │   ├── AdminPayRepo.java
+   │   │               │   ├── AdminRepo.java
+   │   │               │   ├── AttendanceRepo.java
+   │   │               │   ├── BankDetailsRepository.java
+   │   │               │   ├── GymAddressRepo.java
+   │   │               │   ├── GymSubscriptionRepo.java
+   │   │               │   ├── GymTimeRepo.java
+   │   │               │   ├── RatingRepo.java
+   │   │               │   ├── UserBankDetailsRepo.java
+   │   │               │   ├── UserDetailsRepository.java
+   │   │               │   ├── UserOrderRepo.java
+   │   │               │   ├── UserRepository.java
+   │   │               │   ├── VendorDetailsRepository.java
+   │   │               │   ├── VendorPayRepo.java
+   │   │               │   └── VendorRepository.java
+   │   │               ├── security
+   │   │               │   └── service
+   │   │               │       └── UserDetailsServiceImpl.java
+   │   │               └── service
+   │   │                   ├── AdminService.java
+   │   │                   ├── AttendanceService.java
+   │   │                   ├── FilterBySubscription.java
+   │   │                   ├── GymService.java
+   │   │                   ├── PagingService.java
+   │   │                   ├── RatingService.java
+   │   │                   ├── UserBankDetailsService.java
+   │   │                   ├── UserDetailsService.java
+   │   │                   ├── UserOrderService.java
+   │   │                   ├── UserService.java
+   │   │                   ├── VendorBankDetailsService.java
+   │   │                   └── VendorDetailsService.java
+   │   └── resources
+   │       └── application.properties
+   └── test
+       └── java
+           └── com
+               ├── fitness
+               │   └── app
+               │       ├── componets
+               │       │   └── ComponentsTest.java
+               │       ├── config
+               │       │   ├── JwtAuthenticationFilterTestCase.java
+               │       │   ├── JwtAuthenticationFilterTest.java
+               │       │   └── JwtUtilsTest.java
+               │       ├── controller
+               │       │   ├── AdminControllerTest.java
+               │       │   ├── AttendanceControllerTest.java
+               │       │   ├── GymControllerTest.java
+               │       │   ├── LocationControllerTest.java
+               │       │   ├── UserBankDetailsControllerTest.java
+               │       │   ├── UserControllerTest.java
+               │       │   ├── UserDetailsControllerTest.java
+               │       │   ├── UserForgetPasswordControllerTest.java
+               │       │   ├── UserOrderControllerTest.java
+               │       │   ├── UserRatingControllerTest.java
+               │       │   ├── VendorBankDetailsControllerTest.java
+               │       │   └── VendorDetailsControllerTest.java
+               │       ├── exception
+               │       │   └── GlobalExceptionHandlerTest.java
+               │       ├── image
+               │       │   ├── ImgControllerTest.java
+               │       │   └── ImgServiceTest.java
+               │       ├── security
+               │       │   └── service
+               │       │       └── UserDetailsServiceImplTest.java
+               │       └── service
+               │           ├── AdminServiceTest.java
+               │           ├── AttendanceServiceTest.java
+               │           ├── FilterBySubscriptionTest.java
+               │           ├── GymServiceTest.java
+               │           ├── PagingServiceTest.java
+               │           ├── RatingServiceTest.java
+               │           ├── UserBankDetailsServiceTest.java
+               │           ├── UserDetailsServiceTest.java
+               │           ├── UserOrderServiceTest.java
+               │           ├── UserServiceTest.java
+               │           ├── VendorBankDetailsServiceTest.java
+               │           └── VendorDetailsServiceTest.java
+               └── register
+                   └── app
+                       └── FitnessAppApplicationTests.java
