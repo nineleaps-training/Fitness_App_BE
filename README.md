@@ -1,7 +1,7 @@
-# FITNESS APP BACKEND
+# FITNESS APP BACKEND #
 
 
-# Fitness App
+## Fitness App ##
 
 Our team worked on an app which provides its users with the oppourtunity to improve their health and most imortantly give them a platform where they can find gyms with the equipments, activities, budget pricing plans that they require. Also, any user of the app can register his gym(s) and the services provided by his gyms and the discount offers and pricing/subscription plans.
 
@@ -9,9 +9,9 @@ We also have integrated an admin control where a pre-registered admin can have t
 
 The name of our app is Fitness App which is a platform for vendors of various cities where an individual or an estabilished organization can collaborate with other users through the help of our platform and provide them the services they have and similary users can purchase the services as per their requirement.
 
-# Features
+## Features ##
 
-Sign up or Register yourself as a user if you want to book any gym or sign up as a vendor if you have single or multiple gyms acquired.
+*Sign up or Register yourself as a user if you want to book any gym or sign up as a vendor if you have single or multiple gyms acquired.
 
 Create your own personalized profile for both user and vendor where you can fill in your details.
 
@@ -27,7 +27,7 @@ Vendor can mark the attendance of the user i.e. if he/she has attended the day's
 
 Admin can read all the user details who have registered in the web application and can track/montior the activities of the users and delete the user as per his choice.
 
-# Technology Used
+## Technology Used ##
 
 SpringBoot
 
@@ -51,7 +51,7 @@ MongoDB Atlas for database connectivity
 
 Heroku for deployment of APIs
 
-#Dependencies
+## Dependencies ##
 
 Lombok for removing boiler plate code
 
@@ -59,7 +59,7 @@ Razorpay for payment handling
 
 Spring security for OAuth and JWT Authentication
 
-# Folder Structure for Backend
+## Folder Structure for Backend ##
 
 ```
 .
