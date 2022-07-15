@@ -46,6 +46,30 @@ The name of our app is Fitness App which is a platform for vendors of various ci
 
 * Spring security for OAuth and JWT Authentication
 
+## Requirements ##
+
+For building and running the application:
+- [JDK 1.8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+- [Maven 3](https://maven.apache.org)
+- [Any IDE](https://visualstudio.microsoft.com/)
+- [Mongo DB](https://www.mongodb.com/)
+- [GIT](https://git-scm.com/)
+
+## Running the Application Locally ##
+
+There are several ways to run a Spring Boot application on your local machine:
+
+* Execute the `main` method in the `com.fitness.app.FitnessAppApplication.java` class from your IDE.
+
+* Use the [Spring Boot Maven plugin](https://docs.spring.io/spring-boot/docs/current/reference/html/build-tool-plugins-maven-plugin.html)
+
+```
+1. Build the project using`mvn clean install`
+2. Run using `mvn spring-boot:run`
+3. Application is accessible via localhost:8080
+
+```
+
 ## Folder Structure for Backend ##
 
 ```
@@ -264,3 +288,12 @@ The name of our app is Fitness App which is a platform for vendors of various ci
                    └── app
                        └── FitnessAppApplicationTests.java
 ```
+### Configuration of Backend ###
+
+Directory `Fitness_App_BE/src/main/resources/` contains the `appication.properties` config file for the backend.
+ 
+## Resources ##
+
+For more information about Spring Boot please find below resources:
+
+* [Spring Docs](https://spring.io/projects/spring-boot)
