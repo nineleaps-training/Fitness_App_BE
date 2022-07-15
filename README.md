@@ -60,7 +60,7 @@ Razorpay for payment handling
 Spring security for OAuth and JWT Authentication
 
 **Folder Structure for Backend**
-...
+```
 .
 ├── bin
 │   ├── mvnw
@@ -275,4 +275,4 @@ Spring security for OAuth and JWT Authentication
                └── register
                    └── app
                        └── FitnessAppApplicationTests.java
-...
+```
