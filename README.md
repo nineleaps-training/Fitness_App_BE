@@ -15,49 +15,36 @@ The name of our app is Fitness App which is a platform for vendors of various ci
 
 * Create your own personalized profile for both user and vendor where you can fill in your details.
 
-Register your gyms and their prices of subscriptions and discounts with the activities that can be provided to the consumer.
+* Register your gyms and their prices of subscriptions and discounts with the activities that can be provided to the consumer.
 
-A user can search for gyms based on the gym name and most importatly based on interest of area.
+* A user can search for gyms based on the gym name and most importatly based on interest of area.
 
-A user can rate the vendor and his gym/gyms according to the experience had after purchasing the subscription.
+* A user can rate the vendor and his gym/gyms according to the experience had after purchasing the subscription.
 
-Vendor can rate the user according to the behaviour/experience with the user after his purchase order.
+* Vendor can rate the user according to the behaviour/experience with the user after his purchase order.
 
-Vendor can mark the attendance of the user i.e. if he/she has attended the day's particular session or not.
+* Vendor can mark the attendance of the user i.e. if he/she has attended the day's particular session or not.
 
-Admin can read all the user details who have registered in the web application and can track/montior the activities of the users and delete the user as per his choice.
+* Admin can read all the user details who have registered in the web application and can track/montior the activities of the users and delete the user as per his choice.
 
 ## Technology Used ##
 
-SpringBoot
-
-Java 17
-
-MySQL
-
-Maven
-
-JPA buddy
-
-Dependencies
-
-Sonar-maven-plugin for sonarqube
-
-Sql Connector for Sql Database
-
-Lombok for removing boiler plate code
-
-MongoDB Atlas for database connectivity
-
-Heroku for deployment of APIs
+* SpringBoot
+* Java 17
+* Maven
+* Dependencies
+* Sonar-maven-plugin for sonarqube
+* Lombok for removing boiler plate code
+* MongoDB Atlas for database connectivity
+* Heroku for deployment of APIs
 
 ## Dependencies ##
 
-Lombok for removing boiler plate code
+* Lombok for removing boiler plate code
 
-Razorpay for payment handling
+* Razorpay for payment handling
 
-Spring security for OAuth and JWT Authentication
+* Spring security for OAuth and JWT Authentication
 
 ## Folder Structure for Backend ##
 
