@@ -27,7 +27,7 @@ Vendor can mark the attendance of the user i.e. if he/she has attended the day's
 
 Admin can read all the user details who have registered in the web application and can track/montior the activities of the users and delete the user as per his choice.
 
-# Technology Used:
+# Technology Used
 
 SpringBoot
 
