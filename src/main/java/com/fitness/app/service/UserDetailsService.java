@@ -1,7 +1,7 @@
 package com.fitness.app.service;
 
 import com.fitness.app.entity.UserClass;
-import com.fitness.app.entity.UserDetails;
+import com.fitness.app.entity.UserDetailsClass;
 import com.fitness.app.model.DetailsModel;
 import com.fitness.app.repository.UserDetailsRepository;
 import com.fitness.app.repository.UserRepository;
@@ -17,12 +17,12 @@ public class UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    public UserDetails addUserDetails(DetailsModel userDetails) {
+    public UserDetailsClass addUserDetails(DetailsModel userDetails) {
 
         UserClass user = userRepository.findByEmail(userDetails.getEmail());
 
         if (user != null && user.getActivated()) {
-        	UserDetails details=new UserDetails();
+        	UserDetailsClass details=new UserDetailsClass();
         	details.setUserEmail(userDetails.getEmail());
         	details.setUserGender(userDetails.getGender());
         	details.setUserFullAddress(userDetails.getFullAddress());
@@ -35,7 +35,7 @@ public class UserDetailsService {
         return null;
     }
 
-    public UserDetails getUserDetails(String email) {
+    public UserDetailsClass getUserDetails(String email) {
 
         return userDetailsRepository.findByUserEmail(email);
     }

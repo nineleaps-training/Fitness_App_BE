@@ -1,11 +1,10 @@
 package com.register.app.service;
 
-import com.fitness.app.componets.Components;
+import com.fitness.app.componets.MessageComponents;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.model.UserModel;
 import com.fitness.app.repository.UserRepository;
 import com.fitness.app.service.UserService;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.security.SecureRandom;
@@ -33,7 +31,7 @@ class UserServiceTest {
     private PasswordEncoder passwordEncoder;
 
     @Mock
-    private Components sendMessage;
+    private MessageComponents sendMessage;
 
     @InjectMocks
     private UserService userService;

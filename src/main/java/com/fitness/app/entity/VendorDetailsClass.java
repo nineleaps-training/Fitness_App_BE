@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(value = "vendor_details")
-public class VendorDetails {
+public class VendorDetailsClass {
 
 	@Id
 	@Field

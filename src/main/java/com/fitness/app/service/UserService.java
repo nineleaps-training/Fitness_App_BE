@@ -1,15 +1,13 @@
 package com.fitness.app.service;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.Optional;
 import java.util.Random;
 
+import com.fitness.app.componets.MessageComponents;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.fitness.app.componets.Components;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.model.UserModel;
 import com.fitness.app.repository.UserRepository;
@@ -31,7 +29,7 @@ public class UserService {
 	 
 	 
 	 @Autowired
-	 private Components sendMessage;
+	 private MessageComponents sendMessage;
 
 
 

@@ -1,6 +1,6 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.entity.UserDetails;
+import com.fitness.app.entity.UserDetailsClass;
 import com.fitness.app.model.DetailsModel;
 import com.fitness.app.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +18,19 @@ public class UserDetailsController {
     private UserDetailsService userDetailsService;
     //Adding User Details
     @PutMapping("/add/user-details")
-    public ResponseEntity<ArrayList<UserDetails>> addUserDetails(@RequestBody DetailsModel userDetails) {
-        UserDetails userDetails1 = userDetailsService.addUserDetails(userDetails);
+    public ResponseEntity<ArrayList<UserDetailsClass>> addUserDetails(@RequestBody DetailsModel userDetails) {
+        UserDetailsClass userDetailsClass1 = userDetailsService.addUserDetails(userDetails);
 
-        ArrayList<UserDetails> user  = new ArrayList<>();
-        user.add(userDetails1);
+        ArrayList<UserDetailsClass> user  = new ArrayList<>();
+        user.add(userDetailsClass1);
         Assert.notNull(userDetails, "userDetails is null");
-        return new ResponseEntity<ArrayList<UserDetails>>(user, HttpStatus.OK);
+        return new ResponseEntity<ArrayList<UserDetailsClass>>(user, HttpStatus.OK);
 
 
     }
     //Fetching details of user by email
     @GetMapping("/user-details/{email}")
-    public UserDetails getUserDetails(@PathVariable String email) {
+    public UserDetailsClass getUserDetails(@PathVariable String email) {
         return userDetailsService.getUserDetails(email);
     }
 

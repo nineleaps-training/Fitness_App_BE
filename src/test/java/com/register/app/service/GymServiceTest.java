@@ -3,7 +3,7 @@ package com.register.app.service;
 import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.GymSubscriptionClass;
-import com.fitness.app.entity.GymTime;
+import com.fitness.app.entity.GymTimeClass;
 import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.model.GymClassModel;
 import com.fitness.app.model.GymRepresnt;
@@ -13,7 +13,6 @@ import com.fitness.app.repository.GymSubscriptionRepo;
 import com.fitness.app.repository.GymTimeRepo;
 import com.fitness.app.service.GymService;
 import com.fitness.app.service.RatingService;
-import net.bytebuddy.implementation.bytecode.Throw;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -88,11 +87,11 @@ class GymServiceTest {
 
     GymAddressClass GYM_ADDRESS=new GymAddressClass(1.6523589, 1.20053546478, "Varanasi, India", "Varanasi");
     GymSubscriptionClass GYM_SUBS=new GymSubscriptionClass(100,1500,2500,3500,6000,200);
-    GymTime GYM_TIME=new GymTime("6AM-10AM", "4PM-9PM", "SUNDAY");
+    GymTimeClass GYM_TIME=new GymTimeClass("6AM-10AM", "4PM-9PM", "SUNDAY");
 
     GymAddressClass GYM_ADDRESS_ID=new GymAddressClass("GM1", 1.6523589, 1.20053546478, "Varanasi, India", "Varanasi");
     GymSubscriptionClass GYM_SUBS_ID=new GymSubscriptionClass("GM1",100,1500,2500,3500,6000,200);
-    GymTime GYM_TIME_ID=new GymTime("GM1","6AM-10AM", "4PM-9PM", "SUNDAY" );
+    GymTimeClass GYM_TIME_ID=new GymTimeClass("GM1","6AM-10AM", "4PM-9PM", "SUNDAY" );
 
     GymClassModel GYM_MODEL=new GymClassModel(
             "manishsingh@gmail.com",
@@ -109,7 +108,7 @@ class GymServiceTest {
     Optional<GymClass> gymClass= Optional.of(FITNESS1);
     Optional<GymAddressClass> addressClass=Optional.of(GYM_ADDRESS_ID);
     Optional<GymSubscriptionClass> subscriptionClass=Optional.of(GYM_SUBS_ID);
-    Optional<GymTime> time=Optional.of(GYM_TIME_ID);
+    Optional<GymTimeClass> time=Optional.of(GYM_TIME_ID);
     @InjectMocks
     private GymService gymService;
 

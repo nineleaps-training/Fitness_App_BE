@@ -6,14 +6,14 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Repository;
 
-import com.fitness.app.entity.UserAttendance;
+import com.fitness.app.entity.UserAttendanceClass;
 
 @Repository
 @EnableMongoRepositories
-public interface AttendanceRepo extends MongoRepository<UserAttendance,String>{
+public interface AttendanceRepo extends MongoRepository<UserAttendanceClass,String>{
 
-	public UserAttendance findByEmailAndVendor(String email, String vendor);
-	public UserAttendance findByEmailAndVendorAndGym(String email, String vendor, String gym);
-	public UserAttendance findByEmailAndGym(String eamil, String gym);
-	public List<UserAttendance> findByVendorAndGym(String vendor, String gym);
+	public UserAttendanceClass findByEmailAndVendor(String email, String vendor);
+	public UserAttendanceClass findByEmailAndVendorAndGym(String email, String vendor, String gym);
+	public UserAttendanceClass findByEmailAndGym(String eamil, String gym);
+	public List<UserAttendanceClass> findByVendorAndGym(String vendor, String gym);
 }

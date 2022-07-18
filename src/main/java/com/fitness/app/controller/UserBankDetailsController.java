@@ -1,6 +1,6 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.entity.UserBankDetails;
+import com.fitness.app.entity.UserBankDetailsClass;
 import com.fitness.app.model.UserBankModel;
 import com.fitness.app.service.UserBankDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,23 +19,23 @@ public class UserBankDetailsController {
 
     //Add or update bank details of the user.
     @PutMapping("/user-bankdetails/add")
-    public ResponseEntity<UserBankDetails> addBankDetails(@RequestBody UserBankModel details) {
+    public ResponseEntity<UserBankDetailsClass> addBankDetails(@RequestBody UserBankModel details) {
 
-        UserBankDetails userBankDetails = userBankDetailsService.addBankDetails(details);
-        Assert.notNull(userBankDetails, "UserBankDetails is null");
-        return new ResponseEntity<UserBankDetails>(userBankDetails, HttpStatus.OK);
+        UserBankDetailsClass userBankDetailsClass = userBankDetailsService.addBankDetails(details);
+        Assert.notNull(userBankDetailsClass, "UserBankDetails is null");
+        return new ResponseEntity<UserBankDetailsClass>(userBankDetailsClass, HttpStatus.OK);
 
     }
 
     //get bank details of the user to make payment.
     @GetMapping("/user-bankdetails/get/{email}")
-    public UserBankDetails getBankDetails(@PathVariable String email) {
+    public UserBankDetailsClass getBankDetails(@PathVariable String email) {
         return userBankDetailsService.getBankDetails(email);
     }
 
     //List of user's bank.
     @GetMapping("user-bankdetails/getall")
-    public List<UserBankDetails> getAllDetails() {
+    public List<UserBankDetailsClass> getAllDetails() {
         return userBankDetailsService.getAllDetails();
     }
 }

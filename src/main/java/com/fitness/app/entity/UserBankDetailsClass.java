@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(value = "user_bank")
-public class UserBankDetails {
+public class UserBankDetailsClass {
     @Id
     @Field
     private String email;

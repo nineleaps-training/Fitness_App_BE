@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
-import com.fitness.app.entity.VendorDetails;
+import com.fitness.app.entity.VendorDetailsClass;
 import com.fitness.app.model.DetailsModel;
 import com.fitness.app.repository.VendorDetailsRepository;
 
@@ -20,12 +20,12 @@ public class VendorDetailsService {
     private UserRepository userRepository;
 
     // register new vendor service function.
-    public VendorDetails addVendorDetails(DetailsModel vendorDetails) {
+    public VendorDetailsClass addVendorDetails(DetailsModel vendorDetails) {
 
         UserClass user = userRepository.findByEmail(vendorDetails.getEmail());
 
         if (user != null && user.getActivated()) {
-        	VendorDetails details=new VendorDetails();
+        	VendorDetailsClass details=new VendorDetailsClass();
         	details.setVendorEmail(vendorDetails.getEmail());
         	details.setVendorGender(vendorDetails.getGender());
         	details.setVendorFullAddress(vendorDetails.getFullAddress());
@@ -39,7 +39,7 @@ public class VendorDetailsService {
         return null;
     }
 
-    public VendorDetails getVendorDetails(String email) {
+    public VendorDetailsClass getVendorDetails(String email) {
 
         return vendordetailsRepository.findByVendorEmail(email);
     }

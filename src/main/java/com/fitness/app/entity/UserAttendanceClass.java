@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document("user_attendence")
-public class UserAttendance {
+public class UserAttendanceClass {
 
 	
 	@Id
@@ -32,14 +32,14 @@ public class UserAttendance {
 	private List<Integer> attendance;
 	@Field
 	private Double rating;
-	public UserAttendance(String email, String gym, String vendor, int attended) {
+	public UserAttendanceClass(String email, String gym, String vendor, int attended) {
 		
 		this.email = email;
 		this.gym = gym;
 		this.vendor = vendor;
 		this.attended = attended;
 	}
-	public UserAttendance(String email, String gym, String vendor) {
+	public UserAttendanceClass(String email, String gym, String vendor) {
 		this.email = email;
 		this.gym = gym;
 		this.vendor = vendor;

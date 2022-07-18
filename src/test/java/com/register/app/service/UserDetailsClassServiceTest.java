@@ -1,7 +1,7 @@
 package com.register.app.service;
 
 import com.fitness.app.entity.UserClass;
-import com.fitness.app.entity.UserDetails;
+import com.fitness.app.entity.UserDetailsClass;
 import com.fitness.app.model.DetailsModel;
 
 import com.fitness.app.repository.UserDetailsRepository;
@@ -16,7 +16,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class UserDetailsServiceTest {
+class UserDetailsClassServiceTest {
 
     @Mock
     private UserDetailsRepository userDetailsRepository;
@@ -38,16 +38,16 @@ class UserDetailsServiceTest {
            221204L
    );
 
-   UserDetails DETAILS=new UserDetails("rahul01@gmail.com", "Male", "Patna", "Patna", 221204L);
+   UserDetailsClass DETAILS=new UserDetailsClass("rahul01@gmail.com", "Male", "Patna", "Patna", 221204L);
 
    @Test
      void addUserDetails(){
 
        Mockito.when(userRepository.findByEmail(MODEL.getEmail())).thenReturn(USER1);
-       UserDetails userDetails=userDetailsService.addUserDetails(MODEL);
+       UserDetailsClass userDetailsClass =userDetailsService.addUserDetails(MODEL);
 
-       Assertions.assertNotNull(userDetails);
-       Assertions.assertEquals(MODEL.getPostal(), userDetails.getUseroPostal());
+       Assertions.assertNotNull(userDetailsClass);
+       Assertions.assertEquals(MODEL.getPostal(), userDetailsClass.getUseroPostal());
 
    }
 
@@ -55,9 +55,9 @@ class UserDetailsServiceTest {
      void addUserDetailsWithNull(){
 
         Mockito.when(userRepository.findByEmail(MODEL.getEmail())).thenReturn(null);
-        UserDetails userDetails=userDetailsService.addUserDetails(MODEL);
+        UserDetailsClass userDetailsClass =userDetailsService.addUserDetails(MODEL);
 
-        Assertions.assertNull(userDetails);
+        Assertions.assertNull(userDetailsClass);
 
 
     }
@@ -66,9 +66,9 @@ class UserDetailsServiceTest {
      void getUserDetails()
    {
        Mockito.when(userDetailsRepository.findByUserEmail(DETAILS.getUserEmail())).thenReturn(DETAILS);
-       UserDetails userDetails=userDetailsService.getUserDetails(DETAILS.getUserEmail());
-       Assertions.assertNotNull(userDetails);
-       Assertions.assertEquals(userDetails.getUseroPostal(), DETAILS.getUseroPostal());
+       UserDetailsClass userDetailsClass =userDetailsService.getUserDetails(DETAILS.getUserEmail());
+       Assertions.assertNotNull(userDetailsClass);
+       Assertions.assertEquals(userDetailsClass.getUseroPostal(), DETAILS.getUseroPostal());
    }
 
 

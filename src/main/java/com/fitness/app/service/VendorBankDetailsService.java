@@ -1,7 +1,7 @@
 package com.fitness.app.service;
 
 import com.fitness.app.entity.UserClass;
-import com.fitness.app.entity.VendorBankDetails;
+import com.fitness.app.entity.VendorBankDetailsClass;
 import com.fitness.app.model.UserBankModel;
 import com.fitness.app.repository.BankDetailsRepository;
 import com.fitness.app.repository.UserRepository;
@@ -18,12 +18,12 @@ public class VendorBankDetailsService {
     @Autowired
     private UserRepository userRepository;
 
-    public VendorBankDetails addDetails(UserBankModel bankDetails) {
+    public VendorBankDetailsClass addDetails(UserBankModel bankDetails) {
 
         UserClass vendor = userRepository.findByEmail(bankDetails.getEmail());
 
         if(vendor!=null&& vendor.getActivated()){
-        	VendorBankDetails bank=new VendorBankDetails();
+        	VendorBankDetailsClass bank=new VendorBankDetailsClass();
         	bank.setVendorEmail(bankDetails.getEmail());
         	bank.setVendorName(vendor.getFullName());
         	bank.setVendorBankName(bankDetails.getBankName());
@@ -38,12 +38,12 @@ public class VendorBankDetailsService {
         return null;
     }
 
-    public List<VendorBankDetails> getDetails() {
+    public List<VendorBankDetailsClass> getDetails() {
 
         return repository.findAll();
     }
 
-    public VendorBankDetails getBankDetails(String email) {
+    public VendorBankDetailsClass getBankDetails(String email) {
 
         return repository.findByVendorEmail(email);
     }

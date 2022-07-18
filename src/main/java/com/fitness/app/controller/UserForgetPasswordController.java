@@ -1,7 +1,7 @@
 package com.fitness.app.controller;
 
 import com.fitness.app.auth.Authenticate;
-import com.fitness.app.componets.Components;
+import com.fitness.app.componets.MessageComponents;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.model.UserForgot;
 import com.fitness.app.repository.UserRepository;
@@ -21,7 +21,7 @@ public class UserForgetPasswordController {
 	 private UserRepository userRepo;
 
     @Autowired
-	 private Components sendMessage;
+	 private MessageComponents sendMessage;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

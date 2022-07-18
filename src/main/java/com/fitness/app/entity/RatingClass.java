@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document("rating")
-public class Rating {
+public class RatingClass {
     @Id
     @Field
     private String rid;

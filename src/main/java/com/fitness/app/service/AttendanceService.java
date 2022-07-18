@@ -10,8 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fitness.app.entity.Rating;
-import com.fitness.app.entity.UserAttendance;
+import com.fitness.app.entity.RatingClass;
+import com.fitness.app.entity.UserAttendanceClass;
 
 import com.fitness.app.model.MarkUserAttModel;
 
@@ -37,7 +37,7 @@ public class AttendanceService {
 		try {
 			List<String> users=userAttendance.getUsers();
 			
-			List<UserAttendance> allUser=
+			List<UserAttendanceClass> allUser=
 					attendanceRepo.findByVendorAndGym(userAttendance.getVendor(), userAttendance.getGym());
 			if(allUser==null)
 			{
@@ -51,7 +51,7 @@ public class AttendanceService {
 			
 			for(String user:allUsers)
 			{
-				UserAttendance userAtt=
+				UserAttendanceClass userAtt=
 						attendanceRepo.findByEmailAndVendorAndGym(user, userAttendance.getVendor(), userAttendance.getGym());
 				userAtt.setRating(calculateRating(user));
 				List<Integer> attendanceList= userAtt.getAttendance();
@@ -97,7 +97,7 @@ public class AttendanceService {
 	{
 		try {
 
-			UserAttendance user=attendanceRepo.findByEmailAndGym(email, gym);
+			UserAttendanceClass user=attendanceRepo.findByEmailAndGym(email, gym);
 		
 			if(user!=null)
 			{	
@@ -155,11 +155,11 @@ public class AttendanceService {
 	
 	public Double calculateRating(String target)
 	{
-		 List<Rating> ratings = ratingRepo.findByTarget(target);
+		 List<RatingClass> ratingClasses = ratingRepo.findByTarget(target);
 		 
 	        int n=0;
-	        if(ratings!=null) {
-	        	n=ratings.size();
+	        if(ratingClasses !=null) {
+	        	n= ratingClasses.size();
 	        }
 	        if(n==0)
 	        {
@@ -168,8 +168,8 @@ public class AttendanceService {
 	        else
 	        {
 	            double rate=0;
-	            for (Rating rating : ratings) {
-	                rate+=rating.getRate();
+	            for (RatingClass ratingClass : ratingClasses) {
+	                rate+= ratingClass.getRate();
 	            }
 	            rate=rate/n;
 	            rate=Math.round(rate* 100) / 100.0d;

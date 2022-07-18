@@ -8,13 +8,10 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.fitness.app.auth.Authenticate;
-import com.fitness.app.componets.Components;
+import com.fitness.app.componets.MessageComponents;
 import com.fitness.app.config.JwtUtils;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.model.SignUpResponce;
@@ -41,7 +38,7 @@ public class UserController {
 	  private JwtUtils jwtUtils;
 	 
 	 @Autowired
-	 private Components sendMessage;
+	 private MessageComponents sendMessage;
 	
 	 @Autowired
 	 private UserRepository userRepo;
@@ -107,7 +104,19 @@ public class UserController {
 		 
 			 
 		 } 
-	 
+
+
+	@PostMapping("/send-mail/{toEmail}")
+	public String sendMail(@PathVariable String toEmail)
+	{
+		String body="Your OTP is: "+ sendMessage.otpBuilder();
+		int code= sendMessage.sendMail(toEmail,body ,"Fitness App OTP" );
+		if(code==200)
+		{
+			return "Sent";
+		}
+		return "Error";
+	}
 	 
 	 //Verify User
 	 @PutMapping("/verify/user")

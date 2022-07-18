@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymSubscriptionClass;
-import com.fitness.app.entity.GymTime;
+import com.fitness.app.entity.GymTimeClass;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,7 +19,7 @@ public class GymClassModel {
 	private String gym_name;
 	private GymAddressClass gymAddress;
 	private List<String> workoutList;
-	private GymTime timing;
+	private GymTimeClass timing;
 	private GymSubscriptionClass subscription;
 	private Long contact;
 	private int capacity;

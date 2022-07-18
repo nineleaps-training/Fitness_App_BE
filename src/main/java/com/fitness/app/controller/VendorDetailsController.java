@@ -1,8 +1,7 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.entity.VendorDetails;
+import com.fitness.app.entity.VendorDetailsClass;
 import com.fitness.app.model.DetailsModel;
-import com.fitness.app.repository.UserOrderRepo;
 import com.fitness.app.service.VendorDetailsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,18 +25,18 @@ public class VendorDetailsController {
   
     //Adding details of the vendor
     @PutMapping("/add/vendor-details")
-    public ResponseEntity<ArrayList<VendorDetails>> addVendorDetails(@RequestBody DetailsModel vendorDetails) {
-        VendorDetails vendorDetails1 = vendorDetailsService.addVendorDetails(vendorDetails);
+    public ResponseEntity<ArrayList<VendorDetailsClass>> addVendorDetails(@RequestBody DetailsModel vendorDetails) {
+        VendorDetailsClass vendorDetailsClass1 = vendorDetailsService.addVendorDetails(vendorDetails);
 
-        ArrayList<VendorDetails> vendor  = new ArrayList<>();
-        vendor.add(vendorDetails1);
+        ArrayList<VendorDetailsClass> vendor  = new ArrayList<>();
+        vendor.add(vendorDetailsClass1);
         Assert.notNull(vendor, "vendor details is null");
-        return new ResponseEntity<ArrayList< VendorDetails>>(vendor, HttpStatus.OK);
+        return new ResponseEntity<ArrayList<VendorDetailsClass>>(vendor, HttpStatus.OK);
 
     }
     //Fetching the details of the vendor by his email id
     @GetMapping("/vendor-details/{email}")
-    public VendorDetails getVendorDetails(@PathVariable String email) {
+    public VendorDetailsClass getVendorDetails(@PathVariable String email) {
         return vendorDetailsService.getVendorDetails(email);
     }
 

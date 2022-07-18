@@ -1,7 +1,7 @@
 package com.register.app.service;
 
 import com.fitness.app.entity.UserClass;
-import com.fitness.app.entity.VendorDetails;
+import com.fitness.app.entity.VendorDetailsClass;
 import com.fitness.app.model.DetailsModel;
 import com.fitness.app.repository.UserRepository;
 import com.fitness.app.repository.VendorDetailsRepository;
@@ -15,7 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class VendorDetailsServiceTest {
+class VendorDetailsClassServiceTest {
 
     @Mock
     private VendorDetailsRepository detailsRepository;
@@ -36,7 +36,7 @@ class VendorDetailsServiceTest {
             "Patna",
             221204L
     );
-    VendorDetails DETAILS=new VendorDetails(
+    VendorDetailsClass DETAILS=new VendorDetailsClass(
             "rahul01@gmail.com",
             "Male",
             "Patna, Bihar, India",
@@ -49,9 +49,9 @@ class VendorDetailsServiceTest {
      void addVendorDetails()
     {
         Mockito.when(userRepository.findByEmail(MODEL.getEmail())).thenReturn(USER1);
-        VendorDetails vendorDetails=vendorDetailsService.addVendorDetails(MODEL);
-        Assertions.assertNotNull(vendorDetails);
-        Assertions.assertEquals(vendorDetails.getVendorPostal(), DETAILS.getVendorPostal());
+        VendorDetailsClass vendorDetailsClass =vendorDetailsService.addVendorDetails(MODEL);
+        Assertions.assertNotNull(vendorDetailsClass);
+        Assertions.assertEquals(vendorDetailsClass.getVendorPostal(), DETAILS.getVendorPostal());
     }
 
 
@@ -59,8 +59,8 @@ class VendorDetailsServiceTest {
     void addVendorDetailsWithNUll()
     {
         Mockito.when(userRepository.findByEmail(MODEL.getEmail())).thenReturn(null);
-        VendorDetails vendorDetails=vendorDetailsService.addVendorDetails(MODEL);
-        Assertions.assertNull(vendorDetails);
+        VendorDetailsClass vendorDetailsClass =vendorDetailsService.addVendorDetails(MODEL);
+        Assertions.assertNull(vendorDetailsClass);
     }
 
 
@@ -68,7 +68,7 @@ class VendorDetailsServiceTest {
      void getVendorDetails()
     {
         Mockito.when(detailsRepository.findByVendorEmail(DETAILS.getVendorEmail())).thenReturn(DETAILS);
-        VendorDetails details=vendorDetailsService.getVendorDetails(DETAILS.getVendorEmail());
+        VendorDetailsClass details=vendorDetailsService.getVendorDetails(DETAILS.getVendorEmail());
         Assertions.assertNotNull(details);
         Assertions.assertEquals(details.getVendorPostal(), DETAILS.getVendorPostal());
     }

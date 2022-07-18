@@ -6,7 +6,6 @@ import java.util.Set;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-import com.fitness.app.model.GymRepresnt;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fitness.app.entity.UserOrder;
+import com.fitness.app.entity.UserOrderClass;
 import com.fitness.app.model.BookedGymModel;
 import com.fitness.app.model.UserOrderModel;
 import com.fitness.app.model.UserPerfomanceModel;
@@ -57,23 +56,23 @@ public class UserOrderController {
         ob.put("receipt", "txn_201456");
 
         Order myOrder = razorpayClient.Orders.create(ob);
-        UserOrder userOrder = new UserOrder();
+        UserOrderClass userOrderClass = new UserOrderClass();
 
-        userOrder.setId(myOrder.get("id"));
-        userOrder.setEmail(order.getEmail());
-        userOrder.setGym(order.getGym());
-        userOrder.setServices(order.getServices());
-        userOrder.setSubscription(order.getSubscription());
-        userOrder.setSlot(order.getSlot());
-        userOrder.setAmount(order.getAmount());
-        userOrder.setBooked("");
-        userOrder.setStatus(myOrder.get("status"));
-        userOrder.setPaymentId(null);
-        userOrder.setReceipt(myOrder.get("receipt"));
-        userOrder.setDate(date);
-        userOrder.setTime(time);
+        userOrderClass.setId(myOrder.get("id"));
+        userOrderClass.setEmail(order.getEmail());
+        userOrderClass.setGym(order.getGym());
+        userOrderClass.setServices(order.getServices());
+        userOrderClass.setSubscription(order.getSubscription());
+        userOrderClass.setSlot(order.getSlot());
+        userOrderClass.setAmount(order.getAmount());
+        userOrderClass.setBooked("");
+        userOrderClass.setStatus(myOrder.get("status"));
+        userOrderClass.setPaymentId(null);
+        userOrderClass.setReceipt(myOrder.get("receipt"));
+        userOrderClass.setDate(date);
+        userOrderClass.setTime(time);
 
-        userOrderService.orderNow(userOrder);
+        userOrderService.orderNow(userOrderClass);
         return myOrder.toString();
     }
 
@@ -81,20 +80,20 @@ public class UserOrderController {
     //update_order after payment.
 
     @PutMapping("update/order")
-    public UserOrder updatingOrder(@RequestBody Map<String, String> data) {
+    public UserOrderClass updatingOrder(@RequestBody Map<String, String> data) {
 
         return userOrderService.updateOrder(data);
     }
 
     //Check the pending orders by email id of the user
     @GetMapping("/pending/order/{email}")
-    public ResponseEntity<List<UserOrder>> pedingOrerList(@PathVariable String email) {
+    public ResponseEntity<List<UserOrderClass>> pedingOrerList(@PathVariable String email) {
         return new ResponseEntity<>(userOrderService.pendingListOrder(email), HttpStatus.OK);
     }
 
     //Fetching the order history by email id of the user
     @GetMapping("/order/history/{email}")
-    public ResponseEntity<List<UserOrder>> orderHistory(@PathVariable String email) {
+    public ResponseEntity<List<UserOrderClass>> orderHistory(@PathVariable String email) {
         return new ResponseEntity<>(userOrderService.OrderListOrder(email), HttpStatus.OK);
     }
 

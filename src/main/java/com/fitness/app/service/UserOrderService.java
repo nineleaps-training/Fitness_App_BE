@@ -6,7 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-import com.fitness.app.componets.Components;
+import com.fitness.app.componets.MessageComponents;
 import com.fitness.app.entity.*;
 import com.fitness.app.model.BookedGymModel;
 
@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import com.fitness.app.model.UserPerfomanceModel;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.AttendanceRepo;
-import com.fitness.app.repository.GymAddressRepo;
 import com.fitness.app.repository.UserOrderRepo;
 import com.fitness.app.repository.UserRepository;
 import com.fitness.app.repository.VendorPayRepo;
@@ -48,20 +47,20 @@ public class UserOrderService {
 
 
     //creating order
-    public void orderNow(UserOrder userOrder) {
-        userOrderRepo.save(userOrder);
+    public void orderNow(UserOrderClass userOrderClass) {
+        userOrderRepo.save(userOrderClass);
     }
     final String CURRENT="Current";
 
     //updating order
 
-    public UserOrder updateOrder(Map<String, String> data) {
+    public UserOrderClass updateOrder(Map<String, String> data) {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
         
         if(data==null) {return null;}
-        UserOrder order=new UserOrder();
-        Optional<UserOrder>orderData =userOrderRepo.findById(data.get("order_id"));
+        UserOrderClass order=new UserOrderClass();
+        Optional<UserOrderClass>orderData =userOrderRepo.findById(data.get("order_id"));
         if(orderData.isPresent())
         {
         	order=orderData.get();
@@ -94,7 +93,7 @@ public class UserOrderService {
         }
 
 
-        UserAttendance attendance = new UserAttendance();
+        UserAttendanceClass attendance = new UserAttendanceClass();
         String vendor=null;
         Optional<GymClass>gymOp = gymRepo.findById(order.getGym());
         if(gymOp.isPresent())
@@ -112,7 +111,7 @@ public class UserOrderService {
         attendanceRepo.save(attendance);
 
 
-        VendorPayment vendorOrder = new VendorPayment();
+        VendorPaymentClass vendorOrder = new VendorPaymentClass();
         vendorOrder.setVendor(vendor);
         vendorOrder.setUser(order.getEmail());
         vendorOrder.setGym(order.getGym());
@@ -130,10 +129,10 @@ public class UserOrderService {
     //pending order list of user
 
 
-    public List<UserOrder> pendingListOrder(String email) {
-        List<UserOrder> orders = userOrderRepo.findByEmail(email);
+    public List<UserOrderClass> pendingListOrder(String email) {
+        List<UserOrderClass> orders = userOrderRepo.findByEmail(email);
         orders = orders.stream().filter(o -> o.getStatus().equals("created")).collect(Collectors.toList());
-        for (UserOrder eachOrder : orders) {
+        for (UserOrderClass eachOrder : orders) {
             LocalDate date = eachOrder.getDate();
             date = date.plusDays(5);
             LocalDate currenDate = LocalDate.now();
@@ -145,14 +144,14 @@ public class UserOrderService {
         return orders;
     }
 
-    public List<UserOrder> OrderListOrder(String email) {
-        List<UserOrder> orders = userOrderRepo.findByEmail(email);
+    public List<UserOrderClass> OrderListOrder(String email) {
+        List<UserOrderClass> orders = userOrderRepo.findByEmail(email);
         orders = orders.stream().filter(o -> o.getStatus().equals("Completed")).collect(Collectors.toList());
         return orders;
     }
 
     public Set<UserPerfomanceModel> allMyUser(String gymId) {
-        List<UserOrder> orders = userOrderRepo.findByGym(gymId);
+        List<UserOrderClass> orders = userOrderRepo.findByGym(gymId);
         orders = orders.stream().filter(o -> o.getStatus().equals("Completed")).collect(Collectors.toList());
         Set<UserPerfomanceModel> users = new HashSet<>();
         Optional<GymClass>gymdata=gymRepo.findById(gymId);
@@ -161,8 +160,8 @@ public class UserOrderService {
                vendor=gymdata.get().getEmail();
         }
         
-        for (UserOrder order : orders) {
-            UserAttendance newAtt = attendanceRepo.findByEmailAndVendor(order.getEmail(), vendor);
+        for (UserOrderClass order : orders) {
+            UserAttendanceClass newAtt = attendanceRepo.findByEmailAndVendor(order.getEmail(), vendor);
             UserPerfomanceModel user = new UserPerfomanceModel();
             UserClass userClass=userRepository.findByEmail(order.getEmail());
             user.setName(userClass.getFullName());
@@ -178,27 +177,27 @@ public class UserOrderService {
 
 
     @Autowired
-    private Components components;
+    private MessageComponents messageComponents;
 
     public List<BookedGymModel> bookedGym(String email) {
 
 
 
 
-    List<UserOrder> orders = userOrderRepo.findByEmail(email);
+    List<UserOrderClass> orders = userOrderRepo.findByEmail(email);
         List<BookedGymModel> gyms = new ArrayList<>();
         if (orders == null) {
             return gyms;
         }
 
-        BookedGymModel gymModel=components.gymModelByStatus(orders, CURRENT);
+        BookedGymModel gymModel= messageComponents.gymModelByStatus(orders, CURRENT);
         if(gymModel==null || gymModel.getId()==null)
         {
             gymModel=null;
         }
         gyms.add(gymModel);
 
-        gymModel=components.gymModelByStatus(orders, "Expired");
+        gymModel= messageComponents.gymModelByStatus(orders, "Expired");
         gyms.add(gymModel);
       return  gyms;
 
@@ -211,7 +210,7 @@ public class UserOrderService {
 
     public Boolean canOrder(String email) {
 
-        List<UserOrder> orders = userOrderRepo.findByEmail(email);
+        List<UserOrderClass> orders = userOrderRepo.findByEmail(email);
         if (orders == null) {
             return true;
         }
@@ -219,10 +218,10 @@ public class UserOrderService {
 
 
         LocalDate localDate = LocalDate.now();
-        for (UserOrder order : orders) {
+        for (UserOrderClass order : orders) {
             LocalDate currentDate = order.getDate();
             String subs = order.getSubscription();
-            currentDate=currentDate.plusDays(components.calculateTotalTime(subs));
+            currentDate=currentDate.plusDays(messageComponents.calculateTotalTime(subs));
 
             int comp = currentDate.compareTo(localDate);
             if (comp > 0) {

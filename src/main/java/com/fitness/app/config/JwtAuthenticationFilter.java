@@ -30,46 +30,34 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
         final String requestTokenHeader = request.getHeader("Authorization");
-
-        log.info("Request token header: {}", requestTokenHeader);
-
+        log.info("Request token header has been created:");
         String username = null;
         String jwtToken = null;
-
-        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")){
-
+        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             try {
                 username = jwtUtil.extractUsername(jwtToken);
             } catch (ExpiredJwtException e) {
-                e.printStackTrace();
-                log.info("JWT Token Is Expired!");
-
+                log.error("JwtAuthenticationFilter >> doFilterInternal >> Error found due to : {}", e.getMessage());
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("JwtAuthenticationFilter >> doFilterInternal >> A general error found due to : {}", e.getMessage());
             }
+        } else
+        {
+            log.error("JwtAuthenticationFilter >> doFilterInternal >> Invalid Token or bad credentials : Not start with bearer");
         }
-
-        else {
-
-            log.info("Invalid Token : Not Start With Bearer");
-        }
-
         // Validating Token
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (jwtUtil.validateToken(jwtToken, userDetails)) {
-
                 UsernamePasswordAuthenticationToken usernamePasswordAuthentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthentication);
             }
-        }
-        else {
-            log.info("Invalid Token");
+        } else {
+            log.error("JwtAuthenticationFilter >> doFilterInternal >> Invalid Token or bad credentials : Not start with bearer");
         }
         filterChain.doFilter(request, response);
     }

@@ -1,15 +1,13 @@
 package com.fitness.app.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import com.fitness.app.entity.GymClass;
-import com.fitness.app.entity.Rating;
+import com.fitness.app.entity.RatingClass;
 import com.fitness.app.model.RatingModel;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.RatingRepo;
 
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +23,10 @@ public class RatingService {
     @Autowired
     private AddGymRepository gymRepo;
 
-    public Rating ratingService(RatingModel rating)
+    public RatingClass ratingService(RatingModel rating)
     {
     	
-    	Rating rtt=new Rating();
+    	RatingClass rtt=new RatingClass();
     	rtt.setTarget(rating.getRateTaget());
     	rtt.setRater(rating.getRateRatter());
     	rtt.setRate(rating.getRate());
@@ -39,18 +37,18 @@ public class RatingService {
     }
     public Double getRating(String target)
     {
-        List<Rating> ratings = ratingRepo.findByTarget(target);
-        System.out.println(ratings);
-        if(ratings==null)
+        List<RatingClass> ratingClasses = ratingRepo.findByTarget(target);
+        System.out.println(ratingClasses);
+        if(ratingClasses ==null)
         {
             return 0.0;
         }
         else
         {
-        	int n=ratings.size();
+        	int n= ratingClasses.size();
             double rate=0;
-            for (Rating rating : ratings) {
-                rate+=rating.getRate();
+            for (RatingClass ratingClass : ratingClasses) {
+                rate+= ratingClass.getRate();
             }
             rate=rate/n;
             rate=Math.round(rate* 100) / 100.0d;
@@ -64,17 +62,17 @@ public class RatingService {
     
     public Double getRatingOfPerson(String email)
     {
-        List<Rating> ratings = ratingRepo.findByTarget(email);
-        if(ratings==null)
+        List<RatingClass> ratingClasses = ratingRepo.findByTarget(email);
+        if(ratingClasses ==null)
         {
             return 0.0;
         }
         else
         {
-        	int n=ratings.size();
+        	int n= ratingClasses.size();
             double rate=0;
-            for (Rating rating : ratings) {
-                rate+=rating.getRate();
+            for (RatingClass ratingClass : ratingClasses) {
+                rate+= ratingClass.getRate();
             }
             rate=rate/n;
             rate=Math.round(rate* 100) / 100.0d;

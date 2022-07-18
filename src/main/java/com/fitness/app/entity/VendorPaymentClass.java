@@ -10,57 +10,47 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("admin_paid")
-public class AdminPay {
-
+@Document("vendor_order")
+public class VendorPaymentClass {
+	
+	
 	@Id
 	@Field
-	private String id;
-	@Field
-	private String orderId;
-	@Field
 	private String vendor;
-	
+	@Field
+	private String user;
+	@Field
+	private String gym;
 	@Field
 	private int amount;
 	@Field
 	private String status;
 	@Field
-	private String paymentId;
+    private LocalDate date;
 	@Field
-	private String reciept;
-	@Field
-	private LocalDate date;
-	@Field
-	private LocalTime time;
+    private LocalTime time;
 	
 	
-	public AdminPay(String vendor, int amount) {
-		super();
-		this.vendor = vendor;
-		this.amount = amount;
-	}
-
-
-	public AdminPay(String vendor, int amount, String status) {
-		super();
+	public VendorPaymentClass(String email, String vendor, int amount, String status) {
+		
+		this.user = email;
 		this.vendor = vendor;
 		this.amount = amount;
 		this.status = status;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+	public VendorPaymentClass(String email, String vendor, int amount) {
+		super();
+		this.user = email;
+		this.vendor = vendor;
+		this.amount = amount;
+	}
+
+
 	
 	
 }

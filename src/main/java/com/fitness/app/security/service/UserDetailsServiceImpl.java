@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,8 +25,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 	
 	@Autowired 
 	private UserRepository userRepo;
-	
-	
+
+
 	//Authenticating user information with the email id
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

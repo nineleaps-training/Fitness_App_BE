@@ -1,7 +1,7 @@
 package com.register.app.service;
 
 import com.fitness.app.entity.UserClass;
-import com.fitness.app.entity.VendorBankDetails;
+import com.fitness.app.entity.VendorBankDetailsClass;
 import com.fitness.app.model.UserBankModel;
 import com.fitness.app.repository.BankDetailsRepository;
 import com.fitness.app.repository.UserRepository;
@@ -19,7 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @ExtendWith({MockitoExtension.class})
-class VendorBankDetailsServiceTest {
+class VendorBankDetailsClassServiceTest {
 
 
 
@@ -42,7 +42,7 @@ class VendorBankDetailsServiceTest {
             "Monthly"
     );
 
-    VendorBankDetails BANK=new VendorBankDetails(
+    VendorBankDetailsClass BANK=new VendorBankDetailsClass(
             "rahul01@gmail.com",
             "Rahul Kumar",
             "YES BANK",
@@ -58,7 +58,7 @@ class VendorBankDetailsServiceTest {
      void addDetails()
     {
         Mockito.when(userRepository.findByEmail(BANK_MODEL.getEmail())).thenReturn(USER1);
-        VendorBankDetails bankDetails=vendorBankDetailsService.addDetails(BANK_MODEL);
+        VendorBankDetailsClass bankDetails=vendorBankDetailsService.addDetails(BANK_MODEL);
         Assertions.assertNotNull(bankDetails);
         Assertions.assertEquals(bankDetails.getVendorAccountNumber(), BANK.getVendorAccountNumber());
     }
@@ -67,7 +67,7 @@ class VendorBankDetailsServiceTest {
      void addDetailsWithNull()
     {
         Mockito.when(userRepository.findByEmail(BANK_MODEL.getEmail())).thenReturn(null);
-        VendorBankDetails bankDetails=vendorBankDetailsService.addDetails(BANK_MODEL);
+        VendorBankDetailsClass bankDetails=vendorBankDetailsService.addDetails(BANK_MODEL);
         Assertions.assertNull(bankDetails);
     }
 
@@ -76,13 +76,13 @@ class VendorBankDetailsServiceTest {
     @Test
      void getDetails()
     {
-        List<VendorBankDetails> lists=new ArrayList<>(Arrays.asList(BANK));
+        List<VendorBankDetailsClass> lists=new ArrayList<>(Arrays.asList(BANK));
         Mockito.when(bankDetailsRepository.findAll()).thenReturn(lists);
 
-        List<VendorBankDetails> vendorBankDetailsList=vendorBankDetailsService.getDetails();
+        List<VendorBankDetailsClass> vendorBankDetailsClassList =vendorBankDetailsService.getDetails();
 
-        Assertions.assertNotNull(vendorBankDetailsList);
-        Assertions.assertEquals(vendorBankDetailsList.get(0).getVendorAccountNumber(), BANK.getVendorAccountNumber());
+        Assertions.assertNotNull(vendorBankDetailsClassList);
+        Assertions.assertEquals(vendorBankDetailsClassList.get(0).getVendorAccountNumber(), BANK.getVendorAccountNumber());
     }
 
 
@@ -91,7 +91,7 @@ class VendorBankDetailsServiceTest {
      void getBankDetails()
     {
         Mockito.when(bankDetailsRepository.findByVendorEmail(BANK_MODEL.getEmail())).thenReturn(BANK);
-        VendorBankDetails bankDetails=vendorBankDetailsService.getBankDetails(BANK_MODEL.getEmail());
+        VendorBankDetailsClass bankDetails=vendorBankDetailsService.getBankDetails(BANK_MODEL.getEmail());
 
         Assertions.assertNotNull(bankDetails);
         Assertions.assertEquals(bankDetails.getVendorAccountNumber(), BANK.getVendorAccountNumber());

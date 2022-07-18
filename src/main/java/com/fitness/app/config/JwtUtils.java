@@ -3,6 +3,7 @@ package com.fitness.app.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +14,10 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtils {
-    private String secretKey = "fitnessapp";
 
+    @Value("${secretKey}")
+    private String secretKey;
+    private static final long EXPIRATION_TIME = 900_000;
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
@@ -27,6 +30,7 @@ public class JwtUtils {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
+
     private Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
@@ -43,7 +47,7 @@ public class JwtUtils {
     private String createToken(Map<String, Object> claims, String subject) {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 604800000))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(SignatureAlgorithm.HS256, secretKey).compact();
     }
 

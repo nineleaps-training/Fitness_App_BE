@@ -53,7 +53,7 @@ public class GymService {
 		addressRepo.save(address);
 
 		// set time
-		GymTime time =gymClassModel.getTiming();
+		GymTimeClass time =gymClassModel.getTiming();
 		time.setId(gym_id);
 		timeRepo.save(time);
 
@@ -82,12 +82,12 @@ public class GymService {
 		GymClass gym_cl=new GymClass();
 		GymAddressClass address=new GymAddressClass();
 		GymSubscriptionClass subs=new GymSubscriptionClass();
-		GymTime time=new GymTime();
+		GymTimeClass time=new GymTimeClass();
 		
 		Optional<GymClass> data=gymRepository.findById(gym_id);
 		Optional<GymAddressClass> dataAddress=addressRepo.findById(gym_id);
         Optional<GymSubscriptionClass> dataSubs=subcriptionRepo.findById(gym_id);
-        Optional<GymTime>dataTime=timeRepo.findById(gym_id);
+        Optional<GymTimeClass>dataTime=timeRepo.findById(gym_id);
 		if(data.isPresent())
 		{
 			gym_cl=data.get();
@@ -196,12 +196,12 @@ public class GymService {
 				GymRepresnt gym = new GymRepresnt();
 				
 				GymClass gymClass=new GymClass();
-				GymTime time=new GymTime();
+				GymTimeClass time=new GymTimeClass();
 				GymSubscriptionClass subscription=new GymSubscriptionClass();
 				
 				Optional<GymClass> gym_cl = gymRepository.findById(id);
 				Optional<GymSubscriptionClass> subscription_cl = subcriptionRepo.findById(id);
-				Optional<GymTime> time_cl = timeRepo.findById(id);
+				Optional<GymTimeClass> time_cl = timeRepo.findById(id);
 				
 				if(gym_cl.isPresent())
 				{

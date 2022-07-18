@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
-import com.fitness.app.entity.AdminPay;
+import com.fitness.app.entity.AdminPayClass;
 import com.fitness.app.model.AdminPayModel;
 import com.fitness.app.repository.AdminPayRepo;
 import com.fitness.app.service.AdminService;
@@ -88,11 +88,11 @@ class AdminControllerTest {
 	UserClass USER2=new UserClass("manish.kumar@nineleaps.com", "Manish Kumar",
 			"7651977515","Manish@123","VENDOR", true, true, true );
 
-	AdminPay VENDOR_PAY=new AdminPay("id", "orderId", "manish.kumar@nineleaps.com",
+	AdminPayClass VENDOR_PAY=new AdminPayClass("id", "orderId", "manish.kumar@nineleaps.com",
 			4000, "Due","paymentID","reciept", LocalDate.now(), LocalTime.now() );
 
 
-	AdminPay VENDOR_PAY_COM=new AdminPay("id", "orderId", "manish.kumar@nineleaps.com",
+	AdminPayClass VENDOR_PAY_COM=new AdminPayClass("id", "orderId", "manish.kumar@nineleaps.com",
 			2000, "Completed","paymentID","reciept", LocalDate.now(), LocalTime.now() );
 
 
@@ -252,7 +252,7 @@ class AdminControllerTest {
 	 void paymentHistoryOfVendor()throws Exception
 	{
 
-		List<AdminPay> allHistory=new ArrayList<>();
+		List<AdminPayClass> allHistory=new ArrayList<>();
 		allHistory.add(VENDOR_PAY_COM);
        Mockito.when(adminService.paidHistroyVendor("manish.kumar@nineleaps.com")).thenReturn(allHistory);
 
