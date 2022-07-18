@@ -13,7 +13,7 @@ import java.util.*;
 import com.fitness.app.entity.AdminPayClass;
 import com.fitness.app.model.AdminPayModel;
 import com.fitness.app.repository.AdminPayRepo;
-import com.fitness.app.service.AdminService;
+import com.fitness.app.service.AdminServiceImplementation;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -189,14 +189,14 @@ class AdminControllerTest {
 	///vendor-payment/{vendor}
 
 	@Mock
-	private AdminService adminService;
+	private AdminServiceImplementation adminServiceImplementation;
 
 
 
 	@Test
 	 void vendorPayment() throws  Exception
 	{
-		Mockito.when(adminService.vendorPayment("manish.kumar@nineleaps.com")).thenReturn(VENDOR_PAY);
+		Mockito.when(adminServiceImplementation.vendorPayment("manish.kumar@nineleaps.com")).thenReturn(VENDOR_PAY);
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/vendor-payment/manish.kumar@nineleaps.com")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -212,7 +212,7 @@ class AdminControllerTest {
 	 void amountToPay() throws Exception
 	{
 
-		Mockito.when(adminService.getDataPay(VENDOR_DUE)).thenReturn(VENDOR_PAY);
+		Mockito.when(adminServiceImplementation.getDataPay(VENDOR_DUE)).thenReturn(VENDOR_PAY);
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/get-data-pay")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -233,7 +233,7 @@ class AdminControllerTest {
 		data.put("payment_id", "paymentId");
 		data.put("status", "Completed");
 
-		Mockito.when(adminService.updatePayment(data)).thenReturn(VENDOR_PAY_COM);
+		Mockito.when(adminServiceImplementation.updatePayment(data)).thenReturn(VENDOR_PAY_COM);
 		String requestData= objectMapper.writeValueAsString(data);
 
 		mockMvc.perform(MockMvcRequestBuilders.put("/update-vendor-payment")
@@ -254,7 +254,7 @@ class AdminControllerTest {
 
 		List<AdminPayClass> allHistory=new ArrayList<>();
 		allHistory.add(VENDOR_PAY_COM);
-       Mockito.when(adminService.paidHistroyVendor("manish.kumar@nineleaps.com")).thenReturn(allHistory);
+       Mockito.when(adminServiceImplementation.paidHistoryVendor("manish.kumar@nineleaps.com")).thenReturn(allHistory);
 
 	   mockMvc.perform(MockMvcRequestBuilders.get("/paid-history/manish.kumar@nineleaps.com")
 			   .contentType(MediaType.APPLICATION_JSON))

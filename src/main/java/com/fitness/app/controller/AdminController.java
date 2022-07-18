@@ -12,7 +12,7 @@ import com.fitness.app.model.SignUpResponce;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.UserRepository;
 import com.fitness.app.security.service.UserDetailsServiceImpl;
-import com.fitness.app.service.AdminService;
+import com.fitness.app.service.AdminServiceImplementation;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +50,7 @@ public class AdminController {
     private AddGymRepository gymRepo;
 
     @Autowired
-    private AdminService adminService;
+    private AdminServiceImplementation adminServiceImplementation;
 
     // log in user....with custom sign option.
     @PostMapping("/login/admin")
@@ -116,13 +116,13 @@ public class AdminController {
     //finding total amount to pay to the vendor.
     @GetMapping("/vendor-payment/{vendor}")
     public AdminPayClass vendorPayment(@PathVariable String vendor) {
-        return adminService.vendorPayment(vendor);
+        return adminServiceImplementation.vendorPayment(vendor);
     }
 
     //demo api for payment.
     @GetMapping("/get-data-pay")
     public AdminPayClass getDatapay(@RequestBody AdminPayModel pay) {
-        return adminService.getDataPay(pay);
+        return adminServiceImplementation.getDataPay(pay);
     }
 
 
@@ -139,7 +139,7 @@ public class AdminController {
 
         Order myOrder = razorpayClient.Orders.create(ob);
 
-        boolean flag = adminService.PayNow(payment, myOrder);
+        boolean flag = adminServiceImplementation.PayNow(payment, myOrder);
         if (flag) {
             return myOrder.toString();
         } else {
@@ -152,14 +152,14 @@ public class AdminController {
     @PutMapping("/update-vendor-payment")
     public AdminPayClass updatingOrder(@RequestBody Map<String, String> data) {
 
-        return adminService.updatePayment(data);
+        return adminServiceImplementation.updatePayment(data);
     }
 
 
     //Finding payment history of the vendor.
     @GetMapping("/paid-history/{vendor}")
     public List<AdminPayClass> paidHistroy(@PathVariable String vendor) throws DataNotFoundException {
-        return adminService.paidHistroyVendor(vendor);
+        return adminServiceImplementation.paidHistoryVendor(vendor);
     }
 
 

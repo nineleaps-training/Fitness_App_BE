@@ -919,7 +919,7 @@ You may wish to exclude one of them to ensure predictable runtime behavior
 2022-07-18 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
 2022-07-18 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
 2022-07-18 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
-2022-07-18 [main] INFO  com.fitness.app.service.AdminService - Payment to admin is being accessed
+2022-07-18 [main] INFO  com.fitness.app.service.AdminServiceImplementation - Payment to admin is being accessed
 2022-07-18 [main] INFO  o.s.mock.web.MockServletContext - Initializing Spring TestDispatcherServlet ''
 2022-07-18 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Initializing Servlet ''
 2022-07-18 [main] INFO  o.s.t.w.s.TestDispatcherServlet - Completed initialization in 0 ms
