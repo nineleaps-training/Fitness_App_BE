@@ -1,41 +1,77 @@
 package com.fitness.app.service;
 
 import com.fitness.app.entity.UserClass;
-import com.fitness.app.repository.UserRepository;
+import com.fitness.app.entity.VendorDetails;
+import com.fitness.app.exception.DataNotFoundException;
+import com.fitness.app.repository.UserRepo;
+
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
-import com.fitness.app.model.VendorDetailsRequestModel;
-import com.fitness.app.repository.VendorDetailsRepository;
+import com.fitness.app.model.UserDetailsRequestModel;
+import com.fitness.app.repository.VendorDetailsRepo;
 
 @Service
 public class VendorDetailsService {
 
     @Autowired
-    private VendorDetailsRepository vendordetailsRepository;
+    private VendorDetailsRepo vendordetailsRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserRepo userRepository;
 
-    public VendorDetailsService(UserRepository userRepository2, VendorDetailsRepository vendorDetailsRepository2) {
-        this.userRepository=userRepository2;
-        this.vendordetailsRepository=vendorDetailsRepository2;
+    // Initializing constructor
+    /**
+     * This constructor is used to initialize the repositories
+     * 
+     * @param userRepository2          - User Repository
+     * @param vendorDetailsRepository2 - Vendor Details Repository
+     */
+    public VendorDetailsService(UserRepo userRepository2, VendorDetailsRepo vendorDetailsRepository2) {
+        this.userRepository = userRepository2;
+        this.vendordetailsRepository = vendorDetailsRepository2;
     }
 
-    // register new vendor service function.
-    public VendorDetailsRequestModel addVendorDetails(VendorDetailsRequestModel vendorDetails) {
+    /**
+     * This function is used to register new vendor
+     * 
+     * @param vendorDetails - Details of the vendor
+     * @return - Vendor Details
+     */
+    public VendorDetails addVendorDetails(UserDetailsRequestModel vendorDetails) {
 
-        UserClass user = userRepository.findByEmail(vendorDetails.getVEmail());
+        VendorDetails vDetails = new VendorDetails();
+        vDetails.setVCity(vendorDetails.getCity());
+        vDetails.setVEmail(vendorDetails.getEmail());
+        vDetails.setVFulladdress(vendorDetails.getFullAddress());
+        vDetails.setVPostal(vendorDetails.getPostal());
+        vDetails.setVGender(vendorDetails.getGender());
+
+        UserClass user = userRepository.findByEmail(vDetails.getVEmail());
 
         if (user != null && user.getActivated()) {
-            return vendordetailsRepository.save(vendorDetails);
+            return vendordetailsRepository.save(vDetails); // Register new vendor.
         }
         return null;
     }
 
-    public VendorDetailsRequestModel getVendorDetails(String email) {
+    /**
+     * This function is used to fetch vendor details from his email
+     * 
+     * @param email - Email id of the vendor
+     * @return - Details of the vendor
+     * @throws DataNotFoundException
+     */
+    public VendorDetails getVendorDetails(String email) {
 
-        return vendordetailsRepository.findByVEmail(email);
+        Optional<VendorDetails> optional = vendordetailsRepository.findById(email);
+        if (optional.isPresent()) {
+            return optional.get(); // Fetching Vendor Details from email
+        } else {
+            throw new DataNotFoundException("No Vendor Details Found");
+        }
     }
 }

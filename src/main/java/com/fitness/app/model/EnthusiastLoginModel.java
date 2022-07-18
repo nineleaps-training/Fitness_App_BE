@@ -21,14 +21,14 @@ public class EnthusiastLoginModel {
     @ApiModelProperty(name = "email", notes = "Email of enthusiast")
     @NotNull
     @NotEmpty
-	@NotBlank
+    @NotBlank
     @Email
     private String email;
     @ApiModelProperty(name = "password", notes = "Password of enthusiast")
-	@NotBlank
-	@NotEmpty
+    @NotBlank
+    @NotEmpty
     @NotNull
-    @Pattern(regexp="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",message="Password length must be 8 or greater")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "Password should contain 1 capital letter, 1 small letter, 1 digit, 1 special symbol and must be 8 or greater")
     private String password;
 
 }

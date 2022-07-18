@@ -12,14 +12,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "user_order")
 public class UserOrder {
 
-	
 	@Id
 	@Field
 	private String id;
@@ -37,10 +35,10 @@ public class UserOrder {
 	private int amount;
 	@Field
 	private String booked;
-    @Field
-    private String status;
-    @Field
-    private String paymentId;
+	@Field
+	private String status;
+	@Field
+	private String paymentId;
 	@Field
 	private String receipt;
 	@Field

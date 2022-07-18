@@ -1,6 +1,5 @@
 package com.fitness.app.config;
 
-
 import com.fitness.app.security.service.UserDetailsServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,37 +31,36 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public JwtAuthenticationFilter(UserDetailsServiceImpl customUserDetailsService, JwtUtils jutil) {
 
         this.userDetailsService = customUserDetailsService;
-        this.jwtUtil= jutil;
+        this.jwtUtil = jutil;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         final String requestTokenHeader = request.getHeader("Authorization");
         String username = null;
         String jwtToken = null;
 
-        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")){
+        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
 
             jwtToken = requestTokenHeader.substring(7);
             username = jwtUtil.extractUsername(jwtToken);
-            
+
         }
 
         // Validating Token
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-            if(Boolean.TRUE.equals(jwtUtil.validateToken(jwtToken, userDetails)))
-            {
-                UsernamePasswordAuthenticationToken usernamePasswordAuthentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            if (Boolean.TRUE.equals(jwtUtil.validateToken(jwtToken, userDetails))) {
+                UsernamePasswordAuthenticationToken usernamePasswordAuthentication = new UsernamePasswordAuthenticationToken(
+                        userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthentication);
             }
-        }
-        else
-        {
+        } else {
             log.error("Invalid Token");
         }
 

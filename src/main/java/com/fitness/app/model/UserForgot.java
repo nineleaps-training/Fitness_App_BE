@@ -14,6 +14,6 @@ public class UserForgot {
     @ApiModelProperty(name = "otp", notes = "OTP")
     private String otp;
     @ApiModelProperty(name = "bool", notes = "True or False")
-	private boolean bool;
-	
+    private boolean bool;
+
 }

@@ -3,6 +3,7 @@ package com.fitness.app.controller;
 import static org.mockito.ArgumentMatchers.any;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,8 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fitness.app.entity.Rating;
 import com.fitness.app.model.RatingRequestModel;
-import com.fitness.app.repository.AddGymRepository;
+import com.fitness.app.repository.AddGymRepo;
 import com.fitness.app.repository.RatingRepo;
 import com.fitness.app.service.RatingService;
 
@@ -40,57 +42,59 @@ class UserRatingControllerTest {
     RatingRepo ratingRepo;
 
     @Mock
-    AddGymRepository addGymRepository;
+    AddGymRepo addGymRepository;
 
-    ObjectMapper objectMapper=new ObjectMapper();
+    ObjectMapper objectMapper = new ObjectMapper();
 
     @BeforeEach
-    public void setup()
-    {
-        this.mockMvc=MockMvcBuilders.standaloneSetup(userRatingController).build();
+    public void setup() {
+        this.mockMvc = MockMvcBuilders.standaloneSetup(userRatingController).build();
     }
-    
+
     @Test
+    @DisplayName("Testing of fetching the rating of the gym")
     void testGetRating() throws Exception {
-        List<String> workoutList=new ArrayList<>();
+        List<String> workoutList = new ArrayList<>();
         workoutList.add("zumba");
-        RatingRequestModel ratingRequestModel=new RatingRequestModel("GM6", "target", "rater", 3.5);
-        List<RatingRequestModel> ratingRequestModels=new ArrayList<>();
+        RatingRequestModel ratingRequestModel = new RatingRequestModel("GM1", "rater", 3.5);
+        List<RatingRequestModel> ratingRequestModels = new ArrayList<>();
         ratingRequestModels.add(ratingRequestModel);
-        Mockito.when(ratingService.getRating(ratingRequestModel.getRid())).thenReturn(any());
+        Mockito.when(ratingService.getRating(ratingRequestModel.getTarget())).thenReturn(any());
         mockMvc.perform(MockMvcRequestBuilders
-        .get("/v1/get-rating/GM6")).andExpect(status().isOk());
-
+                .get("/v1/get-rating/GM1")).andExpect(status().isOk());
 
     }
 
     @Test
+    @DisplayName("Testing of fetching the rating of the user")
     void testGetRatingOfPerson() throws Exception {
 
-        List<String> workoutList=new ArrayList<>();
-        workoutList.add("zumba");       
-        RatingRequestModel ratingRequestModel=new RatingRequestModel("GM6", "target", "rater", 3.5);
-        List<RatingRequestModel> ratingRequestModels=new ArrayList<>();
+        List<String> workoutList = new ArrayList<>();
+        workoutList.add("zumba");
+        RatingRequestModel ratingRequestModel = new RatingRequestModel("target", "rater", 3.5);
+        List<RatingRequestModel> ratingRequestModels = new ArrayList<>();
         ratingRequestModels.add(ratingRequestModel);
         Mockito.when(ratingService.getRatingOfPerson(ratingRequestModel.getTarget())).thenReturn(any());
         mockMvc.perform(MockMvcRequestBuilders
-        .get("/v1/get-rating-person/target")).andExpect(status().isOk());
-
+                .get("/v1/get-rating-person/target")).andExpect(status().isOk());
 
     }
 
     @Test
+    @DisplayName("Testing of rating the vendor")
     void testRateVendor() throws Exception {
 
-        List<String> workoutList=new ArrayList<>();
+        List<String> workoutList = new ArrayList<>();
         workoutList.add("zumba");
-        RatingRequestModel ratingRequestModel=new RatingRequestModel("GM6", "target", "rater", 3.5);
-        List<RatingRequestModel> ratingRequestModels=new ArrayList<>();
+        RatingRequestModel ratingRequestModel = new RatingRequestModel("target", "rater", 3.5);
+        Rating rating = new Rating("GM6", "target", "rater", 3.5);
+        List<RatingRequestModel> ratingRequestModels = new ArrayList<>();
         ratingRequestModels.add(ratingRequestModel);
-        String content=objectMapper.writeValueAsString(ratingRequestModel);
-        Mockito.when(ratingService.ratingService(ratingRequestModel)).thenReturn(ratingRequestModel);
+        String content = objectMapper.writeValueAsString(ratingRequestModel);
+        Mockito.when(ratingService.ratingService(ratingRequestModel)).thenReturn(rating);
         mockMvc.perform(MockMvcRequestBuilders
-        .post("/v1/rating").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isCreated());
+                .post("/v1/rating").contentType(MediaType.APPLICATION_JSON).content(content))
+                .andExpect(status().isCreated());
 
     }
 }

@@ -10,7 +10,7 @@ import com.fitness.app.entity.UserOrder;
 @Repository
 public interface UserOrderRepo extends MongoRepository<UserOrder, String> {
 
-	public UserOrder  findByEmailAndBooked(String email, String booked);
+	public UserOrder findByEmailAndBooked(String email, String booked);
 
 	public List<UserOrder> findByEmail(String email);
 

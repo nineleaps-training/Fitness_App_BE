@@ -1,10 +1,13 @@
 package com.fitness.app.model;
 
 import java.util.List;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 
 import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymSubscriptionClass;
@@ -33,6 +36,7 @@ public class GymClassModel {
 	@NotNull
 	@NotBlank
 	@NotEmpty
+	@Size(max = 25)
 	private String mGymname;
 	@ApiModelProperty(name = "mGymaddress", notes = "Address of Gym")
 	private GymAddressClass mGymaddress;
@@ -44,7 +48,10 @@ public class GymClassModel {
 	@ApiModelProperty(name = "mSubscription", notes = "Subscriptions of gym")
 	private GymSubscriptionClass mSubscription;
 	@ApiModelProperty(name = "mContact", notes = "Vendor Contact Details")
+	@NotNull
 	private Long mContact;
 	@ApiModelProperty(name = "mCapacity", notes = "Capacity of gym")
+	@NotNull
+	@Positive(message = "Value should be positive")
 	private int mCapacity;
 }

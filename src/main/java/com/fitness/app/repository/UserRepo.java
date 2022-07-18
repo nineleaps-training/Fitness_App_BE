@@ -4,11 +4,11 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Repository;
 
-import com.fitness.app.model.VendorDetailsRequestModel;
+import com.fitness.app.entity.UserClass;
 
-@EnableMongoRepositories
 @Repository
-public interface VendorDetailsRepository  extends  MongoRepository<VendorDetailsRequestModel,String>{
+@EnableMongoRepositories
+public interface UserRepo extends MongoRepository<UserClass, String> {
 
-	public VendorDetailsRequestModel findByVEmail(String email);
+	public UserClass findByEmail(String email);
 }

@@ -2,9 +2,13 @@ package com.fitness.app.model;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fitness.app.entity.GymAddressClass;
 
@@ -19,7 +23,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @ApiModel(description = "BookedGymModel")
 public class BookedGymModel {
-	
+
 	@ApiModelProperty(name = "id", notes = "Booked gym id")
 	@NotNull
 	private String id;
@@ -27,6 +31,7 @@ public class BookedGymModel {
 	@NotNull
 	@NotBlank
 	@NotEmpty
+	@Size(max = 25)
 	private String gymName;
 	@ApiModelProperty(name = "vendor", notes = "Vendor Email")
 	@NotNull
@@ -51,5 +56,7 @@ public class BookedGymModel {
 	@ApiModelProperty(name = "contact", notes = "Contact number of vendor")
 	private String contact;
 	@ApiModelProperty(name = "rating", notes = "Rating of the gym")
+	@DecimalMax(value = "5.0", inclusive = true, message = "Value should not exceed 5.0")
+	@DecimalMin(value = "0.0", inclusive = true, message = "Value should not be less than 0.0")
 	private Double rating;
 }

@@ -4,16 +4,16 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "Geo")
-public class Geo {
+public class GeoModel {
 
     @ApiModelProperty(name = "location", notes = "Location of User or Gym")
-    private Location location;
+    private LocationModel location;
 
-    public Location getLocation() {
+    public LocationModel getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(LocationModel location) {
         this.location = location;
     }
 

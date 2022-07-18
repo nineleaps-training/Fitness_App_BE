@@ -10,72 +10,105 @@ import com.fitness.app.model.GymClassModel;
 
 @Service
 public class FilterBySubscription {
-	
-	//Filter based on monthly subscription
-	public List<GymClassModel> filterByMonthly(int price, List<GymClassModel> listGym)
-	{
-		
-		List<GymClassModel> newList=new ArrayList<>();
-		for(GymClassModel gym: listGym)
-		{
-			GymSubscriptionClass subscription=gym.getMSubscription();
-			if((subscription.getMonthly()<=price) || (subscription.getMonthly()<=(price+200)))
+
+	/**
+	 * This function is used to filter the gyms by monthly subscription
+	 * 
+	 * @param price
+	 * @param listGym
+	 * @return
+	 */
+	public List<GymClassModel> filterByMonthly(int price, List<GymClassModel> listGym) {
+
+		List<GymClassModel> newList = new ArrayList<>();
+		for (GymClassModel gym : listGym) {
+			GymSubscriptionClass subscription = gym.getMSubscription();
+			if ((subscription.getMonthly() <= price) || (subscription.getMonthly() <= (price + 200))) // Filter based on monthly subscription
 			{
 				newList.add(gym);
 			}
 		}
-		
 		return newList;
 	}
 
-	//Filter based on quarterly subscription
+	/**
+	 * This function is used to filter the gyms by quaterly subscription
+	 * 
+	 * @param price
+	 * @param listGym
+	 * @return
+	 */
 	public List<GymClassModel> filterByQuarterly(int price, List<GymClassModel> listGym) {
 
 		List<GymClassModel> list = new ArrayList<>();
-		for(GymClassModel gym: listGym) {
+		for (GymClassModel gym : listGym) {
 
 			GymSubscriptionClass subscription = gym.getMSubscription();
-			if(subscription.getQuaterly()<=price || subscription.getQuaterly()<=(price+500)) {
+			if (subscription.getQuaterly() <= price || subscription.getQuaterly() <= (price + 500)) // Filter based on quarterly subscription
+			{
 				list.add(gym);
 			}
 		}
 		return list;
 	}
 
-
+	/**
+	 * This function is used to filter the gyms by half-yearly subscription
+	 * 
+	 * @param price
+	 * @param listGym
+	 * @return
+	 */
 	public List<GymClassModel> filterByHalfYearly(int price, List<GymClassModel> listGym) {
 
 		List<GymClassModel> list = new ArrayList<>();
-		for(GymClassModel gym: listGym) {
+		for (GymClassModel gym : listGym) {
 
 			GymSubscriptionClass subscription = gym.getMSubscription();
-			if(subscription.getHalf()<=price || subscription.getHalf()<=(price+1000)) {
+			if (subscription.getHalf() <= price || subscription.getHalf() <= (price + 1000)) // Filter based on half-yearly subscription
+			{
 				list.add(gym);
 			}
 		}
 		return list;
 	}
 
+	/**
+	 * This function is used to filter the gyms by yearly subscription
+	 * 
+	 * @param price
+	 * @param listGym
+	 * @return
+	 */
 	public List<GymClassModel> filterByYearly(int price, List<GymClassModel> listGym) {
 
 		List<GymClassModel> list = new ArrayList<>();
-		for(GymClassModel gym: listGym) {
+		for (GymClassModel gym : listGym) {
 
 			GymSubscriptionClass subscription = gym.getMSubscription();
-			if(subscription.getYearly()<=price || subscription.getYearly()<=(price+1500)) {
+			if (subscription.getYearly() <= price || subscription.getYearly() <= (price + 1500)) // Filter based on yearly subscription
+			{
 				list.add(gym);
 			}
 		}
 		return list;
 	}
 
+	/**
+	 * This function is used to filter the gyms by workout subscription
+	 * 
+	 * @param price
+	 * @param listGym
+	 * @return
+	 */
 	public List<GymClassModel> filterByOneWorkout(int price, List<GymClassModel> listGym) {
 
 		List<GymClassModel> list = new ArrayList<>();
-		for(GymClassModel gym: listGym) {
+		for (GymClassModel gym : listGym) {
 
 			GymSubscriptionClass subscription = gym.getMSubscription();
-			if(subscription.getOneWorkout()<=price || subscription.getOneWorkout()<=(price+200)) {
+			if (subscription.getOneWorkout() <= price || subscription.getOneWorkout() <= (price + 200)) // Filter based on workout subscription
+			{
 				list.add(gym);
 			}
 		}

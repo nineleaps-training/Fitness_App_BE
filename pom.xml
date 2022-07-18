@@ -21,6 +21,7 @@
 			**/java/com/fitness/app/config/JwtAuthenticationEntryPoint.java,
             **/java/com/fitness/app/config/WebConfiguration.java,
             **/java/com/fitness/app/config/WebCorsConfiguration.java,
+            **/java/com/fitness/app/config/TraceInterceptor.java,
 			**/java/com/fitness/app/entity/*,
 			**/java/com/fitness/app/image/Doc.java,
 			**/java/com/fitness/app/image/ImgRepo.java,
@@ -174,7 +175,18 @@
             <artifactId>springfox-boot-starter</artifactId>
             <version>3.0.0</version>
         </dependency>
-		<dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.vladimir-bukhtoyarov/bucket4j-core -->
+        <dependency>
+            <groupId>com.github.vladimir-bukhtoyarov</groupId>
+            <artifactId>bucket4j-core</artifactId>
+            <version>6.4.1</version>
+        </dependency>
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>7.2</version>
+        </dependency>
+        <dependency>
 			<groupId>com.itextpdf</groupId>
 			<artifactId>itextpdf</artifactId>
 			<version>5.5.13.3</version>

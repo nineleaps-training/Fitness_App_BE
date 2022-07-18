@@ -1,4 +1,5 @@
 package com.fitness.app.entity;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -12,14 +13,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Document("rating")
 public class Rating {
-    @Id
-    @Field
-    private String rid;
-    @Field
+	@Id
+	@Field
+	private String rid;
+	@Field
 	private String target;
 	@Field
 	private String rater;
 	@Field
-	private double rate;  
-    
+	private double rate;
+
 }

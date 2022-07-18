@@ -28,17 +28,15 @@ public class JwtUtils {
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        try
-        {
+        try {
             final Claims claims = extractAllClaims(token);
             return claimsResolver.apply(claims);
-        }
-        catch(ExpiredJwtException e)
-        {
+        } catch (ExpiredJwtException e) {
             log.error("JWT Token Expired");
             return null;
         }
     }
+
     private Claims extractAllClaims(String token) {
         return Jwts.parser().setSigningKey(secretKEY).parseClaimsJws(token).getBody();
     }
@@ -51,18 +49,15 @@ public class JwtUtils {
     private String createToken(Map<String, Object> claims, String subject) {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 30000))
+                .setExpiration(new Date(System.currentTimeMillis() + 1800000))
                 .signWith(SignatureAlgorithm.HS256, secretKEY).compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
-        if(username!=null)
-        {
+        if (username != null) {
             return (username.equals(userDetails.getUsername()));
-        }
-        else
-        {
+        } else {
             return false;
         }
     }

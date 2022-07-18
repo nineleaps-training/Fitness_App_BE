@@ -9,13 +9,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootConfiguration
 class FitnessAppApplicationTests {
 
-	@Test
-	void contextLoads() {
-    Assertions.assertDoesNotThrow(this::doNotThrowException);
-}
+    @Test
+    void contextLoads() {
+        Assertions.assertDoesNotThrow(this::doNotThrowException);
+    }
 
-private void doNotThrowException(){
-    //This method will never throw exception
-}
+    private void doNotThrowException() {
+        // This method will never throw exception
+    }
 
 }

@@ -10,7 +10,7 @@ import io.swagger.annotations.ApiModelProperty;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(description = "PhotoResponse")
-public class PhotoResponse {
+public class PhotoResponseModel {
     @ApiModelProperty(name = "fileName", notes = "Name of the image")
     private String fileName;
     @ApiModelProperty(name = "downloadURL", notes = "URL of the image")

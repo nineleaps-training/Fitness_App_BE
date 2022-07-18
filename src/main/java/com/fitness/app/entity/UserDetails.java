@@ -21,7 +21,7 @@ public class UserDetails {
     private String uGender;
 
     @Field
-    private String uFullAddress;
+    private String uFulladdress;
 
     @Field
     private String uCity;

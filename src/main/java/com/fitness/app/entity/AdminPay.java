@@ -24,7 +24,7 @@ public class AdminPay {
 	private String orderId;
 	@Field
 	private String vendor;
-	
+
 	@Field
 	private int amount;
 	@Field
@@ -37,14 +37,12 @@ public class AdminPay {
 	private LocalDate date;
 	@Field
 	private LocalTime time;
-	
-	
+
 	public AdminPay(String vendor, int amount) {
 		super();
 		this.vendor = vendor;
 		this.amount = amount;
 	}
-
 
 	public AdminPay(String vendor, int amount, String status) {
 		super();
@@ -52,15 +50,5 @@ public class AdminPay {
 		this.amount = amount;
 		this.status = status;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 }

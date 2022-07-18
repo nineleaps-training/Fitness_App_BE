@@ -1,17 +1,18 @@
 package com.fitness.app.model;
 
+import io.swagger.annotations.ApiModel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-
-import org.springframework.stereotype.Component;
-
-import com.fitness.app.entity.CustomResponse;
-@Component
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ApiModel(description = "ResponseModel")
 public class ResponseModel {
-    public CustomResponse changeResponse(boolean success, String message, String status) {
-        CustomResponse response = new CustomResponse();
-        response.setMessage(message);
-        response.setStatus(status);
-        response.setSuccess(success);
-        return response;
-    }
+
+    private String status;
+    private String message;
+    private boolean success;
+
 }

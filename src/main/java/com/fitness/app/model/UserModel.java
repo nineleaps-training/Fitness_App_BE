@@ -20,8 +20,8 @@ import io.swagger.annotations.ApiModelProperty;
 public class UserModel {
     @ApiModelProperty(name = "email", notes = "Email of User")
     @NotNull
-	@NotBlank
-	@NotEmpty
+    @NotBlank
+    @NotEmpty
     @Email
     private String email;
     @ApiModelProperty(name = "fullName", notes = "Name of User")
@@ -30,14 +30,13 @@ public class UserModel {
     private String mobile;
     @ApiModelProperty(name = "password", notes = "Password of User")
     @NotNull
-	@NotBlank
-	@NotEmpty
-    @Pattern(regexp="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",message="Password length must be 8 or greater")
+    @NotBlank
+    @NotEmpty
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message = "Password should contain 1 capital letter, 1 small letter, 1 digit, 1 special symbol and must be 8 or greater")
     private String password;
     @ApiModelProperty(name = "role", notes = "Role of user")
     private String role;
     @ApiModelProperty(name = "custom", notes = "True or False")
     private Boolean custom;
-
 
 }

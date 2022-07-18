@@ -1,12 +1,12 @@
 package com.fitness.app.model;
 
-
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
@@ -18,34 +18,39 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 @ApiModel(description = "UserBankDetailsRequestModel")
 public class UserBankDetailsRequestModel {
-    @ApiModelProperty(name = "uEmail", notes = "Email of User")
+
     @NotNull
-	@NotBlank
-	@NotEmpty
+    @NotBlank
+    @NotEmpty
     @Email
-    private String uEmail;
-    @ApiModelProperty(name = "uName", notes = "Name of user")
+    @ApiModelProperty(name = "email", notes = "Email of User")
+    private String email;
+    @ApiModelProperty(name = "name", notes = "Name of user")
     @NotNull
-	@NotBlank
-	@NotEmpty
-    private String uName;
-    @ApiModelProperty(name = "uBankname", notes = "Name of the Bank")
+    @NotBlank
+    @NotEmpty
+    private String name;
+    @ApiModelProperty(name = "bankName", notes = "Name of the Bank")
     @NotNull
-	@NotBlank
-	@NotEmpty
-    private String uBankname;
-    @ApiModelProperty(name = "uBranchname", notes = "Name of the Branch")
+    @NotBlank
+    @NotEmpty
+    @Size(max = 25)
+    private String bankName;
+    @ApiModelProperty(name = "branchName", notes = "Name of the Branch")
     @NotNull
-	@NotBlank
-	@NotEmpty
-    private String uBranchname;
-    @ApiModelProperty(name = "uAccountnumber", notes = "Account number")
+    @NotBlank
+    @NotEmpty
+    @Size(max = 25)
+    private String branchName;
+    @ApiModelProperty(name = "accountNumber", notes = "Account number")
     @NotNull
-    private Long uAccountnumber;
-    @ApiModelProperty(name = "uBankifsc", notes = "IFSC Code of the Bank")
+    private Long accountNumber;
+    @ApiModelProperty(name = "bankIFSC", notes = "IFSC Code of the Bank")
     @NotNull
-	@NotBlank
-	@NotEmpty
-    private String uBankifsc;
-   
+    @NotBlank
+    @NotEmpty
+    private String bankIFSC;
+    @ApiModelProperty(name = "paymentSchedule", notes = "Payment Schedule")
+    private String paymentSchedule;
+
 }

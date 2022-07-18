@@ -9,15 +9,14 @@ public class Rows {
 
     @JsonProperty("elements")
     @ApiModelProperty(name = "elements", notes = "All Elements")
-    private Elements[] elements;
+    private ElementsModel[] elements;
 
-    public Elements[] getElements() {
+    public ElementsModel[] getElements() {
         return elements;
     }
 
-    public void setElements(Elements[] elements) {
+    public void setElements(ElementsModel[] elements) {
         this.elements = elements;
     }
 
-    
 }

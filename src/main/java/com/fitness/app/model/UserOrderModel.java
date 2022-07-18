@@ -3,6 +3,7 @@ package com.fitness.app.model;
 import java.util.List;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -36,6 +37,7 @@ public class UserOrderModel {
 	private String subscription;
 	@ApiModelProperty(name = "amount", notes = "Amount to be paid")
 	@NotNull
+	@Min(value = 1, message = "Amount should be atleast 1")
 	private int amount;
 	@ApiModelProperty(name = "slot", notes = "Slot of the gym")
 	private String slot;

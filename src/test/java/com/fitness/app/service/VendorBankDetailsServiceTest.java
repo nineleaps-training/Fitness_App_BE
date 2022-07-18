@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -16,117 +17,147 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorBankDetails;
-import com.fitness.app.model.VendorBankDetailsRequestModel;
-import com.fitness.app.repository.BankDetailsRepository;
-import com.fitness.app.repository.UserRepository;
+import com.fitness.app.model.UserBankDetailsRequestModel;
+import com.fitness.app.repository.BankDetailsRepo;
+import com.fitness.app.repository.UserRepo;
 
 @ExtendWith(MockitoExtension.class)
 class VendorBankDetailsServiceTest {
     @Mock
-    BankDetailsRepository bankDetailsRepository;
+    BankDetailsRepo bankDetailsRepository;
 
     @Mock
-    UserRepository userRepository;
+    UserRepo userRepository;
 
     VendorBankDetailsService vendorBankDetailsService;
 
     VendorBankDetails vendorBankDetails;
 
-    VendorBankDetailsRequestModel userBankDetailsModel;
+    UserBankDetailsRequestModel userBankDetailsModel;
 
-    long l=1234;
-   
+    long l = 1234;
+
     MockMvc mockMvc;
     UserClass userClass;
 
     @BeforeEach
     public void initcase() {
-        vendorBankDetailsService=new VendorBankDetailsService(bankDetailsRepository, userRepository);
+        vendorBankDetailsService = new VendorBankDetailsService(bankDetailsRepository, userRepository);
     }
-    
+
     @Test
+    @DisplayName("Testing of adding the vendor details")
     void addBankDetailsIfUserIsNotNullAndStatusIsActivated() {
-        userBankDetailsModel = new VendorBankDetailsRequestModel("pankaj.jain@nineleaps.com",
+        userBankDetailsModel = new UserBankDetailsRequestModel("pankaj.jain@nineleaps.com",
                 "Pankaj", "ICICI", "Bangalore",
-                1234L, "ICICI2000","weekly");
+                1234L, "ICICI2000", "weekly");
 
         UserClass userClass = new UserClass("pankaj.jain@nineleaps.com", "Pankaj",
                 "9685903290", "12345", "Enthusiast", true, true, true);
 
         when(userRepository.findByEmail(userBankDetailsModel.getEmail())).thenReturn(userClass);
 
-        VendorBankDetailsRequestModel actual = vendorBankDetailsService.addDetails(userBankDetailsModel);
+        VendorBankDetails actual = vendorBankDetailsService.addDetails(userBankDetailsModel);
 
         Assertions.assertEquals(null, actual);
 
     }
 
     @Test
+    @DisplayName("Testing of adding the vendor details")
     void doNotAddBankDetailsIfUserIsNotNullAndStatusIsNotActivated() {
-        VendorBankDetailsRequestModel userBankDetailsModel = new VendorBankDetailsRequestModel("pankaj.jain@nineleaps.com",
+        UserBankDetailsRequestModel userBankDetailsModel = new UserBankDetailsRequestModel("pankaj.jain@nineleaps.com",
                 "Pankaj", "ICICI", "Bangalore",
-                1234L, "ICICI2000","weekly");
+                1234L, "ICICI2000", "weekly");
 
         UserClass userClass = new UserClass("pankaj.jain@nineleaps.com", "Pankaj",
                 "9685903290", "12345", "Enthusiast", false, true, true);
 
         when(userRepository.findByEmail(userBankDetailsModel.getEmail())).thenReturn(userClass);
 
-        VendorBankDetailsRequestModel actual = vendorBankDetailsService.addDetails(userBankDetailsModel);
+        VendorBankDetails actual = vendorBankDetailsService.addDetails(userBankDetailsModel);
 
-        Assertions.assertEquals(null,actual);
+        Assertions.assertEquals(null, actual);
 
     }
 
     @Test
+    @DisplayName("Testing of adding the vendor details")
     void doNotAddBankDetailsIfUserIsNullAndStatusIsNotActivated() {
-        VendorBankDetailsRequestModel userBankDetailsModel = new VendorBankDetailsRequestModel("pankaj.jain@nineleaps.com",
+        UserBankDetailsRequestModel userBankDetailsModel = new UserBankDetailsRequestModel("pankaj.jain@nineleaps.com",
                 "Pankaj", "ICICI", "Bangalore",
-                1234L, "ICICI2000","weekly");
+                1234L, "ICICI2000", "weekly");
 
         UserClass userClass = new UserClass();
         userClass.setActivated(false);
 
         when(userRepository.findByEmail(userBankDetailsModel.getEmail())).thenReturn(userClass);
 
-        VendorBankDetailsRequestModel actual = vendorBankDetailsService.addDetails(userBankDetailsModel);
+        VendorBankDetails actual = vendorBankDetailsService.addDetails(userBankDetailsModel);
 
-        Assertions.assertEquals(null,actual);
+        Assertions.assertEquals(null, actual);
 
     }
 
     @Test
+    @DisplayName("Testing of adding the vendor details")
     void doNotAddBankDetailsIfUserIsNullAndStatusIsActivated() {
-        VendorBankDetailsRequestModel userBankDetailsModel = new VendorBankDetailsRequestModel("pankaj.jain@nineleaps.com",
+        UserBankDetailsRequestModel userBankDetailsModel = new UserBankDetailsRequestModel("pankaj.jain@nineleaps.com",
                 "Pankaj", "ICICI", "Bangalore",
-                1234L, "ICICI2000","weekly");
+                1234L, "ICICI2000", "weekly");
 
         UserClass userClass = new UserClass();
         userClass.setActivated(true);
 
-        VendorBankDetailsRequestModel actual = vendorBankDetailsService.addDetails(userBankDetailsModel);
+        VendorBankDetails actual = vendorBankDetailsService.addDetails(userBankDetailsModel);
 
-        Assertions.assertEquals(null,actual);
+        Assertions.assertEquals(null, actual);
 
     }
 
     @Test
+    @DisplayName("Testing of fetching the vendor bank details")
     void testGetBankDetails() {
 
-        VendorBankDetailsRequestModel vendorBankDetailsRequestModel=new VendorBankDetailsRequestModel("pankaj.jain@nineleaps.com","Pankaj Jain","ICICI","Bhatar",l,"ICICI00008","weekly");
-        when(bankDetailsRepository.findByEmail(vendorBankDetailsRequestModel.getEmail())).thenReturn(vendorBankDetailsRequestModel);    
-        VendorBankDetailsRequestModel vendorBankDetailsRequestModel2=vendorBankDetailsService.getBankDetails(vendorBankDetailsRequestModel.getEmail());
-        Assertions.assertEquals(vendorBankDetailsRequestModel, vendorBankDetailsRequestModel2);
+        UserBankDetailsRequestModel vendorBankDetailsRequestModel = new UserBankDetailsRequestModel(
+                "pankaj.jain@nineleaps.com", "Pankaj Jain", "ICICI", "Bhatar", l, "ICICI00008", "weekly");
+        VendorBankDetails vendorBankDetails = new VendorBankDetails("pankaj.jain@nineleaps.com", "Pankaj Jain", "ICICI",
+                "Bhatar", l, "ICICI00008", "weekly");
+        when(bankDetailsRepository.findByEmail(vendorBankDetailsRequestModel.getEmail())).thenReturn(vendorBankDetails);
+        VendorBankDetails vendorBankDetailsRequestModel2 = vendorBankDetailsService
+                .getBankDetails(vendorBankDetailsRequestModel.getEmail());
+        Assertions.assertEquals(vendorBankDetails, vendorBankDetailsRequestModel2);
     }
 
     @Test
+    @DisplayName("Testing of fetching the vendor bank details")
+    void testGetBankDetailsNotFound() {
+
+        UserBankDetailsRequestModel vendorBankDetailsRequestModel = new UserBankDetailsRequestModel(
+                "pankaj.jain@nineleaps.com", "Pankaj Jain", "ICICI", "Bhatar", l, "ICICI00008", "weekly");
+        when(bankDetailsRepository.findByEmail(vendorBankDetailsRequestModel.getEmail())).thenReturn(null);
+        try {
+            vendorBankDetailsService.getBankDetails(vendorBankDetailsRequestModel.getEmail());
+        } catch (Exception e) {
+            Assertions.assertEquals("No vendor found with this email", e.getMessage());
+        }
+
+    }
+
+    @Test
+    @DisplayName("Testing of fetching the vendor bank details")
     void testGetDetails() {
 
-        VendorBankDetailsRequestModel vendorBankDetailsRequestModel=new VendorBankDetailsRequestModel("pankaj.jain@nineleaps.com","Pankaj Jain","ICICI","Bhatar",l,"ICICI00008","weekly");
-        List<VendorBankDetailsRequestModel> vendorBankDetailsRequestModels=new ArrayList<>();
+        UserBankDetailsRequestModel vendorBankDetailsRequestModel = new UserBankDetailsRequestModel(
+                "pankaj.jain@nineleaps.com", "Pankaj Jain", "ICICI", "Bhatar", l, "ICICI00008", "weekly");
+        VendorBankDetails vendorBankDetails = new VendorBankDetails("pankaj.jain@nineleaps.com", "Pankaj Jain", "ICICI",
+                "Bhatar", l, "ICICI00008", "weekly");
+        List<UserBankDetailsRequestModel> vendorBankDetailsRequestModels = new ArrayList<>();
         vendorBankDetailsRequestModels.add(vendorBankDetailsRequestModel);
-        when(bankDetailsRepository.findAll()).thenReturn(vendorBankDetailsRequestModels);
-        List<VendorBankDetailsRequestModel> vendorBankDetailsRequestModels2= vendorBankDetailsService.getDetails();
-        Assertions.assertEquals(vendorBankDetailsRequestModels, vendorBankDetailsRequestModels2); 
+        List<VendorBankDetails> vendorBankDetails2 = new ArrayList<>();
+        vendorBankDetails2.add(vendorBankDetails);
+        when(bankDetailsRepository.findAll()).thenReturn(vendorBankDetails2);
+        List<VendorBankDetails> vendorBankDetailsRequestModels2 = vendorBankDetailsService.getDetails();
+        Assertions.assertEquals(vendorBankDetails2, vendorBankDetailsRequestModels2);
     }
 }

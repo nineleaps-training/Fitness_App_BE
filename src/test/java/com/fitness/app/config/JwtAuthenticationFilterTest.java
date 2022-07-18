@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,21 +33,21 @@ import com.fitness.app.security.service.UserDetailsServiceImpl;
 import com.fitness.app.service.UserDetailsService;
 
 class JwtAuthenticationFilterTest {
-    
+
     @Mock
-	UserDetailsService userService;
+    UserDetailsService userService;
 
-	JwtAuthenticationFilter filter;
-	
-	@Mock
-	UserDetails userDetails;
+    JwtAuthenticationFilter filter;
 
-	@Mock
-	JwtUtils jutil;
+    @Mock
+    UserDetails userDetails;
 
-	HttpServletRequest request;
-	HttpServletResponse response;
-	FilterChain chain;
+    @Mock
+    JwtUtils jutil;
+
+    HttpServletRequest request;
+    HttpServletResponse response;
+    FilterChain chain;
 
     @Mock
     private UserDetailsServiceImpl customUserDetailsService;
@@ -64,6 +65,7 @@ class JwtAuthenticationFilterTest {
     }
 
     @Test
+    @DisplayName("Testing do Filter Internal")
     void testDoFilterInternal() throws ServletException, IOException {
 
         String token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWdtZXQucmluY2hlbkBuaW5lbGVhcHMuY29tIiwiRG9jdG9yRGV0YWlscyI6eyJkb2N0b3JJZCI6NCwiZG9jdG9yTmFtZSI6ImppZ21ldCIsImRvY3RvckVtYWlsIjoiamlnbWV0LnJpbmNoZW5AbmluZWxlYXBzLmNvbSIsInJvbGUiOiJET0NUT1IiLCJwcm9maWxlUGljIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FGZFp1Y3F1dUExT0FMQUZpVlRIMldxTV9mQ29LR0UzZmlGbk5RSUl1OEE9czk2LWMifSwicm9sZSI6IkRPQ1RPUiIsImV4cCI6MTY1NzQzMTQ5OCwiaWF0IjoxNjU3MzQ1MDk4fQ.5EsBF7HKfTkcpbOTK5ks1IClSHvo0swO8R6cvdv-40q85UgOs1YSIvn9R_iQtlNBlCGMUSLCq96XOOLA-f7Jag";
@@ -73,10 +75,11 @@ class JwtAuthenticationFilterTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain filterChain = mock(FilterChain.class);
 
-        UserModel loginDetails=new UserModel("pankaj.jain@nineleaps.com","Pankaj Jain","8469492322","Pankaj@123","ADMIN",false);
+        UserModel loginDetails = new UserModel("pankaj.jain@nineleaps.com", "Pankaj Jain", "8469492322", "Pankaj@123",
+                "ADMIN", false);
 
-        org.springframework.security.core.userdetails.UserDetails userDetails = new org.springframework.security.core.userdetails.UserDetails()  {
-            
+        org.springframework.security.core.userdetails.UserDetails userDetails = new org.springframework.security.core.userdetails.UserDetails() {
+
             @Override
             public Collection<? extends GrantedAuthority> getAuthorities() {
                 String roles = loginDetails.getRole();
@@ -116,17 +119,19 @@ class JwtAuthenticationFilterTest {
             }
         };
 
-        Mockito.when(jutil.validateToken(Mockito.any(String.class), Mockito.any(org.springframework.security.core.userdetails.UserDetails.class))).thenReturn(true);
+        Mockito.when(jutil.validateToken(Mockito.any(String.class),
+                Mockito.any(org.springframework.security.core.userdetails.UserDetails.class))).thenReturn(true);
         Mockito.when(jutil.extractUsername(Mockito.any(String.class))).thenReturn("jigmet");
         Mockito.when(customUserDetailsService.loadUserByUsername("jigmet")).thenReturn(userDetails);
 
-        authenticationFilter.doFilterInternal(request,response,filterChain);
-        authenticationFilter.doFilterInternal(request,response,filterChain);
+        authenticationFilter.doFilterInternal(request, response, filterChain);
+        authenticationFilter.doFilterInternal(request, response, filterChain);
 
-        verify(filterChain,times(2)).doFilter(request,response);
+        verify(filterChain, times(2)).doFilter(request, response);
     }
 
     @Test
+    @DisplayName("Testing if the token is invalid")
     void returnNullIfTokenIsNotValid() throws ServletException, IOException {
 
         String token = "Bear eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWdtZXQucmluY2hlbkBuaW5lbGVhcHMuY29tIiwiRG9jdG9yRGV0YWlscyI6eyJkb2N0b3JJZCI6NCwiZG9jdG9yTmFtZSI6ImppZ21ldCIsImRvY3RvckVtYWlsIjoiamlnbWV0LnJpbmNoZW5AbmluZWxlYXBzLmNvbSIsInJvbGUiOiJET0NUT1IiLCJwcm9maWxlUGljIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FGZFp1Y3F1dUExT0FMQUZpVlRIMldxTV9mQ29LR0UzZmlGbk5RSUl1OEE9czk2LWMifSwicm9sZSI6IkRPQ1RPUiIsImV4cCI6MTY1NzQzMTQ5OCwiaWF0IjoxNjU3MzQ1MDk4fQ.5EsBF7HKfTkcpbOTK5ks1IClSHvo0swO8R6cvdv-40q85UgOs1YSIvn9R_iQtlNBlCGMUSLCq96XOOLA-f7Jag";
@@ -136,13 +141,14 @@ class JwtAuthenticationFilterTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain filterChain = mock(FilterChain.class);
 
-        authenticationFilter.doFilterInternal(request,response,filterChain);
+        authenticationFilter.doFilterInternal(request, response, filterChain);
 
-        verify(filterChain,times(1)).doFilter(request,response);
+        verify(filterChain, times(1)).doFilter(request, response);
 
     }
 
     @Test
+    @DisplayName("Testing if token is empty")
     void returnNullIfBearerTokenIsEmpty() throws ServletException, IOException {
 
         String token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJqaWdtZXQucmluY2hlbkBuaW5lbGVhcHMuY29tIiwiRG9jdG9yRGV0YWlscyI6eyJkb2N0b3JJZCI6NCwiZG9jdG9yTmFtZSI6ImppZ21ldCIsImRvY3RvckVtYWlsIjoiamlnbWV0LnJpbmNoZW5AbmluZWxlYXBzLmNvbSIsInJvbGUiOiJET0NUT1IiLCJwcm9maWxlUGljIjoiaHR0cHM6Ly9saDMuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2EtL0FGZFp1Y3F1dUExT0FMQUZpVlRIMldxTV9mQ29LR0UzZmlGbk5RSUl1OEE9czk2LWMifSwicm9sZSI6IkRPQ1RPUiIsImV4cCI6MTY1NzQzMTQ5OCwiaWF0IjoxNjU3MzQ1MDk4fQ.5EsBF7HKfTkcpbOTK5ks1IClSHvo0swO8R6cvdv-40q85UgOs1YSIvn9R_iQtlNBlCGMUSLCq96XOOLA-f7Jag";
@@ -152,18 +158,20 @@ class JwtAuthenticationFilterTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain filterChain = mock(FilterChain.class);
 
-        authenticationFilter.doFilterInternal(request,response,filterChain);
+        authenticationFilter.doFilterInternal(request, response, filterChain);
 
-        verify(filterChain,times(1)).doFilter(request,response);
+        verify(filterChain, times(1)).doFilter(request, response);
 
     }
 
     @Test
+    @DisplayName("Testing failure if token is not validated")
     void returnFailureIfValidateTokenIsFalse() throws ServletException, IOException {
 
-        UserModel loginDetails=new UserModel("pankaj.jain@nineleaps.com","Pankaj Jain","8469492322","Pankaj@123","ADMIN",false);
-        org.springframework.security.core.userdetails.UserDetails userDetails = new org.springframework.security.core.userdetails.UserDetails()  {
-            
+        UserModel loginDetails = new UserModel("pankaj.jain@nineleaps.com", "Pankaj Jain", "8469492322", "Pankaj@123",
+                "ADMIN", false);
+        org.springframework.security.core.userdetails.UserDetails userDetails = new org.springframework.security.core.userdetails.UserDetails() {
+
             @Override
             public Collection<? extends GrantedAuthority> getAuthorities() {
                 String roles = loginDetails.getRole();
@@ -210,58 +218,61 @@ class JwtAuthenticationFilterTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain filterChain = mock(FilterChain.class);
 
-        Mockito.when(jutil.validateToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYW5rYWouamFpbkBuaW5lbGVhcHMuY29tIiwiZXhwIjoxNjU3NTMxNzY4LCJpYXQiOjE2NTc1MzE3Mzh9.pj2x625PfTndZ3PISV4dIpNIBzE-jZ7rShR16i0dwYs",userDetails)).thenReturn(false);
+        Mockito.when(jutil.validateToken(
+                "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYW5rYWouamFpbkBuaW5lbGVhcHMuY29tIiwiZXhwIjoxNjU3NTMxNzY4LCJpYXQiOjE2NTc1MzE3Mzh9.pj2x625PfTndZ3PISV4dIpNIBzE-jZ7rShR16i0dwYs",
+                userDetails)).thenReturn(false);
         Mockito.when(jutil.extractUsername(Mockito.any(String.class))).thenReturn("jigmet");
 
-        authenticationFilter.doFilterInternal(request,response,filterChain);
+        authenticationFilter.doFilterInternal(request, response, filterChain);
 
-        verify(filterChain,times(1)).doFilter(request,response);
+        verify(filterChain, times(1)).doFilter(request, response);
 
     }
 
-
-
-	@Test
-	@ExtendWith(MockitoExtension.class)
-	void TestJwtFilter() throws ServletException, IOException {
+    @Test
+    @ExtendWith(MockitoExtension.class)
+    @DisplayName("Testing JWT Filter")
+    void TestJwtFilter() throws ServletException, IOException {
 
         filter = new JwtAuthenticationFilter(customUserDetailsService, jutil);
         FilterChain filterChain = mock(FilterChain.class);
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
-		Mockito.when(request.getHeader("Authorization")).thenReturn(
-				"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGl0LnJhajEwYUBnbWFpbC5jb20iLCJleHAiOjE2NTE4ODI2MjQsImlhdCI6MTY1MTUyMjYyNH0.hsMnTM5-k4JWnfMdT7i95Xc1kTHKvtClF1A0OGzigPo");
-		Mockito.when(jutil.extractUsername(
-				"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGl0LnJhajEwYUBnbWFpbC5jb20iLCJleHAiOjE2NTE4ODI2MjQsImlhdCI6MTY1MTUyMjYyNH0.hsMnTM5-k4JWnfMdT7i95Xc1kTHKvtClF1A0OGzigPo"))
-				.thenReturn("harshit.raj10a@gmail.com");
-		filter.doFilterInternal(request, response, filterChain);
-		verify(filterChain,times(1)).doFilter(request,response);
-	}
+        Mockito.when(request.getHeader("Authorization")).thenReturn(
+                "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGl0LnJhajEwYUBnbWFpbC5jb20iLCJleHAiOjE2NTE4ODI2MjQsImlhdCI6MTY1MTUyMjYyNH0.hsMnTM5-k4JWnfMdT7i95Xc1kTHKvtClF1A0OGzigPo");
+        Mockito.when(jutil.extractUsername(
+                "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGl0LnJhajEwYUBnbWFpbC5jb20iLCJleHAiOjE2NTE4ODI2MjQsImlhdCI6MTY1MTUyMjYyNH0.hsMnTM5-k4JWnfMdT7i95Xc1kTHKvtClF1A0OGzigPo"))
+                .thenReturn("pankaj.jain@nineleaps.com");
+        filter.doFilterInternal(request, response, filterChain);
+        verify(filterChain, times(1)).doFilter(request, response);
+    }
 
-	@Test
-	@ExtendWith(MockitoExtension.class)
-	void TestJwtFilterauthHeaderNull() throws ServletException, IOException {
-
-        FilterChain filterChain = mock(FilterChain.class);
-        filter = new JwtAuthenticationFilter(customUserDetailsService, jutil);
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        HttpServletResponse response = mock(HttpServletResponse.class);
-		Mockito.when(request.getHeader("Authorization")).thenReturn(null);
-		filter.doFilterInternal(request, response, filterChain);
-        verify(filterChain,times(1)).doFilter(request,response);
-	}
-
-	@Test
-	@ExtendWith(MockitoExtension.class)
-	void TestJwtFilterNonBererToken() throws ServletException, IOException {
+    @Test
+    @ExtendWith(MockitoExtension.class)
+    @DisplayName("Testing if Authentication Header is null")
+    void TestJwtFilterauthHeaderNull() throws ServletException, IOException {
 
         FilterChain filterChain = mock(FilterChain.class);
         filter = new JwtAuthenticationFilter(customUserDetailsService, jutil);
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
-		Mockito.when(request.getHeader("Authorization")).thenReturn(
-				"Beare eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGl0LnJhajEwYUBnbWFpbC5jb20iLCJleHAiOjE2NTE4ODI2MjQsImlhdCI6MTY1MTUyMjYyNH0.hsMnTM5-k4JWnfMdT7i95Xc1kTHKvtClF1A0OGzigPo");
-		filter.doFilterInternal(request, response, filterChain);
-        verify(filterChain,times(1)).doFilter(request,response);
-	}
+        Mockito.when(request.getHeader("Authorization")).thenReturn(null);
+        filter.doFilterInternal(request, response, filterChain);
+        verify(filterChain, times(1)).doFilter(request, response);
+    }
+
+    @Test
+    @ExtendWith(MockitoExtension.class)
+    @DisplayName("Testing JWT Filter with Non Bearer Token")
+    void TestJwtFilterNonBererToken() throws ServletException, IOException {
+
+        FilterChain filterChain = mock(FilterChain.class);
+        filter = new JwtAuthenticationFilter(customUserDetailsService, jutil);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+        Mockito.when(request.getHeader("Authorization")).thenReturn(
+                "Beare eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGl0LnJhajEwYUBnbWFpbC5jb20iLCJleHAiOjE2NTE4ODI2MjQsImlhdCI6MTY1MTUyMjYyNH0.hsMnTM5-k4JWnfMdT7i95Xc1kTHKvtClF1A0OGzigPo");
+        filter.doFilterInternal(request, response, filterChain);
+        verify(filterChain, times(1)).doFilter(request, response);
+    }
 }

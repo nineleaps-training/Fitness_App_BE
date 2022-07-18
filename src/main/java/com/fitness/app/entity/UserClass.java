@@ -11,10 +11,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection =  "all_users")
+@Document(collection = "all_users")
 public class UserClass {
 
-	
 	@Id
 	@Field
 	private String email;

@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 @Document("user_attendence")
 public class UserAttendance {
 
-	
 	@Id
 	@Field
 	private String email;
@@ -32,5 +31,5 @@ public class UserAttendance {
 	private List<Integer> attendance;
 	@Field
 	private Double rating;
-	
+
 }

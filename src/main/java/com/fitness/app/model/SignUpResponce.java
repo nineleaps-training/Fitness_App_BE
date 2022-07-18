@@ -16,5 +16,5 @@ public class SignUpResponce {
 	private UserClass currentUser;
 	@ApiModelProperty(name = "message", notes = "JWT Token")
 	private String message;
-	
+
 }

@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "GoogleAddress")
-public class GoogleAddress {
+public class GoogleAddressModel {
 
     @JsonProperty("long_name")
     @ApiModelProperty(name = "longName", notes = "Long Name of Address")
@@ -19,16 +19,13 @@ public class GoogleAddress {
     @ApiModelProperty(name = "type", notes = "Types of Address")
     private String[] type;
 
-    
     public String getLongName() {
         return longName;
     }
 
-
     public String getShortName() {
         return shortName;
     }
-
 
     public String[] getType() {
         return type;

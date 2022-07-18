@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fitness.app.model.GymClassModel;
-import com.fitness.app.model.GymRepresnt;
+import com.fitness.app.model.GymRepresentModel;
 
 @Service
 public class GymService {
 
 	@Autowired
-	private AddGymRepository gymRepository;
+	private AddGymRepo gymRepository;
 
 	@Autowired
 	private GymAddressRepo addressRepo;
@@ -26,8 +26,8 @@ public class GymService {
 
 	@Autowired
 	private GymSubscriptionRepo subcriptionRepo;
-	
-	@Autowired 
+
+	@Autowired
 	private RatingService ratingService;
 
 	private GymAddressClass gymAddressClass;
@@ -38,17 +38,32 @@ public class GymService {
 
 	private GymClass gymClass;
 
-	public GymService(AddGymRepository addGymRepository, GymTimeRepo gymTimeRepo, GymAddressRepo gymAddressRepo,
+	// Initializing constructor
+	/**
+	 * This constructor is used to initialize the repositories
+	 * 
+	 * @param addGymRepository    - Gym Repository
+	 * @param gymTimeRepo         - Gym Time Repository
+	 * @param gymAddressRepo      - Gym Address Repository
+	 * @param gymSubscriptionRepo - Gym Subscription Repository
+	 * @param ratingService       - Rating Service
+	 */
+	public GymService(AddGymRepo addGymRepository, GymTimeRepo gymTimeRepo, GymAddressRepo gymAddressRepo,
 			GymSubscriptionRepo gymSubscriptionRepo, RatingService ratingService) {
 
-				this.gymRepository=addGymRepository;
-				this.timeRepo=gymTimeRepo;
-				this.addressRepo=gymAddressRepo;
-				this.subcriptionRepo=gymSubscriptionRepo;
-				this.ratingService=ratingService;
+		this.gymRepository = addGymRepository;
+		this.timeRepo = gymTimeRepo;
+		this.addressRepo = gymAddressRepo;
+		this.subcriptionRepo = gymSubscriptionRepo;
+		this.ratingService = ratingService;
 	}
 
-    // Add New Gym
+	/**
+	 * This function is used to add new gym
+	 * 
+	 * @param gymClassModel - Details of new gym
+	 * @return - Details of the gym
+	 */
 	public GymClass addNewGym(GymClassModel gymClassModel) {
 		gymClass = gymRepository.findByName(gymClassModel.getMGymname());
 		Long idLast = gymRepository.count() + 1;
@@ -83,162 +98,178 @@ public class GymService {
 		newGym.setWorkout(gymClassModel.getMWorkoutlist());
 		newGym.setContact(gymClassModel.getMContact());
 		newGym.setCapacity(gymClassModel.getMCapacity());
-		gymRepository.save(newGym);
+		gymRepository.save(newGym); // Add New Gym
 		return newGym;
 	}
 
-	// Find gym by Gym_id
-	public GymRepresnt getGymByGymId(String gymId) {
-		GymRepresnt gym = new GymRepresnt();
-		Optional<GymClass> optional=gymRepository.findById(gymId);
-		if(optional.isPresent())
-		{
-			gymClass=optional.get();
+	/**
+	 * This function is used to fetch gym by it's id
+	 * 
+	 * @param gymId - Id of the gym
+	 * @return
+	 */
+	public GymRepresentModel getGymByGymId(String gymId) {
+		GymRepresentModel gym = new GymRepresentModel();
+		Optional<GymClass> optional = gymRepository.findById(gymId); // Find gym by Gym_id
+		if (optional.isPresent()) {
+			gymClass = optional.get();
 			gym.setId(gymClass.getId());
 			gym.setEmail(gymClass.getEmail());
 			gym.setGymName(gymClass.getName());
-			Optional<GymAddressClass> optional2=addressRepo.findById(gymId);
-			if(optional2.isPresent())
-			{
-				gymAddressClass=optional2.get();
+			Optional<GymAddressClass> optional2 = addressRepo.findById(gymId);
+			if (optional2.isPresent()) {
+				gymAddressClass = optional2.get();
 				gym.setGymAddress(gymAddressClass);
 			}
 			gym.setWorkoutList(gymClass.getWorkout());
-			Optional<GymTime> optional3=timeRepo.findById(gymId);
-			if(optional3.isPresent())
-			{
-				gymTime=optional3.get();
+			Optional<GymTime> optional3 = timeRepo.findById(gymId);
+			if (optional3.isPresent()) {
+				gymTime = optional3.get();
 				gym.setTiming(gymTime);
 			}
-			Optional<GymSubscriptionClass> optional4=subcriptionRepo.findById(gymId);
-			if(optional4.isPresent())
-			{
-				gSubscriptionClass=optional4.get();
+			Optional<GymSubscriptionClass> optional4 = subcriptionRepo.findById(gymId);
+			if (optional4.isPresent()) {
+				gSubscriptionClass = optional4.get();
 				gym.setSubscription(gSubscriptionClass);
 			}
 			gym.setContact(gymClass.getContact());
 			gym.setCapacity(gymClass.getCapacity());
 			gym.setRating(gymClass.getRating());
 
-		return gym;
-		}
-		else
-		{
+			return gym;
+		} else {
 			return null;
 		}
 	}
 
-	// Find All gym of a vendor by email id..
-	public List<GymRepresnt> getGymByVendorEmail(String email) {
+	/**
+	 * This function is used to fetch all gyms of a particular vendor from his email
+	 * 
+	 * @param email - Email id of the vendor
+	 * @return - List of gyms
+	 */
+	public List<GymRepresentModel> getGymByVendorEmail(String email) {
 
 		List<GymClass> gymList = gymRepository.findByEmail(email);
-		List<GymRepresnt> gyms = new ArrayList<>();
+		List<GymRepresentModel> gyms = new ArrayList<>();
 
 		for (GymClass eachGym : gymList) {
-			GymRepresnt gym = new GymRepresnt();
-			Double rate= ratingService.getRating(eachGym.getId());
+			GymRepresentModel gym = new GymRepresentModel();
+			Double rate = ratingService.getRating(eachGym.getId());
 			eachGym.setRating(rate);
 			gymRepository.save(eachGym);
 			String id = eachGym.getId();
 			gym.setEmail(eachGym.getEmail());
 			gym.setId(eachGym.getId());
 			gym.setGymName(eachGym.getName());
-			Optional<GymAddressClass> optional2=addressRepo.findById(id);
-			if(optional2.isPresent())
-			{
-				gymAddressClass=optional2.get();
+			Optional<GymAddressClass> optional2 = addressRepo.findById(id);
+			if (optional2.isPresent()) {
+				gymAddressClass = optional2.get();
 				gym.setGymAddress(gymAddressClass);
 			}
 			gym.setWorkoutList(eachGym.getWorkout());
-			Optional<GymTime> optional3=timeRepo.findById(id);
-			if(optional3.isPresent())
-			{
-				gymTime=optional3.get();
+			Optional<GymTime> optional3 = timeRepo.findById(id);
+			if (optional3.isPresent()) {
+				gymTime = optional3.get();
 				gym.setTiming(gymTime);
 			}
-			Optional<GymSubscriptionClass> optional4=subcriptionRepo.findById(id);
-			if(optional4.isPresent())
-			{
-				gSubscriptionClass=optional4.get();
+			Optional<GymSubscriptionClass> optional4 = subcriptionRepo.findById(id);
+			if (optional4.isPresent()) {
+				gSubscriptionClass = optional4.get();
 				gym.setSubscription(gSubscriptionClass);
 			}
 			gym.setContact(eachGym.getContact());
 			gym.setRating(rate);
 			gym.setCapacity(eachGym.getCapacity());
 
-			gyms.add(gym);
+			gyms.add(gym); // Find All gym of a vendor by email id..
 		}
 		return gyms;
 	}
 
-	// Find gym address by gym id
+	/**
+	 * This function is used to fetch the address of the gym from it's id
+	 * 
+	 * @param id - Id of the gym
+	 * @return - Address of the gym
+	 */
 	public GymAddressClass findTheAddress(String id) {
-		GymAddressClass gymAddressClass1=new GymAddressClass();
-		Optional<GymAddressClass> optional2=addressRepo.findById(id);
-			if(optional2.isPresent())
-			{
-				gymAddressClass=optional2.get();
-				return gymAddressClass;
-			}
-			else
-			{
-				return gymAddressClass1;
-			}
+		GymAddressClass gymAddressClass1 = new GymAddressClass();
+		Optional<GymAddressClass> optional2 = addressRepo.findById(id); // Find gym address by gym id
+		if (optional2.isPresent()) {
+			gymAddressClass = optional2.get();
+			return gymAddressClass;
+		} else {
+			return gymAddressClass1;
+		}
 	}
 
-	// Find All gym from database..
+	/**
+	 * This function is used to find all the registered gyms in the application
+	 * 
+	 * @return
+	 */
 	public List<GymClass> getAllGym() {
-		return gymRepository.findAll();
+		return gymRepository.findAll(); // Find All gym from database..
 	}
 
-	// edit gym
+	/**
+	 * This function is used to edit/update the gym details
+	 * 
+	 * @param gymClassModel - Updated details of the gym
+	 * @param gymId         - Id of the gym
+	 * @return - Updated gym details
+	 */
 	public GymClass editGym(GymClassModel gymClassModel, String gymId) {
 		GymClass theGym;
-		Optional<GymClass> optional=gymRepository.findById(gymId);
-		if(optional.isPresent())
-		{
-			theGym=optional.get();
+		Optional<GymClass> optional = gymRepository.findById(gymId);
+		if (optional.isPresent()) {
+			theGym = optional.get();
 
-		// Creating address of gym
-		addressRepo.deleteById(theGym.getId());
-		GymAddressClass gClass;
-		gClass = gymClassModel.getMGymaddress();
-		gClass.setId(gymId);
-		addressRepo.save(gClass);
+			// Creating address of gym
+			addressRepo.deleteById(theGym.getId());
+			GymAddressClass gClass;
+			gClass = gymClassModel.getMGymaddress();
+			gClass.setId(gymId);
+			addressRepo.save(gClass);
 
-		// set time
-		timeRepo.deleteById(theGym.getId());
-		GymTime gTime;
-		gTime = gymClassModel.getMTiming();
-		gTime.setId(gymId);
-		timeRepo.save(gTime);
+			// set time
+			timeRepo.deleteById(theGym.getId());
+			GymTime gTime;
+			gTime = gymClassModel.getMTiming();
+			gTime.setId(gymId);
+			timeRepo.save(gTime);
 
-		// set subscription.
-		subcriptionRepo.deleteById(theGym.getId());
-		gSubscriptionClass = gymClassModel.getMSubscription();
-		gSubscriptionClass.setId(gymId);
-		subcriptionRepo.save(gSubscriptionClass);
+			// set subscription.
+			subcriptionRepo.deleteById(theGym.getId());
+			gSubscriptionClass = gymClassModel.getMSubscription();
+			gSubscriptionClass.setId(gymId);
+			subcriptionRepo.save(gSubscriptionClass);
 
-		gymRepository.delete(theGym);
-		theGym.setId(gymId);
-		theGym.setEmail(gymClassModel.getVendorEmail());
-		theGym.setName(gymClassModel.getMGymname());
-		theGym.setWorkout(gymClassModel.getMWorkoutlist());
-		theGym.setContact(gymClassModel.getMContact());
-		theGym.setCapacity(gymClassModel.getMCapacity());
+			gymRepository.delete(theGym);
+			theGym.setId(gymId); // edit gym
+			theGym.setEmail(gymClassModel.getVendorEmail());
+			theGym.setName(gymClassModel.getMGymname());
+			theGym.setWorkout(gymClassModel.getMWorkoutlist());
+			theGym.setContact(gymClassModel.getMContact());
+			theGym.setCapacity(gymClassModel.getMCapacity());
 
-		gymRepository.save(theGym);
-		return theGym;
-		
-		}
-		else
-		{
+			gymRepository.save(theGym);
+			return theGym;
+
+		} else {
 			return new GymClass();
 		}
 
 	}
+
+	/**
+	 * This function is used to delete all the gyms
+	 * 
+	 * @return - Done
+	 */
 	public String wipingAll() {
-		timeRepo.deleteAll();
+		timeRepo.deleteAll(); // Deleting all Gyms
 		subcriptionRepo.deleteAll();
 		addressRepo.deleteAll();
 		gymRepository.deleteAll();
@@ -246,36 +277,41 @@ public class GymService {
 		return "done";
 	}
 
+	/**
+	 * This function is used to fetch the gym from gym name
+	 * 
+	 * @param gymName - Name of the gym
+	 * @return - Gym with the provided name
+	 */
 	public GymClass getGymByGymName(String gymName) {
-		return gymRepository.findByName(gymName);
+		return gymRepository.findByName(gymName); // Fetching gym by gym name
 	}
 
-	// Gym By City or Loacltiy..
+	/**
+	 * This function is used to fetch the gym from gym city
+	 * 
+	 * @param city - City of the gym
+	 * @return - List of gyms residing in the city
+	 */
+	public List<GymRepresentModel> getGymByCity(String city) {
 
+		List<GymAddressClass> addressList = addressRepo.findByCity(city);
+		List<GymRepresentModel> gyms = new ArrayList<>();
 
-	// Find by City
-	public List<GymRepresnt> getGymByCity(String city) {
-		
-			List<GymAddressClass> addressList = addressRepo.findByCity(city);
-			List<GymRepresnt> gyms = new ArrayList<>();
-
-			for (GymAddressClass ad : addressList) {
-				String id = ad.getId();
-				GymRepresnt gym = new GymRepresnt();
-				Optional<GymClass> optional=gymRepository.findById(id);
-				if(optional.isPresent())
-				{
-					gymClass=optional.get();
-					Optional<GymTime> optional3=timeRepo.findById(id);
-				if(optional3.isPresent())
-				{
-					gymTime=optional3.get();
+		for (GymAddressClass ad : addressList) {
+			String id = ad.getId();
+			GymRepresentModel gym = new GymRepresentModel();
+			Optional<GymClass> optional = gymRepository.findById(id);// Gym By City or Locality
+			if (optional.isPresent()) {
+				gymClass = optional.get();
+				Optional<GymTime> optional3 = timeRepo.findById(id);
+				if (optional3.isPresent()) {
+					gymTime = optional3.get();
 					gym.setTiming(gymTime);
 				}
-				Optional<GymSubscriptionClass> optional4=subcriptionRepo.findById(id);
-				if(optional4.isPresent())
-				{
-					gSubscriptionClass=optional4.get();
+				Optional<GymSubscriptionClass> optional4 = subcriptionRepo.findById(id);
+				if (optional4.isPresent()) {
+					gSubscriptionClass = optional4.get();
 					gym.setSubscription(gSubscriptionClass);
 				}
 				gym.setId(gymClass.getId());
@@ -288,9 +324,9 @@ public class GymService {
 				gym.setCapacity(gymClass.getCapacity());
 			}
 
-				gyms.add(gym);
-			}
-			return gyms;
-		
+			gyms.add(gym);
+		}
+		return gyms;
+
 	}
 }

@@ -1,6 +1,5 @@
 package com.fitness.app.config;
 
-
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
@@ -14,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -32,7 +32,7 @@ class JwtAuthenticationFilterTestCase extends HttpServlet {
 	UserDetailsServiceImpl userService;
 
 	JwtAuthenticationFilter filter;
-	
+
 	@Mock
 	UserDetails userDetails;
 
@@ -43,7 +43,8 @@ class JwtAuthenticationFilterTestCase extends HttpServlet {
 	HttpServletResponse response;
 	FilterChain chain;
 
-	UserModel user1=new UserModel("pankaj.jain@nineleaps.com","Pankaj Jain","8469492322","Pankaj@123","ADMIN",false);
+	UserModel user1 = new UserModel("pankaj.jain@nineleaps.com", "Pankaj Jain", "8469492322", "Pankaj@123", "ADMIN",
+			false);
 
 	@BeforeEach
 	void initUseCase() {
@@ -59,31 +60,34 @@ class JwtAuthenticationFilterTestCase extends HttpServlet {
 
 	@Test
 	@ExtendWith(MockitoExtension.class)
+	@DisplayName("Testing JWT Filter")
 	void TestJwtFilter() throws ServletException, IOException {
 		Mockito.when(request.getHeader("Authorization")).thenReturn(
 				"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGl0LnJhajEwYUBnbWFpbC5jb20iLCJleHAiOjE2NTE4ODI2MjQsImlhdCI6MTY1MTUyMjYyNH0.hsMnTM5-k4JWnfMdT7i95Xc1kTHKvtClF1A0OGzigPo");
 		Mockito.when(jutil.extractUsername(
 				"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGl0LnJhajEwYUBnbWFpbC5jb20iLCJleHAiOjE2NTE4ODI2MjQsImlhdCI6MTY1MTUyMjYyNH0.hsMnTM5-k4JWnfMdT7i95Xc1kTHKvtClF1A0OGzigPo"))
-				.thenReturn("harshit.raj10a@gmail.com");
+				.thenReturn("pankaj.jain@nineleaps.com");
 		filter.doFilterInternal(request, response, chain);
-        verify(chain,times(1)).doFilter(request,response);
-		
+		verify(chain, times(1)).doFilter(request, response);
+
 	}
 
 	@Test
 	@ExtendWith(MockitoExtension.class)
+	@DisplayName("Testing JWT Filter when header is null")
 	void TestJwtFilterauthHeaderNull() throws ServletException, IOException {
 		Mockito.when(request.getHeader("Authorization")).thenReturn(null);
 		filter.doFilterInternal(request, response, chain);
-        verify(chain,times(1)).doFilter(request,response);
+		verify(chain, times(1)).doFilter(request, response);
 	}
 
 	@Test
 	@ExtendWith(MockitoExtension.class)
+	@DisplayName("Testing JWT Filter with Non Bearer Token")
 	void TestJwtFilterNonBererToken() throws ServletException, IOException {
 		Mockito.when(request.getHeader("Authorization")).thenReturn(
 				"Beare eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGl0LnJhajEwYUBnbWFpbC5jb20iLCJleHAiOjE2NTE4ODI2MjQsImlhdCI6MTY1MTUyMjYyNH0.hsMnTM5-k4JWnfMdT7i95Xc1kTHKvtClF1A0OGzigPo");
 		filter.doFilterInternal(request, response, chain);
-        verify(chain,times(1)).doFilter(request,response);
+		verify(chain, times(1)).doFilter(request, response);
 	}
 }

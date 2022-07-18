@@ -1,10 +1,11 @@
 package com.fitness.app.model;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "DResponse")
-public class DResponse {
+public class DResponseModel {
 
     @JsonProperty("destination_addresses")
     @ApiModelProperty(name = "destinationAddresses", notes = "Address of destination")
@@ -15,7 +16,6 @@ public class DResponse {
     @JsonProperty("rows")
     @ApiModelProperty(name = "rows", notes = "List of rows")
     private Rows[] rows;
-    
 
     public String[] getDestinationAddresses() {
         return destinationAddresses;
@@ -40,5 +40,5 @@ public class DResponse {
     public void setRows(Rows[] rows) {
         this.rows = rows;
     }
-    
+
 }

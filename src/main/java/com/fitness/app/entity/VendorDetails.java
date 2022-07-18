@@ -16,18 +16,18 @@ public class VendorDetails {
 
 	@Id
 	@Field
-	private String email;
+	private String vEmail;
 
 	@Field
-	private String gender;
+	private String vGender;
 
 	@Field
-	private String fullAddress;
+	private String vFulladdress;
 
 	@Field
-	private String city;
+	private String vCity;
 
 	@Field
-	private Long postal;
+	private Long vPostal;
 
 }

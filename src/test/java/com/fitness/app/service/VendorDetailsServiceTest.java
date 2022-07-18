@@ -3,105 +3,131 @@ package com.fitness.app.service;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.when;
+
+import java.util.Optional;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fitness.app.entity.UserClass;
-import com.fitness.app.model.VendorDetailsRequestModel;
-import com.fitness.app.repository.UserRepository;
-import com.fitness.app.repository.VendorDetailsRepository;
+import com.fitness.app.entity.VendorDetails;
+import com.fitness.app.model.UserDetailsRequestModel;
+import com.fitness.app.repository.UserRepo;
+import com.fitness.app.repository.VendorDetailsRepo;
 
 @ExtendWith(MockitoExtension.class)
 class VendorDetailsServiceTest {
 
     @Mock
-    VendorDetailsRepository vendorDetailsRepository;
+    VendorDetailsRepo vendorDetailsRepository;
 
     @Mock
-    UserRepository userRepository;
+    UserRepo userRepository;
 
     VendorDetailsService vendorDetailsService;
 
-    VendorDetailsRequestModel vendorDetailsRequestModel;
+    UserDetailsRequestModel vendorDetailsRequestModel;
 
-    long l=1234;
-   
+    long l = 1234;
+
     MockMvc mockMvc;
     UserClass userClass;
 
     @BeforeEach
     public void initcase() {
-        vendorDetailsService=new VendorDetailsService(userRepository,vendorDetailsRepository);
+        vendorDetailsService = new VendorDetailsService(userRepository, vendorDetailsRepository);
     }
 
     @Test
+    @DisplayName("Testing of adding the vendor details")
     void addUserDetailsIfUserIsNotNullAndStatusIsActivated() {
-        VendorDetailsRequestModel userDetailsModel = new VendorDetailsRequestModel("pankaj.jain@nineleaps.com", "Male",
-                "80 Feet Road, Koramangala", "Bangalore",5678L);
+        UserDetailsRequestModel userDetailsModel = new UserDetailsRequestModel("pankaj.jain@nineleaps.com", "Male",
+                "80 Feet Road, Koramangala", "Bangalore", 5678L);
 
         UserClass userClass = new UserClass("pankaj.jain@nineleaps.com", "Pankaj",
                 "9999999999", "12345", "Enthusiast", true, true, true);
 
-        when(userRepository.findByEmail(userDetailsModel.getVEmail())).thenReturn(userClass);
+        when(userRepository.findByEmail(userDetailsModel.getEmail())).thenReturn(userClass);
 
-        VendorDetailsRequestModel actual = vendorDetailsService.addVendorDetails(userDetailsModel);
+        VendorDetails actual = vendorDetailsService.addVendorDetails(userDetailsModel);
 
         Assertions.assertEquals(null, actual);
     }
 
     @Test
+    @DisplayName("Testing of adding the vendor details")
     void doNotAddUserDetailsIfUserIsNotNullAndStatusIsNotActivated() {
-        VendorDetailsRequestModel userDetailsModel = new VendorDetailsRequestModel("pankaj.jain@nineleaps.com", "Male",
-                "80 Feet Road, Koramangala", "Bangalore",5678L);
+        UserDetailsRequestModel userDetailsModel = new UserDetailsRequestModel("pankaj.jain@nineleaps.com", "Male",
+                "80 Feet Road, Koramangala", "Bangalore", 5678L);
 
         UserClass userClass = new UserClass("pankaj.jain@nineleaps.com", "Pankaj",
                 "9999999999", "12345", "Enthusiast", false, true, true);
 
-        when(userRepository.findByEmail(userDetailsModel.getVEmail())).thenReturn(userClass);
+        when(userRepository.findByEmail(userDetailsModel.getEmail())).thenReturn(userClass);
 
-        VendorDetailsRequestModel actual = vendorDetailsService.addVendorDetails(userDetailsModel);
+        VendorDetails actual = vendorDetailsService.addVendorDetails(userDetailsModel);
 
-        Assertions.assertEquals(null,actual);
+        Assertions.assertEquals(null, actual);
     }
 
     @Test
+    @DisplayName("Testing of adding the vendor details")
     void doNotAddUserDetailsIfUserIsNullAndStatusIsNotActivated() {
-        VendorDetailsRequestModel userDetailsModel = new VendorDetailsRequestModel("pankaj.jain@nineleaps.com", "Male",
-                "80 Feet Road, Koramangala", "Bangalore",5678L);
+        UserDetailsRequestModel userDetailsModel = new UserDetailsRequestModel("pankaj.jain@nineleaps.com", "Male",
+                "80 Feet Road, Koramangala", "Bangalore", 5678L);
 
         UserClass userClass = new UserClass();
         userClass.setActivated(false);
 
-        when(userRepository.findByEmail(userDetailsModel.getVEmail())).thenReturn(userClass);
+        when(userRepository.findByEmail(userDetailsModel.getEmail())).thenReturn(userClass);
 
-        VendorDetailsRequestModel actual = vendorDetailsService.addVendorDetails(userDetailsModel);
+        VendorDetails actual = vendorDetailsService.addVendorDetails(userDetailsModel);
 
-        Assertions.assertEquals(null,actual);
+        Assertions.assertEquals(null, actual);
     }
 
     @Test
+    @DisplayName("Testing of adding the vendor details")
     void doNotAddUserDetailsIfUserIsNullAndStatusIsActivated() {
-        VendorDetailsRequestModel userDetailsModel = new VendorDetailsRequestModel("pankaj.jain@nineleaps.com", "Male",
-                "80 Feet Road, Koramangala", "Bangalore",5678L);
+        UserDetailsRequestModel userDetailsModel = new UserDetailsRequestModel("pankaj.jain@nineleaps.com", "Male",
+                "80 Feet Road, Koramangala", "Bangalore", 5678L);
 
         UserClass userClass = new UserClass();
         userClass.setActivated(true);
 
-        VendorDetailsRequestModel actual = vendorDetailsService.addVendorDetails(userDetailsModel);
+        VendorDetails actual = vendorDetailsService.addVendorDetails(userDetailsModel);
 
-        Assertions.assertEquals(null,actual);
+        Assertions.assertEquals(null, actual);
     }
 
+    @Test
+    @DisplayName("Testing of fetching the vendor details")
+    void testGetVendorDetails() {
+        long l = 12345;
+        vendorDetailsRequestModel = new UserDetailsRequestModel("pankaj.jain@nineleaps.com", "male", "Bhatar", "Surat",
+                l);
+        Optional<VendorDetails> optional = Optional
+                .of(new VendorDetails("pankaj.jain@nineleaps.com", "male", "Bhatar", "Surat", l));
+        when(vendorDetailsRepository.findById(vendorDetailsRequestModel.getEmail())).thenReturn(optional);
+        Assertions.assertEquals(vendorDetailsRequestModel.getEmail(),
+                vendorDetailsService.getVendorDetails("pankaj.jain@nineleaps.com").getVEmail());
+    }
 
     @Test
-    void testGetVendorDetails() {
-        long l=12345;
-        vendorDetailsRequestModel = new VendorDetailsRequestModel("pankaj.jain@nineleaps.com","male","Bhatar","Surat",l);
-        when(vendorDetailsRepository.findByVEmail(vendorDetailsRequestModel.getVEmail())).thenReturn(vendorDetailsRequestModel);
-        Assertions.assertEquals(vendorDetailsRequestModel.getVEmail(), vendorDetailsService.getVendorDetails("pankaj.jain@nineleaps.com").getVEmail());
+    @DisplayName("Testing of fetching the vendor details")
+    void testGetVendorDetailsNotFound() {
+        long l = 12345;
+        vendorDetailsRequestModel = new UserDetailsRequestModel("pankaj.jain@nineleaps.com", "male", "Bhatar", "Surat",
+                l);
+        try {
+            vendorDetailsService.getVendorDetails("pankaj.jain@nineleaps.com").getVEmail();
+        } catch (Exception e) {
+            Assertions.assertEquals("No Vendor Details Found", e.getMessage());
+        }
     }
 }

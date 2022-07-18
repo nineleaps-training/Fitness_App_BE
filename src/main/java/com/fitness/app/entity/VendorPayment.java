@@ -10,13 +10,13 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Document("vendor_order")
 public class VendorPayment {
-	
-	
+
 	@Id
 	@Field
 	private String vendor;
@@ -29,19 +29,17 @@ public class VendorPayment {
 	@Field
 	private String status;
 	@Field
-    private LocalDate date;
+	private LocalDate date;
 	@Field
-    private LocalTime time;
-	
-	
+	private LocalTime time;
+
 	public VendorPayment(String email, String vendor, int amount, String status) {
-		
+
 		this.user = email;
 		this.vendor = vendor;
 		this.amount = amount;
 		this.status = status;
 	}
-
 
 	public VendorPayment(String email, String vendor, int amount) {
 		super();
@@ -50,7 +48,4 @@ public class VendorPayment {
 		this.amount = amount;
 	}
 
-
-	
-	
 }

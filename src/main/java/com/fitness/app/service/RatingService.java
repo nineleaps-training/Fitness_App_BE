@@ -4,10 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import com.fitness.app.entity.GymClass;
+import com.fitness.app.entity.Rating;
+import com.fitness.app.exception.DataNotFoundException;
 import com.fitness.app.model.RatingRequestModel;
-import com.fitness.app.repository.AddGymRepository;
+import com.fitness.app.repository.AddGymRepo;
 import com.fitness.app.repository.RatingRepo;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,66 +18,89 @@ public class RatingService {
 
     @Autowired
     private RatingRepo ratingRepo;
-    
-    @Autowired
-    private AddGymRepository gymRepo;
 
-    public RatingService(RatingRepo ratingRepo2, AddGymRepository addGymRepository) {
-        this.ratingRepo=ratingRepo2;
-        this.gymRepo=addGymRepository;
+    @Autowired
+    private AddGymRepo gymRepo;
+
+    // Initializing constructor
+    /**
+     * This constructor is used to initialize the repositories
+     * 
+     * @param ratingRepo2      - Rating Repository
+     * @param addGymRepository - Gym Repository
+     */
+    public RatingService(RatingRepo ratingRepo2, AddGymRepo addGymRepository) {
+        this.ratingRepo = ratingRepo2;
+        this.gymRepo = addGymRepository;
     }
-    public RatingRequestModel ratingService(RatingRequestModel rating)
-    {
-    	
-        return ratingRepo.save(rating);  
-        
+
+    /**
+     * This function is used to save the rating
+     * 
+     * @param rating - Actual Rating
+     * @return - Rating
+     */
+    public Rating ratingService(RatingRequestModel rating) {
+        Rating rating2 = new Rating();
+        rating2.setRate(rating.getRating());
+        rating2.setRater(rating.getRater());
+        rating2.setTarget(rating.getTarget());
+
+        return ratingRepo.save(rating2); // Saving the rating
+
     }
-    public Double getRating(String target)
-    {
-        List<RatingRequestModel> ratings = ratingRepo.findByTarget(target);
-        if(ratings==null)
-        {
-            return 0.0;
-        }
-        else
-        {
-        	int n=ratings.size();
-            double rate=0;
-            for (RatingRequestModel rating : ratings) {
-                rate+=rating.getRating();
+
+    /**
+     * This function is used to fetch the rating of the gym
+     * 
+     * @param target - Gym Id
+     * @return - Rating
+     * @throws DataNotFoundException
+     */
+    public Double getRating(String target) {
+        List<Rating> ratings = ratingRepo.findByTarget(target);
+        if (ratings.isEmpty()) {
+            throw new DataNotFoundException("No Gym exists with the provided id");
+        } else {
+            int n = ratings.size();
+            double rate = 0;
+            for (Rating rating : ratings) {
+                rate += rating.getRate();
             }
-            rate=rate/n;
-            rate=Math.round(rate* 100) / 100.0d;
-            Optional<GymClass> optional=gymRepo.findById(target);
+            rate = rate / n;
+            rate = Math.round(rate * 100) / 100.0d;
+            Optional<GymClass> optional = gymRepo.findById(target); // Fetching the rating of gym
             GymClass gym;
-		    if(optional.isPresent())
-            {
-                gym=optional.get();
+            if (optional.isPresent()) {
+                gym = optional.get();
                 gym.setRating(rate);
                 gymRepo.save(gym);
             }
-            return rate%6;
+            return rate % 6;
         }
     }
-    
-    public Double getRatingOfPerson(String email)
-    {
-        List<RatingRequestModel> ratings = ratingRepo.findByTarget(email);
-        if(ratings==null)
-        {
-            return 0.0;
-        }
-        else
-        {
-        	int n=ratings.size();
-            double rate=0;
-            for (RatingRequestModel rating : ratings) {
-                rate+=rating.getRating();
+
+    /**
+     * This function is used to fetch the rating of the user
+     * 
+     * @param email - Email id of the user
+     * @return - Rating
+     * @throws DataNotFoundException
+     */
+    public Double getRatingOfPerson(String email) {
+        List<Rating> ratings = ratingRepo.findByTarget(email); // Fetching the rating of User
+        if (ratings.isEmpty()) {
+            throw new DataNotFoundException("No User exists with the provided email");
+        } else {
+            int n = ratings.size();
+            double rate = 0;
+            for (Rating rating : ratings) {
+                rate += rating.getRate();
             }
-            rate=rate/n;
-            rate=Math.round(rate* 100) / 100.0d;
-          
-            return rate%6;
+            rate = rate / n;
+            rate = Math.round(rate * 100) / 100.0d;
+
+            return rate % 6;
         }
     }
 }

@@ -1,10 +1,8 @@
 package com.fitness.app.entity;
 
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,15 +20,14 @@ public class VendorBankDetails {
 	@Field
 	private String name;
 	@Field
-    private String bankName;
+	private String bankName;
 	@Field
-    private String branchName;
+	private String branchName;
 	@Field
-    private Long accountNumber;
+	private Long accountNumber;
 	@Field
-    private String bankIFSC;
+	private String bankIFSC;
 	@Field
 	private String paymentSchedule;
-
 
 }

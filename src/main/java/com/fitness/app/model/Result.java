@@ -10,26 +10,29 @@ public class Result {
     @ApiModelProperty(name = "address", notes = "Address")
     private String address;
     @ApiModelProperty(name = "geometry", notes = "Geometry")
-    private Geo geometry;
+    private GeoModel geometry;
     @JsonProperty("address_components")
     @ApiModelProperty(name = "allAddress", notes = "All the address")
-    private GoogleAddress[] allAddress;
+    private GoogleAddressModel[] allAddress;
 
-    public GoogleAddress[] getAllAddress() {
+    public GoogleAddressModel[] getAllAddress() {
         return allAddress;
     }
 
     public String getAddress() {
         return address;
     }
+
     public void setAddress(String address) {
         this.address = address;
     }
-    public Geo getGeometry() {
+
+    public GeoModel getGeometry() {
         return geometry;
     }
-    public void setGeometry(Geo geometry) {
+
+    public void setGeometry(GeoModel geometry) {
         this.geometry = geometry;
     }
-    
+
 }

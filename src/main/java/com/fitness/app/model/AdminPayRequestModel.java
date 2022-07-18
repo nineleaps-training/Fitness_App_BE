@@ -3,6 +3,7 @@ package com.fitness.app.model;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -32,6 +33,7 @@ public class AdminPayRequestModel {
 	private String vendor;
 	@ApiModelProperty(name = "amount", notes = "amount payable")
 	@NotNull
+	@Min(value = 1, message = "Amount should be atleast 1")
 	private int amount;
 	@ApiModelProperty(name = "status", notes = "Due or Completed")
 	private String status;
@@ -43,5 +45,5 @@ public class AdminPayRequestModel {
 	@ApiModelProperty(name = "date", notes = "date of payment")
 	private LocalDate date;
 	@ApiModelProperty(name = "time", notes = "time of payment")
-	private LocalTime time;    
+	private LocalTime time;
 }
