@@ -4,8 +4,10 @@ import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.RatingClass;
 import com.fitness.app.model.RatingModel;
 import com.fitness.app.repository.AddGymRepository;
-import com.fitness.app.repository.RatingRepo;
-import com.fitness.app.service.RatingService;
+
+import com.fitness.app.repository.RatingRepository;
+import com.fitness.app.service.RatingServiceImpl;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,14 +27,18 @@ class RatingClassServiceTest {
 
 
     @Mock
-    private RatingRepo ratingRepo;
+
+    private RatingRepository ratingRepository;
+
 
     @Mock
     private AddGymRepository gymRepository;
 
 
     @InjectMocks
-    private RatingService ratingService;
+
+    private RatingServiceImpl ratingServiceImpl;
+
 
 
 
@@ -60,7 +66,10 @@ class RatingClassServiceTest {
     @Test
      void ratingService()
     {
-        RatingClass returnedRate=ratingService.ratingService(RATING_USER_MODEL);
+
+
+        RatingClass returnedRate= ratingServiceImpl.ratingService(RATING_USER_MODEL);
+
         Assertions.assertNotNull(returnedRate);
         Assertions.assertEquals(returnedRate.getRate(), RATING_GYM_MODEL.getRate());
     }
@@ -70,9 +79,10 @@ class RatingClassServiceTest {
    {
        List<RatingClass> ratingClassList =new ArrayList<>(Arrays.asList(RATING_Class_USER));
 
-       Mockito.when(ratingRepo.findByTarget(RATING_Class_USER.getTarget())).thenReturn(ratingClassList);
+       Mockito.when(ratingRepository.findByTarget(RATING_Class_USER.getTarget())).thenReturn(ratingClassList);
        Mockito.when(gymRepository.findById(RATING_Class_USER.getTarget())).thenReturn(gymClass);
-       Double returnRate=ratingService.getRating(RATING_Class_USER.getTarget());
+       Double returnRate= ratingServiceImpl.getRating(RATING_Class_USER.getTarget());
+
        Assertions.assertNotNull(returnRate);
        Assertions.assertEquals(returnRate.floatValue(), RATING_Class_USER.getRate());
 
@@ -84,8 +94,10 @@ class RatingClassServiceTest {
      void getRatingNullValue()
     {
         List<RatingClass> ratingClassList =null;
-        Mockito.when(ratingRepo.findByTarget(RATING_Class_USER.getTarget())).thenReturn(ratingClassList);
-        Double returnRate=ratingService.getRating(RATING_Class_USER.getTarget());
+
+        Mockito.when(ratingRepository.findByTarget(RATING_Class_USER.getTarget())).thenReturn(ratingClassList);
+        Double returnRate= ratingServiceImpl.getRating(RATING_Class_USER.getTarget());
+
         Assertions.assertNotNull(returnRate);
         Assertions.assertEquals(0.0, returnRate.floatValue());
 
@@ -96,8 +108,10 @@ class RatingClassServiceTest {
    {
        List<RatingClass> ratingClassList =new ArrayList<>(Arrays.asList(RATING_Class_USER));
 
-       Mockito.when(ratingRepo.findByTarget(RATING_Class_USER.getTarget())).thenReturn(ratingClassList);
-       Double ratingVal=ratingService.getRatingOfPerson(RATING_Class_USER.getTarget());
+
+       Mockito.when(ratingRepository.findByTarget(RATING_Class_USER.getTarget())).thenReturn(ratingClassList);
+       Double ratingVal= ratingServiceImpl.getRatingOfPerson(RATING_Class_USER.getTarget());
+
 
        Assertions.assertNotNull(ratingVal);
        Assertions.assertEquals(ratingVal.floatValue(), RATING_Class_USER.getRate());
@@ -109,8 +123,10 @@ class RatingClassServiceTest {
     {
         List<RatingClass> ratingClassList =null;
 
-        Mockito.when(ratingRepo.findByTarget(RATING_Class_USER.getTarget())).thenReturn(ratingClassList);
-        Double ratingVal=ratingService.getRatingOfPerson(RATING_Class_USER.getTarget());
+
+        Mockito.when(ratingRepository.findByTarget(RATING_Class_USER.getTarget())).thenReturn(ratingClassList);
+        Double ratingVal= ratingServiceImpl.getRatingOfPerson(RATING_Class_USER.getTarget());
+
 
         Assertions.assertNotNull(ratingVal);
         Assertions.assertEquals(0.0, ratingVal.floatValue());

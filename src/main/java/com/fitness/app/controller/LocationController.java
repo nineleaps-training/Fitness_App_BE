@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+<<<<<<< HEAD
 import java.util.concurrent.Future;
 
 import com.fitness.app.model.GoogleAddress;
@@ -15,6 +16,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
+=======
+
+import com.fitness.app.model.GoogleAddress;
+import com.fitness.app.model.Response;
+
+import com.fitness.app.service.GymServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +40,11 @@ public class LocationController {
     private static final Object API_KEY = "AIzaSyCgHNmyruLEfUzPbSoKUJrx1I-rL_NqJ2U";
 
     @Autowired
+<<<<<<< HEAD
     public GymService gymService;
+=======
+    public GymServiceImpl gymServiceImpl;
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
     @GetMapping("/getLocation")
     public String getDetails(@RequestParam String address)
     {

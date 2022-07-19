@@ -3,9 +3,11 @@ package com.register.app.service;
 import com.fitness.app.entity.UserBankDetailsClass;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.model.UserBankModel;
-import com.fitness.app.repository.UserBankDetailsRepo;
+
+import com.fitness.app.repository.UserBankDetailsRepository;
 import com.fitness.app.repository.UserRepository;
-import com.fitness.app.service.UserBankDetailsService;
+import com.fitness.app.service.UserBankDetailsServiceImpl;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,10 +28,13 @@ class UserBankDetailsClassTest {
     @Mock
     private UserRepository userRepository;
 
+
     @Mock
-    private UserBankDetailsRepo userBankDetailsRepo;
+    private UserBankDetailsRepository userBankDetailsRepository;
+
     @InjectMocks
-    private UserBankDetailsService userBankDetailsService;
+    private UserBankDetailsServiceImpl userBankDetailsServiceImpl;
+
 
     UserBankModel BANK_MODEL=new UserBankModel(
             "rahul01@gmail.com",
@@ -55,7 +60,9 @@ class UserBankDetailsClassTest {
      void addBankDetails()
     {
         Mockito.when(userRepository.findByEmail(BANK_MODEL.getEmail())).thenReturn(USER1);
-        UserBankDetailsClass bankDetails=userBankDetailsService.addBankDetails(BANK_MODEL);
+
+        UserBankDetailsClass bankDetails= userBankDetailsServiceImpl.addBankDetails(BANK_MODEL);
+
         Assertions.assertNotNull(bankDetails);
         Assertions.assertEquals(bankDetails.getEmail(), USER1.getEmail());
 
@@ -64,7 +71,9 @@ class UserBankDetailsClassTest {
      void addBankDetailsWithNull()
     {
         Mockito.when(userRepository.findByEmail(BANK_MODEL.getEmail())).thenReturn(null);
-        UserBankDetailsClass bankDetails=userBankDetailsService.addBankDetails(BANK_MODEL);
+
+        UserBankDetailsClass bankDetails= userBankDetailsServiceImpl.addBankDetails(BANK_MODEL);
+
         Assertions.assertNull(bankDetails);
 
 
@@ -74,8 +83,10 @@ class UserBankDetailsClassTest {
     void getAllDetails()
     {
         List<UserBankDetailsClass> theList=new ArrayList<>(Arrays.asList(BANK));
-        Mockito.when(userBankDetailsRepo.findAll()).thenReturn(theList);
-        List<UserBankDetailsClass> userBankDetailsClassList =userBankDetailsService.getAllDetails();
+
+        Mockito.when(userBankDetailsRepository.findAll()).thenReturn(theList);
+        List<UserBankDetailsClass> userBankDetailsClassList = userBankDetailsServiceImpl.getAllDetails();
+
         Assertions.assertNotNull(userBankDetailsClassList);
         Assertions.assertEquals(userBankDetailsClassList.get(0).getEmail(), BANK_MODEL.getEmail());
     }
@@ -83,8 +94,10 @@ class UserBankDetailsClassTest {
     @Test
     void getBankDetails()
     {
-        Mockito.when(userBankDetailsRepo.findByEmail(BANK.getEmail())).thenReturn(BANK);
-        UserBankDetailsClass theBank=userBankDetailsService.getBankDetails(BANK.getEmail());
+
+        Mockito.when(userBankDetailsRepository.findByEmail(BANK.getEmail())).thenReturn(BANK);
+        UserBankDetailsClass theBank= userBankDetailsServiceImpl.getBankDetails(BANK.getEmail());
+
         Assertions.assertNotNull(theBank);
         Assertions.assertEquals(theBank.getEmail(), BANK.getEmail());
     }

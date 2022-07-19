@@ -18,7 +18,11 @@ import com.fitness.app.model.SignUpResponce;
 import com.fitness.app.model.UserModel;
 import com.fitness.app.repository.UserRepository;
 import com.fitness.app.security.service.UserDetailsServiceImpl;
+<<<<<<< HEAD
 import com.fitness.app.service.UserService;
+=======
+import com.fitness.app.service.UserServiceImpl;
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 @Slf4j
 @RestController
 public class UserController {
@@ -26,7 +30,11 @@ public class UserController {
 	
 	
 	@Autowired
+<<<<<<< HEAD
 	private UserService userService;
+=======
+	private UserServiceImpl userServiceImpl;
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 	
 	 @Autowired
 	 private AuthenticationManager authenticationManager;
@@ -90,7 +98,11 @@ public class UserController {
 		      String otp= sendMessage.otpBuilder();
 		      final  int code=sendMessage.sendOtpMessage( otp,user.getMobile());
 		      if(code==200) {
+<<<<<<< HEAD
 		      responce.setCurrentUser(userService.registerUser(user));
+=======
+		      responce.setCurrentUser(userServiceImpl.registerUser(user));
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 	          responce.setMessage(otp);
 	          return responce;
 		     }
@@ -122,7 +134,11 @@ public class UserController {
 	 @PutMapping("/verify/user")
 	 public ResponseEntity<SignUpResponce> verifyTheUser(@RequestBody Authenticate authCredential) throws Exception
 	 {
+<<<<<<< HEAD
 		 UserClass user= userService.verifyUser(authCredential.getEmail());
+=======
+		 UserClass user= userServiceImpl.verifyUser(authCredential.getEmail());
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 		 
 		 if(user!=null)
 		 {
@@ -173,9 +189,15 @@ public class UserController {
 	 @PutMapping("/google-sign-in/vendor")
 	 public ResponseEntity<SignUpResponce> googleSignInVendor(@RequestBody UserModel user) throws Exception
 	 {
+<<<<<<< HEAD
 		 String pass=userService.randomPass();
 		 user.setPassword(pass);
 		 UserClass localUser=userService.googleSignInMethod(user);
+=======
+		 String pass= userServiceImpl.randomPass();
+		 user.setPassword(pass);
+		 UserClass localUser= userServiceImpl.googleSignInMethod(user);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 		 if(localUser==null) {
 			 return ResponseEntity.ok( new SignUpResponce(null, "This email in use!"));
 		 }
@@ -193,9 +215,15 @@ public class UserController {
 	 @PutMapping("/google-sign-in/user")
 	 public ResponseEntity<SignUpResponce> googleSignInUser(@RequestBody UserModel user) throws Exception
 	 {
+<<<<<<< HEAD
 		 String pass=userService.randomPass();
 		 user.setPassword(pass);
 		 UserClass localUser=userService.googleSignInMethod(user);
+=======
+		 String pass= userServiceImpl.randomPass();
+		 user.setPassword(pass);
+		 UserClass localUser= userServiceImpl.googleSignInMethod(user);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 		 if(localUser==null) {
 			 return ResponseEntity.ok( new SignUpResponce(null, "This email in use!"));
 		 }

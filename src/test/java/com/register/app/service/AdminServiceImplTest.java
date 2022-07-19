@@ -6,7 +6,10 @@ import com.fitness.app.entity.AdminPayClass;
 import com.fitness.app.entity.VendorPaymentClass;
 import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.model.AdminPayModel;
+import com.fitness.app.repository.AdminPayRepository;
 
+import com.fitness.app.repository.VendorPayRepository;
+import com.fitness.app.service.AdminServiceImpl;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
@@ -36,10 +39,10 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-class AdminServiceImplementationTest {
+class AdminServiceImplTest {
 
     @Mock
-    private AdminPayRepo adminPayRepo;
+    private AdminPayRepository adminPayRepository;
     private MockMvc mockMvc;
 
 
@@ -58,13 +61,13 @@ class AdminServiceImplementationTest {
      void setUp()
     {
         MockitoAnnotations.initMocks(this);
-        this.mockMvc= MockMvcBuilders.standaloneSetup(adminServiceImplementation).build();
+        this.mockMvc= MockMvcBuilders.standaloneSetup(adminServiceImpl).build();
 
 
 
     }
     @InjectMocks
-    private AdminServiceImplementation adminServiceImplementation;
+    private AdminServiceImpl adminServiceImpl;
 
 
 
@@ -73,8 +76,8 @@ class AdminServiceImplementationTest {
     @Test
      void getDataPay()
     {
-        when(adminPayRepo.findByVendorAndAmountAndStatus(VENDOR_PAY.getVendor(), VENDOR_PAY.getAmount(), "Due")).thenReturn(VENDOR_PAY);
-        AdminPayClass myPay= adminServiceImplementation.getDataPay(VENDOR_DUE);
+        when(adminPayRepository.findByVendorAndAmountAndStatus(VENDOR_PAY.getVendor(), VENDOR_PAY.getAmount(), "Due")).thenReturn(VENDOR_PAY);
+        AdminPayClass myPay= adminServiceImpl.getDataPay(VENDOR_DUE);
         System.out.println(myPay.getAmount() +"\n"+ VENDOR_PAY.getAmount());
         Assertions.assertEquals(myPay.getAmount(), VENDOR_PAY.getAmount());
     }
@@ -90,8 +93,8 @@ class AdminServiceImplementationTest {
         ob.put("receipt", "txn_201456");
 
         Order myOrder = razorpayClient.Orders.create(ob);
-        when(adminPayRepo.findByVendorAndAmountAndStatus(VENDOR_DUE.getVendor(), VENDOR_DUE.getAmount(), "Due")).thenReturn(VENDOR_PAY);
-        Boolean expected= adminServiceImplementation.PayNow(VENDOR_DUE, myOrder);
+        when(adminPayRepository.findByVendorAndAmountAndStatus(VENDOR_DUE.getVendor(), VENDOR_DUE.getAmount(), "Due")).thenReturn(VENDOR_PAY);
+        Boolean expected= adminServiceImpl.PayNow(VENDOR_DUE, myOrder);
 
         Assertions.assertNotNull(VENDOR_PAY);
         Assertions.assertTrue(expected);
@@ -108,24 +111,24 @@ class AdminServiceImplementationTest {
         ob.put("receipt", "txn_201456");
 
         Order myOrder = razorpayClient.Orders.create(ob);
-        when(adminPayRepo.findByVendorAndAmountAndStatus(VENDOR_DUE.getVendor(), VENDOR_DUE.getAmount(), "Due")).thenReturn(null);
-        Boolean expected= adminServiceImplementation.PayNow(VENDOR_DUE, myOrder);
+        when(adminPayRepository.findByVendorAndAmountAndStatus(VENDOR_DUE.getVendor(), VENDOR_DUE.getAmount(), "Due")).thenReturn(null);
+        Boolean expected= adminServiceImpl.PayNow(VENDOR_DUE, myOrder);
         Assertions.assertNotNull(expected);
         Assertions.assertEquals(false, expected);
     }
 
 
     @Mock
-    private VendorPayRepo vendorPayRepo;
+    private VendorPayRepository vendorPayRepository;
 
     @Test
     void vendorPayment()
     {
         List<VendorPaymentClass> vendorPaymentClassList =new ArrayList<>();
         vendorPaymentClassList.add(VENDOR_PAYMENT);
-        when(vendorPayRepo.findByVendor("manish.kumar@nineleaps.com")).thenReturn(vendorPaymentClassList);
-        when(adminPayRepo.findByVendorAndAmountAndStatus("manish.kumar@nineleaps.com", 2000, "Due")).thenReturn(VENDOR_PAY);
-        AdminPayClass expected= adminServiceImplementation.vendorPayment("manish.kumar@nineleaps.com");
+        when(vendorPayRepository.findByVendor("manish.kumar@nineleaps.com")).thenReturn(vendorPaymentClassList);
+        when(adminPayRepository.findByVendorAndAmountAndStatus("manish.kumar@nineleaps.com", 2000, "Due")).thenReturn(VENDOR_PAY);
+        AdminPayClass expected= adminServiceImpl.vendorPayment("manish.kumar@nineleaps.com");
         Assertions.assertEquals(expected.getOrderId(), VENDOR_PAY.getOrderId());
     }
 
@@ -140,9 +143,9 @@ class AdminServiceImplementationTest {
 
         List<VendorPaymentClass> vendorPaymentClassList =new ArrayList<>();
         vendorPaymentClassList.add(vendorPaymentClass);
-        when(vendorPayRepo.findByVendor("manish.kumar@nineleaps.com")).thenReturn(vendorPaymentClassList);
-        when(adminPayRepo.findByVendorAndAmountAndStatus("manish.kumar@nineleaps.com", 2000, "Due")).thenReturn(null);
-        AdminPayClass expected= adminServiceImplementation.vendorPayment("manish.kumar@nineleaps.com");
+        when(vendorPayRepository.findByVendor("manish.kumar@nineleaps.com")).thenReturn(vendorPaymentClassList);
+        when(adminPayRepository.findByVendorAndAmountAndStatus("manish.kumar@nineleaps.com", 2000, "Due")).thenReturn(null);
+        AdminPayClass expected= adminServiceImpl.vendorPayment("manish.kumar@nineleaps.com");
         Assertions.assertEquals(expected.getAmount(), vendorPaymentClass.getAmount());
     }
 
@@ -160,10 +163,10 @@ class AdminServiceImplementationTest {
 
         AdminPayClass vendorPay=new AdminPayClass("id", "orderId", "manish.kumar@nineleaps.com",
                 2000, "Due","paymentID","reciept", LocalDate.now(), LocalTime.now() );
-        when(adminPayRepo.findByOrderId(data.get("order_id"))).thenReturn(vendorPay);
-        when(vendorPayRepo.findByVendorAndStatus(vendorPay.getVendor(), "Due")).thenReturn(listVendors);
+        when(adminPayRepository.findByOrderId(data.get("order_id"))).thenReturn(vendorPay);
+        when(vendorPayRepository.findByVendorAndStatus(vendorPay.getVendor(), "Due")).thenReturn(listVendors);
 
-        AdminPayClass expected= adminServiceImplementation.updatePayment(data);
+        AdminPayClass expected= adminServiceImpl.updatePayment(data);
 
         Assertions.assertEquals(expected.getAmount(), VENDOR_PAYMENT.getAmount());
 
@@ -176,8 +179,8 @@ class AdminServiceImplementationTest {
                 2000, "Completed","paymentID","reciept", LocalDate.now(), LocalTime.now() );
         List<AdminPayClass> allPaid=new ArrayList<>();
         allPaid.add(vendorPay);
-        when(adminPayRepo.findByVendor(vendorPay.getVendor())).thenReturn(allPaid);
-        List <AdminPayClass> expected= adminServiceImplementation.paidHistoryVendor(vendorPay.getVendor());
+        when(adminPayRepository.findByVendor(vendorPay.getVendor())).thenReturn(allPaid);
+        List <AdminPayClass> expected= adminServiceImpl.paidHistoryVendor(vendorPay.getVendor());
 
         Assertions.assertEquals(2000, expected.get(0).getAmount());
 
@@ -191,10 +194,10 @@ class AdminServiceImplementationTest {
         AdminPayClass vendorPay=new AdminPayClass("id", "orderId", "manish.kumar@nineleaps.com",
                 2000, "Completed","paymentID","reciept", LocalDate.now(), LocalTime.now() );
         String vendor=vendorPay.getVendor();
-        when(adminPayRepo.findByVendor(vendorPay.getVendor())).thenReturn(null);
+        when(adminPayRepository.findByVendor(vendorPay.getVendor())).thenReturn(null);
         Assertions.assertThrows(DataNotFoundException.class, ()->{
 
-            List <AdminPayClass> expected= adminServiceImplementation.paidHistoryVendor(vendor);
+            List <AdminPayClass> expected= adminServiceImpl.paidHistoryVendor(vendor);
         }, "Error handled");
     }
 }

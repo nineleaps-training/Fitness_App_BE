@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.fitness.app.entity.UserOrderClass;
 
 @Repository
-public interface UserOrderRepo extends MongoRepository<UserOrderClass, String> {
+public interface UserOrderRepository extends MongoRepository<UserOrderClass, String> {
 
 	public UserOrderClass findByEmailAndBooked(String email, String booked);
 

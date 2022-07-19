@@ -1,5 +1,6 @@
 package com.fitness.app.service;
 
+<<<<<<< HEAD
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.UserDetailsClass;
 import com.fitness.app.model.DetailsModel;
@@ -39,4 +40,14 @@ public class UserDetailsService {
 
         return userDetailsRepository.findByUserEmail(email);
     }
+=======
+import com.fitness.app.entity.UserDetailsClass;
+import com.fitness.app.model.DetailsModel;
+
+public interface UserDetailsService {
+
+    UserDetailsClass addUserDetails(DetailsModel userDetails);
+    UserDetailsClass getUserDetails(String email);
+
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 }

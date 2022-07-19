@@ -12,7 +12,10 @@ import com.fitness.app.model.SignUpResponce;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.UserRepository;
 import com.fitness.app.security.service.UserDetailsServiceImpl;
-import com.fitness.app.service.AdminServiceImplementation;
+<<<<<<< HEAD
+=======
+import com.fitness.app.service.AdminServiceImpl;
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import lombok.extern.slf4j.Slf4j;
@@ -50,7 +53,11 @@ public class AdminController {
     private AddGymRepository gymRepo;
 
     @Autowired
+<<<<<<< HEAD
     private AdminServiceImplementation adminServiceImplementation;
+=======
+    private AdminServiceImpl adminServiceImpl;
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 
     // log in user....with custom sign option.
     @PostMapping("/login/admin")
@@ -116,13 +123,21 @@ public class AdminController {
     //finding total amount to pay to the vendor.
     @GetMapping("/vendor-payment/{vendor}")
     public AdminPayClass vendorPayment(@PathVariable String vendor) {
+<<<<<<< HEAD
         return adminServiceImplementation.vendorPayment(vendor);
+=======
+        return adminServiceImpl.vendorPayment(vendor);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
     }
 
     //demo api for payment.
     @GetMapping("/get-data-pay")
     public AdminPayClass getDatapay(@RequestBody AdminPayModel pay) {
+<<<<<<< HEAD
         return adminServiceImplementation.getDataPay(pay);
+=======
+        return adminServiceImpl.getDataPay(pay);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
     }
 
 
@@ -139,7 +154,11 @@ public class AdminController {
 
         Order myOrder = razorpayClient.Orders.create(ob);
 
+<<<<<<< HEAD
         boolean flag = adminServiceImplementation.PayNow(payment, myOrder);
+=======
+        boolean flag = adminServiceImpl.PayNow(payment, myOrder);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
         if (flag) {
             return myOrder.toString();
         } else {
@@ -152,14 +171,22 @@ public class AdminController {
     @PutMapping("/update-vendor-payment")
     public AdminPayClass updatingOrder(@RequestBody Map<String, String> data) {
 
+<<<<<<< HEAD
         return adminServiceImplementation.updatePayment(data);
+=======
+        return adminServiceImpl.updatePayment(data);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
     }
 
 
     //Finding payment history of the vendor.
     @GetMapping("/paid-history/{vendor}")
     public List<AdminPayClass> paidHistroy(@PathVariable String vendor) throws DataNotFoundException {
+<<<<<<< HEAD
         return adminServiceImplementation.paidHistoryVendor(vendor);
+=======
+        return adminServiceImpl.paidHistoryVendor(vendor);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
     }
 
 

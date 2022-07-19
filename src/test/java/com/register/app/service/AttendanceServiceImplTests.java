@@ -4,7 +4,9 @@ import com.fitness.app.entity.RatingClass;
 import com.fitness.app.entity.UserAttendanceClass;
 import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.model.MarkUserAttModel;
-import com.fitness.app.service.AttendanceService;
+import com.fitness.app.repository.AttendanceRepository;
+import com.fitness.app.repository.RatingRepository;
+import com.fitness.app.service.AttendanceServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,18 +24,18 @@ import java.util.List;
 
 //@RunWith(MockitoJUnitRunner.class)
 @ExtendWith(MockitoExtension.class)
-class AttendanceServiceTests {
+class AttendanceServiceImplTests {
 
 
     @InjectMocks
-    private AttendanceService attendanceService;
+    private AttendanceServiceImpl attendanceServiceImpl;
 
 
     @Mock
-    private AttendanceRepo attendanceRepo;
+    private AttendanceRepository attendanceRepository;
 
     @Mock
-    private RatingRepo ratingRepo;
+    private RatingRepository ratingRepository;
 
     List<String> users=new ArrayList<>(Arrays.asList("Rahul"));
     MarkUserAttModel attModel=new MarkUserAttModel(
@@ -86,10 +88,10 @@ class AttendanceServiceTests {
         List<UserAttendanceClass> allusers=new ArrayList<>();
         allusers.add(userAttendanceClass);
 
-        Mockito.when(attendanceRepo.findByVendorAndGym(userAttendanceClass.getVendor(), userAttendanceClass.getGym())).thenReturn(allusers);
-        Mockito.when(attendanceRepo.findByEmailAndVendorAndGym(userAttendanceClass.getEmail(), userAttendanceClass.getVendor(), userAttendanceClass.getGym())).thenReturn(userAttendanceClass);
+        Mockito.when(attendanceRepository.findByVendorAndGym(userAttendanceClass.getVendor(), userAttendanceClass.getGym())).thenReturn(allusers);
+        Mockito.when(attendanceRepository.findByEmailAndVendorAndGym(userAttendanceClass.getEmail(), userAttendanceClass.getVendor(), userAttendanceClass.getGym())).thenReturn(userAttendanceClass);
 
-        String ans=attendanceService.markUsersAttendance(attModel);
+        String ans= attendanceServiceImpl.markUsersAttendance(attModel);
 
         Assertions.assertNotNull(ans);
     }
@@ -102,11 +104,11 @@ class AttendanceServiceTests {
         allusers.add(userAttendanceClass);
         allusers.add(userAttendanceClass2);
 
-        Mockito.when(attendanceRepo.findByVendorAndGym(userAttendanceClass.getVendor(), userAttendanceClass.getGym())).thenReturn(allusers);
-        Mockito.when(attendanceRepo.findByEmailAndVendorAndGym(userAttendanceClass.getEmail(), userAttendanceClass.getVendor(), userAttendanceClass.getGym())).thenReturn(userAttendanceClass);
-        Mockito.when(attendanceRepo.findByEmailAndVendorAndGym(userAttendanceClass2.getEmail(), userAttendanceClass2.getVendor(), userAttendanceClass2.getGym())).thenReturn(userAttendanceClass2);
+        Mockito.when(attendanceRepository.findByVendorAndGym(userAttendanceClass.getVendor(), userAttendanceClass.getGym())).thenReturn(allusers);
+        Mockito.when(attendanceRepository.findByEmailAndVendorAndGym(userAttendanceClass.getEmail(), userAttendanceClass.getVendor(), userAttendanceClass.getGym())).thenReturn(userAttendanceClass);
+        Mockito.when(attendanceRepository.findByEmailAndVendorAndGym(userAttendanceClass2.getEmail(), userAttendanceClass2.getVendor(), userAttendanceClass2.getGym())).thenReturn(userAttendanceClass2);
 
-        String ans=attendanceService.markUsersAttendance(attModel);
+        String ans= attendanceServiceImpl.markUsersAttendance(attModel);
 
         Assertions.assertNotNull(ans);
     }
@@ -140,10 +142,10 @@ class AttendanceServiceTests {
         allusers.add(userAttendanceClass);
         allusers.add(userAttendanceClass2);
 
-        Mockito.when(attendanceRepo.findByVendorAndGym(userAttendanceClass.getVendor(), userAttendanceClass.getGym())).thenReturn(allusers);
-        Mockito.when(attendanceRepo.findByEmailAndVendorAndGym(userAttendanceClass.getEmail(), userAttendanceClass.getVendor(), userAttendanceClass.getGym())).thenReturn(userAttendanceClass);
-        Mockito.when(attendanceRepo.findByEmailAndVendorAndGym(userAttendanceClass2.getEmail(), userAttendanceClass2.getVendor(), userAttendanceClass2.getGym())).thenReturn(userAttendanceClass2);
-        String ans=attendanceService.markUsersAttendance(attModel);
+        Mockito.when(attendanceRepository.findByVendorAndGym(userAttendanceClass.getVendor(), userAttendanceClass.getGym())).thenReturn(allusers);
+        Mockito.when(attendanceRepository.findByEmailAndVendorAndGym(userAttendanceClass.getEmail(), userAttendanceClass.getVendor(), userAttendanceClass.getGym())).thenReturn(userAttendanceClass);
+        Mockito.when(attendanceRepository.findByEmailAndVendorAndGym(userAttendanceClass2.getEmail(), userAttendanceClass2.getVendor(), userAttendanceClass2.getGym())).thenReturn(userAttendanceClass2);
+        String ans= attendanceServiceImpl.markUsersAttendance(attModel);
         System.out.println(ans);
         Assertions.assertNotNull(ans);
 
@@ -153,9 +155,9 @@ class AttendanceServiceTests {
     @DisplayName("With Exception for marking attendance")
      void markAttForException()
     {
-        Mockito.when(attendanceRepo.findByVendorAndGym(userAttendanceClass.getVendor(), userAttendanceClass.getGym())).thenReturn(null);
+        Mockito.when(attendanceRepository.findByVendorAndGym(userAttendanceClass.getVendor(), userAttendanceClass.getGym())).thenReturn(null);
         Assertions.assertThrows(DataNotFoundException.class, ()->{
-            String ans=attendanceService.markUsersAttendance(attModel);
+            String ans= attendanceServiceImpl.markUsersAttendance(attModel);
         }, "No data Found Exception");
     }
 
@@ -176,8 +178,8 @@ class AttendanceServiceTests {
                 attendance,
                 4.0
         );
-        Mockito.when(attendanceRepo.findByEmailAndGym(userAttendanceClass.getEmail(), userAttendanceClass.getGym())).thenReturn(userAttendanceClass);
-        List<Integer> attendance1= attendanceService.userPerfomance(userAttendanceClass.getEmail(), userAttendanceClass.getGym());
+        Mockito.when(attendanceRepository.findByEmailAndGym(userAttendanceClass.getEmail(), userAttendanceClass.getGym())).thenReturn(userAttendanceClass);
+        List<Integer> attendance1= attendanceServiceImpl.userPerformance(userAttendanceClass.getEmail(), userAttendanceClass.getGym());
 
         Assertions.assertNotNull(attendance1);
         Assertions.assertTrue(attendance1.size()>0);
@@ -188,11 +190,11 @@ class AttendanceServiceTests {
     @DisplayName("Exception handle")
     void  userPerformanceForException()
     {
-        Mockito.when(attendanceRepo.findByEmailAndGym(userAttendanceClass.getEmail(), userAttendanceClass.getGym())).thenReturn(null);
+        Mockito.when(attendanceRepository.findByEmailAndGym(userAttendanceClass.getEmail(), userAttendanceClass.getGym())).thenReturn(null);
         String email= userAttendanceClass.getEmail(), gym= userAttendanceClass.getGym();
         Assertions.assertThrows(DataNotFoundException.class, ()->{
 
-            List<Integer> attendance1= attendanceService.userPerfomance(email, gym);
+            List<Integer> attendance1= attendanceServiceImpl.userPerformance(email, gym);
         },"Data not found any: ");
     }
 
@@ -207,8 +209,8 @@ class AttendanceServiceTests {
        ratingsList.add(ratingClass);
 
 
-       Mockito.when(ratingRepo.findByTarget(ratingClass.getTarget())).thenReturn(ratingsList);
-       Double returnedRate= attendanceService.calculateRating(ratingClass.getTarget());
+       Mockito.when(ratingRepository.findByTarget(ratingClass.getTarget())).thenReturn(ratingsList);
+       Double returnedRate= attendanceServiceImpl.calculateRating(ratingClass.getTarget());
        Assertions.assertNotNull(returnedRate);
        Assertions.assertEquals(4.0, returnedRate);
 
@@ -220,8 +222,8 @@ class AttendanceServiceTests {
     void  calculateRatingWithNullRating()
     {
 
-        Mockito.when(ratingRepo.findByTarget(ratingClass.getTarget())).thenReturn(null);
-        Double returnedRate= attendanceService.calculateRating(ratingClass.getTarget());
+        Mockito.when(ratingRepository.findByTarget(ratingClass.getTarget())).thenReturn(null);
+        Double returnedRate= attendanceServiceImpl.calculateRating(ratingClass.getTarget());
         Assertions.assertNotNull(returnedRate);
         Assertions.assertEquals(0.0, returnedRate);
 

@@ -5,7 +5,10 @@ import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.UserOrderClass;
 import com.fitness.app.model.BookedGymModel;
 import com.fitness.app.repository.AddGymRepository;
-import com.fitness.app.repository.GymAddressRepo;
+
+
+import com.fitness.app.repository.GymAddressRepository;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,7 +42,9 @@ public class MessageComponents {
     @Autowired
     private JavaMailSender javaMailSender;
     @Autowired
-    private GymAddressRepo gymAddressRepo;
+
+    private GymAddressRepository gymAddressRepository;
+
 
 
     public MessageComponents() throws NoSuchAlgorithmException {
@@ -128,7 +133,7 @@ public class MessageComponents {
             if (localGym1.isPresent()) {
                 localGym = localGym1.get();
             }
-            Optional<GymAddressClass> addressGym1 = gymAddressRepo.findById(order.getGym());
+            Optional<GymAddressClass> addressGym1 = gymAddressRepository.findById(order.getGym());
             if (addressGym1.isPresent()) {
                 addressGym = addressGym1.get();
             }

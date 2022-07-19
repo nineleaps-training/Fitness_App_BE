@@ -10,7 +10,7 @@ import com.fitness.app.entity.UserAttendanceClass;
 
 @Repository
 @EnableMongoRepositories
-public interface AttendanceRepo extends MongoRepository<UserAttendanceClass,String>{
+public interface AttendanceRepository extends MongoRepository<UserAttendanceClass,String>{
 
 	public UserAttendanceClass findByEmailAndVendor(String email, String vendor);
 	public UserAttendanceClass findByEmailAndVendorAndGym(String email, String vendor, String gym);

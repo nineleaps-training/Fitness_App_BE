@@ -10,15 +10,26 @@ import java.util.Map;
 
 public interface AdminService {
 
-    public AdminPayClass getDataPay(AdminPayModel payModel);
 
-    public boolean PayNow(AdminPayModel payModel, Order order);
+    AdminPayClass getDataPay(AdminPayModel payModel);
 
-    public AdminPayClass vendorPayment(String vendor);
+    boolean PayNow(AdminPayModel payModel, Order order);
 
-    public AdminPayClass updatePayment(Map<String, String> data);
+    AdminPayClass vendorPayment(String vendor);
 
-    public List<AdminPayClass> paidHistoryVendor(String vendor) throws DataNotFoundException;
+    AdminPayClass updatePayment(Map<String, String> data);
+
+    List<AdminPayClass> paidHistoryVendor(String vendor) throws DataNotFoundException;
+
+    AdminPayClass getDataPay(AdminPayModel payModel);
+
+    boolean PayNow(AdminPayModel payModel, Order order);
+
+    AdminPayClass vendorPayment(String vendor);
+
+    AdminPayClass updatePayment(Map<String, String> data);
+
+    List<AdminPayClass> paidHistoryVendor(String vendor) throws DataNotFoundException;
 
 
 }

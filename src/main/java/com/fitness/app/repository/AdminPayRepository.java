@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @EnableMongoRepositories
-public interface AdminPayRepo extends MongoRepository<AdminPayClass, String> {
+public interface AdminPayRepository extends MongoRepository<AdminPayClass, String> {
 
 	
 	public AdminPayClass findByVendorAndAmountAndStatus(String vendor, int amount, String status);

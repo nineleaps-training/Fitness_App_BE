@@ -1,4 +1,4 @@
-package com.fitness.app.image;
+package com.fitness.app.entity;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document("images")
-public class Doc {
+public class ImageOperationDoc {
 
 	private String id;
 	private String fileName;

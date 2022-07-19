@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.fitness.app.entity.AdminClass;
 
 @Repository
-public interface AdminRepo extends MongoRepository<AdminClass, String> {
+public interface AdminRepository extends MongoRepository<AdminClass, String> {
 
 }

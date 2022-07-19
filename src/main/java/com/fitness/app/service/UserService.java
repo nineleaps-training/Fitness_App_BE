@@ -1,5 +1,6 @@
 package com.fitness.app.service;
 
+<<<<<<< HEAD
 import java.util.Optional;
 import java.util.Random;
 
@@ -147,4 +148,17 @@ public class UserService {
 	    return generatedString;
 	}
 	
+=======
+import com.fitness.app.entity.UserClass;
+import com.fitness.app.model.UserModel;
+
+public interface UserService {
+
+    UserClass registerUser(UserModel userModel);
+    UserClass verifyUser(String email);
+    void loginUser(String email);
+    UserClass googleSignInMethod(UserModel userModel);
+    String randomPass();
+
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 }

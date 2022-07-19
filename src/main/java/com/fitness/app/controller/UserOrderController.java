@@ -22,7 +22,11 @@ import com.fitness.app.entity.UserOrderClass;
 import com.fitness.app.model.BookedGymModel;
 import com.fitness.app.model.UserOrderModel;
 import com.fitness.app.model.UserPerfomanceModel;
+<<<<<<< HEAD
 import com.fitness.app.service.UserOrderService;
+=======
+import com.fitness.app.service.UserOrderServiceImpl;
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 
@@ -31,7 +35,11 @@ public class UserOrderController {
 
 
     @Autowired
+<<<<<<< HEAD
     private UserOrderService userOrderService;
+=======
+    private UserOrderServiceImpl userOrderServiceImpl;
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 
     //key_id: rzp_test_vmHcJh5Dj4v5EB
     //sec_key: SGff6EaJ7l3RzR47hnE4dYJz
@@ -39,7 +47,11 @@ public class UserOrderController {
 
     @GetMapping("/check-user-order/{email}")
     public Boolean checkUserCanOrder(@PathVariable String email) {
+<<<<<<< HEAD
         return userOrderService.canOrder(email);
+=======
+        return userOrderServiceImpl.canOrder(email);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
     }
 
     //order now
@@ -72,7 +84,11 @@ public class UserOrderController {
         userOrderClass.setDate(date);
         userOrderClass.setTime(time);
 
+<<<<<<< HEAD
         userOrderService.orderNow(userOrderClass);
+=======
+        userOrderServiceImpl.orderNow(userOrderClass);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
         return myOrder.toString();
     }
 
@@ -82,31 +98,51 @@ public class UserOrderController {
     @PutMapping("update/order")
     public UserOrderClass updatingOrder(@RequestBody Map<String, String> data) {
 
+<<<<<<< HEAD
         return userOrderService.updateOrder(data);
+=======
+        return userOrderServiceImpl.updateOrder(data);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
     }
 
     //Check the pending orders by email id of the user
     @GetMapping("/pending/order/{email}")
     public ResponseEntity<List<UserOrderClass>> pedingOrerList(@PathVariable String email) {
+<<<<<<< HEAD
         return new ResponseEntity<>(userOrderService.pendingListOrder(email), HttpStatus.OK);
+=======
+        return new ResponseEntity<>(userOrderServiceImpl.pendingListOrder(email), HttpStatus.OK);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
     }
 
     //Fetching the order history by email id of the user
     @GetMapping("/order/history/{email}")
     public ResponseEntity<List<UserOrderClass>> orderHistory(@PathVariable String email) {
+<<<<<<< HEAD
         return new ResponseEntity<>(userOrderService.OrderListOrder(email), HttpStatus.OK);
+=======
+        return new ResponseEntity<>(userOrderServiceImpl.orderListByEmail(email), HttpStatus.OK);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
     }
 
     //Fetching the user of the particular Gym by gymId
     @GetMapping("/my/users/{gymId}")
     public Set<UserPerfomanceModel> allMyUsers(@PathVariable String gymId) {
+<<<<<<< HEAD
         return userOrderService.allMyUser(gymId);
+=======
+        return userOrderServiceImpl.allMyUser(gymId);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
     }
 
     //Fetching gyms booked by a particular user by email
     @GetMapping("/booked/gyms/{email}")
     public List<BookedGymModel> bookedGym(@PathVariable String email) {
+<<<<<<< HEAD
         return userOrderService.bookedGym(email);
+=======
+        return userOrderServiceImpl.bookedGym(email);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
     }
 
 

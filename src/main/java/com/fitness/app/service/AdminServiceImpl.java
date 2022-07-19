@@ -4,12 +4,13 @@ import com.fitness.app.entity.AdminPayClass;
 import com.fitness.app.entity.VendorPaymentClass;
 import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.model.AdminPayModel;
-import com.fitness.app.repository.AdminPayRepo;
-import com.fitness.app.repository.VendorPayRepo;
+import com.fitness.app.repository.AdminPayRepository;
+import com.fitness.app.repository.VendorPayRepository;
 import com.razorpay.Order;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -20,16 +21,17 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AdminServiceImplementation implements AdminService {
+@Transactional
+public class AdminServiceImpl implements AdminService {
 
-    final private VendorPayRepo vendorPay;
+    final private VendorPayRepository vendorPay;
 
-    final private AdminPayRepo adminPayRepo;
+    final private AdminPayRepository adminPayRepository;
 
     @Override
     public AdminPayClass getDataPay(AdminPayModel payment) {
         log.info("Payment to admin is being accessed");
-        return adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due");
+        return adminPayRepository.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due");
 
     }
 
@@ -37,7 +39,7 @@ public class AdminServiceImplementation implements AdminService {
     public boolean PayNow(AdminPayModel payment, Order myOrder) {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
-        AdminPayClass payVendor = adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due");
+        AdminPayClass payVendor = adminPayRepository.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due");
         if (payVendor == null) {
             return false;
         }
@@ -47,7 +49,7 @@ public class AdminServiceImplementation implements AdminService {
         payVendor.setReciept(myOrder.get("receipt"));
         payVendor.setDate(date);
         payVendor.setTime(time);
-        adminPayRepo.save(payVendor);
+        adminPayRepository.save(payVendor);
         return true;
     }
 
@@ -65,14 +67,14 @@ public class AdminServiceImplementation implements AdminService {
             }
         }
         payment.setAmount(amount);
-        int s = adminPayRepo.findAll().size();
+        int s = adminPayRepository.findAll().size();
         String id = "P0" + s;
         payment.setId(id);
-        AdminPayClass oldPay = adminPayRepo.findByVendorAndAmountAndStatus(vendor, amount, "Due");
+        AdminPayClass oldPay = adminPayRepository.findByVendorAndAmountAndStatus(vendor, amount, "Due");
         if (oldPay != null) {
             return oldPay;
         }
-        adminPayRepo.save(payment);
+        adminPayRepository.save(payment);
         return payment;
     }
 
@@ -80,7 +82,7 @@ public class AdminServiceImplementation implements AdminService {
     public AdminPayClass updatePayment(Map<String, String> data) {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
-        AdminPayClass payment = adminPayRepo.findByOrderId(data.get("order_id"));
+        AdminPayClass payment = adminPayRepository.findByOrderId(data.get("order_id"));
         payment.setPaymentId(data.get("payment_id"));
         payment.setStatus(data.get("status"));
         payment.setDate(date);
@@ -90,14 +92,14 @@ public class AdminServiceImplementation implements AdminService {
             pays.setStatus("Paid");
             vendorPay.save(pays);
         }
-        adminPayRepo.save(payment);
+        adminPayRepository.save(payment);
         return payment;
     }
 
     @Override
     public List<AdminPayClass> paidHistoryVendor(String vendor) throws DataNotFoundException {
         try {
-            List<AdminPayClass> allPaid = adminPayRepo.findByVendor(vendor);
+            List<AdminPayClass> allPaid = adminPayRepository.findByVendor(vendor);
             if (allPaid == null) {
                 throw new DataNotFoundException("No Payment Is there");
             }

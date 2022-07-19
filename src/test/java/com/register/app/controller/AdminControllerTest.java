@@ -12,8 +12,11 @@ import java.util.*;
 
 import com.fitness.app.entity.AdminPayClass;
 import com.fitness.app.model.AdminPayModel;
-import com.fitness.app.repository.AdminPayRepo;
-import com.fitness.app.service.AdminServiceImplementation;
+<<<<<<< HEAD
+=======
+import com.fitness.app.repository.AdminPayRepository;
+import com.fitness.app.service.AdminServiceImpl;
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,7 +42,10 @@ import com.fitness.app.controller.AdminController;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.repository.AddGymRepository;
-import com.fitness.app.repository.AdminRepo;
+<<<<<<< HEAD
+=======
+import com.fitness.app.repository.AdminRepository;
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 import com.fitness.app.repository.UserRepository;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -55,13 +61,21 @@ class AdminControllerTest {
 	
 	
 	@Mock
+<<<<<<< HEAD
 	private AdminRepo adminRepo;
+=======
+	private AdminRepository adminRepository;
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 	
 	@Mock
 	private UserRepository userRepository;
 
 	@Mock
+<<<<<<< HEAD
 	private AdminPayRepo payRepo;
+=======
+	private AdminPayRepository payRepo;
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 	@Mock
 	private AddGymRepository gymRepository;
 	
@@ -189,14 +203,22 @@ class AdminControllerTest {
 	///vendor-payment/{vendor}
 
 	@Mock
+<<<<<<< HEAD
 	private AdminServiceImplementation adminServiceImplementation;
+=======
+	private AdminServiceImpl adminServiceImpl;
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 
 
 
 	@Test
 	 void vendorPayment() throws  Exception
 	{
+<<<<<<< HEAD
 		Mockito.when(adminServiceImplementation.vendorPayment("manish.kumar@nineleaps.com")).thenReturn(VENDOR_PAY);
+=======
+		Mockito.when(adminServiceImpl.vendorPayment("manish.kumar@nineleaps.com")).thenReturn(VENDOR_PAY);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/vendor-payment/manish.kumar@nineleaps.com")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -212,7 +234,11 @@ class AdminControllerTest {
 	 void amountToPay() throws Exception
 	{
 
+<<<<<<< HEAD
 		Mockito.when(adminServiceImplementation.getDataPay(VENDOR_DUE)).thenReturn(VENDOR_PAY);
+=======
+		Mockito.when(adminServiceImpl.getDataPay(VENDOR_DUE)).thenReturn(VENDOR_PAY);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/get-data-pay")
 				.contentType(MediaType.APPLICATION_JSON))
@@ -233,7 +259,11 @@ class AdminControllerTest {
 		data.put("payment_id", "paymentId");
 		data.put("status", "Completed");
 
+<<<<<<< HEAD
 		Mockito.when(adminServiceImplementation.updatePayment(data)).thenReturn(VENDOR_PAY_COM);
+=======
+		Mockito.when(adminServiceImpl.updatePayment(data)).thenReturn(VENDOR_PAY_COM);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 		String requestData= objectMapper.writeValueAsString(data);
 
 		mockMvc.perform(MockMvcRequestBuilders.put("/update-vendor-payment")
@@ -254,7 +284,11 @@ class AdminControllerTest {
 
 		List<AdminPayClass> allHistory=new ArrayList<>();
 		allHistory.add(VENDOR_PAY_COM);
+<<<<<<< HEAD
        Mockito.when(adminServiceImplementation.paidHistoryVendor("manish.kumar@nineleaps.com")).thenReturn(allHistory);
+=======
+       Mockito.when(adminServiceImpl.paidHistoryVendor("manish.kumar@nineleaps.com")).thenReturn(allHistory);
+>>>>>>> ab44702953f521464a7b7eaa187535692b51af48
 
 	   mockMvc.perform(MockMvcRequestBuilders.get("/paid-history/manish.kumar@nineleaps.com")
 			   .contentType(MediaType.APPLICATION_JSON))
