@@ -11,7 +11,7 @@ import io.swagger.annotations.ApiModelProperty;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(description = "SignUpResponce")
-public class SignUpResponce {
+public class SignUpResponceModel {
 	@ApiModelProperty(name = "currentUser", notes = "Current User")
 	private UserClass currentUser;
 	@ApiModelProperty(name = "message", notes = "JWT Token")

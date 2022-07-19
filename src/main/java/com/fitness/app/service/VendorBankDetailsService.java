@@ -1,23 +1,23 @@
 package com.fitness.app.service;
 
+import com.fitness.app.dao.VendorBankDetailsDAO;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorBankDetails;
 import com.fitness.app.exception.DataNotFoundException;
 import com.fitness.app.model.UserBankDetailsRequestModel;
 import com.fitness.app.repository.BankDetailsRepo;
 import com.fitness.app.repository.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
-@Service
-public class VendorBankDetailsService {
+@Slf4j
+public class VendorBankDetailsService implements VendorBankDetailsDAO {
 
-    @Autowired
     private BankDetailsRepo repository;
 
-    @Autowired
     private UserRepo userRepository;
 
     // Initializing constructor
@@ -27,6 +27,7 @@ public class VendorBankDetailsService {
      * @param bankDetailsRepository - Bank Details Repository
      * @param userRepository2       - User Repository
      */
+    @Autowired
     public VendorBankDetailsService(BankDetailsRepo bankDetailsRepository, UserRepo userRepository2) {
         this.repository = bankDetailsRepository;
         this.userRepository = userRepository2;
@@ -40,6 +41,7 @@ public class VendorBankDetailsService {
      */
     public VendorBankDetails addDetails(UserBankDetailsRequestModel bankDetails) {
 
+        log.info("VendorBankDetailsService >> addDetails >> Initiated");
         UserClass vendor = userRepository.findByEmail(bankDetails.getEmail());
 
         if (vendor != null && vendor.getActivated()) {
@@ -51,10 +53,10 @@ public class VendorBankDetailsService {
             vendorBankDetails.setBankName(bankDetails.getBankName());
             vendorBankDetails.setBranchName(bankDetails.getBranchName());
             vendorBankDetails.setPaymentSchedule(bankDetails.getPaymentSchedule());
-
+            log.info("VendorBankDetailsService >> addDetails >> Terminated");
             return repository.save(vendorBankDetails); // Adding Vendor Bank Details
         }
-
+        log.warn("Null is returned");
         return null;
     }
 
@@ -64,7 +66,7 @@ public class VendorBankDetailsService {
      * @return - List of all the bank details
      */
     public List<VendorBankDetails> getDetails() {
-
+        log.info("VendorBankDetailsService >> getDetails >> Initiated");
         return repository.findAll(); // Fetching all Vendor Bank Details
     }
 
@@ -77,10 +79,12 @@ public class VendorBankDetailsService {
      */
     public VendorBankDetails getBankDetails(String email) {
 
+        log.info("VendorBankDetailsService >> getBankDetails >> Initiated");
         VendorBankDetails vendorBankDetails = repository.findByEmail(email); // Fetching Vendor Bank Details from email
         if (vendorBankDetails != null) {
             return vendorBankDetails;
         } else {
+            log.error("VendorBankDetailsService >> getBankDetails >> Exception thrown");
             throw new DataNotFoundException("No vendor found with this email");
         }
 

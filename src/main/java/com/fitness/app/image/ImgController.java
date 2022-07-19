@@ -5,15 +5,11 @@ import java.io.IOException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 
-import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.retry.annotation.Backoff;
-import org.springframework.retry.annotation.EnableRetry;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.fitness.app.exception.IncorrectFileUploadException;
 
 @RestController
-@EnableRetry
 public class ImgController {
 
 	@Autowired
@@ -44,7 +39,6 @@ public class ImgController {
 	@PostMapping("/v1/image/uploadFile/{id}")
 	@Consumes({ "image/png,image/jpg,image/jpeg" })
 	@ResponseStatus(HttpStatus.CREATED)
-	@Retryable(value = FileUploadException.class, maxAttempts = 2, backoff = @Backoff(delay = 60000))
 	public Doc saveFile(@RequestParam MultipartFile file, @PathVariable String id)
 			throws IOException, MaxUploadSizeExceededException {
 		if ("image/png".equals(file.getContentType()) || "image/jpg".equals(file.getContentType())

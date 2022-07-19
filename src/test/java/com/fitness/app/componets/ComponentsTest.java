@@ -25,7 +25,7 @@ class ComponentsTest {
 
     @Test
     @DisplayName("Testing if the OTP is sent")
-    void testSendOtpMessage() {
+    void testSendOtpMessageException() {
 
         int actual = components.sendOtpMessage("message", "1234", "8469492322");
         Assertions.assertEquals(0, actual);

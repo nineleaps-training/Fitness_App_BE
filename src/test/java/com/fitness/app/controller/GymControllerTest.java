@@ -24,7 +24,7 @@ import com.fitness.app.entity.GymSubscriptionClass;
 import com.fitness.app.entity.GymTime;
 import com.fitness.app.model.GymClassModel;
 import com.fitness.app.model.GymRepresentModel;
-import com.fitness.app.service.FilterBySubscription;
+import com.fitness.app.service.FilterBySubscriptionService;
 import com.fitness.app.service.GymService;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,7 +42,7 @@ class GymControllerTest {
     GymService gymService;
 
     @Mock
-    FilterBySubscription filterBySubscription;
+    FilterBySubscriptionService filterBySubscription;
 
     List<GymRepresentModel> gymRepresnts = new ArrayList<>();
 

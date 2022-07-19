@@ -6,8 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.fitness.app.dao.AttendanceServiceDAO;
 import com.fitness.app.entity.Rating;
 import com.fitness.app.entity.UserAttendance;
 import com.fitness.app.exception.DataNotFoundException;
@@ -15,22 +14,16 @@ import com.fitness.app.model.MarkUserAttModel;
 import com.fitness.app.repository.AttendanceRepo;
 import com.fitness.app.repository.RatingRepo;
 
-@Service
-public class AttendanceService {
+import lombok.extern.slf4j.Slf4j;
 
-	@Autowired
+@Slf4j
+public class AttendanceService implements AttendanceServiceDAO {
+
 	private AttendanceRepo attendanceRepo;
-
-	@Autowired
+	
 	private RatingRepo ratingRepo;
 
-	// Initializing constructor
-	/**
-	 * This constructor is used to initialize the repositories
-	 * 
-	 * @param ratingRepo2     - Rating repository
-	 * @param attendanceRepo2 - Attendance Repository
-	 */
+	@Autowired
 	public AttendanceService(RatingRepo ratingRepo2, AttendanceRepo attendanceRepo2) {
 		this.ratingRepo = ratingRepo2;
 		this.attendanceRepo = attendanceRepo2;
@@ -44,6 +37,7 @@ public class AttendanceService {
 	 * @throws DataNotFoundException
 	 */
 	public String markUsersAttendance(MarkUserAttModel userAttendance) {
+		log.info("Attendance Service >> markUsersAttendance >> Initiated");
 		try {
 			List<String> users = userAttendance.getUsers();
 
@@ -66,6 +60,7 @@ public class AttendanceService {
 						attendanceList = new ArrayList<>();
 						attendanceList.add(1);
 					} else {
+						log.warn("Attendance Service >> markUsersAttendance >> List is null");
 						attendanceList.add(1);
 					}
 					att++;
@@ -75,6 +70,7 @@ public class AttendanceService {
 						attendanceList = new ArrayList<>();
 						attendanceList.add(0);
 					} else {
+						log.warn("Attendance Service >> markUsersAttendance >> List is null");
 						attendanceList.add(0);
 					}
 					nonatt++;
@@ -84,8 +80,10 @@ public class AttendanceService {
 				attendanceRepo.save(userAtt);
 
 			}
+			log.info("Attendance Service >> markUsersAttendance >> ends");
 			return "Marked total: " + att + " and non attendy:  " + nonatt;
 		} catch (Exception e) {
+			log.error("Attendance Service >> markUsersAttendance >> Exception thrown");
 			throw new DataNotFoundException("Data Not Found");
 		}
 	}
@@ -100,6 +98,7 @@ public class AttendanceService {
 	 */
 	public List<Integer> userPerfomance(String email, String gym) {
 		try {
+			log.info("Attendance Service >> userPerfomance >> Initiated");
 			UserAttendance user = attendanceRepo.findByEmailAndGym(email, gym);
 			List<Integer> perfomance = new ArrayList<>();
 			List<Integer> attendenceList = user.getAttendance();
@@ -127,8 +126,10 @@ public class AttendanceService {
 				i++;
 			}
 			perfomance.add(count); // Adding User Performance
+			log.info("Attendance Service >> userPerfomance >> Terminated");
 			return perfomance;
 		} catch (Exception e) {
+			log.error("Attendance Service >> userPerfomance >> Exception thrown");
 			throw new DataNotFoundException("Data Not Found");
 		}
 	}
@@ -140,6 +141,7 @@ public class AttendanceService {
 	 * @return - Rating
 	 */
 	public Double calculateRating(String target) {
+		log.info("Attendance Service >> calculateRating >> Initiated");
 		List<Rating> ratings = ratingRepo.findByTarget(target);
 
 		int n = 0;
@@ -147,6 +149,7 @@ public class AttendanceService {
 			n = ratings.size();
 		}
 		if (n == 0) {
+			log.warn("Attendance Service >> calculateRating >> returning 0");
 			return 0.0;
 		} else {
 			double rate = 0; // Calculating Rating of User
@@ -155,6 +158,7 @@ public class AttendanceService {
 			}
 			rate = rate / n;
 			rate = Math.round(rate * 100) / 100.0d;
+			log.info("Attendance Service >> calculateRating >> Terminated");
 			return rate % 6;
 		}
 	}

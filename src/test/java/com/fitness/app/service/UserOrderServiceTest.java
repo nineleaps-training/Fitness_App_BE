@@ -12,10 +12,10 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -27,6 +27,7 @@ import com.fitness.app.entity.UserAttendance;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.UserOrder;
 import com.fitness.app.model.GymRepresentModel;
+import com.fitness.app.model.UserOrderModel;
 import com.fitness.app.model.UserPerfomanceModel;
 import com.fitness.app.repository.AddGymRepo;
 import com.fitness.app.repository.AttendanceRepo;
@@ -34,10 +35,13 @@ import com.fitness.app.repository.GymTimeRepo;
 import com.fitness.app.repository.UserOrderRepo;
 import com.fitness.app.repository.UserRepo;
 import com.fitness.app.repository.VendorPayRepo;
+import com.razorpay.Order;
+import com.razorpay.RazorpayException;
 
 @ExtendWith(MockitoExtension.class)
 class UserOrderServiceTest {
 
+    @InjectMocks
     UserOrderService userOrderService;
 
     @Mock
@@ -59,18 +63,15 @@ class UserOrderServiceTest {
     GymTimeRepo gymTimeRepo;
 
     @Mock
+    Order order;
+
+    @Mock
     VendorPayRepo vendorOrderRepo;
     LocalDate localDate;
     LocalTime localTime;
     UserOrder userOrder;
     String subscription = "Monthly";
     String subscription2 = "quaterly";
-
-    @BeforeEach
-    public void initcase() {
-        userOrderService = new UserOrderService(userRepository, userOrderRepo, attendanceRepo, gymRepo, gymService,
-                vendorOrderRepo);
-    }
 
     @Test
     @DisplayName("Testing of fetching all the users of a particular gym")
@@ -101,6 +102,19 @@ class UserOrderServiceTest {
         when(gymRepo.findById(userOrder.getId())).thenReturn(optional);
         Set<UserPerfomanceModel> uModels3 = userOrderService.allMyUser(userOrder.getId());
         Assertions.assertEquals(uModels2.size(), uModels3.size());
+    }
+
+    @Test
+    void testOrderNowService() throws RazorpayException
+    {
+        List<String> services = new ArrayList<>();
+        services.add("zumba");
+        UserOrderModel userOrder = new UserOrderModel("GM6", "pankaj.jain@nineleaps.com", services,"subscription",123,"weekly");
+        List<UserOrderModel> list = new ArrayList<>();
+        list.add(userOrder);
+        String order = userOrderService.orderNow(userOrder).toString();
+        Assertions.assertEquals(true, order.contains("amount"));
+
     }
 
     @Test
@@ -568,17 +582,15 @@ class UserOrderServiceTest {
 
     @Test
     @DisplayName("Testing of ordering the services")
-    void testOrderNow() {
+    void testOrderNow() throws RazorpayException {
 
         List<String> services = new ArrayList<>();
         services.add("zumba");
-        localDate = LocalDate.now();
-        localTime = LocalTime.now();
-        UserOrder userOrder = new UserOrder("id", "email", "gym", services, "subscription", "slot", 1234, "booked",
-                "status", "paymentId", "receipt", localDate, localTime);
-        when(userOrderRepo.save(userOrder)).thenReturn(userOrder);
-        UserOrder userOrder2 = userOrderService.orderNow(userOrder);
-        Assertions.assertEquals(userOrder.getEmail(), userOrder2.getEmail());
+        UserOrderModel userOrder = new UserOrderModel("GM6", "pankaj.jain@nineleaps.com", services,"subscription",123,"weekly");
+        List<UserOrderModel> list = new ArrayList<>();
+        list.add(userOrder);
+        String order = userOrderService.orderNow(userOrder).toString();
+        Assertions.assertEquals(219, order.length());
 
     }
 

@@ -5,10 +5,10 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -34,12 +34,8 @@ class UserBankDetailsServiceTest {
     @Mock
     UserRepo userRepository;
 
+    @InjectMocks
     UserBankDetailsService userBankDetailsService;
-
-    @BeforeEach
-    public void initcase() {
-        userBankDetailsService = new UserBankDetailsService(userBankDetailsRepo, userRepository);
-    }
 
     @Test
     @DisplayName("Testing of adding the User Bank Details")

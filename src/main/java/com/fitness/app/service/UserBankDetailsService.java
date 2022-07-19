@@ -1,22 +1,23 @@
 package com.fitness.app.service;
 
+import com.fitness.app.dao.UserBankDetailsDAO;
 import com.fitness.app.entity.UserBankDetails;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.exception.DataNotFoundException;
 import com.fitness.app.model.UserBankDetailsRequestModel;
 import com.fitness.app.repository.UserBankDetailsRepo;
 import com.fitness.app.repository.UserRepo;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import java.util.Optional;
 
-@Service
-public class UserBankDetailsService {
+@Slf4j
+public class UserBankDetailsService implements UserBankDetailsDAO {
 
-    @Autowired
     private UserBankDetailsRepo repository;
 
-    @Autowired
     private UserRepo userRepository;
 
     // Initializing constructor
@@ -26,6 +27,7 @@ public class UserBankDetailsService {
      * @param userBankDetailsRepo - User Bank Details Respository
      * @param userRepository2     - User Repository
      */
+    @Autowired
     public UserBankDetailsService(UserBankDetailsRepo userBankDetailsRepo, UserRepo userRepository2) {
         this.repository = userBankDetailsRepo;
         this.userRepository = userRepository2;
@@ -39,6 +41,7 @@ public class UserBankDetailsService {
      */
     public UserBankDetails addBankDetails(UserBankDetailsRequestModel bankDetails) {
 
+        log.info("UserBankDetailsService >> addBankDetails >> Initiated");
         UserClass user = userRepository.findByEmail(bankDetails.getEmail());
 
         if (user != null && user.getActivated()) {
@@ -50,9 +53,10 @@ public class UserBankDetailsService {
             userBankDetails.setUbankIFSC(bankDetails.getBankIFSC());
             userBankDetails.setUbankName(bankDetails.getBankName());
             userBankDetails.setUbranchName(bankDetails.getBranchName());
+            log.info("UserBankDetailsService >> addBankDetails >> Terminated");
             return repository.save(userBankDetails);
         }
-
+        log.warn("Null is returned");
         return null;
     }
 
@@ -64,10 +68,12 @@ public class UserBankDetailsService {
      * @throws DataNotFoundException
      */
     public UserBankDetails getBankDetails(String email) {
+        log.info("UserBankDetailsService >> getBankDetails >> Initiated");
         Optional<UserBankDetails> optional = repository.findById(email);
         if (optional.isPresent()) {
             return optional.get(); // Fetching Bank Details of a particular User
         } else {
+            log.error("UserBankDetailsService >> getBankDetails >> Error thrown");
             throw new DataNotFoundException("No User Bank Details Found");
         }
     }

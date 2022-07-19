@@ -1,5 +1,6 @@
 package com.fitness.app.service;
 
+import com.fitness.app.dao.VendorDetailsDAO;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorDetails;
 import com.fitness.app.exception.DataNotFoundException;
@@ -9,18 +10,16 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.stereotype.Service;
-
 import com.fitness.app.model.UserDetailsRequestModel;
 import com.fitness.app.repository.VendorDetailsRepo;
 
-@Service
-public class VendorDetailsService {
+import lombok.extern.slf4j.Slf4j;
 
-    @Autowired
+@Slf4j
+public class VendorDetailsService implements VendorDetailsDAO {
+
     private VendorDetailsRepo vendordetailsRepository;
 
-    @Autowired
     private UserRepo userRepository;
 
     // Initializing constructor
@@ -30,6 +29,7 @@ public class VendorDetailsService {
      * @param userRepository2          - User Repository
      * @param vendorDetailsRepository2 - Vendor Details Repository
      */
+    @Autowired
     public VendorDetailsService(UserRepo userRepository2, VendorDetailsRepo vendorDetailsRepository2) {
         this.userRepository = userRepository2;
         this.vendordetailsRepository = vendorDetailsRepository2;
@@ -43,6 +43,7 @@ public class VendorDetailsService {
      */
     public VendorDetails addVendorDetails(UserDetailsRequestModel vendorDetails) {
 
+        log.info("VendorDetailsService >> addVendorDetails >> Initiated");
         VendorDetails vDetails = new VendorDetails();
         vDetails.setVCity(vendorDetails.getCity());
         vDetails.setVEmail(vendorDetails.getEmail());
@@ -55,6 +56,8 @@ public class VendorDetailsService {
         if (user != null && user.getActivated()) {
             return vendordetailsRepository.save(vDetails); // Register new vendor.
         }
+
+        log.warn("VendorDetailsService >> addVendorDetails >> Null is returned");
         return null;
     }
 
@@ -66,11 +69,12 @@ public class VendorDetailsService {
      * @throws DataNotFoundException
      */
     public VendorDetails getVendorDetails(String email) {
-
+        log.info("VendorDetailsService >> getVendorDetails >> Initiated");
         Optional<VendorDetails> optional = vendordetailsRepository.findById(email);
         if (optional.isPresent()) {
             return optional.get(); // Fetching Vendor Details from email
         } else {
+            log.error("VendorDetailsService >> getVendorDetails >> Exception thrown");
             throw new DataNotFoundException("No Vendor Details Found");
         }
     }

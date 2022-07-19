@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -44,17 +44,13 @@ class GymServiceTest {
     @Mock
     RatingService ratingService;
 
+    @InjectMocks
     GymService gymService;
 
     GymClassModel gymClassModel;
     GymTime gymTime;
     GymAddressClass gymAddressClass;
     GymSubscriptionClass gymSubscriptionClass;
-
-    @BeforeEach
-    public void initcase() {
-        gymService = new GymService(addGymRepository, gymTimeRepo, gymAddressRepo, gymSubscriptionRepo, ratingService);
-    }
 
     @Test
     @DisplayName("Testing for adding new gym")

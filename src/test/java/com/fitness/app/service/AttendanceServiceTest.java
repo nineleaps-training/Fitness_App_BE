@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -49,12 +49,8 @@ class AttendanceServiceTest {
     @Mock
     RatingRepo ratingRepo;
 
+    @InjectMocks
     AttendanceService attendanceService;
-
-    @BeforeEach
-    public void initcase() {
-        attendanceService = new AttendanceService(ratingRepo, attendanceRepo);
-    }
 
     @Test
     @DisplayName("Testing of calculating the rating")

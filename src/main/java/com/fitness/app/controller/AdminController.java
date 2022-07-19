@@ -5,10 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.retry.annotation.Retryable;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,24 +15,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import javax.naming.AuthenticationException;
 import javax.validation.Valid;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 import com.fitness.app.auth.Authenticate;
-import com.fitness.app.config.JwtUtils;
 import com.fitness.app.entity.AdminPay;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.model.AdminPayRequestModel;
-import com.fitness.app.model.SignUpResponce;
+import com.fitness.app.model.SignUpResponceModel;
 import com.fitness.app.repository.AddGymRepo;
-import com.fitness.app.repository.UserRepo;
-import com.fitness.app.security.service.UserDetailsServiceImpl;
 import com.fitness.app.service.AdminService;
 import com.fitness.app.service.PagingService;
 import com.razorpay.Order;
@@ -49,18 +40,6 @@ import io.swagger.annotations.ApiResponses;
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class AdminController {
-
-	@Autowired
-	private AuthenticationManager authenticationManager;
-
-	@Autowired
-	private UserDetailsServiceImpl userDetailsService;
-
-	@Autowired
-	private JwtUtils jwtUtils;
-
-	@Autowired
-	private UserRepo userRepo;
 
 	@Autowired
 	private AddGymRepo gymRepo;
@@ -78,25 +57,15 @@ public class AdminController {
 	 * @return - Response with Email and JWT Token
 	 */
 	@PostMapping(value = "/v1/login/admin", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	@Retryable(value = AuthenticationException.class, maxAttempts = 2)
+	
 	@ResponseStatus(HttpStatus.CREATED)
 	@Validated
 	@ApiOperation(value = "Admin Login", notes = "Admin can login for access")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Login Sucessfull", response = SignUpResponce.class),
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Login Sucessfull", response = SignUpResponceModel.class),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class) })
-	public ResponseEntity<SignUpResponce> authenticateUser(@Valid @RequestBody Authenticate authCredential) {
+	public ResponseEntity<SignUpResponceModel> authenticateUser(@Valid @RequestBody Authenticate authCredential) {
 
-		authenticationManager.authenticate(
-				new UsernamePasswordAuthenticationToken(authCredential.getEmail(), authCredential.getPassword()));
-		final UserDetails usrDetails = userDetailsService.loadUserByUsername(authCredential.getEmail());
-		final String jwt = jwtUtils.generateToken(usrDetails);
-		final UserClass localUser = userRepo.findByEmail(authCredential.getEmail());
-		if (localUser.getRole().equals("ADMIN")) {
-			return ResponseEntity.ok(new SignUpResponce(localUser, jwt)); // Returning the response after authenticating
-																			// the ADMIN
-		} else {
-			return ResponseEntity.ok(new SignUpResponce(null, null));
-		}
+		return adminService.loginAdmin(authCredential);
 
 	}
 
@@ -223,7 +192,6 @@ public class AdminController {
 	@ResponseStatus(HttpStatus.OK)
 	@Validated
 	@ResponseBody
-	@Retryable(value = RazorpayException.class, maxAttempts = 2)
 	public AdminPay payNow(@Valid @RequestBody AdminPayRequestModel payment) throws RazorpayException {
 		RazorpayClient razorpayClient = new RazorpayClient(System.getenv("RAZORPAY_KEY"),
 				System.getenv("RAZORPAY_SECRET"));
@@ -288,22 +256,8 @@ public class AdminController {
 	@GetMapping(value = "/v1/all-numbers", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> getAllNumber() {
-		List<UserClass> l = userRepo.findAll(); // Fetching all the registered users
 
-		int u = l.stream().filter(e -> e.getRole().equals("USER")).collect(Collectors.toList()).size(); // Filtering users
-		
-		int v = l.stream().filter(e -> e.getRole().equals("VENDOR")).collect(Collectors.toList()).size(); // Filtering vendors																									
-
-		List<GymClass> gyms = gymRepo.findAll(); // Fetching all the registered gyms
-
-		int g = gyms.size();
-
-		List<String> nums = new ArrayList<>();
-		nums.add(Integer.toString(u));
-		nums.add(Integer.toString(v));
-		nums.add(Integer.toString(g));
-
-		return new ResponseEntity<>(nums, HttpStatus.OK);
+		return adminService.getAllNumber();
 	}
 
 }

@@ -17,7 +17,7 @@
         <java.version>1.8</java.version>
         <sonar.coverage.exclusions>
 			**/java/com/fitness/app/auth/*,
-			**/java/com/fitness/app/componets/*,
+			**/java/com/fitness/app/components/*,
 			**/java/com/fitness/app/config/JwtAuthenticationEntryPoint.java,
             **/java/com/fitness/app/config/WebConfiguration.java,
             **/java/com/fitness/app/config/WebCorsConfiguration.java,

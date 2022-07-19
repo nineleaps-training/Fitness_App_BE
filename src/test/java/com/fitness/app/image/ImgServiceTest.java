@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
@@ -26,6 +27,7 @@ class ImgServiceTest {
     @Mock
     ImgRepo imgRepo;
 
+    @InjectMocks
     ImgService imgService;
 
     File file;
@@ -71,7 +73,7 @@ class ImgServiceTest {
         }
     }
 
-    @DisplayName("Uploading Png Test")
+    @DisplayName("Uploading PNG Test")
     @Test
     void testSaveImage() throws IOException {
 
@@ -86,7 +88,7 @@ class ImgServiceTest {
         Assertions.assertEquals(docFile, doc);
     }
 
-    @DisplayName("Uploading Jpeg Test")
+    @DisplayName("Uploading JPEG Test")
     @Test
     void testImageJpeg() throws IOException {
 
@@ -101,7 +103,7 @@ class ImgServiceTest {
         Assertions.assertEquals(docFile, doc);
     }
 
-    @DisplayName("Uploading Jpg Test")
+    @DisplayName("Uploading JPG Test")
     @Test
     void testImgJpg() throws IOException {
 
@@ -115,4 +117,6 @@ class ImgServiceTest {
         Doc doc = imgService.saveImage(multipartFile, id);
         Assertions.assertEquals(docFile, doc);
     }
+
+    
 }

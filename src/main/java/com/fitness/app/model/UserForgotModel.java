@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @ApiModel(description = "UserForgot")
-public class UserForgot {
+public class UserForgotModel {
     @ApiModelProperty(name = "otp", notes = "OTP")
     private String otp;
     @ApiModelProperty(name = "bool", notes = "True or False")

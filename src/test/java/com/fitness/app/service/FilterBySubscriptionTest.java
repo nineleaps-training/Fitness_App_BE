@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.fitness.app.entity.GymAddressClass;
@@ -16,13 +16,9 @@ import com.fitness.app.model.GymClassModel;
 
 @ExtendWith(MockitoExtension.class)
 class FilterBySubscriptionTest {
-
-    FilterBySubscription filterBySubscription;
-
-    @BeforeEach
-    public void initcase() {
-        filterBySubscription = new FilterBySubscription();
-    }
+    
+    @InjectMocks
+    FilterBySubscriptionService filterBySubscription;
 
     @Test
     void testFilterByHalfYearly() {

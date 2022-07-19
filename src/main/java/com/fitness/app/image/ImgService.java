@@ -4,15 +4,16 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import com.fitness.app.exception.DataNotFoundException;
 
-@Service
-public class ImgService {
+import lombok.extern.slf4j.Slf4j;
 
-	@Autowired
+@Slf4j
+public class ImgService implements ImgDAO {
+
 	private ImgRepo imgRepo;
 
 	Doc doc;
@@ -22,12 +23,13 @@ public class ImgService {
 	 * 
 	 * @param imgRepo2
 	 */
+	@Autowired
 	public ImgService(ImgRepo imgRepo2) {
 		this.imgRepo = imgRepo2;
 	}
 
 	public Doc saveImage(MultipartFile file, String id) throws IOException {
-
+		log.info("ImgService >> saveImage >> started");
 		String docName = file.getOriginalFilename();
 		Doc docFile = new Doc(id, docName, file.getContentType(), file.getBytes());
 		imgRepo.save(docFile);
@@ -42,11 +44,13 @@ public class ImgService {
 	 * @return
 	 */
 	public Doc getImage(String id) {
+		log.info("ImgService >> getImage >> started");
 		Optional<Doc> optional = imgRepo.findById(id);
 		if (optional.isPresent()) {
 			doc = optional.get();
 			return doc;
 		} else {
+			log.error("ImgService >> saveImage >> Exception thrown");
 			throw new DataNotFoundException("File Not Found");
 		}
 	}

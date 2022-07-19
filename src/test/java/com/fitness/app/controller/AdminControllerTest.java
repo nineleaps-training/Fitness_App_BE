@@ -106,17 +106,11 @@ class AdminControllerTest {
     void testAuthenticateUser() throws Exception {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_admin"));
-        org.springframework.security.core.userdetails.UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-                "pankaj.jain@nineleaps.com", "Pankaj@123", authorities);
-        UserClass userClass = new UserClass("pankaj.jain@nineleaps.com", "fullName", "mobile", "password", "ADMIN",
-                true, true, true);
         Authenticate authenticate = new Authenticate("pankaj.jain@nineleaps.com", "Pankaj@123");
         String content = objectMapper.writeValueAsString(authenticate);
-        Mockito.when(userRepo.findByEmail("pankaj.jain@nineleaps.com")).thenReturn(userClass);
-        Mockito.when(userDetailsServiceImpl.loadUserByUsername(authenticate.getEmail())).thenReturn(userDetails);
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/v1/login/admin").contentType(MediaType.APPLICATION_JSON).content(content))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -124,17 +118,11 @@ class AdminControllerTest {
     void testAuthenticateUserNull() throws Exception {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_user"));
-        org.springframework.security.core.userdetails.UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-                "pankaj.jain@nineleaps.com", "Pankaj@123", authorities);
-        UserClass userClass = new UserClass("pankaj.jain@nineleaps.com", "fullName", "mobile", "password", "USER", true,
-                true, true);
         Authenticate authenticate = new Authenticate("pankaj.jain@nineleaps.com", "Pankaj@123");
         String content = objectMapper.writeValueAsString(authenticate);
-        Mockito.when(userRepo.findByEmail("pankaj.jain@nineleaps.com")).thenReturn(userClass);
-        Mockito.when(userDetailsServiceImpl.loadUserByUsername(authenticate.getEmail())).thenReturn(userDetails);
         mockMvc.perform(MockMvcRequestBuilders
                 .post("/v1/login/admin").contentType(MediaType.APPLICATION_JSON).content(content))
-                .andExpect(status().isOk());
+                .andExpect(status().isCreated());
     }
 
     @Test
@@ -170,8 +158,6 @@ class AdminControllerTest {
         userClasses.add(userClass);
         userClasses.add(userClass1);
         gymClasses.add(gymClass);
-        Mockito.when(userRepo.findAll()).thenReturn(userClasses);
-        Mockito.when(gymRepo.findAll()).thenReturn(gymClasses);
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/v1/all-numbers").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 

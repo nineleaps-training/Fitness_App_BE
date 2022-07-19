@@ -7,9 +7,9 @@ import static org.mockito.Mockito.when;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,6 +29,7 @@ class VendorDetailsServiceTest {
     @Mock
     UserRepo userRepository;
 
+    @InjectMocks
     VendorDetailsService vendorDetailsService;
 
     UserDetailsRequestModel vendorDetailsRequestModel;
@@ -37,11 +38,6 @@ class VendorDetailsServiceTest {
 
     MockMvc mockMvc;
     UserClass userClass;
-
-    @BeforeEach
-    public void initcase() {
-        vendorDetailsService = new VendorDetailsService(userRepository, vendorDetailsRepository);
-    }
 
     @Test
     @DisplayName("Testing of adding the vendor details")

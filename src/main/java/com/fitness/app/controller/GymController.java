@@ -25,7 +25,7 @@ import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.model.GymClassModel;
 import com.fitness.app.model.GymRepresentModel;
-import com.fitness.app.service.FilterBySubscription;
+import com.fitness.app.service.FilterBySubscriptionService;
 import com.fitness.app.service.GymService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -39,7 +39,7 @@ public class GymController {
 	private GymService gymService;
 
 	@Autowired
-	private FilterBySubscription filterSubscriptionService;
+	private FilterBySubscriptionService filterSubscriptionService;
 
 	/**
 	 * This controller is used to add new fitness center in the application

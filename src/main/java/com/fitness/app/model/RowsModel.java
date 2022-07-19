@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "Rows")
-public class Rows {
+public class RowsModel {
 
     @JsonProperty("elements")
     @ApiModelProperty(name = "elements", notes = "All Elements")

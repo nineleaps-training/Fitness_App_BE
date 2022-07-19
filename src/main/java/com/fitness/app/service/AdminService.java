@@ -2,39 +2,73 @@ package com.fitness.app.service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.fitness.app.auth.Authenticate;
+import com.fitness.app.config.JwtUtils;
+import com.fitness.app.dao.AdminDAO;
 import com.fitness.app.entity.AdminPay;
+import com.fitness.app.entity.GymClass;
+import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorPayment;
 import com.fitness.app.model.AdminPayRequestModel;
+import com.fitness.app.model.SignUpResponceModel;
+import com.fitness.app.repository.AddGymRepo;
 import com.fitness.app.repository.AdminPayRepo;
+import com.fitness.app.repository.UserRepo;
 import com.fitness.app.repository.VendorPayRepo;
+import com.fitness.app.security.service.UserDetailsServiceImpl;
 import com.razorpay.Order;
 
-@Service
-public class AdminService {
+import lombok.extern.slf4j.Slf4j;
 
-	@Autowired
+@Slf4j
+public class AdminService implements AdminDAO {
+
+	
+	private UserRepo userRepo;
+	
+	
 	private VendorPayRepo vendorPay;
 
-	@Autowired
+	
 	private AdminPayRepo adminPayRepo;
 
-	/**
-	 * This constructor is used to initialize the repositories
-	 * 
-	 * @param adminPayRepo2 - Admin Pay Repository
-	 * @param vendorPayRepo - Vendor Pay Repository
-	 */
-	public AdminService(AdminPayRepo adminPayRepo2, VendorPayRepo vendorPayRepo) {
+	
+	private AuthenticationManager authenticationManager;
+
+	
+	private UserDetailsServiceImpl userDetailsService;
+
+	
+	private AddGymRepo gymRepo;
+
+	
+	private JwtUtils jwtUtils;
+
+	@Autowired
+	public AdminService(AdminPayRepo adminPayRepo2, VendorPayRepo vendorPayRepo, AuthenticationManager authenticationManager, UserDetailsServiceImpl userDetailsServiceImpl, JwtUtils jwtUtils, UserRepo userRepo, AddGymRepo gymRepo) {
 		// Initializing constructor
 		this.adminPayRepo = adminPayRepo2;
 		this.vendorPay = vendorPayRepo;
+		this.authenticationManager=authenticationManager;
+		this.userDetailsService=userDetailsServiceImpl;
+		this.jwtUtils=jwtUtils;
+		this.userRepo=userRepo;
+		this.gymRepo=gymRepo;
 	}
 
 	/**
@@ -44,7 +78,27 @@ public class AdminService {
 	 * @return - Details of the payment
 	 */
 	public AdminPay getDataPay(AdminPayRequestModel payment) {
+
+		log.info("AdminService >> getDataPay >> Initiated");
+
 		return adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due"); // Getting details of payment of vendor
+	}
+
+	public ResponseEntity<SignUpResponceModel> loginAdmin(@Valid @RequestBody Authenticate authCredential)
+	{
+		log.info("AdminService >> loginAdmin >> Initiated");
+		authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(authCredential.getEmail(), authCredential.getPassword()));
+		final UserDetails usrDetails = userDetailsService.loadUserByUsername(authCredential.getEmail());
+		final String jwt = jwtUtils.generateToken(usrDetails);
+		final UserClass localUser = userRepo.findByEmail(authCredential.getEmail());
+		if (localUser.getRole().equals("ADMIN")) {
+			return ResponseEntity.ok(new SignUpResponceModel(localUser, jwt)); // Returning the response after authenticating
+																			// the ADMIN
+		} else {
+			log.warn("AdminService >> loginAdmin >> User is not an admin");
+			return ResponseEntity.ok(new SignUpResponceModel(null, null));
+		}
 	}
 
 	/**
@@ -55,6 +109,8 @@ public class AdminService {
 	 * @return - Details of the order
 	 */
 	public AdminPay payNow(AdminPayRequestModel payment, Order myOrder) {
+
+		log.info("AdminService >> payNow >> Initiated");
 		LocalDate date = LocalDate.now();
 		LocalTime time = LocalTime.now();
 
@@ -62,6 +118,7 @@ public class AdminService {
 				"Due");
 
 		if (payVendor == null) {
+			log.error("AdminService >> payNow >> No payments are due");
 			return payVendor;
 		}
 		payVendor.setOrderId(myOrder.get("id"));
@@ -70,8 +127,8 @@ public class AdminService {
 		payVendor.setReciept(myOrder.get("receipt"));
 		payVendor.setDate(date);
 		payVendor.setTime(time);
-
 		adminPayRepo.save(payVendor); // Paying to Vendor
+		log.info("AdminService >> payNow >> Details saved to database");
 		return payVendor;
 	}
 
@@ -83,6 +140,7 @@ public class AdminService {
 	 */
 	public AdminPay vendorPayment(String vendor) {
 
+		log.info("AdminService >> vendorPayment >> Initiated");
 		List<VendorPayment> payments = vendorPay.findByVendor(vendor);
 		int amount = 0;
 		if (!payments.isEmpty()) {
@@ -93,6 +151,7 @@ public class AdminService {
 				}
 			}
 		}
+
 		AdminPay payment = new AdminPay();
 		payment.setVendor(vendor);
 		payment.setStatus("Due");
@@ -116,6 +175,8 @@ public class AdminService {
 	 * @return - Details of the order
 	 */
 	public AdminPay updatePayment(Map<String, String> data) {
+
+		log.info("AdminService >> updatePayment >> Initiated");
 		LocalDate date = LocalDate.now();
 		LocalTime time = LocalTime.now();
 
@@ -144,8 +205,32 @@ public class AdminService {
 	 * @return - List of details of the order
 	 */
 	public List<AdminPay> paidHistroyVendor(String vendor) {
+		log.info("AdminService >> paidHistroyVendor >> Initiated");
 		List<AdminPay> allPaid = adminPayRepo.findByVendor(vendor);
 		allPaid = allPaid.stream().filter(p -> p.getStatus().equals("Completed")).collect(Collectors.toList()); // Fetching Vendor History Payments
 		return allPaid;
+	}
+
+	public ResponseEntity<Object> getAllNumber(){
+
+		log.info("AdminService >> getAllNumber >> Initiated");
+
+		List<UserClass> l = userRepo.findAll(); // Fetching all the registered users
+
+		int u = l.stream().filter(e -> e.getRole().equals("USER")).collect(Collectors.toList()).size(); // Filtering users
+		
+		int v = l.stream().filter(e -> e.getRole().equals("VENDOR")).collect(Collectors.toList()).size(); // Filtering vendors																									
+
+		List<GymClass> gyms = gymRepo.findAll(); // Fetching all the registered gyms
+
+		int g = gyms.size();
+
+		List<String> nums = new ArrayList<>();
+		nums.add(Integer.toString(u));
+		nums.add(Integer.toString(v));
+		nums.add(Integer.toString(g));
+
+		log.info("AdminService >> getAllNumber >> Terminated");
+		return new ResponseEntity<>(nums, HttpStatus.OK);
 	}
 }

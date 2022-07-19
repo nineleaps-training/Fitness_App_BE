@@ -3,13 +3,14 @@ package com.fitness.app.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
+import com.fitness.app.dao.FilterBySubscriptionDAO;
 import com.fitness.app.entity.GymSubscriptionClass;
 import com.fitness.app.model.GymClassModel;
 
-@Service
-public class FilterBySubscription {
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+public class FilterBySubscriptionService implements FilterBySubscriptionDAO {
 
 	/**
 	 * This function is used to filter the gyms by monthly subscription
@@ -20,6 +21,7 @@ public class FilterBySubscription {
 	 */
 	public List<GymClassModel> filterByMonthly(int price, List<GymClassModel> listGym) {
 
+		log.info("FilterBySubscriptionService >> filterByMonthly >> Initiateds");
 		List<GymClassModel> newList = new ArrayList<>();
 		for (GymClassModel gym : listGym) {
 			GymSubscriptionClass subscription = gym.getMSubscription();
@@ -28,6 +30,7 @@ public class FilterBySubscription {
 				newList.add(gym);
 			}
 		}
+		log.info("FilterBySubscriptionService >> filterByMonthly >> Terminated");
 		return newList;
 	}
 
@@ -39,7 +42,7 @@ public class FilterBySubscription {
 	 * @return
 	 */
 	public List<GymClassModel> filterByQuarterly(int price, List<GymClassModel> listGym) {
-
+		log.info("FilterBySubscriptionService >> filterByQuarterly >> Initiated");
 		List<GymClassModel> list = new ArrayList<>();
 		for (GymClassModel gym : listGym) {
 
@@ -49,6 +52,7 @@ public class FilterBySubscription {
 				list.add(gym);
 			}
 		}
+		log.info("FilterBySubscriptionService >> filterByQuarterly >> end");
 		return list;
 	}
 
@@ -60,7 +64,7 @@ public class FilterBySubscription {
 	 * @return
 	 */
 	public List<GymClassModel> filterByHalfYearly(int price, List<GymClassModel> listGym) {
-
+		log.info("FilterBySubscriptionService >> filterByHalfYearly >> Initiated");
 		List<GymClassModel> list = new ArrayList<>();
 		for (GymClassModel gym : listGym) {
 
@@ -70,6 +74,7 @@ public class FilterBySubscription {
 				list.add(gym);
 			}
 		}
+		log.info("FilterBySubscriptionService >> filterByHalfYearly >> end");
 		return list;
 	}
 
@@ -81,7 +86,7 @@ public class FilterBySubscription {
 	 * @return
 	 */
 	public List<GymClassModel> filterByYearly(int price, List<GymClassModel> listGym) {
-
+		log.info("FilterBySubscriptionService >> filterByYearly >> Initiated");
 		List<GymClassModel> list = new ArrayList<>();
 		for (GymClassModel gym : listGym) {
 
@@ -91,6 +96,7 @@ public class FilterBySubscription {
 				list.add(gym);
 			}
 		}
+		log.info("FilterBySubscriptionService >> filterByYearly >> end");
 		return list;
 	}
 
@@ -102,7 +108,7 @@ public class FilterBySubscription {
 	 * @return
 	 */
 	public List<GymClassModel> filterByOneWorkout(int price, List<GymClassModel> listGym) {
-
+		log.info("FilterBySubscriptionService >> filterByOneWorkout >> Initiated");
 		List<GymClassModel> list = new ArrayList<>();
 		for (GymClassModel gym : listGym) {
 
@@ -112,6 +118,7 @@ public class FilterBySubscription {
 				list.add(gym);
 			}
 		}
+		log.info("FilterBySubscriptionService >> filterByOneWorkout >> end");
 		return list;
 	}
 

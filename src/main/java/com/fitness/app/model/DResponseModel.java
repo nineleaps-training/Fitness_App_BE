@@ -15,7 +15,7 @@ public class DResponseModel {
     private String[] originAddresses;
     @JsonProperty("rows")
     @ApiModelProperty(name = "rows", notes = "List of rows")
-    private Rows[] rows;
+    private RowsModel[] rows;
 
     public String[] getDestinationAddresses() {
         return destinationAddresses;
@@ -33,11 +33,11 @@ public class DResponseModel {
         this.originAddresses = originAddresses;
     }
 
-    public Rows[] getRows() {
+    public RowsModel[] getRows() {
         return rows;
     }
 
-    public void setRows(Rows[] rows) {
+    public void setRows(RowsModel[] rows) {
         this.rows = rows;
     }
 

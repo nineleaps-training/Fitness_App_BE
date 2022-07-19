@@ -8,13 +8,13 @@ import io.swagger.annotations.ApiModelProperty;
 public class Response {
     @JsonProperty("results")
     @ApiModelProperty(name = "result", notes = "Results Fetched")
-    private Result[] result;
+    private ResultModel[] result;
 
-    public Result[] getResult() {
+    public ResultModel[] getResult() {
         return result;
     }
 
-    public void setResult(Result[] result) {
+    public void setResult(ResultModel[] result) {
         this.result = result;
     }
 

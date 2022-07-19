@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -13,17 +14,32 @@ import java.util.Map;
 
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import com.fitness.app.auth.Authenticate;
+import com.fitness.app.config.JwtUtils;
 import com.fitness.app.entity.AdminPay;
+import com.fitness.app.entity.GymClass;
+import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorPayment;
 import com.fitness.app.model.AdminPayRequestModel;
+import com.fitness.app.model.SignUpResponceModel;
+import com.fitness.app.repository.AddGymRepo;
 import com.fitness.app.repository.AdminPayRepo;
+import com.fitness.app.repository.UserRepo;
 import com.fitness.app.repository.VendorPayRepo;
+import com.fitness.app.security.service.UserDetailsServiceImpl;
 import com.razorpay.Order;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,13 +51,38 @@ class AdminServiceTest {
     @Mock
     VendorPayRepo vendorPayRepo;
 
+    @Mock
+    UserRepo userRepo;
+
+    @Mock
+    UserDetailsServiceImpl userDetailsServiceImpl;
+
+    @Mock
+    JwtUtils jwtUtils;
+
+    @Mock
+    AddGymRepo gymRepo;
+
+    List<String> aList = new ArrayList<>(List.of("Hello"));
+
+    long l = 123;
+
+    @Mock
+    AuthenticationManager authenticationManager;
+
+    @InjectMocks
     AdminService adminService;
 
-    @BeforeEach
-    public void initcase() {
-        adminService = new AdminService(adminPayRepo, vendorPayRepo);
-    }
+    List<GymClass> gymClasses = new ArrayList<>();
+    List<UserClass> userClasses = new ArrayList<>();
 
+    UserClass userClass = new UserClass("pankaj.jain@nineleaps.com", "Pankaj Jain", "8469492322", "Hello@123", "USER",
+            true, true, true);
+
+    UserClass userClass1 = new UserClass("pankaj.jain@nineleaps.com", "Pankaj Jain", "8469492322", "Hello@123",
+            "VENDOR", true, true, true);
+
+        GymClass gymClass = new GymClass("GM6", "pankaj.jain@nineleaps.com", "Pankaj Jain", aList, l, 2.3, 15);
     @Test
     @DisplayName("Testing to fetch the details of the order")
     void testGetDataPay() {
@@ -57,6 +98,42 @@ class AdminServiceTest {
         AdminPay adminPayRequestModel2 = adminService.getDataPay(adminPayRequestModel);
         Assertions.assertEquals(adminPay.getVendor(), adminPayRequestModel2.getVendor());
 
+    }
+
+    @Test
+    void testLoginAdmin()
+    {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ADMIN"));
+        org.springframework.security.core.userdetails.UserDetails userDetails = new org.springframework.security.core.userdetails.User(
+                "pankaj.jain@nineleaps.com", "Pankaj@123", authorities);
+        UserClass userClass = new UserClass("pankaj.jain@nineleaps.com", "Pankaj Jain", "8469492322", "Pankaj@123", "ADMIN",
+                true, true, true);
+        Authenticate authenticate = new Authenticate("pankaj.jain@nineleaps.com", "Pankaj@123");
+        Mockito.when(userRepo.findByEmail("pankaj.jain@nineleaps.com")).thenReturn(userClass);
+        Mockito.when(userDetailsServiceImpl.loadUserByUsername(authenticate.getEmail())).thenReturn(userDetails);
+        ResponseEntity<SignUpResponceModel> responseEntity = ResponseEntity.ok(new SignUpResponceModel(userClass, null));
+        ResponseEntity<SignUpResponceModel> responseEntity2 = adminService.loginAdmin(authenticate);
+        Assertions.assertEquals(responseEntity, responseEntity2);
+        
+    }
+
+    @Test
+    void testLoginAdminElse()
+    {
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ADMIN"));
+        org.springframework.security.core.userdetails.UserDetails userDetails = new org.springframework.security.core.userdetails.User(
+                "pankaj.jain@nineleaps.com", "Pankaj@123", authorities);
+        UserClass userClass = new UserClass("pankaj.jain@nineleaps.com", "Pankaj Jain", "8469492322", "Pankaj@123", "USER",
+                true, true, true);
+        Authenticate authenticate = new Authenticate("pankaj.jain@nineleaps.com", "Pankaj@123");
+        Mockito.when(userRepo.findByEmail("pankaj.jain@nineleaps.com")).thenReturn(userClass);
+        Mockito.when(userDetailsServiceImpl.loadUserByUsername(authenticate.getEmail())).thenReturn(userDetails);
+        ResponseEntity<SignUpResponceModel> responseEntity = ResponseEntity.ok(new SignUpResponceModel(null, null));
+        ResponseEntity<SignUpResponceModel> responseEntity2 = adminService.loginAdmin(authenticate);
+        Assertions.assertEquals(responseEntity, responseEntity2);
+        
     }
 
     @Test
@@ -99,6 +176,27 @@ class AdminServiceTest {
         AdminPay adminPayRequestModel2 = adminService.payNow(adminPayRequestModel, order);
         Assertions.assertEquals(adminPay, adminPayRequestModel2);
 
+    }
+
+    @Test
+    void testGetAllNumber(){
+        List<String> list = new ArrayList<>();
+        list.add("4");
+        list.add("1");
+        list.add("5");
+
+        userClasses.add(userClass);
+        userClasses.add(userClass1);
+        gymClasses.add(gymClass);
+        Mockito.when(userRepo.findAll()).thenReturn(userClasses);
+        Mockito.when(gymRepo.findAll()).thenReturn(gymClasses);
+        ResponseEntity<Object> responseEntity = adminService.getAllNumber();
+        List<String> nums = new ArrayList<>();
+		nums.add(Integer.toString(1));
+		nums.add(Integer.toString(1));
+		nums.add(Integer.toString(1));
+        ResponseEntity<Object> responseEntity2 = new ResponseEntity<>(nums, HttpStatus.OK);
+        Assertions.assertEquals(responseEntity, responseEntity2);
     }
 
     @Test

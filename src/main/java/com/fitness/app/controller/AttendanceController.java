@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -68,7 +67,6 @@ public class AttendanceController {
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	@GetMapping(value = "/v1/user-performance", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	@Retryable(value = DataNotFoundException.class, maxAttempts = 2)
 	public ResponseEntity<Object> userPerformance(@Email @RequestParam String email,
 			@NotNull @NotBlank @RequestParam String gym) throws DataNotFoundException {
 		return new ResponseEntity<>(attendanceService.userPerfomance(email, gym), HttpStatus.OK); // Finding the total attendance of the user.

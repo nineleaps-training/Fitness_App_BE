@@ -3,8 +3,6 @@ package com.fitness.app.controller;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 import javax.validation.Valid;
 import javax.ws.rs.ForbiddenException;
@@ -12,12 +10,10 @@ import javax.ws.rs.NotFoundException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.annotation.Validated;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,8 +28,6 @@ import com.fitness.app.model.GymRepresentModel;
 import com.fitness.app.model.UserOrderModel;
 import com.fitness.app.model.UserPerfomanceModel;
 import com.fitness.app.service.UserOrderService;
-import com.razorpay.Order;
-import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -69,38 +63,11 @@ public class UserOrderController {
     @PostMapping(value = "/v1/order/now", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    @Retryable(value = RazorpayException.class, maxAttempts = 2)
     @Validated
-    public String orderNow(@Valid @RequestBody UserOrderModel order) throws RazorpayException {
-        RazorpayClient razorpayClient = new RazorpayClient(System.getenv("RAZORPAY_KEY"),
-                System.getenv("RAZORPAY_SECRET"));
+    public String orderNow(@Valid @RequestBody UserOrderModel order) throws RazorpayException{
 
-        LocalDate date = LocalDate.now();
-        LocalTime time = LocalTime.now();
-        JSONObject ob = new JSONObject();
-        ob.put("amount", order.getAmount() * 100);
-        ob.put("currency", "INR");
-        ob.put("receipt", "txn_201456");
+        return userOrderService.orderNow(order); 
 
-        Order myOrder = razorpayClient.Orders.create(ob); // Creating the order
-        UserOrder userOrder = new UserOrder();
-
-        userOrder.setId(myOrder.get("id"));
-        userOrder.setEmail(order.getEmail());
-        userOrder.setGym(order.getGym());
-        userOrder.setServices(order.getServices());
-        userOrder.setSubscription(order.getSubscription());
-        userOrder.setSlot(order.getSlot());
-        userOrder.setAmount(order.getAmount());
-        userOrder.setBooked("");
-        userOrder.setStatus(myOrder.get("status"));
-        userOrder.setPaymentId(null);
-        userOrder.setReceipt(myOrder.get("receipt"));
-        userOrder.setDate(date);
-        userOrder.setTime(time);
-
-        userOrderService.orderNow(userOrder);
-        return myOrder.toString();
     }
 
     /**

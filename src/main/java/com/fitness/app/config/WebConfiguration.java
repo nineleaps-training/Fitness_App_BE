@@ -76,10 +76,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
 			"/v1/update-vendor-payment",
 			"/v1/paid-history/{vendor}",
 			"/v1/all-numbers",
-			"/health",
-			"/actuator/**",
-			"/env",
-			"/metrics"
+			"/actuator/**"
 	};
 
 	@Autowired
@@ -122,6 +119,8 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
 				.and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		
+		http.headers().xssProtection().and().contentSecurityPolicy("script-src 'self'");
 
 		http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	}

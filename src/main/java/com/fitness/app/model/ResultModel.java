@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 @ApiModel(description = "Result")
-public class Result {
+public class ResultModel {
     @JsonProperty("formatted_address")
     @ApiModelProperty(name = "address", notes = "Address")
     private String address;
