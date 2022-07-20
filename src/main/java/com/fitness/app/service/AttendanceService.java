@@ -1,7 +1,7 @@
 package com.fitness.app.service;
 
 import com.fitness.app.exceptions.DataNotFoundException;
-import com.fitness.app.model.MarkUserAttModel;
+import com.fitness.app.dto.MarkUserAttModel;
 
 import java.util.List;
 

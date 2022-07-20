@@ -29,7 +29,7 @@ public class ImageOperationServiceImpl implements ImageOperationService {
             return imageOperationRepository.save(imageOperationDocFile);
         } catch (Exception e) {
             log.error("ImageOperationServiceImpl ::-> saveImage :: Error found due to: {}", e.getMessage());
-            throw new FileNotFoundException(e.getMessage());
+            throw new FileNotFoundException("No file found :");
         }
     }
 
@@ -45,7 +45,7 @@ public class ImageOperationServiceImpl implements ImageOperationService {
             }
         } catch (Exception e) {
             log.error("ImageOperationServiceImpl ::-> getImage :: Error found due to: {}", e.getMessage());
-            throw new FileNotFoundException(e.getMessage());
+            throw new FileNotFoundException("File is not found : ");
 
         }
 

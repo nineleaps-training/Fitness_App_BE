@@ -1,10 +1,10 @@
 package com.fitness.app.config;
 
 
-import com.fitness.app.security.service.UserDetailsServiceImpl;
+import com.fitness.app.security.service.UserDetailsSecServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,14 +20,10 @@ import java.io.IOException;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    private JwtUtils jwtUtil;
-
+    private final UserDetailsSecServiceImpl userDetailsService;
+    private final JwtUtils jwtUtil;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         final String requestTokenHeader = request.getHeader("Authorization");
@@ -43,8 +39,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             } catch (Exception e) {
                 log.error("JwtAuthenticationFilter >> doFilterInternal >> A general error found due to : {}", e.getMessage());
             }
-        } else
-        {
+        } else {
             log.error("JwtAuthenticationFilter >> doFilterInternal >> Invalid Token or bad credentials : Not start with bearer");
         }
         // Validating Token

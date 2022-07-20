@@ -1,14 +1,15 @@
 package com.fitness.app.service;
 
-import com.fitness.app.entity.RatingClass;
-import com.fitness.app.model.RatingModel;
+import com.fitness.app.dto.RatingModel;
 
 
 public interface RatingService {
 
-     RatingClass ratingService(RatingModel ratingModel);
-     Double getRating(String target);
-     Double getRatingOfPerson(String email);
+    Boolean ratingService(RatingModel ratingModel);
+
+    Double getRating(String target);
+
+    Double getRatingOfPerson(String email);
 
 
 }

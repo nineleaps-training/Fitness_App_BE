@@ -2,11 +2,15 @@ package com.register.app.service;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.AdminPayClass;
 import com.fitness.app.entity.VendorPaymentClass;
 import com.fitness.app.exceptions.DataNotFoundException;
-import com.fitness.app.model.AdminPayModel;
+import com.fitness.app.dto.AdminPayModel;
 
+import com.fitness.app.repository.AdminPayRepository;
+import com.fitness.app.repository.VendorPayRepository;
+import com.fitness.app.service.AdminServiceImpl;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
@@ -38,8 +42,12 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 class AdminServiceImplementationTest {
 
+    @InjectMocks
+    private AdminServiceImpl adminServiceImplementation;
+
+
     @Mock
-    private AdminPayRepo adminPayRepo;
+    private AdminPayRepository adminPayRepo;
     private MockMvc mockMvc;
 
 
@@ -63,9 +71,6 @@ class AdminServiceImplementationTest {
 
 
     }
-    @InjectMocks
-    private AdminServiceImplementation adminServiceImplementation;
-
 
 
     AdminPayModel VENDOR_DUE=new AdminPayModel("manish.kumar@nineleaps.com", 4000);
@@ -91,10 +96,10 @@ class AdminServiceImplementationTest {
 
         Order myOrder = razorpayClient.Orders.create(ob);
         when(adminPayRepo.findByVendorAndAmountAndStatus(VENDOR_DUE.getVendor(), VENDOR_DUE.getAmount(), "Due")).thenReturn(VENDOR_PAY);
-        Boolean expected= adminServiceImplementation.PayNow(VENDOR_DUE, myOrder);
+        ApiResponse expected= adminServiceImplementation.PayNow(VENDOR_DUE);
 
         Assertions.assertNotNull(VENDOR_PAY);
-        Assertions.assertTrue(expected);
+
     }
 
     @Test
@@ -109,14 +114,14 @@ class AdminServiceImplementationTest {
 
         Order myOrder = razorpayClient.Orders.create(ob);
         when(adminPayRepo.findByVendorAndAmountAndStatus(VENDOR_DUE.getVendor(), VENDOR_DUE.getAmount(), "Due")).thenReturn(null);
-        Boolean expected= adminServiceImplementation.PayNow(VENDOR_DUE, myOrder);
+        ApiResponse expected= adminServiceImplementation.PayNow(VENDOR_DUE);
         Assertions.assertNotNull(expected);
-        Assertions.assertEquals(false, expected);
+
     }
 
 
     @Mock
-    private VendorPayRepo vendorPayRepo;
+    private VendorPayRepository vendorPayRepo;
 
     @Test
     void vendorPayment()

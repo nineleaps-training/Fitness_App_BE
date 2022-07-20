@@ -1,11 +1,15 @@
 package com.fitness.app.service;
 
+import com.fitness.app.dto.UserBankModel;
+import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorBankDetailsClass;
-import com.fitness.app.model.UserBankModel;
+import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.repository.BankDetailsRepository;
 import com.fitness.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +18,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class VendorBankDetailsServiceImpl implements VendorBankDetailsService {
 
 
@@ -21,7 +26,7 @@ public class VendorBankDetailsServiceImpl implements VendorBankDetailsService {
     final private UserRepository userRepo;
 
     @Override
-    public VendorBankDetailsClass addDetails(UserBankModel bankDetails) {
+    public ApiResponse addDetails(UserBankModel bankDetails) {
 
         UserClass vendor = userRepo.findByEmail(bankDetails.getEmail());
 
@@ -35,21 +40,25 @@ public class VendorBankDetailsServiceImpl implements VendorBankDetailsService {
             bank.setVendorBankIFSC(bankDetails.getBankIFSC());
             bank.setPaymentSchedule(bankDetails.getSchedule());
             bankDetailsRepo.save(bank);
-            return bank;
+            return new ApiResponse(HttpStatus.OK, "Successful");
         }
 
-        return null;
+        return new ApiResponse(HttpStatus.NO_CONTENT, "Failed");
     }
 
     @Override
     public List<VendorBankDetailsClass> getDetails() {
-
         return bankDetailsRepo.findAll();
     }
 
     @Override
-    public VendorBankDetailsClass getBankDetails(String email) {
+    public VendorBankDetailsClass getBankDetails(String email) throws DataNotFoundException {
 
-        return bankDetailsRepo.findByVendorEmail(email);
+        try {
+            return bankDetailsRepo.findByVendorEmail(email);
+        } catch (Exception e) {
+            log.error("VendorBankDetails ::-> getBankDetails :: Exception found due to: {}", e.getMessage());
+            throw new DataNotFoundException("No vendor bank exist by this name: ");
+        }
     }
 }

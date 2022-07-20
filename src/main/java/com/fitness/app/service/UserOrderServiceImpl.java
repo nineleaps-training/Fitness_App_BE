@@ -1,11 +1,18 @@
 package com.fitness.app.service;
 
-import com.fitness.app.componets.MessageComponents;
+import com.fitness.app.utils.MessageComponents;
+import com.fitness.app.dto.BookedGymModel;
+import com.fitness.app.dto.UserOrderModel;
+import com.fitness.app.dto.UserPerfomanceModel;
+import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.*;
-import com.fitness.app.model.BookedGymModel;
-import com.fitness.app.model.UserPerfomanceModel;
 import com.fitness.app.repository.*;
+import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
 import lombok.RequiredArgsConstructor;
+import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,18 +37,47 @@ public class UserOrderServiceImpl implements UserOrderService {
 
     //creating order
     @Override
-    public void orderNow(UserOrderClass userOrderClass) {
+    public String orderNow(UserOrderModel order) throws RazorpayException {
+
+        RazorpayClient razorpayClient = new RazorpayClient("rzp_test_vmHcJh5Dj4v5EB", "SGff6EaJ7l3RzR47hnE4dYJz");
+
+        LocalDate date = LocalDate.now();
+        LocalTime time = LocalTime.now();
+        JSONObject ob = new JSONObject();
+        ob.put("amount", order.getAmount() * 100);
+        ob.put("currency", "INR");
+        ob.put("receipt", "txn_201456");
+
+        Order myOrder = razorpayClient.Orders.create(ob);
+        UserOrderClass userOrderClass = new UserOrderClass();
+
+        userOrderClass.setId(myOrder.get("id"));
+        userOrderClass.setEmail(order.getEmail());
+        userOrderClass.setGym(order.getGym());
+        userOrderClass.setServices(order.getServices());
+        userOrderClass.setSubscription(order.getSubscription());
+        userOrderClass.setSlot(order.getSlot());
+        userOrderClass.setAmount(order.getAmount());
+        userOrderClass.setBooked("");
+        userOrderClass.setStatus(myOrder.get("status"));
+        userOrderClass.setPaymentId(null);
+        userOrderClass.setReceipt(myOrder.get("receipt"));
+        userOrderClass.setDate(date);
+        userOrderClass.setTime(time);
+
+
         userOrderRepository.save(userOrderClass);
+        return myOrder.toString();
     }
 
     //updating order
     @Override
-    public UserOrderClass updateOrder(Map<String, String> data) {
+    public ApiResponse updateOrder(Map<String, String> data) {
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
 
         if (data == null) {
-            return null;
+            return new ApiResponse(HttpStatus.NO_CONTENT, null);
         }
         UserOrderClass order = new UserOrderClass();
         Optional<UserOrderClass> orderData = userOrderRepository.findById(data.get("order_id"));
@@ -102,7 +138,8 @@ public class UserOrderServiceImpl implements UserOrderService {
         vendorOrderRepo.save(vendorOrder);
 
         userOrderRepository.save(order);
-        return order;
+        return new ApiResponse(HttpStatus.OK
+                , order);
     }
 
     //pending order list of user
@@ -114,8 +151,8 @@ public class UserOrderServiceImpl implements UserOrderService {
         for (UserOrderClass eachOrder : orders) {
             LocalDate date = eachOrder.getDate();
             date = date.plusDays(5);
-            LocalDate currenDate = LocalDate.now();
-            int ans = currenDate.compareTo(date);
+            LocalDate currentDate = LocalDate.now();
+            int ans = currentDate.compareTo(date);
             if (ans < 0) {
                 userOrderRepository.delete(eachOrder);
             }
@@ -131,7 +168,7 @@ public class UserOrderServiceImpl implements UserOrderService {
     }
 
     @Override
-    public Set<UserPerfomanceModel> allMyUser(String gymId) {
+    public ApiResponse allMyUser(String gymId) {
         List<UserOrderClass> orders = userOrderRepository.findByGym(gymId);
         orders = orders.stream().filter(o -> o.getStatus().equals("Completed")).collect(Collectors.toList());
         Set<UserPerfomanceModel> users = new HashSet<>();
@@ -153,7 +190,7 @@ public class UserOrderServiceImpl implements UserOrderService {
             user.setRating(newAtt.getRating());
             users.add(user);
         }
-        return users;
+        return new ApiResponse(HttpStatus.OK, orders);
     }
 
     @Override
@@ -181,7 +218,7 @@ public class UserOrderServiceImpl implements UserOrderService {
     public Boolean canOrder(String email) {
 
         List<UserOrderClass> orders = userOrderRepository.findByEmail(email);
-        if (orders == null) {
+        if (orders == null || orders.size() < 0) {
             return true;
         }
         orders = orders.stream().filter(o -> o.getBooked().equals(CURRENT)).collect(Collectors.toList());

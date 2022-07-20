@@ -1,19 +1,21 @@
 package com.fitness.app.service;
 
 
+import com.fitness.app.dto.GymClassModel;
+import com.fitness.app.dto.GymRepresent;
+import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.GymSubscriptionClass;
 import com.fitness.app.entity.GymTimeClass;
 import com.fitness.app.exceptions.DataNotFoundException;
-import com.fitness.app.model.GymClassModel;
-import com.fitness.app.model.GymRepresnt;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.GymAddressRepository;
 import com.fitness.app.repository.GymSubscriptionRepository;
 import com.fitness.app.repository.GymTimeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +39,7 @@ public class GymServiceImpl implements GymService {
 
     // Add New Gym
     @Override
-    public GymClass addNewGym(GymClassModel gymClassModel) {
+    public ApiResponse addNewGym(GymClassModel gymClassModel) {
         GymClass gym = gymRepo.findByName(gymClassModel.getGym_name());
         Long idLast = gymRepo.count() + 1;
         String gym_id = "GM" + idLast;
@@ -69,19 +71,18 @@ public class GymServiceImpl implements GymService {
         newGym.setCapacity(gymClassModel.getCapacity());
 
         gymRepo.save(newGym);
-        return newGym;
+        return new ApiResponse(HttpStatus.OK, "Successful");
     }
 
 
     // Find gym by Gym_id
     @Override
-    public GymRepresnt getGymByGymId(String gym_id) {
-        GymRepresnt gym = new GymRepresnt();
+    public GymRepresent getGymByGymId(String gym_id) {
+        GymRepresent gym = new GymRepresent();
         GymClass gym_cl = new GymClass();
         GymAddressClass address = new GymAddressClass();
         GymSubscriptionClass subs = new GymSubscriptionClass();
         GymTimeClass time = new GymTimeClass();
-
         Optional<GymClass> data = gymRepo.findById(gym_id);
         Optional<GymAddressClass> dataAddress = addressRepo.findById(gym_id);
         Optional<GymSubscriptionClass> dataSubs = subscriptionRepo.findById(gym_id);
@@ -108,19 +109,18 @@ public class GymServiceImpl implements GymService {
         gym.setContact(gym_cl.getContact());
         gym.setCapacity(gym_cl.getCapacity());
         gym.setRating(gym_cl.getRating());
-
         return gym;
     }
 
     // Find All gym of a vendor by email id..
     @Override
-    public List<GymRepresnt> getGymByVendorEmail(String email) {
+    public List<GymRepresent> getGymByVendorEmail(String email) {
 
         List<GymClass> gymList = gymRepo.findByEmail(email);
-        List<GymRepresnt> gyms = new ArrayList<>();
+        List<GymRepresent> gyms = new ArrayList<>();
 
         for (GymClass eachGym : gymList) {
-            GymRepresnt gym = new GymRepresnt();
+            GymRepresent gym = new GymRepresent();
             Double rate = ratingServiceImpl.getRating(eachGym.getId());
             eachGym.setRating(rate);
             gymRepo.save(eachGym);
@@ -166,16 +166,16 @@ public class GymServiceImpl implements GymService {
     // Find by City
 
     @Override
-    public List<GymRepresnt> getGymByCity(String city) throws DataNotFoundException {
+    public List<GymRepresent> getGymByCity(String city) throws DataNotFoundException {
         try {
             List<GymAddressClass> addressList = addressRepo.findByCity(city);
-            List<GymRepresnt> gyms = new ArrayList<>();
+            List<GymRepresent> gyms = new ArrayList<>();
             if (addressList == null) {
                 throw new DataNotFoundException("Data not found for Fitness Center: ");
             }
             for (GymAddressClass address : addressList) {
                 String id = address.getId();
-                GymRepresnt gym = new GymRepresnt();
+                GymRepresent gym = new GymRepresent();
                 GymClass gymClass = new GymClass();
                 GymTimeClass time = new GymTimeClass();
                 GymSubscriptionClass subscription = new GymSubscriptionClass();

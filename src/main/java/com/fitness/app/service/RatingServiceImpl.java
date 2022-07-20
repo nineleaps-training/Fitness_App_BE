@@ -1,8 +1,8 @@
 package com.fitness.app.service;
 
+import com.fitness.app.dto.RatingModel;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.RatingClass;
-import com.fitness.app.model.RatingModel;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,22 +23,21 @@ public class RatingServiceImpl implements RatingService {
     final private AddGymRepository gymRepo;
 
     @Override
-    public RatingClass ratingService(RatingModel rating) {
+    public Boolean ratingService(RatingModel rating) {
 
         RatingClass rtt = new RatingClass();
         rtt.setTarget(rating.getRateTaget());
         rtt.setRater(rating.getRateRatter());
         rtt.setRate(rating.getRate());
         ratingRepository.save(rtt);
-        return rtt;
+        return true;
 
     }
 
     @Override
     public Double getRating(String target) {
         List<RatingClass> ratingClasses = ratingRepository.findByTarget(target);
-        System.out.println(ratingClasses);
-        if (ratingClasses == null) {
+        if (ratingClasses == null || ratingClasses.size() < 0) {
             return 0.0;
         } else {
             int n = ratingClasses.size();
@@ -59,7 +58,7 @@ public class RatingServiceImpl implements RatingService {
     @Override
     public Double getRatingOfPerson(String email) {
         List<RatingClass> ratingClasses = ratingRepository.findByTarget(email);
-        if (ratingClasses == null) {
+        if (ratingClasses == null || ratingClasses.size() < 0) {
             return 0.0;
         } else {
             int n = ratingClasses.size();

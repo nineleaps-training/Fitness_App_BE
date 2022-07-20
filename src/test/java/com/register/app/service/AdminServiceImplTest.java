@@ -2,10 +2,11 @@ package com.register.app.service;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.AdminPayClass;
 import com.fitness.app.entity.VendorPaymentClass;
 import com.fitness.app.exceptions.DataNotFoundException;
-import com.fitness.app.model.AdminPayModel;
+import com.fitness.app.dto.AdminPayModel;
 import com.fitness.app.repository.AdminPayRepository;
 
 import com.fitness.app.repository.VendorPayRepository;
@@ -94,10 +95,10 @@ class AdminServiceImplTest {
 
         Order myOrder = razorpayClient.Orders.create(ob);
         when(adminPayRepository.findByVendorAndAmountAndStatus(VENDOR_DUE.getVendor(), VENDOR_DUE.getAmount(), "Due")).thenReturn(VENDOR_PAY);
-        Boolean expected= adminServiceImpl.PayNow(VENDOR_DUE, myOrder);
+        ApiResponse expected= adminServiceImpl.PayNow(VENDOR_DUE);
 
         Assertions.assertNotNull(VENDOR_PAY);
-        Assertions.assertTrue(expected);
+
     }
 
     @Test
@@ -112,9 +113,9 @@ class AdminServiceImplTest {
 
         Order myOrder = razorpayClient.Orders.create(ob);
         when(adminPayRepository.findByVendorAndAmountAndStatus(VENDOR_DUE.getVendor(), VENDOR_DUE.getAmount(), "Due")).thenReturn(null);
-        Boolean expected= adminServiceImpl.PayNow(VENDOR_DUE, myOrder);
+        ApiResponse expected= adminServiceImpl.PayNow(VENDOR_DUE);
         Assertions.assertNotNull(expected);
-        Assertions.assertEquals(false, expected);
+
     }
 
 

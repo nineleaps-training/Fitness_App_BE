@@ -1,6 +1,6 @@
 package com.fitness.app.config;
 
-import com.fitness.app.security.service.UserDetailsServiceImpl;
+import com.fitness.app.security.service.UserDetailsSecServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,43 +20,25 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebConfiguration extends WebSecurityConfigurerAdapter {
 
     private static String[] publicApi = {
-            "/gyms/locality/{locality}",
-            "/gym/city/{city}",
-            "/gym/id/**",
-            "/login/user",
-            "/send-mail/**",
-            "/verify/user/**",
-            "/register/user",
-            "/hello",
-            "/login/admin",
 
-            "/forget/user/**",
-            "/user/set-password",
-
-            "/user-performance",
-            "/all-numbers",
-            "/downloadFile/**",
-            "/google-sign-in/**",
-
+            "/api/v1/admin/public/**",
+            "/api/v1/fitness/public/**",
+            "/api/v1/image/**",
+            "/api/v1/reset/**",
+            "/api/v1/map/public/**",
+            "/api/v1/user/public/**",
 
             "/swagger-ui/*",
             "/swagger-resources/**",
             "/v2/api-docs/**",
             "/swagger-ui.html",
             "/favicon.ico",
-            "/booked/gyms/**",
-            "/get-fitness-center-by-location",
-
-            "/qrcode",
-
-            "/address-by-lat-lng",
-
 
     };
 
 
     @Autowired
-    private UserDetailsServiceImpl userDetailsServiceImpl;
+    private UserDetailsSecServiceImpl userDetailsSecServiceImpl;
 
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
@@ -81,7 +63,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         super.configure(auth);
-        auth.userDetailsService(userDetailsServiceImpl).passwordEncoder(new BCryptPasswordEncoder());
+        auth.userDetailsService(userDetailsSecServiceImpl).passwordEncoder(new BCryptPasswordEncoder());
     }
 
 

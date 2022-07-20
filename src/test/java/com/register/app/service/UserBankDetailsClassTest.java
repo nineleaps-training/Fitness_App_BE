@@ -2,7 +2,7 @@ package com.register.app.service;
 
 import com.fitness.app.entity.UserBankDetailsClass;
 import com.fitness.app.entity.UserClass;
-import com.fitness.app.model.UserBankModel;
+import com.fitness.app.dto.UserBankModel;
 
 import com.fitness.app.repository.UserBankDetailsRepository;
 import com.fitness.app.repository.UserRepository;

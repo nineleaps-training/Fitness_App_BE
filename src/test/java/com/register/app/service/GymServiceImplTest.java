@@ -1,12 +1,13 @@
 package com.register.app.service;
 
+import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.GymSubscriptionClass;
 import com.fitness.app.entity.GymTimeClass;
 import com.fitness.app.exceptions.DataNotFoundException;
-import com.fitness.app.model.GymClassModel;
-import com.fitness.app.model.GymRepresnt;
+import com.fitness.app.dto.GymClassModel;
+import com.fitness.app.dto.GymRepresent;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.GymAddressRepository;
 import com.fitness.app.repository.GymSubscriptionRepository;
@@ -121,11 +122,11 @@ class GymServiceImplTest {
         Mockito.when(gymRepository.count()+1).thenReturn(idlast);
 
 
-        GymClass returnedGYm= gymServiceImpl.addNewGym(GYM_MODEL);
+        ApiResponse returnedGYm= gymServiceImpl.addNewGym(GYM_MODEL);
 
         Assertions.assertNotNull(returnedGYm);
 
-        Assertions.assertEquals(returnedGYm.getContact(), contact);
+        Assertions.assertEquals(returnedGYm.getBody(), "Successful");
     }
 
 
@@ -139,7 +140,7 @@ class GymServiceImplTest {
        Mockito.when(subscriptionRepo.findById(FITNESS1.getId())).thenReturn(subscriptionClass);
        Mockito.when(timeRepo.findById(FITNESS1.getId())).thenReturn(time);
 
-       GymRepresnt returnedGym= gymServiceImpl.getGymByGymId(FITNESS1.getId());
+       GymRepresent returnedGym= gymServiceImpl.getGymByGymId(FITNESS1.getId());
 
        Assertions.assertNotNull(returnedGym);
        Assertions.assertEquals(returnedGym.getCapacity(), FITNESS1.getCapacity());
@@ -157,7 +158,7 @@ class GymServiceImplTest {
         Mockito.when(subscriptionRepo.findById(FITNESS1.getId())).thenReturn(subscriptionClass);
         Mockito.when(timeRepo.findById(FITNESS1.getId())).thenReturn(time);
 
-        List<GymRepresnt> returnedGyms= gymServiceImpl.getGymByVendorEmail(FITNESS1.getEmail());
+        List<GymRepresent> returnedGyms= gymServiceImpl.getGymByVendorEmail(FITNESS1.getEmail());
 
         Assertions.assertNotNull(returnedGyms);
         Assertions.assertEquals(100, returnedGyms.get(0).getCapacity());
@@ -175,7 +176,7 @@ class GymServiceImplTest {
         Mockito.when(subscriptionRepo.findById(FITNESS1.getId())).thenReturn(subscriptionClass);
         Mockito.when(timeRepo.findById(FITNESS1.getId())).thenReturn(time);
 
-        List<GymRepresnt> returnedGyms= gymServiceImpl.getGymByCity(GYM_ADDRESS.getCity());
+        List<GymRepresent> returnedGyms= gymServiceImpl.getGymByCity(GYM_ADDRESS.getCity());
 
         Assertions.assertNotNull(returnedGyms);
 

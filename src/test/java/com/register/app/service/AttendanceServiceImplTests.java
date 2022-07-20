@@ -3,7 +3,7 @@ package com.register.app.service;
 import com.fitness.app.entity.RatingClass;
 import com.fitness.app.entity.UserAttendanceClass;
 import com.fitness.app.exceptions.DataNotFoundException;
-import com.fitness.app.model.MarkUserAttModel;
+import com.fitness.app.dto.MarkUserAttModel;
 import com.fitness.app.repository.AttendanceRepository;
 import com.fitness.app.repository.RatingRepository;
 import com.fitness.app.service.AttendanceServiceImpl;

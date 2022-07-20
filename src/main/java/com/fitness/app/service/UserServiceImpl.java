@@ -1,10 +1,20 @@
 package com.fitness.app.service;
 
-import com.fitness.app.componets.MessageComponents;
+import com.fitness.app.dto.auth.Authenticate;
+import com.fitness.app.utils.MessageComponents;
+import com.fitness.app.config.JwtUtils;
+import com.fitness.app.dto.UserModel;
+import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.UserClass;
-import com.fitness.app.model.UserModel;
+import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.repository.UserRepository;
+import com.fitness.app.security.service.UserDetailsSecServiceImpl;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,81 +25,99 @@ import java.util.Random;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
 
-    final private UserRepository userRepo;
-    final private PasswordEncoder passwordEncoder;
-    final private MessageComponents sendMessage;
-
+    private final UserRepository userRepo;
+    private final PasswordEncoder passwordEncoder;
+    private final MessageComponents sendMessage;
+    private final AuthenticationManager authenticationManager;
+    private final UserDetailsSecServiceImpl userDetailsSecService;
     private Random random = new Random();
+    final private JwtUtils jwtUtils;
+    private String otp;
 
     //register user
     @Override
-    public UserClass registerUser(UserModel user) {
+    public ApiResponse registerUser(UserModel user) {
 
 
-        String otp = sendMessage.otpBuilder();
-
-        final int code = sendMessage.sendOtpMessage(otp, user.getMobile());
-        if (code == 200) {
-            UserClass newUser = new UserClass();
-            newUser.setEmail(user.getEmail());
-            newUser.setFullName(user.getFullName());
-            newUser.setMobile(user.getMobile());
-            newUser.setPassword(passwordEncoder.encode(user.getPassword()));
-            newUser.setRole(user.getRole());
-            newUser.setActivated(false);
-            newUser.setLoggedin(false);
-            newUser.setCustom(user.getCustom());
-            userRepo.save(newUser);
-            return newUser;
+        UserClass localUser = userRepo.findByEmail(user.getEmail());
+        if (localUser != null && localUser.getCustom() && localUser.getActivated()) {
+            return new ApiResponse(HttpStatus.NOT_ACCEPTABLE, "Already User Exist:");
+        } else if (localUser != null && localUser.getCustom() && localUser.getActivated()) {
+            otp = sendMessage.otpBuilder();
+            String body = "your verification code is: " + otp;
+            sendMessage.sendMail(localUser.getEmail(), body, "Verify YourSelf : Fitness Freak");
+            return new ApiResponse(HttpStatus.CONTINUE, "Verify Otp.");
         } else {
-            return null;
+            otp = sendMessage.otpBuilder();
+            String body = "your verification code is: " + otp;
+            int code = sendMessage.sendMail(localUser.getEmail(), body, "Verify YourSelf : Fitness Freak");
+            if (code == 200) {
+                UserClass newUser = new UserClass();
+                newUser.setEmail(user.getEmail());
+                newUser.setFullName(user.getFullName());
+                newUser.setMobile(user.getMobile());
+                newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+                newUser.setRole(user.getRole());
+                newUser.setActivated(false);
+                newUser.setLoggedin(false);
+                newUser.setCustom(user.getCustom());
+                userRepo.save(newUser);
+                return new ApiResponse(HttpStatus.OK, "Verify now:");
+            } else {
+                return new ApiResponse(HttpStatus.RESET_CONTENT, "Email is not correct: ");
+            }
         }
-
-
     }
 
     //Verifying user
     @Override
-    public UserClass verifyUser(String email) {
+    public ApiResponse verifyUser(String email, String expectedOtp) {
         UserClass user = null;
         Optional<UserClass> userData = userRepo.findById(email);
-        if (userData.isPresent()) {
+        if (userData.isPresent() && expectedOtp.equals(otp)) {
             user = userData.get();
             user.setActivated(true);
             userRepo.save(user);
-            return user;
+            final UserDetails usrDetails = userDetailsSecService.loadUserByUsername(email);
+            String token = jwtUtils.generateToken(usrDetails);
+            return new ApiResponse(HttpStatus.OK, token);
         }
-
-        return null;
+        return new ApiResponse(HttpStatus.NO_CONTENT, "No user available with this user id:");
     }
 
-    //LogIn user
     @Override
-    public void loginUser(String email) {
-        UserClass user = new UserClass();
-        Optional<UserClass> userData = userRepo.findById(email);
-        if (userData.isPresent()) {
-            user = userData.get();
+    //LogIn user
+    public ApiResponse loginUser(Authenticate authCredential) throws DataNotFoundException {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(authCredential.getEmail(), authCredential.getPassword())
+            );
+        } catch (DataNotFoundException e) {
+            log.error("Error found: {}", e.getMessage());
+            throw new DataNotFoundException("User Not Found");
         }
-        user.setLoggedin(true);
-        userRepo.save(user);
-    }
+        final UserDetails usrDetails = userDetailsSecService.loadUserByUsername(authCredential.getEmail());
+        final String token = jwtUtils.generateToken(usrDetails);
+        return new ApiResponse(HttpStatus.OK, token);
 
+    }
 
     //google sign in
     @Override
-    public UserClass googleSignInMethod(UserModel user) {
+    public ApiResponse googleSignInMethod(UserModel user) {
         UserClass localUser = userRepo.findByEmail(user.getEmail());
-
         if (localUser != null && !localUser.getCustom()) {
             localUser.setPassword(passwordEncoder.encode(user.getPassword()));
             userRepo.save(localUser);
-            return localUser;
+            final UserDetails usrDetails = userDetailsSecService.loadUserByUsername(user.getEmail());
+            final String token = jwtUtils.generateToken(usrDetails);
+            return new ApiResponse(HttpStatus.OK, token);
         } else if (localUser != null && localUser.getCustom()) {
-            return null;
+            return new ApiResponse(HttpStatus.NOT_ACCEPTABLE, "Email has been already in use with password.");
         } else {
 
             UserClass newUser = new UserClass();
@@ -102,8 +130,9 @@ public class UserServiceImpl implements UserService {
             newUser.setLoggedin(false);
             newUser.setCustom(user.getCustom());
             userRepo.save(newUser);
-            return newUser;
-
+            final UserDetails usrDetails = userDetailsSecService.loadUserByUsername(user.getEmail());
+            final String token = jwtUtils.generateToken(usrDetails);
+            return new ApiResponse(HttpStatus.OK, token);
         }
 
     }

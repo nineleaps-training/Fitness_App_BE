@@ -1,73 +1,120 @@
 package com.fitness.app.controller;
 
 
-
+import com.fitness.app.dto.GymClassModel;
+import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymClass;
-import com.fitness.app.model.GymClassModel;
-import com.fitness.app.model.GymRepresnt;
-
 import com.fitness.app.service.GymServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * The type Gym controller.
+ */
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/fitness")
 public class GymController {
 
-    @Autowired
-    private GymServiceImpl gymServiceImpl;
+
+    final private GymServiceImpl gymServiceImpl;
 
 
-    // Adding new fitness center
-    @PutMapping("/add/gym")
-    public GymClass addNewGym(@RequestBody GymClassModel gymClassModel) {
+    /**
+     * Add new gym api response.
+     *
+     * @param gymClassModel the gym class model
+     * @return the api response
+     */
+// Adding new fitness center
+    @PutMapping("/private/add-or-update-gym")
+    public ApiResponse addNewGym(@RequestBody GymClassModel gymClassModel) {
         return gymServiceImpl.addNewGym(gymClassModel);
     }
 
-    // getting list of all registered fitness center.
-    @GetMapping("/gym/all")
-    public List<GymClass> getAllGym() {
-        return gymServiceImpl.getAllGym();
+    /**
+     * Gets all gym.
+     *
+     * @return the all gym
+     */
+// getting list of all registered fitness center.
+    //TODO :: Add pagination here.
+    @GetMapping("/private/gym-all")
+    public ApiResponse getAllGym() {
+        return new ApiResponse(HttpStatus.OK, gymServiceImpl.getAllGym());
     }
 
-    // Search Fitness centers by vendor email.
-    @GetMapping("/gym/email/{email}")
-    public List<GymRepresnt> getAllOfVendor(@PathVariable String email) {
-        return gymServiceImpl.getGymByVendorEmail(email);
+    /**
+     * Gets all of vendor.
+     *
+     * @param email the email
+     * @return the all of vendor
+     */
+// Search Fitness centers by vendor email.
+    //TODO :: Add pagination here.
+    @GetMapping("/private/gym-by-username/{email}")
+    public ApiResponse getAllOfVendor(@PathVariable String email) {
+        return new ApiResponse(HttpStatus.OK, gymServiceImpl.getGymByVendorEmail(email));
     }
 
 
-    //get address of fitness center by its unique id.
-    @GetMapping("/gym/address/{id}")
+    /**
+     * Gets address.
+     *
+     * @param id the id
+     * @return the address
+     */
+//get address of fitness center by its unique id.
+    @GetMapping("/private/address-by-id/{id}")
     public GymAddressClass getAddress(@PathVariable String id) {
         return gymServiceImpl.findTheAddress(id);
     }
 
-    // Search Fitness center by fitness id.
-    @GetMapping("/gym/id/{id}")
-    public GymRepresnt getGymById(@PathVariable String id) {
-        return gymServiceImpl.getGymByGymId(id);
+    /**
+     * Gets gym by id.
+     *
+     * @param id the id
+     * @return the gym by id
+     */
+// Search Fitness center by fitness id.
+    @GetMapping("/private/by-id/{id}")
+    public ResponseEntity<?> getGymById(@PathVariable String id) {
+        return new ResponseEntity<>(gymServiceImpl.getGymByGymId(id), HttpStatus.OK);
     }
 
 
-    // Search gym by gymName
-    @GetMapping("/gym/gymName/{gymName}")
-    public List<GymClass> getGymByGymName(@PathVariable("gymName") String gymName) {
+    /**
+     * Gets gym by gym name.
+     *
+     * @param gymName the gym name
+     * @return the gym by gym name
+     */
+// Search gym by gymName
+    @GetMapping("/private/by-gymName/{gymName}")
+    public ResponseEntity<?> getGymByGymName(@PathVariable("gymName") String gymName) {
         List<GymClass> allGym = new ArrayList<GymClass>();
         allGym.add(gymServiceImpl.getGymByGymName(gymName));
-        return allGym;
+        return new ResponseEntity<>(allGym, HttpStatus.OK);
     }
 
 
-    @GetMapping("/gym/city/{city}")
-    public List<GymRepresnt> getGYmByCity(@PathVariable String city) {
-        return gymServiceImpl.getGymByCity(city);
+    /**
+     * Gets g ym by city.
+     *
+     * @param city the city
+     * @return the g ym by city
+     */
+    @GetMapping("/public/by-city/{city}")
+    public ResponseEntity<?> getGYmByCity(@PathVariable String city) {
+        return new ResponseEntity<>(gymServiceImpl.getGymByCity(city), HttpStatus.OK);
     }
-
 
 
 }

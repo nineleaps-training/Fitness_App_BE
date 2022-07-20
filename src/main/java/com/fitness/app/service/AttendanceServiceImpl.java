@@ -1,15 +1,16 @@
 package com.fitness.app.service;
 
+import com.fitness.app.dto.MarkUserAttModel;
 import com.fitness.app.entity.RatingClass;
 import com.fitness.app.entity.UserAttendanceClass;
 import com.fitness.app.exceptions.DataNotFoundException;
-import com.fitness.app.model.MarkUserAttModel;
 import com.fitness.app.repository.AttendanceRepository;
 import com.fitness.app.repository.RatingRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     final private AttendanceRepository attendanceRepository;
     final private RatingRepository ratingRepository;
+
     @Override
     public String markUsersAttendance(MarkUserAttModel userAttendance) throws DataNotFoundException {
         try {
@@ -29,11 +31,11 @@ public class AttendanceServiceImpl implements AttendanceService {
 
             List<UserAttendanceClass> allUser =
                     attendanceRepository.findByVendorAndGym(userAttendance.getVendor(), userAttendance.getGym());
-            if (allUser == null) {
-                throw new DataNotFoundException("No User is present: ");
+            if (allUser == null || allUser.size() < 0) {
+                throw new DataNotFoundException("No User is present in list: ");
             }
             List<String> allUsers = allUser.stream().map(p -> p.getEmail()).collect(Collectors.toList());
-            int att = 0, nonatt = 0;
+            int att = 0, nonAtt = 0;
             for (String user : allUsers) {
                 UserAttendanceClass userAtt =
                         attendanceRepository.findByEmailAndVendorAndGym(user, userAttendance.getVendor(), userAttendance.getGym());
@@ -54,17 +56,17 @@ public class AttendanceServiceImpl implements AttendanceService {
                     } else {
                         attendanceList.add(0);
                     }
-                    nonatt++;
+                    nonAtt++;
                 }
 
                 userAtt.setAttendance(attendanceList);
                 attendanceRepository.save(userAtt);
 
             }
-            return "Marked total: " + att + " and non attendy:  " + nonatt;
+            return "Marked total: " + att + " and non attendy:  " + nonAtt;
         } catch (DataNotFoundException e) {
             log.error("AttendanceService ::-> markUserAttendance :: Error found due to: {} ", e.getMessage());
-            throw new DataNotFoundException("Error: " + e.getMessage());
+            throw new DataNotFoundException("Data not found for most of users.");
         }
     }
 
@@ -73,10 +75,10 @@ public class AttendanceServiceImpl implements AttendanceService {
         try {
             UserAttendanceClass user = attendanceRepository.findByEmailAndGym(email, gym);
             if (user != null) {
-                List<Integer> attendenceList = user.getAttendance();
-                List<Integer> perfomance = new ArrayList<>();
-                if (attendenceList != null) {
-                    int s = attendenceList.size();
+                List<Integer> attendanceList = user.getAttendance();
+                List<Integer> performance = new ArrayList<>();
+                if (attendanceList != null) {
+                    int s = attendanceList.size();
                     int div = s / 25;
                     int count = 0;
                     int i = 0;
@@ -85,29 +87,31 @@ public class AttendanceServiceImpl implements AttendanceService {
                         count = 0;
 
                         while (i <= j) {
-                            if (attendenceList.get(i) == 1) {
+                            if (attendanceList.get(i) == 1) {
                                 count++;
                             }
                             i++;
                         }
-                        perfomance.add(count);
+                        performance.add(count);
                         j += 25;
                     }
                     count = 0;
                     while (i < s) {
-                        if (attendenceList.get(i) == 1) {
+                        if (attendanceList.get(i) == 1) {
                             count++;
                         }
                         i++;
                     }
-                    perfomance.add(count);
+                    performance.add(count);
                 }
-                return perfomance;
+                return performance;
             } else {
-                throw new DataNotFoundException("No attendance Found");
+                log.info("No more user exist with this user name : ");
+                throw new DataNotFoundException("User Not found with this username:");
             }
         } catch (DataNotFoundException e) {
-            throw new DataNotFoundException("Error: " + e.getMessage());
+            log.error("AttendanceService ::-> userPerformance ::  Error found due to : {}", e.getMessage());
+            throw new DataNotFoundException("Error: Data is not available for this user");
         }
     }
 

@@ -1,11 +1,14 @@
 package com.fitness.app.service;
 
+import com.fitness.app.dto.DetailsModel;
+import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorDetailsClass;
-import com.fitness.app.model.DetailsModel;
+import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.repository.UserRepository;
 import com.fitness.app.repository.VendorDetailsRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,7 +23,7 @@ public class VendorDetailsServiceImpl implements VendorDetailsService {
 
     // register new vendor service function.
     @Override
-    public VendorDetailsClass addVendorDetails(DetailsModel vendorDetails) {
+    public ApiResponse addVendorDetails(DetailsModel vendorDetails) {
 
         UserClass user = userRepository.findByEmail(vendorDetails.getEmail());
 
@@ -34,14 +37,19 @@ public class VendorDetailsServiceImpl implements VendorDetailsService {
 
 
             vendordetailsRepository.save(details);
-            return details;
+            return new ApiResponse(HttpStatus.OK, "Successful");
         }
-        return null;
+        return new ApiResponse(HttpStatus.NO_CONTENT, "Failed");
     }
 
     @Override
-    public VendorDetailsClass getVendorDetails(String email) {
-
-        return vendordetailsRepository.findByVendorEmail(email);
+    public VendorDetailsClass getVendorDetails(String email) throws DataNotFoundException {
+        try{
+            return vendordetailsRepository.findByVendorEmail(email);
+        }
+        catch (Exception e)
+        {
+            throw new DataNotFoundException("No Details found for this vendor:");
+        }
     }
 }

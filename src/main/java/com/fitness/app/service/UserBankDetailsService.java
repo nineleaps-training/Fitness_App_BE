@@ -2,7 +2,7 @@ package com.fitness.app.service;
 
 import com.fitness.app.entity.UserBankDetailsClass;
 
-import com.fitness.app.model.UserBankModel;
+import com.fitness.app.dto.UserBankModel;
 
 import java.util.List;
 

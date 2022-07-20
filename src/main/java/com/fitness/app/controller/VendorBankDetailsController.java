@@ -1,35 +1,47 @@
 package com.fitness.app.controller;
 
+import com.fitness.app.dto.UserBankModel;
+import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.VendorBankDetailsClass;
-import com.fitness.app.model.UserBankModel;
-
 import com.fitness.app.service.VendorBankDetailsServiceImpl;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * The type Vendor bank details controller.
+ */
 @RestController
+@RequestMapping("/api/v1/vendor-bank")
+@RequiredArgsConstructor
 public class VendorBankDetailsController {
-    @Autowired
 
-    private VendorBankDetailsServiceImpl vendorBankDetailsServiceImpl;
-    //Adding bank details of the vendor
-    @PutMapping("/vendor-bankdetails/add")
-    public ResponseEntity<VendorBankDetailsClass> addDetails(@RequestBody UserBankModel details) {
-        VendorBankDetailsClass vendorBankDetailsClass = vendorBankDetailsServiceImpl.addDetails(details);
+    private final VendorBankDetailsServiceImpl vendorBankDetailsServiceImpl;
 
-        Assert.notNull(vendorBankDetailsClass, "bank details are null");
-        return new ResponseEntity<VendorBankDetailsClass>(vendorBankDetailsClass, HttpStatus.OK);
+    /**
+     * Add details api response.
+     *
+     * @param details the details
+     * @return the api response
+     */
+//Adding bank details of the vendor
+    @PutMapping("/vendor-bank-details/add")
+    public ApiResponse addDetails(@RequestBody UserBankModel details) {
+        return vendorBankDetailsServiceImpl.addDetails(details);
 
     }
-    //Febtching bank details of the vendor by email id
-    @GetMapping("/vendor-bankdetails/get/{email}")
-    public VendorBankDetailsClass getBankDetails(@PathVariable String email) {
 
-        return vendorBankDetailsServiceImpl.getBankDetails(email);
+    /**
+     * Gets bank details.
+     *
+     * @param email the email
+     * @return the bank details
+     */
+//Fetching bank details of the vendor by email id
+    @GetMapping("/vendor-bank-details-get/{email}")
+    public ResponseEntity<VendorBankDetailsClass> getBankDetails(@PathVariable String email) {
+        return new ResponseEntity<VendorBankDetailsClass>(vendorBankDetailsServiceImpl.getBankDetails(email), HttpStatus.OK);
 
     }
 

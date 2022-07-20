@@ -1,61 +1,58 @@
 package com.fitness.app.controller;
 
+import com.fitness.app.dto.UserBankModel;
 import com.fitness.app.entity.UserBankDetailsClass;
-import com.fitness.app.model.UserBankModel;
-<<<<<<< HEAD
-import com.fitness.app.service.UserBankDetailsService;
-=======
 import com.fitness.app.service.UserBankDetailsServiceImpl;
->>>>>>> ab44702953f521464a7b7eaa187535692b51af48
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
+/**
+ * The type User bank details controller.
+ */
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/bank")
 public class UserBankDetailsController {
 
-    @Autowired
-<<<<<<< HEAD
-    UserBankDetailsService userBankDetailsService;
-=======
-    UserBankDetailsServiceImpl userBankDetailsServiceImpl;
->>>>>>> ab44702953f521464a7b7eaa187535692b51af48
+    private final UserBankDetailsServiceImpl userBankDetailsServiceImpl;
 
-    //Add or update bank details of the user.
-    @PutMapping("/user-bankdetails/add")
+    /**
+     * Add bank details response entity.
+     *
+     * @param details the details
+     * @return the response entity
+     */
+//Add or update bank details of the user.
+    @PutMapping("/private/user-bankDetails/add")
     public ResponseEntity<UserBankDetailsClass> addBankDetails(@RequestBody UserBankModel details) {
-
-<<<<<<< HEAD
-        UserBankDetailsClass userBankDetailsClass = userBankDetailsService.addBankDetails(details);
-=======
         UserBankDetailsClass userBankDetailsClass = userBankDetailsServiceImpl.addBankDetails(details);
->>>>>>> ab44702953f521464a7b7eaa187535692b51af48
-        Assert.notNull(userBankDetailsClass, "UserBankDetails is null");
         return new ResponseEntity<UserBankDetailsClass>(userBankDetailsClass, HttpStatus.OK);
 
     }
 
-    //get bank details of the user to make payment.
-    @GetMapping("/user-bankdetails/get/{email}")
-    public UserBankDetailsClass getBankDetails(@PathVariable String email) {
-<<<<<<< HEAD
-        return userBankDetailsService.getBankDetails(email);
-=======
-        return userBankDetailsServiceImpl.getBankDetails(email);
->>>>>>> ab44702953f521464a7b7eaa187535692b51af48
+    /**
+     * Gets bank details.
+     *
+     * @param email the email
+     * @return the bank details
+     */
+//get bank details of the user to make payment.
+    @GetMapping("/private/user-bankDetails/get/{email}")
+    public ResponseEntity<?> getBankDetails(@PathVariable String email) {
+        return new ResponseEntity<>(userBankDetailsServiceImpl.getBankDetails(email), HttpStatus.OK);
     }
 
-    //List of user's bank.
-    @GetMapping("user-bankdetails/getall")
-    public List<UserBankDetailsClass> getAllDetails() {
-<<<<<<< HEAD
-        return userBankDetailsService.getAllDetails();
-=======
-        return userBankDetailsServiceImpl.getAllDetails();
->>>>>>> ab44702953f521464a7b7eaa187535692b51af48
+    /**
+     * Gets all details.
+     *
+     * @return the all details
+     */
+//List of user's bank.
+    @GetMapping("/private/user-bankDetails/get-all")
+    public ResponseEntity<?> getAllDetails() {
+        return new ResponseEntity<>(userBankDetailsServiceImpl.getAllDetails(), HttpStatus.OK);
+
     }
 }
