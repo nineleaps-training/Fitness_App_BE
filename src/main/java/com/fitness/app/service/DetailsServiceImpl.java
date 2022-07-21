@@ -2,9 +2,10 @@ package com.fitness.app.service;
 
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.UserDetailsClass;
-import com.fitness.app.dto.DetailsModel;
+import com.fitness.app.dto.requestDtos.DetailsModel;
 import com.fitness.app.repository.UserDetailsRepository;
 import com.fitness.app.repository.UserRepository;
+import com.fitness.app.service.dao.DetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

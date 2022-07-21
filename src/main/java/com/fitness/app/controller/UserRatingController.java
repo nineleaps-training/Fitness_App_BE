@@ -1,7 +1,7 @@
 package com.fitness.app.controller;
 
 
-import com.fitness.app.dto.RatingModel;
+import com.fitness.app.dto.requestDtos.RatingModel;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.service.RatingServiceImpl;

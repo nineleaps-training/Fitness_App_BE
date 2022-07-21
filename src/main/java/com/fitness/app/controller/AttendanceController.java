@@ -1,6 +1,6 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.dto.MarkUserAttModel;
+import com.fitness.app.dto.requestDtos.MarkUserAttModel;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.service.AttendanceServiceImpl;

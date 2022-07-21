@@ -1,6 +1,6 @@
 package com.register.app.service;
 
-import com.fitness.app.dto.UserBankModel;
+import com.fitness.app.dto.requestDtos.UserBankModel;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorBankDetailsClass;
@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -58,20 +59,17 @@ class VendorBankDetailsClassServiceTest {
     @Test
     void addDetails() {
         Mockito.when(userRepository.findByEmail(BANK_MODEL.getEmail())).thenReturn(USER1);
-
         ApiResponse bankDetails = vendorBankDetailsServiceImpl.addDetails(BANK_MODEL);
-
         Assertions.assertNotNull(bankDetails);
-        Assertions.assertEquals(bankDetails.getBody().getClass(), BANK.getClass());
+        Assertions.assertEquals(HttpStatus.OK, bankDetails.getStatus());
     }
 
     @Test
     void addDetailsWithNull() {
         Mockito.when(userRepository.findByEmail(BANK_MODEL.getEmail())).thenReturn(null);
-
         ApiResponse bankDetails = vendorBankDetailsServiceImpl.addDetails(BANK_MODEL);
-
-        Assertions.assertNull(bankDetails);
+        Assertions.assertNotNull(bankDetails);
+        Assertions.assertEquals(HttpStatus.NO_CONTENT, bankDetails.getStatus());
     }
 
 

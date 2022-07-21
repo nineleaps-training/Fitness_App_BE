@@ -1,7 +1,7 @@
 package com.fitness.app.controller;
 
 import com.fitness.app.dto.auth.Authenticate;
-import com.fitness.app.dto.UserModel;
+import com.fitness.app.dto.requestDtos.UserModel;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +31,16 @@ public class UserController {
     public ApiResponse registerUser(@RequestBody UserModel user) {
         return userServiceImpl.registerUser(user);
     }
+
+//    @Autowired
+//    private UserRepository userRepository;
+//    @GetMapping("/public/get-user/{email}")
+//    public UserClass getUser(@PathVariable String email)
+//    {
+//        UserClass userClass = userRepository.findByEmail(email);
+//        System.out.println(userClass.);
+//        return userClass;
+//    }
 
     /**
      * Verify the user api response.

@@ -32,13 +32,10 @@ public class UserDetailsSecServiceImpl implements UserDetailsService {
 		else {
 			throw new UsernameNotFoundException("User not found at that location: ");
 		}
-	     
 	     if (user == null){
                 log.info("User Not Found.");
 	            throw new UsernameNotFoundException("Invalid Credentials : "+email);
 	        }
-	     
-	     
 	     return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), new ArrayList<>());
 	}
 

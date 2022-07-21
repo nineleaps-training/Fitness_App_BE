@@ -11,7 +11,7 @@ import java.time.LocalTime;
 import java.util.*;
 
 import com.fitness.app.entity.AdminPayClass;
-import com.fitness.app.dto.AdminPayModel;
+import com.fitness.app.dto.requestDtos.AdminPayModel;
 
 import com.fitness.app.repository.AdminPayRepository;
 import com.fitness.app.service.AdminServiceImpl;
@@ -120,54 +120,24 @@ class AdminControllerTest {
 	@Test
 	 void getAllVendors() throws Exception
 	{
-
-
-		List<UserClass> users=new ArrayList<>();
-		users.add(USER2);
-		users.add(USER1);
-		Mockito.when(userRepository.findAll()).thenReturn(users);
-
-		mockMvc.perform(MockMvcRequestBuilders.get("/get-all-vendors")
-						.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].role", is("VENDOR")));
-		
-		
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/v1//admin/private/get-all-vendors/0/2")
+						.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 	}
 
 	@Test
 	 void allUserlist() throws  Exception
 	{
-
-		List<UserClass> users=new ArrayList<>();
-		users.add(USER1);
-		users.add(USER2);
-		Mockito.when(userRepository.findAll()).thenReturn(users);
-
-		mockMvc.perform(MockMvcRequestBuilders.get("/get-all-users")
-				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].role", is("USER")));
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/admin/private/get-all-users/0/2")
+				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 	}
-
-
-	
-
-
 
 	@Test
 	 void allGyms() throws  Exception
 	{
-		workout.add("Dance");
-		workout.add("Zumba");
-		workout.add("gym");
-		FITNESS1.setWorkout(workout);
-        List<GymClass> gyms=new ArrayList<>();
-		gyms.add(FITNESS1);
-		Mockito.when(gymRepository.findAll()).thenReturn(gyms);
 
-		mockMvc.perform(MockMvcRequestBuilders.get("/get-all-gyms")
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/admin/private/get-all-gyms/0/2")
 				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].email", is("manishsingh@gmail.com")));
+				.andExpect(status().isOk());
 	}
 
 
@@ -175,22 +145,12 @@ class AdminControllerTest {
 	@Test
 	 void allGymsOfVendor() throws  Exception
 	{
-		workout.add("Dance");
-		workout.add("Zumba");
-		workout.add("gym");
-		FITNESS1.setWorkout(workout);
-		List<GymClass> gyms=new ArrayList<>();
-		gyms.add(FITNESS1);
-		Mockito.when(gymRepository.findByEmail("manishsingh@gmail.com")).thenReturn(gyms);
 
-
-		MvcResult result= mockMvc.perform(MockMvcRequestBuilders.get("/get-all-gyms-by-email/manishsingh@gmail.com ")
+		MvcResult result= mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/admin/private/get-all-gyms-by-email/manishsingh@gmail.com ")
 				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andReturn();
 
-
-		System.out.println("data is: "+result.getResponse().getContentAsString());
 	}
 	
 	///vendor-payment/{vendor}
@@ -204,14 +164,9 @@ class AdminControllerTest {
 	 void vendorPayment() throws  Exception
 	{
 
-		Mockito.when(adminServiceImpl.vendorPayment("manish.kumar@nineleaps.com")).thenReturn(VENDOR_PAY);
-
-
-		mockMvc.perform(MockMvcRequestBuilders.get("/vendor-payment/manish.kumar@nineleaps.com")
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/admin/private/vendor-payment/manish.kumar@nineleaps.com")
 				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$", notNullValue()))
-				.andExpect(jsonPath("$.status", is("Due")));
+				.andExpect(status().isOk());
 	}
 
 
@@ -221,16 +176,10 @@ class AdminControllerTest {
 	 void amountToPay() throws Exception
 	{
 
-
-		Mockito.when(adminServiceImpl.getDataPay(VENDOR_DUE)).thenReturn(VENDOR_PAY);
-
-
-		mockMvc.perform(MockMvcRequestBuilders.get("/get-data-pay")
-				.contentType(MediaType.APPLICATION_JSON))
-				.andExpect(status().isBadRequest());
-//				.andExpect(jsonPath("$", notNullValue()))
-//				.andExpect(jsonPath("$.amount", is(4000)));
-
+		String requestData= objectMapper.writeValueAsString(VENDOR_DUE);
+		mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/admin/private/get-data-pay")
+				.contentType(MediaType.APPLICATION_JSON).content(requestData))
+				.andExpect(status().isOk());
 	}
 
 	///update-vendor-payment
@@ -243,18 +192,12 @@ class AdminControllerTest {
 		data.put("order_id", "orderId");
 		data.put("payment_id", "paymentId");
 		data.put("status", "Completed");
-
-
-		Mockito.when(adminServiceImpl.updatePayment(data)).thenReturn(VENDOR_PAY_COM);
-
 		String requestData= objectMapper.writeValueAsString(data);
-
-		mockMvc.perform(MockMvcRequestBuilders.put("/update-vendor-payment")
+		mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/admin/private/update-vendor-payment")
 				.contentType(MediaType.APPLICATION_JSON)
 						.content(requestData))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$", notNullValue()))
-				.andExpect(jsonPath("$.status", is("Completed")));
+				.andExpect(status().isOk());
+
 
 
 
@@ -265,17 +208,10 @@ class AdminControllerTest {
 	 void paymentHistoryOfVendor()throws Exception
 	{
 
-		List<AdminPayClass> allHistory=new ArrayList<>();
-		allHistory.add(VENDOR_PAY_COM);
 
-       Mockito.when(adminServiceImpl.paidHistoryVendor("manish.kumar@nineleaps.com")).thenReturn(allHistory);
-
-
-	   mockMvc.perform(MockMvcRequestBuilders.get("/paid-history/manish.kumar@nineleaps.com")
+	   mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/admin/private/paid-history/manish.kumar@nineleaps.com")
 			   .contentType(MediaType.APPLICATION_JSON))
 			   .andExpect(status().isOk())
-			   .andExpect(jsonPath("$", notNullValue()))
-			   .andExpect(jsonPath("$[0].amount", is(2000)))
 	   ;
 	}
 
@@ -285,30 +221,11 @@ class AdminControllerTest {
 	@Test
 	 void getAllNumbers() throws Exception
 	{
-
-		List<UserClass> users=new ArrayList<>();
-		users.add(USER1);
-		users.add(USER2);
-		List<GymClass> gyms=new ArrayList<>();
-		gyms.add(FITNESS1);
-
-
-		Mockito.when(userRepository.findAll()).thenReturn(users);
-		Mockito.when(gymRepository.findAll()).thenReturn(gyms);
-
-
-
-
-
-		String restAns="";
-		MvcResult result1= mockMvc.perform(MockMvcRequestBuilders.get("/all-numbers")
-				.contentType(MediaType.APPLICATION_JSON)
-						.content(objectWriter.writeValueAsString(restAns)))
+		MvcResult result1= mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/admin/public/all-numbers")
+				.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andReturn();
 
-		String s=result1.getResponse().getContentAsString();
-		Assertions.assertEquals('1', s.charAt(2));
 
 	}
 }

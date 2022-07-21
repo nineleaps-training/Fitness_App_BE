@@ -3,6 +3,7 @@ package com.fitness.app.service;
 import com.fitness.app.entity.ImageOperationDoc;
 import com.fitness.app.exceptions.FileNotFoundException;
 import com.fitness.app.repository.ImageOperationRepository;
+import com.fitness.app.service.dao.ImageOperationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

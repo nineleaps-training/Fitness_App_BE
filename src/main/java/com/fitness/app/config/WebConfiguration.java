@@ -1,7 +1,7 @@
 package com.fitness.app.config;
 
 import com.fitness.app.security.service.UserDetailsSecServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,6 +17,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebConfiguration extends WebSecurityConfigurerAdapter {
 
     private static String[] publicApi = {
@@ -36,22 +37,14 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
 
     };
 
-
-    @Autowired
-    private UserDetailsSecServiceImpl userDetailsSecServiceImpl;
-
-    @Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
-
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
-
+    private final UserDetailsSecServiceImpl userDetailsSecServiceImpl;
+    private final JwtAuthenticationEntryPoint unauthorizedHandler;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     @Override
     @Bean
@@ -59,13 +52,11 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         super.configure(auth);
         auth.userDetailsService(userDetailsSecServiceImpl).passwordEncoder(new BCryptPasswordEncoder());
     }
-
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -85,6 +76,5 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
-
 
 }

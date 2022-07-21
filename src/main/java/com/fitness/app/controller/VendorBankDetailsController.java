@@ -1,6 +1,6 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.dto.UserBankModel;
+import com.fitness.app.dto.requestDtos.UserBankModel;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.VendorBankDetailsClass;
 import com.fitness.app.service.VendorBankDetailsServiceImpl;

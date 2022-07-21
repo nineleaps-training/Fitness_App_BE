@@ -1,6 +1,6 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.dto.UserOrderModel;
+import com.fitness.app.dto.requestDtos.UserOrderModel;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.UserOrderClass;
 import com.fitness.app.service.UserOrderServiceImpl;

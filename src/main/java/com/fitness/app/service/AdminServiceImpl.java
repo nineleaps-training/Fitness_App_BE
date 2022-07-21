@@ -1,8 +1,8 @@
 package com.fitness.app.service;
 
-import com.fitness.app.dto.auth.Authenticate;
 import com.fitness.app.config.JwtUtils;
-import com.fitness.app.dto.AdminPayModel;
+import com.fitness.app.dto.auth.Authenticate;
+import com.fitness.app.dto.requestDtos.AdminPayModel;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.AdminPayClass;
 import com.fitness.app.entity.GymClass;
@@ -15,12 +15,16 @@ import com.fitness.app.repository.AdminPayRepository;
 import com.fitness.app.repository.UserRepository;
 import com.fitness.app.repository.VendorPayRepository;
 import com.fitness.app.security.service.UserDetailsSecServiceImpl;
+import com.fitness.app.service.dao.AdminService;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -43,9 +47,9 @@ import java.util.stream.Collectors;
 @Transactional
 public class AdminServiceImpl implements AdminService {
 
-    final private VendorPayRepository vendorPay;
+    final private VendorPayRepository vendorPayRepository;
 
-    final private AddGymRepository gymRepo;
+    final private AddGymRepository addGymRepository;
 
     final private AuthenticationManager authenticationManager;
 
@@ -53,7 +57,7 @@ public class AdminServiceImpl implements AdminService {
 
     final private UserDetailsSecServiceImpl userDetailsService;
     final private JwtUtils jwtUtils;
-    final private UserRepository userRepo;
+    final private UserRepository userRepository;
 
 
     @Override
@@ -67,7 +71,7 @@ public class AdminServiceImpl implements AdminService {
         }
         final UserDetails usrDetails = userDetailsService.loadUserByUsername(authenticate.getEmail());
         final String jwt = jwtUtils.generateToken(usrDetails);
-        final UserClass localUser = userRepo.findByEmail(authenticate.getEmail());
+        final UserClass localUser = userRepository.findByEmail(authenticate.getEmail());
         if (localUser.getRole().equals("ADMIN")) {
             return jwt;
         }
@@ -75,34 +79,32 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<UserClass> getAllUsersService() {
-        List<UserClass> listOfUsers = userRepo.findAll();
-        listOfUsers = listOfUsers.stream().filter(e -> e.getRole().equals("USER")).collect(Collectors.toList());
-        if (listOfUsers != null && listOfUsers.size() > 0) {
-            return listOfUsers;
-        }
-        log.info("AdminServiceImpl ::-> getAllUser :: No User found.");
+    public List<UserClass> getAllUsersService(int offSet, int pageSize) {
+        Pageable pageable = PageRequest.of(offSet, pageSize);
+        List<UserClass> listOfUsers = userRepository.findByRoleContaining("USER", pageable);
         return listOfUsers;
     }
 
     @Override
-    public List<UserClass> getAllVendorService(){
-        List<UserClass> listOfVendors = userRepo.findAll();
-        listOfVendors = listOfVendors.stream().filter(e -> e.getRole().equals("VENDOR")).collect(Collectors.toList());
+    public List<UserClass> getAllVendorService(int offSet, int pageSize) {
+        Pageable pageable = PageRequest.of(offSet, pageSize);
+        List<UserClass> listOfVendors = userRepository.findByRoleContaining("VENDOR", pageable);
         return listOfVendors;
     }
 
     @Override
-    public List<GymClass> getAllFitnessCenter()
-    {
-        return gymRepo.findAll();
+    public Page<GymClass> getAllFitnessCenter(int offSet, int pageSize) {
+        Pageable pageable = PageRequest.of(offSet, pageSize);
+        return addGymRepository.findAll(pageable);
+
     }
 
 
     @Override
     public List<GymClass> getAllGymsByEmail(@PathVariable String email) {
-        return gymRepo.findByEmail(email);
+        return addGymRepository.findByEmail(email);
     }
+
     @Override
     public AdminPayClass getDataPay(AdminPayModel payment) {
         log.info("Payment to admin is being accessed");
@@ -137,7 +139,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public AdminPayClass vendorPayment(String vendor) {
-        List<VendorPaymentClass> payments = vendorPay.findByVendor(vendor);
+        List<VendorPaymentClass> payments = vendorPayRepository.findByVendor(vendor);
         payments = payments.stream().filter(p -> p.getStatus().equals("Due")).collect(Collectors.toList());
         AdminPayClass payment = new AdminPayClass();
         payment.setVendor(vendor);
@@ -170,10 +172,10 @@ public class AdminServiceImpl implements AdminService {
         payment.setStatus(data.get("status"));
         payment.setDate(date);
         payment.setTime(time);
-        List<VendorPaymentClass> vendorPaids = vendorPay.findByVendorAndStatus(payment.getVendor(), "Due");
+        List<VendorPaymentClass> vendorPaids = vendorPayRepository.findByVendorAndStatus(payment.getVendor(), "Due");
         for (VendorPaymentClass pays : vendorPaids) {
             pays.setStatus("Paid");
-            vendorPay.save(pays);
+            vendorPayRepository.save(pays);
         }
         adminPayRepository.save(payment);
         return payment;
@@ -195,12 +197,11 @@ public class AdminServiceImpl implements AdminService {
         }
     }
 
-    public List<String>  getAllNumber()
-    {
-        List<UserClass> listOfAllUser = userRepo.findAll();
+    public List<String> getAllNumber() {
+        List<UserClass> listOfAllUser = (List<UserClass>) userRepository.findAll();
         int user = listOfAllUser.stream().filter(e -> e.getRole().equals("USER")).collect(Collectors.toList()).size();
         int vendor = listOfAllUser.stream().filter(e -> e.getRole().equals("VENDOR")).collect(Collectors.toList()).size();
-        List<GymClass> gyms = gymRepo.findAll();
+        List<GymClass> gyms = addGymRepository.findAll();
         int fitnessCenter = gyms.size();
         List<String> response = new ArrayList<>();
         response.add(Integer.toString(user));

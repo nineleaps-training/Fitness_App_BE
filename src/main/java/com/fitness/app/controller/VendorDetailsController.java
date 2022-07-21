@@ -1,6 +1,6 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.dto.DetailsModel;
+import com.fitness.app.dto.requestDtos.DetailsModel;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.VendorDetailsClass;
 import com.fitness.app.service.VendorDetailsServiceImpl;

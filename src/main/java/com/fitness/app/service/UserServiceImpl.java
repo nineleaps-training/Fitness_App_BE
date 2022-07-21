@@ -1,19 +1,19 @@
 package com.fitness.app.service;
 
-import com.fitness.app.dto.auth.Authenticate;
-import com.fitness.app.utils.MessageComponents;
 import com.fitness.app.config.JwtUtils;
-import com.fitness.app.dto.UserModel;
+import com.fitness.app.dto.auth.Authenticate;
+import com.fitness.app.dto.requestDtos.UserModel;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.repository.UserRepository;
+import com.fitness.app.security.service.LoginUserSec;
 import com.fitness.app.security.service.UserDetailsSecServiceImpl;
+import com.fitness.app.service.dao.UserService;
+import com.fitness.app.utils.MessageComponents;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -32,29 +32,29 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepo;
     private final PasswordEncoder passwordEncoder;
     private final MessageComponents sendMessage;
-    private final AuthenticationManager authenticationManager;
+    private final LoginUserSec loginUserSec;
     private final UserDetailsSecServiceImpl userDetailsSecService;
     private Random random = new Random();
     final private JwtUtils jwtUtils;
-    private String otp;
+    private String otp = "2545";
 
     //register user
     @Override
     public ApiResponse registerUser(UserModel user) {
 
-
+        final String Sub = "Verify YourSelf : Fitness Freak";
         UserClass localUser = userRepo.findByEmail(user.getEmail());
         if (localUser != null && localUser.getCustom() && localUser.getActivated()) {
             return new ApiResponse(HttpStatus.NOT_ACCEPTABLE, "Already User Exist:");
-        } else if (localUser != null && localUser.getCustom() && localUser.getActivated()) {
+        } else if (localUser != null && localUser.getCustom() && !localUser.getActivated()) {
             otp = sendMessage.otpBuilder();
             String body = "your verification code is: " + otp;
-            sendMessage.sendMail(localUser.getEmail(), body, "Verify YourSelf : Fitness Freak");
+            sendMessage.sendMail(localUser.getEmail(), body, Sub);
             return new ApiResponse(HttpStatus.CONTINUE, "Verify Otp.");
         } else {
             otp = sendMessage.otpBuilder();
             String body = "your verification code is: " + otp;
-            int code = sendMessage.sendMail(localUser.getEmail(), body, "Verify YourSelf : Fitness Freak");
+            int code = sendMessage.sendMail(user.getEmail(), body, Sub);
             if (code == 200) {
                 UserClass newUser = new UserClass();
                 newUser.setEmail(user.getEmail());
@@ -89,21 +89,11 @@ public class UserServiceImpl implements UserService {
         return new ApiResponse(HttpStatus.NO_CONTENT, "No user available with this user id:");
     }
 
+
     @Override
     //LogIn user
     public ApiResponse loginUser(Authenticate authCredential) throws DataNotFoundException {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authCredential.getEmail(), authCredential.getPassword())
-            );
-        } catch (DataNotFoundException e) {
-            log.error("Error found: {}", e.getMessage());
-            throw new DataNotFoundException("User Not Found");
-        }
-        final UserDetails usrDetails = userDetailsSecService.loadUserByUsername(authCredential.getEmail());
-        final String token = jwtUtils.generateToken(usrDetails);
-        return new ApiResponse(HttpStatus.OK, token);
-
+        return loginUserSec.logInUserRes(authCredential);
     }
 
     //google sign in

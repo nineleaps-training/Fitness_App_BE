@@ -1,10 +1,11 @@
 package com.fitness.app.service;
 
-import com.fitness.app.dto.RatingModel;
+import com.fitness.app.dto.requestDtos.RatingModel;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.RatingClass;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.RatingRepository;
+import com.fitness.app.service.dao.RatingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class RatingServiceImpl implements RatingService {
     public Boolean ratingService(RatingModel rating) {
 
         RatingClass rtt = new RatingClass();
-        rtt.setTarget(rating.getRateTaget());
+        rtt.setTarget(rating.getRateTarget());
         rtt.setRater(rating.getRateRatter());
         rtt.setRate(rating.getRate());
         ratingRepository.save(rtt);

@@ -1,9 +1,10 @@
 package com.fitness.app.service;
 
+import com.fitness.app.service.dao.UserOrderService;
 import com.fitness.app.utils.MessageComponents;
-import com.fitness.app.dto.BookedGymModel;
-import com.fitness.app.dto.UserOrderModel;
-import com.fitness.app.dto.UserPerfomanceModel;
+import com.fitness.app.dto.responceDtos.BookedGymModel;
+import com.fitness.app.dto.requestDtos.UserOrderModel;
+import com.fitness.app.dto.responceDtos.UserPerformanceModel;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.*;
 import com.fitness.app.repository.*;
@@ -171,7 +172,7 @@ public class UserOrderServiceImpl implements UserOrderService {
     public ApiResponse allMyUser(String gymId) {
         List<UserOrderClass> orders = userOrderRepository.findByGym(gymId);
         orders = orders.stream().filter(o -> o.getStatus().equals("Completed")).collect(Collectors.toList());
-        Set<UserPerfomanceModel> users = new HashSet<>();
+        Set<UserPerformanceModel> users = new HashSet<>();
         Optional<GymClass> gymdata = gymRepo.findById(gymId);
         String vendor = "";
         if (gymdata.isPresent()) {
@@ -180,7 +181,7 @@ public class UserOrderServiceImpl implements UserOrderService {
 
         for (UserOrderClass order : orders) {
             UserAttendanceClass newAtt = attendanceRepository.findByEmailAndVendor(order.getEmail(), vendor);
-            UserPerfomanceModel user = new UserPerfomanceModel();
+            UserPerformanceModel user = new UserPerformanceModel();
             UserClass userClass = userRepository.findByEmail(order.getEmail());
             user.setName(userClass.getFullName());
             user.setEmail(order.getEmail());
@@ -201,17 +202,14 @@ public class UserOrderServiceImpl implements UserOrderService {
         if (orders == null) {
             return gyms;
         }
-
         BookedGymModel gymModel = messageComponents.gymModelByStatus(orders, CURRENT);
         if (gymModel == null || gymModel.getId() == null) {
             gymModel = null;
         }
         gyms.add(gymModel);
-
         gymModel = messageComponents.gymModelByStatus(orders, "Expired");
         gyms.add(gymModel);
         return gyms;
-
     }
 
     @Override

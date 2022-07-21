@@ -1,12 +1,13 @@
 package com.fitness.app.service;
 
-import com.fitness.app.dto.UserBankModel;
+import com.fitness.app.dto.requestDtos.UserBankModel;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorBankDetailsClass;
 import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.repository.BankDetailsRepository;
 import com.fitness.app.repository.UserRepository;
+import com.fitness.app.service.dao.VendorBankDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

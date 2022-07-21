@@ -1,6 +1,6 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.dto.UserBankModel;
+import com.fitness.app.dto.requestDtos.UserBankModel;
 import com.fitness.app.entity.UserBankDetailsClass;
 import com.fitness.app.service.UserBankDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;

@@ -3,7 +3,7 @@ package com.fitness.app.utils;
 import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.UserOrderClass;
-import com.fitness.app.dto.BookedGymModel;
+import com.fitness.app.dto.responceDtos.BookedGymModel;
 import com.fitness.app.repository.AddGymRepository;
 
 

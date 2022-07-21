@@ -2,6 +2,7 @@ package com.fitness.app.service;
 
 import com.fitness.app.dto.GoogleAddress;
 import com.fitness.app.dto.Response;
+import com.fitness.app.service.dao.LocationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

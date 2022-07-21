@@ -6,7 +6,7 @@ import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.AdminPayClass;
 import com.fitness.app.entity.VendorPaymentClass;
 import com.fitness.app.exceptions.DataNotFoundException;
-import com.fitness.app.dto.AdminPayModel;
+import com.fitness.app.dto.requestDtos.AdminPayModel;
 import com.fitness.app.repository.AdminPayRepository;
 
 import com.fitness.app.repository.VendorPayRepository;

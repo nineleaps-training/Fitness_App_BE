@@ -1,8 +1,8 @@
 package com.fitness.app.service;
 
 
-import com.fitness.app.dto.GymClassModel;
-import com.fitness.app.dto.GymRepresent;
+import com.fitness.app.dto.requestDtos.GymClassModel;
+import com.fitness.app.dto.responceDtos.GymRepresent;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymClass;
@@ -13,6 +13,7 @@ import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.GymAddressRepository;
 import com.fitness.app.repository.GymSubscriptionRepository;
 import com.fitness.app.repository.GymTimeRepository;
+import com.fitness.app.service.dao.GymService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

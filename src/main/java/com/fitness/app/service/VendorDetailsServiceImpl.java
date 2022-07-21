@@ -1,12 +1,13 @@
 package com.fitness.app.service;
 
-import com.fitness.app.dto.DetailsModel;
+import com.fitness.app.dto.requestDtos.DetailsModel;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorDetailsClass;
 import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.repository.UserRepository;
 import com.fitness.app.repository.VendorDetailsRepository;
+import com.fitness.app.service.dao.VendorDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

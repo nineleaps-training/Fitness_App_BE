@@ -1,7 +1,7 @@
 package com.fitness.app.controller;
 
 import com.fitness.app.dto.auth.Authenticate;
-import com.fitness.app.dto.UserForgot;
+import com.fitness.app.dto.responceDtos.UserForgot;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.service.ForgetPassServiceImpl;
 import lombok.RequiredArgsConstructor;

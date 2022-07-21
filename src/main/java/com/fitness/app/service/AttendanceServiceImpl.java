@@ -1,11 +1,12 @@
 package com.fitness.app.service;
 
-import com.fitness.app.dto.MarkUserAttModel;
+import com.fitness.app.dto.requestDtos.MarkUserAttModel;
 import com.fitness.app.entity.RatingClass;
 import com.fitness.app.entity.UserAttendanceClass;
 import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.repository.AttendanceRepository;
 import com.fitness.app.repository.RatingRepository;
+import com.fitness.app.service.dao.AttendanceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

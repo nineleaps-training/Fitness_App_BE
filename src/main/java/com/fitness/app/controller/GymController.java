@@ -1,7 +1,7 @@
 package com.fitness.app.controller;
 
 
-import com.fitness.app.dto.GymClassModel;
+import com.fitness.app.dto.requestDtos.GymClassModel;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymClass;

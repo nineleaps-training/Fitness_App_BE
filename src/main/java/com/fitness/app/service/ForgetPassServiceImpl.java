@@ -1,8 +1,9 @@
 package com.fitness.app.service;
 
 import com.fitness.app.dto.auth.Authenticate;
+import com.fitness.app.service.dao.ForgetPassService;
 import com.fitness.app.utils.MessageComponents;
-import com.fitness.app.dto.UserForgot;
+import com.fitness.app.dto.responceDtos.UserForgot;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
