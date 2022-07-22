@@ -1,8 +1,8 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.dto.requestDtos.UserBankModel;
+import com.fitness.app.dto.request.UserBankModel;
 import com.fitness.app.entity.UserBankDetailsClass;
-import com.fitness.app.service.UserBankDetailsServiceImpl;
+import com.fitness.app.service.UserBankDetailsDaoImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import javax.validation.constraints.Email;
 @RequestMapping("/api/v1/bank")
 public class UserBankDetailsController {
 
-    private final UserBankDetailsServiceImpl userBankDetailsServiceImpl;
+    private final UserBankDetailsDaoImpl userBankDetailsServiceImpl;
 
     /**
      * Add bank details response entity.
@@ -31,7 +31,7 @@ public class UserBankDetailsController {
      * @return the response entity
      */
 //Add or update bank details of the user.
-    @PutMapping("/private/user-bankDetails/add")
+    @PutMapping("/user/bankDetails/add")
     @ApiOperation(value = "Add Bank Details", notes = "Add bank Details of User.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Added or Successful", response = String.class),
     })
@@ -49,7 +49,7 @@ public class UserBankDetailsController {
      * @return the bank details
      */
 //get bank details of the user to make payment.
-    @GetMapping("/private/user-bankDetails/get/{email}")
+    @GetMapping("/user/bankDetails/get/{email}")
     @ApiOperation(value = "Add Bank Details", notes = "Add bank Details of User.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Added or Successful", response = String.class),
     })
@@ -65,7 +65,7 @@ public class UserBankDetailsController {
      * @return the all details
      */
 //List of user's bank.
-    @GetMapping("/private/user-bankDetails/get-all")
+    @GetMapping("/user/bankDetails/get-all")
     @ApiOperation(value = "Bank Details", notes = "Get bank Details of User.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Bank Details", response = UserBankDetailsClass.class),
     })

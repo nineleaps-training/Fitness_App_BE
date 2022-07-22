@@ -1,12 +1,12 @@
 package com.register.app.service;
 
-import com.fitness.app.dto.requestDtos.UserBankModel;
-import com.fitness.app.dto.responceDtos.ApiResponse;
+import com.fitness.app.dto.request.UserBankModel;
+import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorBankDetailsClass;
 import com.fitness.app.repository.BankDetailsRepository;
 import com.fitness.app.repository.UserRepository;
-import com.fitness.app.service.VendorBankDetailsServiceImpl;
+import com.fitness.app.service.VendorBankDetailsDaoImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +32,7 @@ class VendorBankDetailsClassServiceTest {
 
     @InjectMocks
 
-    private VendorBankDetailsServiceImpl vendorBankDetailsServiceImpl;
+    private VendorBankDetailsDaoImpl vendorBankDetailsServiceImpl;
 
     UserBankModel BANK_MODEL = new UserBankModel(
             "rahul01@gmail.com",

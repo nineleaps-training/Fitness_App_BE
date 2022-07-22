@@ -1,9 +1,9 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.dto.requestDtos.DetailsModel;
-import com.fitness.app.dto.responceDtos.ApiResponse;
+import com.fitness.app.dto.request.DetailsModel;
+import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.entity.UserDetailsClass;
-import com.fitness.app.service.DetailsServiceImpl;
+import com.fitness.app.service.DetailsDaoImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import javax.validation.constraints.Email;
 public class UserDetailsController {
 
 
-    private final DetailsServiceImpl userDetailsServiceImpl;
+    private final DetailsDaoImpl userDetailsServiceImpl;
 
     /**
      * Add user details api response.
@@ -32,7 +32,7 @@ public class UserDetailsController {
      * @return the api response
      */
 //Adding User Details
-    @PutMapping("/private/add-user-details")
+    @PutMapping("/add/user/details")
     @ApiOperation(value = "Add/ update user Details", notes = "User can add new details or update the older one.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Successful", response = String.class),
             @io.swagger.annotations.ApiResponse(code = 401, message = "No user found or Bad request", response = String.class)
@@ -53,7 +53,7 @@ public class UserDetailsController {
      * @return the user details
      */
 //Fetching details of user by email
-    @GetMapping("/user-details/{email}")
+    @GetMapping("/user/details/{email}")
     @ApiOperation(value = "User Details", notes = "Get User details.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "User Details", response = UserDetailsClass.class),
             @io.swagger.annotations.ApiResponse(code = 401, message = "No user found or Bad request", response = String.class)

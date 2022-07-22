@@ -2,7 +2,7 @@ package com.fitness.app.security.service;
 
 import com.fitness.app.config.JwtUtils;
 import com.fitness.app.dto.auth.Authenticate;
-import com.fitness.app.dto.responceDtos.ApiResponse;
+import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.exceptions.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
 @Slf4j
 @Service
@@ -24,7 +25,7 @@ public class UserDetailsSecServiceImpl implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 		Optional<UserClass> data=userRepo.findById(email);
-		UserClass user=null;
+		UserClass user;
 		if(data.isPresent())
 		{
 			user=data.get();
@@ -32,7 +33,7 @@ public class UserDetailsSecServiceImpl implements UserDetailsService {
 		else {
 			throw new UsernameNotFoundException("User not found at that location: ");
 		}
-	     if (user == null){
+	     if (Objects.isNull(user)){
                 log.info("User Not Found.");
 	            throw new UsernameNotFoundException("Invalid Credentials : "+email);
 	        }

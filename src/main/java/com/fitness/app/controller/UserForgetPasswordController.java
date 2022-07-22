@@ -1,9 +1,9 @@
 package com.fitness.app.controller;
 
 import com.fitness.app.dto.auth.Authenticate;
-import com.fitness.app.dto.responceDtos.ApiResponse;
-import com.fitness.app.dto.responceDtos.UserForgot;
-import com.fitness.app.service.ForgetPassServiceImpl;
+import com.fitness.app.dto.response.ApiResponse;
+import com.fitness.app.dto.response.UserForgot;
+import com.fitness.app.service.ForgetPassDaoImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import javax.validation.constraints.Email;
 public class UserForgetPasswordController {
 
 
-    private final ForgetPassServiceImpl forgetPassServiceImpl;
+    private final ForgetPassDaoImpl forgetPassServiceImpl;
 
 
     /**
@@ -33,8 +33,8 @@ public class UserForgetPasswordController {
      * @param email the email
      * @return the user forgot
      */
-//Fetching and verifying user
-    @GetMapping("/forget-user-password/{email}")
+
+    @GetMapping("/forget/user/password/{email}")
     @ApiOperation(value = "Forget Password", notes = "User can reset password.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Otp Verification", response = UserForgot.class),
             @io.swagger.annotations.ApiResponse(code = 401, message = "No user found or Bad request", response = String.class)
@@ -50,8 +50,8 @@ public class UserForgetPasswordController {
      * @param user the user
      * @return the password
      */
-//Setting the new password for the user
-    @PutMapping("/user-set-password")
+
+    @PutMapping("/user/set/password")
     @ApiOperation(value = "Set New Password", notes = "User can reset password after verification.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "successful", response = ApiResponse.class),
             @io.swagger.annotations.ApiResponse(code = 401, message = "No user found or Bad request", response = String.class)

@@ -1,14 +1,14 @@
 package com.register.app.service;
 
 import com.fitness.app.utils.MessageComponents;
-import com.fitness.app.dto.requestDtos.UserOrderModel;
-import com.fitness.app.dto.responceDtos.ApiResponse;
+import com.fitness.app.dto.request.UserOrderModel;
+import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.entity.*;
-import com.fitness.app.dto.responceDtos.BookedGymModel;
-import com.fitness.app.dto.responceDtos.UserPerformanceModel;
+import com.fitness.app.dto.response.BookedGymModel;
+import com.fitness.app.dto.response.UserPerformanceModel;
 import com.fitness.app.repository.*;
 
-import com.fitness.app.service.UserOrderServiceImpl;
+import com.fitness.app.service.UserOrderDaoImpl;
 
 import com.razorpay.RazorpayException;
 import org.junit.jupiter.api.Assertions;
@@ -54,7 +54,7 @@ class UserOrderClassServiceImplTest {
 
     @InjectMocks
 
-    private UserOrderServiceImpl userOrderServiceImpl;
+    private UserOrderDaoImpl userOrderServiceImpl;
 
     List<String> SERVICE = new ArrayList<>(Arrays.asList("Dance", "Zumba", "Karate"));
     final String CURRENT = "Current";

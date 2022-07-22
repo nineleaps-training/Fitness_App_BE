@@ -19,13 +19,12 @@
             **/com/fitness/app/FitnessAppApplication.java,
             **/com/fitness/app/dto/*,
             **/com/fitness/app/dto/auth/*,
-            **/com/fitness/app/dto/requestDtos/*,
-            **/com/fitness/app/dto/responceDtos/*,
+            **/com/fitness/app/dto/request/*,
+            **/com/fitness/app/dto/response/*,
             **/com/fitness/app/util/*,
             **/com/fitness/app/config/*,
             **/com/fitness/app/controller/*,
             **/com/fitness/app/entity/*,
-            **/com/fitness/app/helper/*,
             **/com/fitness/app/utils/*,
             **/com/fitness/app/exceptions/*,
             **/com/fitness/app/repository/*,
@@ -164,8 +163,11 @@
             <artifactId>hibernate-validator</artifactId>
             <version>8.0.0.CR1</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>7.1.1</version>
+        </dependency>
     </dependencies>
 
     <build>

@@ -1,11 +1,11 @@
 package com.fitness.app.controller;
 
 
-import com.fitness.app.dto.requestDtos.GymClassModel;
-import com.fitness.app.dto.responceDtos.ApiResponse;
+import com.fitness.app.dto.request.GymClassModel;
+import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymClass;
-import com.fitness.app.service.GymServiceImpl;
+import com.fitness.app.service.GymDaoImpl;
 import com.fitness.app.utils.InputStringValidate;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
@@ -16,8 +16,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -29,7 +27,7 @@ import java.util.List;
 public class GymController {
 
 
-    final private GymServiceImpl gymServiceImpl;
+    final private GymDaoImpl gymServiceImpl;
 
 
     /**
@@ -39,7 +37,7 @@ public class GymController {
      * @return the api response
      */
 // Adding new fitness center
-    @PutMapping("/private/add-or-update-gym")
+    @PutMapping("/add/update/gym")
     @Validated
     @ApiOperation(value = "Vendor can add or update fitness center", notes = "vendor  can update fitness center or add new fitness center")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Successful", response = ApiResponse.class),
@@ -54,7 +52,7 @@ public class GymController {
      * @return the all gym
      */
 // getting list of all registered fitness center.
-    @GetMapping("/private/gym-all")
+    @GetMapping("/gym/all")
     public ApiResponse getAllGym() {
         return new ApiResponse(HttpStatus.OK, gymServiceImpl.getAllGym());
     }
@@ -70,7 +68,7 @@ public class GymController {
     @ApiOperation(value = "fitness centers of Vendor", notes = "Get all Fitness Center of vendor")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "list of all fitness center in a page", response = ApiResponse.class),
     })
-    @GetMapping("/private/gym-by-username/{email}")
+    @GetMapping("/private/gym/by/username/{email}")
     public ApiResponse getAllOfVendor(@PathVariable @Valid String email, int offSet, int pageSize) {
         return new ApiResponse(HttpStatus.OK, gymServiceImpl.getGymByVendorEmail(email,offSet, pageSize));
     }
@@ -83,7 +81,7 @@ public class GymController {
      * @return the address
      */
 //get address of fitness center by its unique id.
-    @GetMapping("/private/address-by-id/{id}")
+    @GetMapping("/address/by/id/{id}")
     @Validated
     @ApiOperation(value = "Get Complete address of fitness Center", notes = "Complete address of a fitness center")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Address of Fitness center", response = GymAddressClass.class),
@@ -99,7 +97,7 @@ public class GymController {
      * @return the gym by id
      */
 // Search Fitness center by fitness id.
-    @GetMapping("/private/by-id/{id}")
+    @GetMapping("/by/id/{id}")
     @Validated
     @ApiOperation(value = "Find fitness center", notes = "Vendor can get a fitness center by Center Id.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Successful", response = ApiResponse.class),
@@ -116,7 +114,7 @@ public class GymController {
      * @return the gym by gym name
      */
 // Search gym by gymName
-    @GetMapping("/private/by-gymName/{gymName}")
+    @GetMapping("/by/gymName/{gymName}")
     @ApiOperation(value = "Find fitness center", notes = "Vendor can get a fitness center by Center Name.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Fitness Center", response =GymClass.class),
     })
@@ -132,7 +130,7 @@ public class GymController {
      * @param city the city
      * @return the g ym by city
      */
-    @GetMapping("/public/by-city/{city}")
+    @GetMapping("/public/by/city/{city}")
     @Validated
     @ApiOperation(value = "Find fitness center", notes = "Vendor can get a fitness center by Center Name.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Fitness Center", response =GymClass.class),

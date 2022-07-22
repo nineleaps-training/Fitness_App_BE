@@ -1,10 +1,10 @@
 package com.fitness.app.controller;
 
 
-import com.fitness.app.dto.requestDtos.RatingModel;
-import com.fitness.app.dto.responceDtos.ApiResponse;
+import com.fitness.app.dto.request.RatingModel;
+import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.exceptions.DataNotFoundException;
-import com.fitness.app.service.RatingServiceImpl;
+import com.fitness.app.service.RatingDaoImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
-import java.util.List;
 
 /**
  * The type User rating controller.
@@ -26,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/rating")
 public class UserRatingController {
-    private final RatingServiceImpl ratingServiceImpl;
+    private final RatingDaoImpl ratingServiceImpl;
 
     /**
      * Rate vendor response entity.
@@ -35,7 +34,7 @@ public class UserRatingController {
      * @return the response entity
      */
 //Rating Controller for vendor, user and gym
-    @PostMapping("/rate-something")
+    @PostMapping("/rate/something")
     @ApiOperation(value = "Rate Someone ", notes = "Rate user of Fitness center.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Successful", response =String.class),
     })
@@ -52,7 +51,7 @@ public class UserRatingController {
      * @throws DataNotFoundException the data not found exception
      */
 //Fetching the rating of the gym by gymId
-    @GetMapping("/get-rating-of-fitness/{gymId}")
+    @GetMapping("/get/rating/of/fitness/center/{gymId}")
     @ApiOperation(value = "Get Rating ", notes = "Get rating of a fitness center.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Rating value", response =ApiResponse.class),
             @io.swagger.annotations.ApiResponse(code = 401, message = "Not found or bad request ", response =DataNotFoundException.class)
@@ -74,7 +73,7 @@ public class UserRatingController {
      * @return the rating of person
      */
 //Fetching the rating of the user by email id
-    @GetMapping("/get-rating-person/{email}")
+    @GetMapping("/get/rating/person/{email}")
     @ApiOperation(value = "Get Rating ", notes = "Get rating of a person.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Rating Value", response =ApiResponse.class),
             @io.swagger.annotations.ApiResponse(code = 401, message = "Not found or bad request ", response =DataNotFoundException.class)

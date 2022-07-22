@@ -1,12 +1,12 @@
 package com.register.app.service;
 
-import com.fitness.app.dto.requestDtos.DetailsModel;
-import com.fitness.app.dto.responceDtos.ApiResponse;
+import com.fitness.app.dto.request.DetailsModel;
+import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorDetailsClass;
 import com.fitness.app.repository.UserRepository;
 import com.fitness.app.repository.VendorDetailsRepository;
-import com.fitness.app.service.VendorDetailsServiceImpl;
+import com.fitness.app.service.VendorDetailsDaoImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +27,7 @@ class VendorDetailsClassServiceTest {
 
     @InjectMocks
 
-    private VendorDetailsServiceImpl vendorDetailsServiceImpl;
+    private VendorDetailsDaoImpl vendorDetailsServiceImpl;
 
 
     UserClass USER1 = new UserClass("rahul01@gmail.com", "Rahul Kumar",

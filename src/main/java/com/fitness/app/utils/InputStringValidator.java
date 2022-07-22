@@ -13,6 +13,6 @@ public class InputStringValidator implements ConstraintValidator<InputStringVali
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return value!=null && value.matches("[a-z]+") && value.matches("[A-Z]+") ;
+        return value!=null &&( value.matches("[a-z]+") || value.matches("[A-Z]+") );
     }
 }

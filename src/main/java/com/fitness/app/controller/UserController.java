@@ -1,9 +1,9 @@
 package com.fitness.app.controller;
 
 import com.fitness.app.dto.auth.Authenticate;
-import com.fitness.app.dto.requestDtos.UserModel;
-import com.fitness.app.dto.responceDtos.ApiResponse;
-import com.fitness.app.service.UserServiceImpl;
+import com.fitness.app.dto.request.UserModel;
+import com.fitness.app.dto.response.ApiResponse;
+import com.fitness.app.service.UserDaoImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 
-/**
- * The type User controller.
- */
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -24,7 +22,7 @@ import javax.validation.constraints.Email;
 public class UserController {
 
 
-    private final UserServiceImpl userServiceImpl;
+    private final UserDaoImpl userServiceImpl;
 
     /**
      * Register user api response.
@@ -32,8 +30,8 @@ public class UserController {
      * @param user the user
      * @return the api response
      */
-//Register a new user by custom option.
-    @PostMapping("/public/register-user")
+
+    @PostMapping("/public/register/user")
     @ApiOperation(value = "Add new user", notes = "User can onboard in application.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Added or Successful", response = String.class),
     })
@@ -51,7 +49,7 @@ public class UserController {
      * @throws Exception the exception
      */
 //Verify User
-    @PutMapping("/public/verify-user")
+    @PutMapping("/public/verify/user")
     @ApiOperation(value = "Verify new added user", notes = "User Should verify via otp sent on mail.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Added or Successful", response = String.class),
     })
@@ -70,7 +68,7 @@ public class UserController {
      * @throws Exception the exception
      */
 //Log in user
-    @PostMapping("/public/login-user")
+    @PostMapping("/public/login/user")
     @ApiOperation(value = "Sign in User", notes = "User Login or Sign up method.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Token for accessing application", response = String.class),
             @io.swagger.annotations.ApiResponse(code = 203, message = "Invalid credentials", response = String.class)
@@ -88,7 +86,7 @@ public class UserController {
      * @return the api response
      * @throws Exception the exception
      */
-    @PutMapping("/public/google-sign-in/user")
+    @PutMapping("/public/google/sign/in/user")
     @ApiOperation(value = "Sign in User via 3rd party", notes = "User Login or Sign up method for google account.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Token for accessing application", response = String.class),
             @io.swagger.annotations.ApiResponse(code = 500, message = "Something went Wrong", response = String.class)

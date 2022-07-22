@@ -1,11 +1,11 @@
 package com.register.app.service;
 
-import com.fitness.app.dto.requestDtos.RatingModel;
+import com.fitness.app.dto.request.RatingModel;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.RatingClass;
 import com.fitness.app.repository.AddGymRepository;
 import com.fitness.app.repository.RatingRepository;
-import com.fitness.app.service.RatingServiceImpl;
+import com.fitness.app.service.RatingDaoImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +35,7 @@ class RatingClassServiceImplTest {
 
     @InjectMocks
 
-    private RatingServiceImpl ratingServiceImpl;
+    private RatingDaoImpl ratingServiceImpl;
 
 
     List<String> workout = new ArrayList<>(Arrays.asList("Zumba", "Dance", "Running"));

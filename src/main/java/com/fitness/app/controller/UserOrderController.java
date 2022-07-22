@@ -1,9 +1,9 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.dto.requestDtos.UserOrderModel;
-import com.fitness.app.dto.responceDtos.ApiResponse;
+import com.fitness.app.dto.request.UserOrderModel;
+import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.entity.UserOrderClass;
-import com.fitness.app.service.UserOrderServiceImpl;
+import com.fitness.app.service.UserOrderDaoImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class UserOrderController {
 
 
-    private final UserOrderServiceImpl userOrderServiceImpl;
+    private final UserOrderDaoImpl userOrderServiceImpl;
 
     /**
      * Check user can order api response.
@@ -34,7 +34,7 @@ public class UserOrderController {
      * @param email the email
      * @return the api response
      */
-    @GetMapping("/check-user-order/{email}")
+    @GetMapping("/check/user/order/{email}")
     @ApiOperation(value = "User can order or not", notes = "Check if user can make order or not.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "True or false", response = ApiResponse.class),
     })
@@ -51,7 +51,7 @@ public class UserOrderController {
      * @throws Exception the exception
      */
 //order now
-    @PostMapping("/order-now")
+    @PostMapping("/order/now")
     @ResponseBody
     @ApiOperation(value = "Make payment", notes = "initiate payment and get order id")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "order id and payment details", response = ApiResponse.class),
@@ -69,7 +69,7 @@ public class UserOrderController {
      * @return the api response
      */
 //update_order after payment.
-    @PutMapping("update-order")
+    @PutMapping("/update/order")
     @ApiOperation(value = "Update payment", notes = "update the status of payment")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Successful or Failed", response = ApiResponse.class),
     })
@@ -85,7 +85,7 @@ public class UserOrderController {
      * @return the response entity
      */
 //Check the pending orders by email id of the user
-    @GetMapping("/pending-order/{email}")
+    @GetMapping("/pending/order/{email}")
     @ApiOperation(value = "Pending Order ", notes = "List of pending order.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Pending Orders list", response = UserOrderClass.class),
     })
@@ -121,7 +121,7 @@ public class UserOrderController {
      * @return the api response
      */
 //Fetching the user of the particular Gym by gymId
-    @GetMapping("/my-users/{gymId}")
+    @GetMapping("/my/users/{gymId}")
     @ApiOperation(value = "All users of a fitness center ", notes = "List of Users.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "User list", response = List.class),
     })

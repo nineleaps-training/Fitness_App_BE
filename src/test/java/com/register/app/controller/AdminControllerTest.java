@@ -11,19 +11,17 @@ import java.time.LocalTime;
 import java.util.*;
 
 import com.fitness.app.entity.AdminPayClass;
-import com.fitness.app.dto.requestDtos.AdminPayModel;
+import com.fitness.app.dto.request.AdminPayModel;
 
 import com.fitness.app.repository.AdminPayRepository;
-import com.fitness.app.service.AdminServiceImpl;
+import com.fitness.app.service.AdminDaoImpl;
 
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -157,7 +155,7 @@ class AdminControllerTest {
 
 	@Mock
 
-	private AdminServiceImpl adminServiceImpl;
+	private AdminDaoImpl adminServiceImpl;
 
 
 	@Test

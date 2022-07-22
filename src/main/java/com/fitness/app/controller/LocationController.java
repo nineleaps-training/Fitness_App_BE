@@ -1,6 +1,6 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.service.LocationServiceImpl;
+import com.fitness.app.service.LocationDaoImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LocationController {
 
 
-    private final LocationServiceImpl locationServiceImpl;
+    private final LocationDaoImpl locationServiceImpl;
 
 
     /**
@@ -41,7 +41,7 @@ public class LocationController {
      * @param latlng the latlng
      * @return the address
      */
-    @GetMapping("/public/get-fitness-center-by-location")
+    @GetMapping("/public/get/fitness/center/by/location")
     public ResponseEntity<?> getAddress(@RequestParam String latlng) {
         return new ResponseEntity<>(locationServiceImpl.getAddress(latlng), HttpStatus.OK);
     }

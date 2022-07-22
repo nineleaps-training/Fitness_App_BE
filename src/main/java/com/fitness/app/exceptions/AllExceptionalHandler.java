@@ -1,6 +1,6 @@
 package com.fitness.app.exceptions;
 
-import com.fitness.app.dto.responceDtos.ApiResponse;
+import com.fitness.app.dto.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

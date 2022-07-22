@@ -1,10 +1,10 @@
 package com.fitness.app.controller;
 
 
-import com.fitness.app.dto.responceDtos.ApiResponse;
+import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.entity.ImageOperationDoc;
 import com.fitness.app.exceptions.FileNotFoundException;
-import com.fitness.app.service.ImageOperationServiceImpl;
+import com.fitness.app.service.ImageOperationDaoImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -24,7 +24,7 @@ public class ImageOperationController {
 
 
     @Autowired
-    private ImageOperationServiceImpl imageOperationServiceImpl;
+    private ImageOperationDaoImpl imageOperationServiceImpl;
 
     /**
      * Save file api response.

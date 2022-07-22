@@ -1,10 +1,10 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.dto.requestDtos.UserBankModel;
-import com.fitness.app.dto.responceDtos.ApiResponse;
+import com.fitness.app.dto.request.UserBankModel;
+import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.entity.VendorBankDetailsClass;
 import com.fitness.app.exceptions.DataNotFoundException;
-import com.fitness.app.service.VendorBankDetailsServiceImpl;
+import com.fitness.app.service.VendorBankDetailsDaoImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import javax.validation.constraints.Email;
 @RequiredArgsConstructor
 public class VendorBankDetailsController {
 
-    private final VendorBankDetailsServiceImpl vendorBankDetailsServiceImpl;
+    private final VendorBankDetailsDaoImpl vendorBankDetailsServiceImpl;
 
     /**
      * Add details api response.
@@ -33,7 +33,7 @@ public class VendorBankDetailsController {
      * @return the api response
      */
 //Adding bank details of the vendor
-    @PutMapping("/vendor-bank-details/add")
+    @PutMapping("/vendor/bank/details/add")
     @ApiOperation(value = "Add Bank Details ", notes = "Add vendor details: .")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Successful", response = String.class),
             @io.swagger.annotations.ApiResponse(code = 401, message = "Not found or bad request ", response = DataNotFoundException.class)
@@ -51,7 +51,7 @@ public class VendorBankDetailsController {
      * @return the bank details
      */
 //Fetching bank details of the vendor by email id
-    @GetMapping("/vendor-bank-details-get/{email}")
+    @GetMapping("/vendor/bank/details/get/{email}")
     @ApiOperation(value = "Get bank Details ", notes = "Get bank details of vendor.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Bank Details", response = VendorBankDetailsClass.class),
             @io.swagger.annotations.ApiResponse(code = 401, message = "Not found or bad request ", response = DataNotFoundException.class)
