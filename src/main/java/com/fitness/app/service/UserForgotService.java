@@ -1,6 +1,7 @@
 package com.fitness.app.service;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.fitness.app.auth.Authenticate;
 import com.fitness.app.components.Components;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 
 @Slf4j
+@Service
 public class UserForgotService implements UserForgotDAO {
    
 	private UserRepo userRepo;

@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import com.fitness.app.dao.AttendanceServiceDAO;
+import org.springframework.stereotype.Service;
+
+import com.fitness.app.dao.AttendanceDAO;
 import com.fitness.app.entity.Rating;
 import com.fitness.app.entity.UserAttendance;
 import com.fitness.app.exception.DataNotFoundException;
@@ -17,7 +19,8 @@ import com.fitness.app.repository.RatingRepo;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class AttendanceService implements AttendanceServiceDAO {
+@Service
+public class AttendanceService implements AttendanceDAO {
 
 	private AttendanceRepo attendanceRepo;
 	

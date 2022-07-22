@@ -19,19 +19,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fitness.app.dao.AttendanceDAO;
 import com.fitness.app.exception.DataNotFoundException;
 import com.fitness.app.model.MarkUserAttModel;
-import com.fitness.app.service.AttendanceService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@Validated
 public class AttendanceController {
 
 	@Autowired
-	private AttendanceService attendanceService;
+	private AttendanceDAO attendanceService;
 
 	/**
 	 * This controller is used to mark the attendance of the user by the vendor
@@ -39,14 +41,14 @@ public class AttendanceController {
 	 * @param userAttendance - Attendance of the user
 	 * @return - Marked attendance
 	 */
-	@PutMapping(value = "/v1/mark/users/attendance", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+	@PutMapping(value = "/v1/attendance/mark/users/attendance", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseStatus(HttpStatus.OK)
+	@Validated
 	@ApiOperation(value = "Mark User's Attendance", notes = "Vendor can mark his user's attendance")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "User Marked", response = String.class),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
-			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@Validated
+			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class)})
 	public String markUserAttendance(@Valid @RequestBody MarkUserAttModel userAttendance) {
 		return attendanceService.markUsersAttendance(userAttendance); // Mark attendance of the user for a specific fitness center by the vendor.
 	}
@@ -65,8 +67,9 @@ public class AttendanceController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@GetMapping(value = "/v1/user-performance", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/v1/attendance/userPerformance", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
+	@Validated
 	public ResponseEntity<Object> userPerformance(@Email @RequestParam String email,
 			@NotNull @NotBlank @RequestParam String gym) throws DataNotFoundException {
 		return new ResponseEntity<>(attendanceService.userPerfomance(email, gym), HttpStatus.OK); // Finding the total attendance of the user.

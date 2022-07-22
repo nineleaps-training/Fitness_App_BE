@@ -61,7 +61,7 @@ class UserForgetPasswordControllerTest {
         Authenticate authenticate = new Authenticate("pankaj.jain@nineleaps.com", "Pankaj@123");
         String content = objectMapper.writeValueAsString(authenticate);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/user/set-password").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/userForgotPassword/setPassword").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }
@@ -73,7 +73,7 @@ class UserForgetPasswordControllerTest {
         UserForgotModel userForgot = new UserForgotModel();
         String content = objectMapper.writeValueAsString(userForgot);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/forget/user/pankaj.jain@nineleaps.com").contentType(MediaType.APPLICATION_JSON)
+                .get("/v1/userForgotPassword/user/pankaj.jain@nineleaps.com").contentType(MediaType.APPLICATION_JSON)
                 .content(content)).andExpect(status().isOk());
     }
 }

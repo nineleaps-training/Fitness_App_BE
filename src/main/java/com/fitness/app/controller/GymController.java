@@ -4,7 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
@@ -21,22 +24,24 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+
+import com.fitness.app.dao.GymDAO;
 import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.model.GymClassModel;
 import com.fitness.app.model.GymRepresentModel;
 import com.fitness.app.service.FilterBySubscriptionService;
-import com.fitness.app.service.GymService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@Validated
 public class GymController {
 
 	@Autowired
-	private GymService gymService;
+	private GymDAO gymService;
 
 	@Autowired
 	private FilterBySubscriptionService filterSubscriptionService;
@@ -52,7 +57,7 @@ public class GymController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@PutMapping(value = "/v1/add/gym", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/v1/gym/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Validated
 	@ResponseStatus(HttpStatus.OK)
 	public GymClass addNewGym(@Valid @RequestBody GymClassModel gymClassModel) {
@@ -90,7 +95,7 @@ public class GymController {
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	@GetMapping(value = "/v1/gym/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<GymRepresentModel> getAllOfVendor(@PathVariable String email) {
+	public List<GymRepresentModel> getAllOfVendor(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
 		return gymService.getGymByVendorEmail(email); // Search Fitness centers by vendor email.
 	}
 
@@ -109,7 +114,7 @@ public class GymController {
 	@PutMapping(value = "/v1/gym/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@Validated
-	public GymClass editGym(@Valid @RequestBody GymClassModel newGym, @NotNull @NotBlank @PathVariable String id) {
+	public GymClass editGym(@Valid @RequestBody GymClassModel newGym, @NotNull @NotBlank @NotEmpty @PathVariable String id) {
 		return gymService.editGym(newGym, id); // Update details and other in the fitness center.
 	}
 
@@ -126,7 +131,7 @@ public class GymController {
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	@GetMapping(value = "/v1/gym/address/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public GymAddressClass getAddress(@PathVariable String id) {
+	public GymAddressClass getAddress(@NotBlank @NotEmpty @NotNull @PathVariable String id) {
 		return gymService.findTheAddress(id); // Returning address of fitness center by its unique id.
 	}
 
@@ -143,7 +148,7 @@ public class GymController {
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	@GetMapping(value = "/v1/gym/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public GymRepresentModel getGymById(@PathVariable String id) {
+	public GymRepresentModel getGymById(@NotBlank @NotEmpty @NotNull @PathVariable String id) {
 		return gymService.getGymByGymId(id); // Search Fitness center by fitness id.
 	}
 
@@ -176,7 +181,7 @@ public class GymController {
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	@GetMapping(value = "/v1/gym/gymName/{gymName}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<GymClass> getGymByGymName(@PathVariable("gymName") String gymName) {
+	public List<GymClass> getGymByGymName(@NotBlank @NotEmpty @NotNull @PathVariable("gymName") String gymName) {
 		List<GymClass> allGym = new ArrayList<>();
 		allGym.add(gymService.getGymByGymName(gymName)); // Search gyms by gymName
 		return allGym;
@@ -195,7 +200,7 @@ public class GymController {
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	@GetMapping(value = "/v1/gym/city/{city}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<GymRepresentModel> getGYmByCity(@PathVariable String city) {
+	public List<GymRepresentModel> getGYmByCity(@NotBlank @NotEmpty @NotNull @PathVariable String city) {
 		return gymService.getGymByCity(city); // Search gym By Locality
 	}
 
@@ -211,9 +216,9 @@ public class GymController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@GetMapping(value = "/v1/filter/subscription/monthly/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/v1/gym/filter/subscription/monthly/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<GymClassModel> filterMonthly(@NotBlank @NotNull @PathVariable int price,
+	public List<GymClassModel> filterMonthly(@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
 			@RequestBody List<GymClassModel> listGym) {
 		return filterSubscriptionService.filterByMonthly(price, listGym); // Returning gyms by monthly price limit.
 	}
@@ -230,9 +235,9 @@ public class GymController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@GetMapping(value = "/v1/filter/subscription/quarterly/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/v1/gym/filter/subscription/quarterly/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<GymClassModel> filterQuarterly(@NotBlank @NotNull @PathVariable int price,
+	public List<GymClassModel> filterQuarterly(@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
 			@RequestBody List<GymClassModel> listGym) {
 
 		return filterSubscriptionService.filterByQuarterly(price, listGym); // Returning gyms by quaterly price limit.
@@ -250,9 +255,9 @@ public class GymController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@GetMapping(value = "/v1/filter/subscription/halfYearly/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/v1/gym/filter/subscription/halfYearly/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<GymClassModel> filterHalfYearly(@NotBlank @NotNull @PathVariable int price,
+	public List<GymClassModel> filterHalfYearly(@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
 			@RequestBody List<GymClassModel> listGym) {
 
 		return filterSubscriptionService.filterByHalfYearly(price, listGym); // Returning gyms by half-yearly price
@@ -271,9 +276,9 @@ public class GymController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@GetMapping(value = "/v1/filter/subscription/yearly/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/v1/gym/filter/subscription/yearly/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<GymClassModel> filterYearly(@NotBlank @NotNull @PathVariable int price,
+	public List<GymClassModel> filterYearly(@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
 			@RequestBody List<GymClassModel> listGym) {
 
 		return filterSubscriptionService.filterByYearly(price, listGym); // Returning gyms by yearly price limit.
@@ -291,9 +296,9 @@ public class GymController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@GetMapping(value = "/v1/filter/subscription/oneWorkout/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/v1/gym/filter/subscription/oneWorkout/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<GymClassModel> filterOneWorkout(@NotBlank @NotNull @PathVariable int price,
+	public List<GymClassModel> filterOneWorkout(@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
 			@RequestBody List<GymClassModel> listGym) {
 
 		return filterSubscriptionService.filterByOneWorkout(price, listGym); // Returning gyms by workout.

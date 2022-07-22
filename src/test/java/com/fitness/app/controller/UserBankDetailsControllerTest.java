@@ -60,7 +60,7 @@ class UserBankDetailsControllerTest {
         String content = objectMapper.writeValueAsString(userBankDetailsRequestModel);
         Mockito.when(userBankDetailsService.addBankDetails(userBankDetailsRequestModel)).thenReturn(userBankDetails2);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/user-bankdetails/add").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/userBankDetails/add").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isCreated());
 
     }
@@ -72,7 +72,7 @@ class UserBankDetailsControllerTest {
         String content = objectMapper.writeValueAsString(userBankDetailsRequestModel);
         Mockito.when(userBankDetailsService.addBankDetails(userBankDetailsRequestModel)).thenReturn(null);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/user-bankdetails/add").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/userBankDetails/add").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isBadRequest());
 
     }
@@ -83,7 +83,7 @@ class UserBankDetailsControllerTest {
 
         Mockito.when(userBankDetailsService.getBankDetails("pankaj.jain@nineleaps.com")).thenReturn(userBankDetails2);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/user-bankdetails/get/pankaj.jain@nineleaps.com").contentType(MediaType.APPLICATION_JSON))
+                .get("/v1/userBankDetails/get/pankaj.jain@nineleaps.com").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
 
@@ -98,6 +98,6 @@ class UserBankDetailsControllerTest {
         userBankDetails.add(uBankDetails);
         Mockito.when(pagingService.getallDetails(0, 1)).thenReturn(userBankDetails);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/user-bankdetails/getall/0/1")).andExpect(status().isOk());
+                .get("/v1/userBankDetails/getall/0/1")).andExpect(status().isOk());
     }
 }

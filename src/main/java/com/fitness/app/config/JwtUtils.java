@@ -6,6 +6,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +19,11 @@ import java.util.function.Function;
 @Slf4j
 @Component
 public class JwtUtils {
-    private String secretKEY = "fitnessapp";
+
+    @Autowired
+    Environment environment;
+    
+    private String secretKEY = environment.getProperty("secretKey");
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -32,7 +38,7 @@ public class JwtUtils {
             final Claims claims = extractAllClaims(token);
             return claimsResolver.apply(claims);
         } catch (ExpiredJwtException e) {
-            log.error("JWT Token Expired");
+            log.error("JwtUtils >> extractClaim >>JWT Token Expired");
             return null;
         }
     }

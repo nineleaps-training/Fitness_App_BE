@@ -329,7 +329,6 @@ class GlobalExceptionHandlerTest {
         HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
         HttpHeaders httpHeaders = mock(HttpHeaders.class);
         ResponseEntity<Object> responseEntity = new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-        System.out.println(ex1.getBindingResult().getAllErrors());
         ResponseEntity<Object> responseEntity2 = globalExceptionHandler.handleMethodArgumentNotValid(ex1, httpHeaders,
                 httpStatus, webRequest);
         Assertions.assertEquals(responseEntity, responseEntity2);

@@ -16,7 +16,7 @@ public interface AttendanceRepo extends MongoRepository<UserAttendance, String> 
 
 	public UserAttendance findByEmailAndVendorAndGym(String email, String vendor, String gym);
 
-	public UserAttendance findByEmailAndGym(String eamil, String gym);
+	public UserAttendance findByEmailAndGym(String email, String gym);
 
 	public List<UserAttendance> findByVendorAndGym(String vendor, String gym);
 }

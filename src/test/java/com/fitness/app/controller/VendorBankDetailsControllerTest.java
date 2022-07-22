@@ -47,7 +47,7 @@ class VendorBankDetailsControllerTest {
         String content = objectMapper.writeValueAsString(vendorBankDetailsRequestModel);
         Mockito.when(vendorBankDetailsService.addDetails(vendorBankDetailsRequestModel)).thenReturn(vendorBankDetails);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/vendor-bankdetails/add").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/vendorBankDetails/add").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isCreated());
 
     }
@@ -59,7 +59,7 @@ class VendorBankDetailsControllerTest {
         String content = objectMapper.writeValueAsString(vendorBankDetailsRequestModel);
         Mockito.when(vendorBankDetailsService.addDetails(vendorBankDetailsRequestModel)).thenReturn(null);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/vendor-bankdetails/add").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/vendorBankDetails/add").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isBadRequest());
 
     }
@@ -71,7 +71,7 @@ class VendorBankDetailsControllerTest {
         Mockito.when(vendorBankDetailsService.getBankDetails("pankaj.jain@nineleaps.com"))
                 .thenReturn(vendorBankDetails);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/vendor-bankdetails/get/pankaj.jain@nineleaps.com").contentType(MediaType.APPLICATION_JSON))
+                .get("/v1/vendorBankDetails/get/pankaj.jain@nineleaps.com").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
     }

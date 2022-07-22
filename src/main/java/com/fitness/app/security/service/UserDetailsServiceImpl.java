@@ -34,7 +34,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 		if (optional.isPresent()) {
 			user = optional.get();
 		} else {
-			log.warn("User Not Found");
+			log.warn("UserDetailsServiceImpl >> loadUserByUsername >>User Not Found");
 			throw new UsernameNotFoundException("Invalid Credentials : " + email);
 		}
 		return new User(user.getEmail(), user.getPassword(), new ArrayList<>());

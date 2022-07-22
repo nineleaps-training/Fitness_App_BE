@@ -42,9 +42,12 @@ import com.fitness.app.service.AdminService;
 import com.fitness.app.service.PagingService;
 import com.razorpay.RazorpayException;
 
+import lombok.extern.slf4j.Slf4j;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
+@Slf4j
 class AdminControllerTest {
 
     @InjectMocks
@@ -109,7 +112,7 @@ class AdminControllerTest {
         Authenticate authenticate = new Authenticate("pankaj.jain@nineleaps.com", "Pankaj@123");
         String content = objectMapper.writeValueAsString(authenticate);
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/login/admin").contentType(MediaType.APPLICATION_JSON).content(content))
+                .post("/v1/admin/login/admin").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isCreated());
     }
 
@@ -121,7 +124,7 @@ class AdminControllerTest {
         Authenticate authenticate = new Authenticate("pankaj.jain@nineleaps.com", "Pankaj@123");
         String content = objectMapper.writeValueAsString(authenticate);
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/login/admin").contentType(MediaType.APPLICATION_JSON).content(content))
+                .post("/v1/admin/login/admin").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isCreated());
     }
 
@@ -130,7 +133,7 @@ class AdminControllerTest {
     void testGetAllGyms() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/get-all-gyms/0/2").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/v1/admin/getAllGyms/0/2").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
@@ -140,9 +143,8 @@ class AdminControllerTest {
 
         List<GymClass> gymClasses = new ArrayList<>();
         gymClasses.add(gymClass);
-        Mockito.when(gymRepo.findByEmail("pankaj.jain@nineleaps.com")).thenReturn(gymClasses);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/get-all-gyms-by-email/pankaj.jain@nineleaps.com").contentType(MediaType.APPLICATION_JSON))
+                .get("/v1/admin/getAllGymsByEmail/pankaj.jain@nineleaps.com").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
     }
@@ -159,7 +161,7 @@ class AdminControllerTest {
         userClasses.add(userClass1);
         gymClasses.add(gymClass);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/all-numbers").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/v1/admin/allNumbers").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
@@ -167,7 +169,7 @@ class AdminControllerTest {
     @DisplayName("Testing to fetch all the registered users")
     void testGetAllUsers() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/get-all-users/0/2").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/v1/admin/getAllUsers/0/2").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
@@ -175,7 +177,7 @@ class AdminControllerTest {
     void testGetAllVendors() throws Exception {
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/get-all-vendors/0/2").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/v1/admin/getAllVendors/0/2").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
@@ -192,7 +194,7 @@ class AdminControllerTest {
         String content = objectMapper.writeValueAsString(adminPayRequestModel);
         Mockito.when(adminService.getDataPay(adminPayRequestModel)).thenReturn(adminPay);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/get-data-pay").contentType(MediaType.APPLICATION_JSON).content(content))
+                .get("/v1/admin/getDataPay").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
     }
 
@@ -212,7 +214,7 @@ class AdminControllerTest {
         list2.add(adminPay);
         Mockito.when(adminService.paidHistroyVendor(adminPayRequestModel.getVendor())).thenReturn(list2);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/paid-history/vendor").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/v1/admin/paidHistory/vendor").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
@@ -229,12 +231,12 @@ class AdminControllerTest {
                     "Completed", "string", "string", localDate, localTime);
             String content = objectMapper.writeValueAsString(adminPayRequestModel);
             mockMvc.perform(MockMvcRequestBuilders
-                    .put("/v1/pay-vendor-now").contentType(MediaType.APPLICATION_JSON).content(content))
+                    .put("/v1/admin/payVendorNow").contentType(MediaType.APPLICATION_JSON).content(content))
                     .andExpect(status().isOk());
         } catch (RazorpayException e) {
             Assertions.assertEquals("Cannot pay", e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("AdminControllerTest >> testPayNow >> Exception thrown");
         }
     }
 
@@ -251,12 +253,12 @@ class AdminControllerTest {
                     "Completed", "string", "string", localDate, localTime);
             String content = objectMapper.writeValueAsString(adminPayRequestModel);
             mockMvc.perform(MockMvcRequestBuilders
-                    .put("/v1/pay-vendor-now").contentType(MediaType.APPLICATION_JSON).content(content))
+                    .put("/v1/admin/payVendorNow").contentType(MediaType.APPLICATION_JSON).content(content))
                     .andExpect(status().isOk());
         } catch (RazorpayException e) {
             Assertions.assertEquals("Cannot pay", e.getMessage());
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("AdminControllerTest >> testPayNowNull >> Exception thrown");
         }
     }
 
@@ -279,7 +281,7 @@ class AdminControllerTest {
         Mockito.when(adminService.updatePayment(data)).thenReturn(adminPay);
         String content = objectMapper.writeValueAsString(data);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/update-vendor-payment").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/admin/updateVendorPayment").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }
@@ -296,7 +298,7 @@ class AdminControllerTest {
                 localTime);
         Mockito.when(adminService.vendorPayment(adminPayRequestModel.getVendor())).thenReturn(adminPay);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/vendor-payment/vendor").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+                .get("/v1/admin/vendorPayment/vendor").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 }

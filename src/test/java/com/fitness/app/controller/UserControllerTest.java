@@ -82,7 +82,7 @@ class UserControllerTest {
                 true);
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/login/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .post("/v1/user/login/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isCreated());
 
     }
@@ -95,7 +95,7 @@ class UserControllerTest {
                 true);
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/login/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .post("/v1/user/login/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isCreated());
 
     }
@@ -108,7 +108,7 @@ class UserControllerTest {
                 true);
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/google-sign-in/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/user/googleSignIn/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }
@@ -122,7 +122,7 @@ class UserControllerTest {
                 true);
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/google-sign-in/vendor").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/user/googleSignIn/vendor").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }
@@ -145,7 +145,7 @@ class UserControllerTest {
         Mockito.when(userService.randomPass()).thenReturn("Pankaj@123");
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/google-sign-in/vendor").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/user/googleSignIn/vendor").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }
@@ -168,7 +168,7 @@ class UserControllerTest {
         Mockito.when(userService.randomPass()).thenReturn("Pankaj@123");
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/google-sign-in/vendor").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/user/googleSignIn/vendor").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }
@@ -190,7 +190,7 @@ class UserControllerTest {
                 "VENDOR", true);
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/google-sign-in/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/user/googleSignIn/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
     } 
 
@@ -212,7 +212,7 @@ class UserControllerTest {
         Mockito.when(userService.randomPass()).thenReturn("Pankaj@123");
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/google-sign-in/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/user/googleSignIn/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }
@@ -235,7 +235,7 @@ class UserControllerTest {
         Mockito.when(userService.randomPass()).thenReturn("Pankaj@123");
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/google-sign-in/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/user/googleSignIn/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }
@@ -258,7 +258,7 @@ class UserControllerTest {
         Mockito.when(userService.randomPass()).thenReturn("Pankaj@123");
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/google-sign-in/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/user/googleSignIn/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }
@@ -280,7 +280,7 @@ class UserControllerTest {
                 false);
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/register/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .post("/v1/user/register/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isCreated());
 
     }
@@ -301,7 +301,7 @@ class UserControllerTest {
         UserModel userModel = new UserModel("pankaj", "Pankaj Jain", "mobile", "Pankaj@123", "USER", false);
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/register/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .post("/v1/user/register/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isBadRequest());
 
     }
@@ -323,7 +323,7 @@ class UserControllerTest {
                 false);
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/register/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .post("/v1/user/register/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isCreated());
 
     }
@@ -337,7 +337,7 @@ class UserControllerTest {
                 true);
         String content = objectMapper.writeValueAsString(userModel);
        mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/register/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .post("/v1/user/register/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isCreated());
 
     }
@@ -351,7 +351,7 @@ class UserControllerTest {
                 "USER", true);
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/register/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .post("/v1/user/register/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isCreated());
 
     }
@@ -364,7 +364,7 @@ class UserControllerTest {
                 true);
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/register/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .post("/v1/user/register/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isCreated());
 
     }
@@ -377,7 +377,7 @@ class UserControllerTest {
                 true);
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/register/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .post("/v1/user/register/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isCreated());
 
     }
@@ -391,7 +391,7 @@ class UserControllerTest {
                 false);
         String content = objectMapper.writeValueAsString(userModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/register/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .post("/v1/user/register/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isCreated());
 
     }
@@ -406,7 +406,7 @@ class UserControllerTest {
         String content = objectMapper.writeValueAsString(authenticate);
         Mockito.when(userService.verifyUser(authenticate.getEmail())).thenReturn(userClass);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/verify/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/user/verify/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }
@@ -418,7 +418,7 @@ class UserControllerTest {
         Authenticate authenticate = new Authenticate("pankaj.jain@nineleaps.com", "Pankaj@123");
         String content = objectMapper.writeValueAsString(authenticate);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/verify/user").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/user/verify/user").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }

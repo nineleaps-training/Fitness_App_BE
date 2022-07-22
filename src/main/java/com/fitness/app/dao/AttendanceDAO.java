@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import com.fitness.app.model.MarkUserAttModel;
 
 @Component
-public interface AttendanceServiceDAO {
+public interface AttendanceDAO {
 
     public String markUsersAttendance(MarkUserAttModel userAttendance);
 

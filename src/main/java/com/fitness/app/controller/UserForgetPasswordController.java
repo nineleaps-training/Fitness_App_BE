@@ -1,8 +1,8 @@
 package com.fitness.app.controller;
 
 import com.fitness.app.auth.Authenticate;
+import com.fitness.app.dao.UserForgotDAO;
 import com.fitness.app.model.UserForgotModel;
-import com.fitness.app.service.UserForgotService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,16 +20,21 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 import org.springframework.security.core.AuthenticationException;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@Validated
 public class UserForgetPasswordController {
 
 	@Autowired
-	UserForgotService userForgotService;
+	UserForgotDAO userForgotService;
 
 	/**
 	 * This controller is used for verifying the user
@@ -42,9 +47,9 @@ public class UserForgetPasswordController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@GetMapping(value = "/v1/forget/user/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/v1/userForgotPassword/user/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public UserForgotModel userForgot(@PathVariable String email) {
+	public UserForgotModel userForgot(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
 
 		return userForgotService.userForgot(email);
 	}
@@ -61,7 +66,7 @@ public class UserForgetPasswordController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@PutMapping(value = "/v1/user/set-password", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/v1/userForgotPassword/setPassword", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@Validated
 	public boolean setPassword(@Valid @RequestBody Authenticate user) {

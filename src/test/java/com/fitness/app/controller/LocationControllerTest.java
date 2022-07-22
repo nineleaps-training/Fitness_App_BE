@@ -70,7 +70,7 @@ class LocationControllerTest {
         address.put("data",list);
         Mockito.when(locationService.getAddress("27.345436,74.253456")).thenReturn(address);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/get-fitness-center-by-location?latlng=27.345436,74.253456")).andExpect(status().isOk());
+                .get("/v1/location/getFitnessCenterByLocation?latlng=27.345436,74.253456")).andExpect(status().isOk());
 
     }
 
@@ -81,6 +81,6 @@ class LocationControllerTest {
         String address="Nineleaps Pasta Street";
         Mockito.when(locationService.getDetails(address)).thenReturn("12.930779,77.633151");
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/getLocation?address=Nineleaps Pasta Street")).andExpect(status().isOk());
+                .get("/v1/location/getLocation?address=Nineleaps Pasta Street")).andExpect(status().isOk());
     }
 }

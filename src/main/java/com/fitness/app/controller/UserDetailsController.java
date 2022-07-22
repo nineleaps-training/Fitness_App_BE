@@ -1,8 +1,8 @@
 package com.fitness.app.controller;
 
+import com.fitness.app.dao.UserDetailsDAO;
 import com.fitness.app.entity.UserDetails;
 import com.fitness.app.model.UserDetailsRequestModel;
-import com.fitness.app.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +13,10 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 import org.springframework.security.core.AuthenticationException;
@@ -22,10 +26,11 @@ import java.util.ArrayList;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@Validated
 public class UserDetailsController {
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsDAO userDetailsService;
 
     /**
      * This controller is used for adding the user details
@@ -38,7 +43,7 @@ public class UserDetailsController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @PutMapping(value = "/v1/add/user-details", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/v1/userDetails/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @Validated
     public ResponseEntity<Object> addUserDetails(@Valid @RequestBody UserDetailsRequestModel userDetails) {
@@ -65,9 +70,9 @@ public class UserDetailsController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @GetMapping(value = "/v1/user-details/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v1/userDetails/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public UserDetails getUserDetails(@PathVariable String email) {
+    public UserDetails getUserDetails(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
         return userDetailsService.getUserDetails(email); // Fetching details of user by email
     }
 

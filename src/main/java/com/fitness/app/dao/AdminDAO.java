@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.fitness.app.auth.Authenticate;
 import com.fitness.app.entity.AdminPay;
+import com.fitness.app.entity.GymClass;
 import com.fitness.app.model.AdminPayRequestModel;
 import com.fitness.app.model.SignUpResponceModel;
 import com.razorpay.Order;
@@ -31,4 +32,6 @@ public interface AdminDAO{
     public ResponseEntity<SignUpResponceModel> loginAdmin(@Valid @RequestBody Authenticate authCredential);
 
     public ResponseEntity<Object> getAllNumber();
+
+    public List<GymClass> getAllGymsByEmail(String email);
 }

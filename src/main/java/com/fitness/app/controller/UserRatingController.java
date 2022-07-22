@@ -1,8 +1,8 @@
 package com.fitness.app.controller;
 
+import com.fitness.app.dao.RatingDAO;
 import com.fitness.app.entity.Rating;
 import com.fitness.app.model.RatingRequestModel;
-import com.fitness.app.service.RatingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +18,10 @@ import io.swagger.annotations.ApiResponses;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 import org.springframework.security.core.AuthenticationException;
@@ -25,10 +29,11 @@ import org.springframework.validation.annotation.Validated;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@Validated
 public class UserRatingController {
 
     @Autowired
-    private RatingService ratingService;
+    private RatingDAO ratingService;
 
     /**
      * This controller is used for rating vendor, user and gym registered in the
@@ -43,7 +48,7 @@ public class UserRatingController {
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(value = "/v1/rating", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/v1/userRating/rating", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Validated
     public Rating rateVendor(@Valid @RequestBody RatingRequestModel rating) {
         return ratingService.ratingService(rating); // Rating vendor, user or gym
@@ -60,9 +65,9 @@ public class UserRatingController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @GetMapping(value = "/v1/get-rating/{gymId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v1/userRating/getRating/{gymId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Double getRating(@PathVariable String gymId) {
+    public Double getRating(@NotBlank @NotEmpty @NotNull @PathVariable String gymId) {
         return ratingService.getRating(gymId); // Fetching the rating of the gym by gymId
     }
 
@@ -77,9 +82,9 @@ public class UserRatingController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @GetMapping(value = "/v1/get-rating-person/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v1/userRating/getRatingPerson/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Double getRatingOfPerson(@PathVariable String email) {
+    public Double getRatingOfPerson(@NotBlank @NotEmpty @NotNull @Email@PathVariable String email) {
         return ratingService.getRatingOfPerson(email); // Fetching the rating of the user by email id
     }
 

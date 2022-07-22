@@ -1,8 +1,8 @@
 package com.fitness.app.controller;
 
+import com.fitness.app.dao.VendorBankDetailsDAO;
 import com.fitness.app.entity.VendorBankDetails;
 import com.fitness.app.model.UserBankDetailsRequestModel;
-import com.fitness.app.service.VendorBankDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +13,10 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 import org.springframework.security.core.AuthenticationException;
@@ -20,9 +24,11 @@ import org.springframework.validation.annotation.Validated;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@Validated
 public class VendorBankDetailsController {
+
     @Autowired
-    private VendorBankDetailsService vendorBankDetailsService;
+    private VendorBankDetailsDAO vendorBankDetailsService;
 
     /**
      * This controller is used to add the bank details of the vendor
@@ -35,7 +41,7 @@ public class VendorBankDetailsController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @PutMapping(value = "/v1/vendor-bankdetails/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/v1/vendorBankDetails/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @Validated
     public ResponseEntity<Object> addDetails(@Valid @RequestBody UserBankDetailsRequestModel details) {
@@ -60,9 +66,9 @@ public class VendorBankDetailsController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @GetMapping(value = "/v1/vendor-bankdetails/get/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v1/vendorBankDetails/get/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public VendorBankDetails getBankDetails(@PathVariable String email) {
+    public VendorBankDetails getBankDetails(@NotBlank @NotEmpty @NotNull @Email@PathVariable String email) {
         return vendorBankDetailsService.getBankDetails(email); // Fetching bank details of the vendor by email id
     }
 }

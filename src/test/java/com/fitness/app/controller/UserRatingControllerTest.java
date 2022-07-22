@@ -61,7 +61,7 @@ class UserRatingControllerTest {
         ratingRequestModels.add(ratingRequestModel);
         Mockito.when(ratingService.getRating(ratingRequestModel.getTarget())).thenReturn(any());
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/get-rating/GM1")).andExpect(status().isOk());
+                .get("/v1/userRating/getRating/GM1")).andExpect(status().isOk());
 
     }
 
@@ -76,7 +76,7 @@ class UserRatingControllerTest {
         ratingRequestModels.add(ratingRequestModel);
         Mockito.when(ratingService.getRatingOfPerson(ratingRequestModel.getTarget())).thenReturn(any());
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/get-rating-person/target")).andExpect(status().isOk());
+                .get("/v1/userRating/getRatingPerson/target")).andExpect(status().isOk());
 
     }
 
@@ -93,7 +93,7 @@ class UserRatingControllerTest {
         String content = objectMapper.writeValueAsString(ratingRequestModel);
         Mockito.when(ratingService.ratingService(ratingRequestModel)).thenReturn(rating);
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/rating").contentType(MediaType.APPLICATION_JSON).content(content))
+                .post("/v1/userRating/rating").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isCreated());
 
     }

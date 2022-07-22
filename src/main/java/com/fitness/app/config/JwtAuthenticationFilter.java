@@ -28,10 +28,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private JwtUtils jwtUtil;
 
-    public JwtAuthenticationFilter(UserDetailsServiceImpl customUserDetailsService, JwtUtils jutil) {
+    public JwtAuthenticationFilter(UserDetailsServiceImpl customUserDetailsService, JwtUtils jUtil) {
 
         this.userDetailsService = customUserDetailsService;
-        this.jwtUtil = jutil;
+        this.jwtUtil = jUtil;
     }
 
     @Override
@@ -61,7 +61,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthentication);
             }
         } else {
-            log.error("Invalid Token");
+            log.error("JwtAuthenticationFilter >> doFilterInternal >>Invalid Token");
         }
 
         filterChain.doFilter(request, response);

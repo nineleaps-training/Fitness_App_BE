@@ -15,57 +15,83 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import javax.naming.AuthenticationException;
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 import com.fitness.app.auth.Authenticate;
+import com.fitness.app.dao.AdminDAO;
+import com.fitness.app.dao.PagingDAO;
 import com.fitness.app.entity.AdminPay;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.UserClass;
+import com.fitness.app.exception.ExceededNumberOfAttemptsException;
 import com.fitness.app.model.AdminPayRequestModel;
 import com.fitness.app.model.SignUpResponceModel;
-import com.fitness.app.repository.AddGymRepo;
-import com.fitness.app.service.AdminService;
-import com.fitness.app.service.PagingService;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
+
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.Bucket4j;
+import io.github.bucket4j.Refill;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @CrossOrigin(origins = "http://localhost:3000")
+@Validated
 @RestController
 public class AdminController {
 
 	@Autowired
-	private AddGymRepo gymRepo;
+	private AdminDAO adminService;
 
 	@Autowired
-	private AdminService adminService;
+	private PagingDAO pagingService;
 
-	@Autowired
-	private PagingService pagingService;
+	private final Bucket bucket;
+
+	public AdminController()
+	{
+		this.bucket=Bucket4j.builder()
+		.addLimit(Bandwidth.classic(3, Refill.intervally(3, Duration.ofHours(24))))
+		.build();
+	}
 
 	/**
 	 * This controller is used for logging in the Admin
 	 * 
 	 * @param authCredential - Email id and Password of Admin
 	 * @return - Response with Email and JWT Token
+	 * @throws ExceededNumberOfAttemptsException
 	 */
-	@PostMapping(value = "/v1/login/admin", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	
-	@ResponseStatus(HttpStatus.CREATED)
+	@PostMapping(value = "/v1/admin/login/admin", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@Validated
+	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Admin Login", notes = "Admin can login for access")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Login Sucessfull", response = SignUpResponceModel.class),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class) })
-	public ResponseEntity<SignUpResponceModel> authenticateUser(@Valid @RequestBody Authenticate authCredential) {
-
-		return adminService.loginAdmin(authCredential);
+	public ResponseEntity<SignUpResponceModel> authenticateUser(@Valid @RequestBody Authenticate authCredential) throws ExceededNumberOfAttemptsException {
+		if(bucket.tryConsume(1))
+		{
+			return adminService.loginAdmin(authCredential);
+		}
+		else
+		{
+			throw new ExceededNumberOfAttemptsException("Account Locked: Please try after 24 hours");
+		}
 
 	}
 
@@ -76,13 +102,13 @@ public class AdminController {
 	 * @param pageSize - Size of Page
 	 * @return - List of registered users
 	 */
-	@GetMapping(value = "/v1/get-all-users/{pageNo}/{pageSize}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/v1/admin/getAllUsers/{pageNo}/{pageSize}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get all Users", notes = "Admin can fetch all users")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "List of users"),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	public List<UserClass> getAllUsers(@PathVariable int pageNo, @PathVariable int pageSize) {
+	public List<UserClass> getAllUsers(@NotNull @Min(value = 1L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo, @NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 50L, message = "Page size can be maximum 49") @NotNull @PathVariable int pageSize) {
 
 		return pagingService.getallUsers(pageNo, pageSize); // Returning all users with pagenation.
 	}
@@ -95,13 +121,13 @@ public class AdminController {
 	 * @param pageSize - Size of page
 	 * @return - List of registered vendors
 	 */
-	@GetMapping(value = "/v1/get-all-vendors/{pageNo}/{pageSize}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/v1/admin/getAllVendors/{pageNo}/{pageSize}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get all Vendors", notes = "Admin can fetch all vendors")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "List of vendors"),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	public List<UserClass> getAllVendors(@PathVariable int pageNo, @PathVariable int pageSize) {
+	public List<UserClass> getAllVendors(@NotNull @Min(value = 1L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo, @NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 20L, message = "Page size can be maximum 19") @PathVariable int pageSize) {
 		return pagingService.getallVendors(pageNo, pageSize); // Returning all vendors with pagenation.
 	}
 
@@ -112,13 +138,13 @@ public class AdminController {
 	 * @param pageSize - Size of page
 	 * @return - List of registered gyms
 	 */
-	@GetMapping(value = "/v1/get-all-gyms/{pageNo}/{pageSize}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/v1/admin/getAllGyms/{pageNo}/{pageSize}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get all Gyms", notes = "Admin can fetch all gyms")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "List of gyms"),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	public List<GymClass> getAllGyms(@PathVariable int pageNo, @PathVariable int pageSize) {
+	public List<GymClass> getAllGyms(@NotNull @Min(value = 1L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo, @NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 20L, message = "Page size can be maximum 19") @PathVariable int pageSize) {
 		return pagingService.getallGyms(pageNo, pageSize); // Returning all fitness centers with pagenation
 	}
 
@@ -129,14 +155,14 @@ public class AdminController {
 	 * @param email - Email id of vendor
 	 * @return - List of all the gyms of the vendor
 	 */
-	@GetMapping(value = "/v1/get-all-gyms-by-email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/v1/admin/getAllGymsByEmail/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get Gyms By Email", notes = "Admin can fetch all gyms of a particular vendor from the his email")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "List of gyms of a particular vendor"),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	public List<GymClass> getAllGymsByEmail(@PathVariable String email) {
-		return gymRepo.findByEmail(email); // Returning list of registered fitness center by email id of vendor.
+	public List<GymClass> getAllGymsByEmail(@NotNull @NotEmpty @NotBlank @Email @PathVariable String email) {
+		return adminService.getAllGymsByEmail(email); // Returning list of registered fitness center by email id of vendor.
 	}
 
 	/**
@@ -146,7 +172,7 @@ public class AdminController {
 	 * @param vendor - Email id of Vendor
 	 * @return - Amount to be paid to the vendor with relevant details
 	 */
-	@GetMapping(value = "/v1/vendor-payment/{vendor}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/v1/admin/vendorPayment/{vendor}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get Payments By Email", notes = "Admin can fetch all the payments of a particular vendor from the his email")
 	@ApiResponses(value = {
@@ -154,7 +180,7 @@ public class AdminController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	public AdminPay vendorPayment(@PathVariable String vendor) {
+	public AdminPay vendorPayment(@NotBlank @NotNull @NotEmpty @PathVariable String vendor) {
 		return adminService.vendorPayment(vendor); // Returning the total amount be paid to the vendor.
 	}
 
@@ -164,7 +190,7 @@ public class AdminController {
 	 * @param pay - Order Details
 	 * @return - Amount with details
 	 */
-	@GetMapping(value = "/v1/get-data-pay", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/v1/admin/getDataPay", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@ApiOperation(value = "Get Data Pay", notes = "Admin can fetch all details of payment of a particular vendor from his email")
 	@ApiResponses(value = {
@@ -188,9 +214,8 @@ public class AdminController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@PutMapping(value = "/v1/pay-vendor-now", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+	@PutMapping(value = "/v1/admin/payVendorNow", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	@Validated
 	@ResponseBody
 	public AdminPay payNow(@Valid @RequestBody AdminPayRequestModel payment) throws RazorpayException {
 		RazorpayClient razorpayClient = new RazorpayClient(System.getenv("RAZORPAY_KEY"),
@@ -217,7 +242,7 @@ public class AdminController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@PutMapping(value = "/v1/update-vendor-payment", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/v1/admin/updateVendorPayment", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public AdminPay updatingOrder(@RequestBody Map<String, String> data) {
 
@@ -235,9 +260,9 @@ public class AdminController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@GetMapping(value = "/v1/paid-history/{vendor}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/v1/admin/paidHistory/{vendor}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<AdminPay> paidHistroy(@PathVariable String vendor) {
+	public List<AdminPay> paidHistroy(@NotBlank @NotEmpty @NotNull @PathVariable String vendor) {
 		return adminService.paidHistroyVendor(vendor); // Finding payment history of the vendor.
 	}
 
@@ -253,7 +278,7 @@ public class AdminController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@GetMapping(value = "/v1/all-numbers", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/v1/admin/allNumbers", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> getAllNumber() {
 

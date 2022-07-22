@@ -3,6 +3,8 @@ package com.fitness.app.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.fitness.app.dao.FilterBySubscriptionDAO;
 import com.fitness.app.entity.GymSubscriptionClass;
 import com.fitness.app.model.GymClassModel;
@@ -10,6 +12,7 @@ import com.fitness.app.model.GymClassModel;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Service
 public class FilterBySubscriptionService implements FilterBySubscriptionDAO {
 
 	/**

@@ -1,11 +1,15 @@
 package com.fitness.app.controller;
 
+import com.fitness.app.dao.VendorDetailsDAO;
 import com.fitness.app.entity.VendorDetails;
 import com.fitness.app.model.UserBankDetailsRequestModel;
 import com.fitness.app.model.UserDetailsRequestModel;
-import com.fitness.app.service.VendorDetailsService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 import org.springframework.security.core.AuthenticationException;
@@ -28,10 +32,11 @@ import java.util.ArrayList;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@Validated
 public class VendorDetailsController {
 
     @Autowired
-    private VendorDetailsService vendorDetailsService;
+    private VendorDetailsDAO vendorDetailsService;
 
     /**
      * This controller is used for adding the details of the vendor
@@ -44,7 +49,7 @@ public class VendorDetailsController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @PutMapping(value = "/v1/add/vendor-details", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/v1/vendorDetails/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @Validated
     public ResponseEntity<Object> addVendorDetails(@Valid @RequestBody UserDetailsRequestModel vendorDetails) {
@@ -72,9 +77,9 @@ public class VendorDetailsController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @GetMapping(value = "/v1/vendor-details/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v1/vendorDetails/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public VendorDetails getVendorDetails(@PathVariable String email) {
+    public VendorDetails getVendorDetails(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
         return vendorDetailsService.getVendorDetails(email); // Fetching the details of the vendor by his email id
     }
 }

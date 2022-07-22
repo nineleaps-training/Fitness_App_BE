@@ -1,5 +1,7 @@
 package com.fitness.app.controller;
 
+import java.time.Duration;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,21 +19,36 @@ import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 import org.springframework.security.core.AuthenticationException;
 import com.fitness.app.auth.Authenticate;
+import com.fitness.app.dao.UserDAO;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.exception.ExceededNumberOfAttemptsException;
 import com.fitness.app.model.SignUpResponceModel;
 import com.fitness.app.model.UserModel;
-import com.fitness.app.service.UserService;
+
+import io.github.bucket4j.Bucket;
+import io.github.bucket4j.Bucket4j;
+import io.github.bucket4j.Bandwidth;
+import io.github.bucket4j.Refill;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@Validated
 public class UserController {
 
 	@Autowired
-	private UserService userService;
+	private UserDAO userService;
+
+	private final Bucket bucket;
+
+	public UserController()
+	{
+		this.bucket=Bucket4j.builder()
+		.addLimit(Bandwidth.classic(3, Refill.intervally(3, Duration.ofHours(24))))
+		.build();
+	}
 
 	/**
 	 * This controller is used to register a new user
@@ -44,7 +61,7 @@ public class UserController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@PostMapping(value = "/v1/register/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/v1/user/register/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	@Validated
 	public SignUpResponceModel registerUser(@Valid @RequestBody UserModel user) {
@@ -64,7 +81,7 @@ public class UserController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@PutMapping(value = "/v1/verify/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/v1/user/verify/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@Validated
 	public ResponseEntity<SignUpResponceModel> verifyTheUser(@Valid @RequestBody Authenticate authCredential) {
@@ -89,12 +106,19 @@ public class UserController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "User Logged in", response = ResponseEntity.class),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@PostMapping(value = "/v1/login/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/v1/user/login/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	@Validated
-	public ResponseEntity<SignUpResponceModel> authenticateUser(@Valid @RequestBody Authenticate authCredential) {
+	public ResponseEntity<SignUpResponceModel> authenticateUser(@Valid @RequestBody Authenticate authCredential) throws ExceededNumberOfAttemptsException {
 
-		return userService.logInFunctionality(authCredential.getEmail(), authCredential.getPassword()); // Log in user
+		if(bucket.tryConsume(1))
+		{
+			return userService.logInFunctionality(authCredential.getEmail(), authCredential.getPassword()); // Log in user
+		}
+		else
+		{
+			throw new ExceededNumberOfAttemptsException("Account Locked: Please try after 24 hours");
+		}
 	}
 
 	/**
@@ -108,7 +132,7 @@ public class UserController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@PutMapping(value = "/v1/google-sign-in/vendor", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/v1/user/googleSignIn/vendor", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@Validated
 	public ResponseEntity<SignUpResponceModel> googleSignInVendor(@Valid @RequestBody UserModel user) {
@@ -135,7 +159,7 @@ public class UserController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	@PutMapping(value = "/v1/google-sign-in/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/v1/user/googleSignIn/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@Validated
 	public ResponseEntity<SignUpResponceModel> googleSignInUser(@Valid @RequestBody UserModel user) {

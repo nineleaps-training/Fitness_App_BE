@@ -223,36 +223,12 @@ class AttendanceServiceTest {
     void testUserPerfomance() {
 
         List<Integer> attendance = new ArrayList<>();
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
+        int i = 0;
+        while(i<30)
+        {
+            attendance.add(1);
+            i++;
+        }
         UserAttendance userAttendance = new UserAttendance("abc@gmail.com", "Fitness", "ABC", 2, 1, attendance, 4.2);
         List<String> userList = new ArrayList<>();
         userList.add("A");
@@ -282,66 +258,13 @@ class AttendanceServiceTest {
     void testUserPerfomance1() {
 
         List<Integer> attendance = new ArrayList<>();
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(0);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(1);
-        attendance.add(0);
-        attendance.add(1);
+        int i = 0;
+        while(i<15)
+        {
+            attendance.add(1);
+            attendance.add(0);
+            i++;
+        }
         UserAttendance userAttendance = new UserAttendance("abc@gmail.com", "Fitness", "ABC", 2, 1, attendance, 4.2);
         List<String> userList = new ArrayList<>();
         userList.add("A");
@@ -360,9 +283,8 @@ class AttendanceServiceTest {
                 .thenReturn(userAttendance);
         List<Integer> list2 = attendanceService.userPerfomance(userAttendance.getEmail(), userAttendance.getGym());
         List<Integer> list = new ArrayList<>();
-        list.add(25);
-        list.add(25);
-        list.add(8);
+        list.add(13);
+        list.add(2);
         Assertions.assertEquals(list, list2);
 
     }

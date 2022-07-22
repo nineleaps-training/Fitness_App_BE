@@ -73,7 +73,7 @@ class GymControllerTest {
                 workoutList, gymTime, gymSubscriptionClass, l, 20);
         String content = objectMapper.writeValueAsString(gymClassModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/add/gym").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/gym/add").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }
@@ -124,7 +124,7 @@ class GymControllerTest {
         Mockito.when(filterBySubscription.filterByHalfYearly(gymClassModel.getMSubscription().getHalf(), list))
                 .thenReturn(list);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/filter/subscription/halfYearly/4").contentType(MediaType.APPLICATION_JSON).content(content))
+                .get("/v1/gym/filter/subscription/halfYearly/4").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }
@@ -147,7 +147,7 @@ class GymControllerTest {
         Mockito.when(filterBySubscription.filterByMonthly(gymClassModel.getMSubscription().getMonthly(), list))
                 .thenReturn(list);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/filter/subscription/monthly/2").contentType(MediaType.APPLICATION_JSON).content(content))
+                .get("/v1/gym/filter/subscription/monthly/2").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }
@@ -170,7 +170,7 @@ class GymControllerTest {
         Mockito.when(filterBySubscription.filterByOneWorkout(gymClassModel.getMSubscription().getOneWorkout(), list))
                 .thenReturn(list);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/filter/subscription/oneWorkout/1").contentType(MediaType.APPLICATION_JSON).content(content))
+                .get("/v1/gym/filter/subscription/oneWorkout/1").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }
@@ -193,7 +193,7 @@ class GymControllerTest {
         Mockito.when(filterBySubscription.filterByQuarterly(gymClassModel.getMSubscription().getQuaterly(), list))
                 .thenReturn(list);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/filter/subscription/quarterly/3").contentType(MediaType.APPLICATION_JSON).content(content))
+                .get("/v1/gym/filter/subscription/quarterly/3").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }
@@ -216,7 +216,7 @@ class GymControllerTest {
         Mockito.when(filterBySubscription.filterByYearly(gymClassModel.getMSubscription().getYearly(), list))
                 .thenReturn(list);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/filter/subscription/yearly/5").contentType(MediaType.APPLICATION_JSON).content(content))
+                .get("/v1/gym/filter/subscription/yearly/5").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }

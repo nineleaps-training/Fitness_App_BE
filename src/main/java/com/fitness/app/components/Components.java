@@ -6,11 +6,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
-import org.springframework.retry.annotation.Backoff;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.retry.annotation.EnableRetry;
-import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
-import org.springframework.web.server.ResponseStatusException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,15 +21,17 @@ public class Components {
 
 	SecureRandom secureRandom = new SecureRandom();
 
+	@Autowired
+	Environment environment;
+
 	public String otpBuilder() {
 		return String.format("%04d", secureRandom.nextInt(10000));
 	}
 
-	@Retryable(value = ResponseStatusException.class, maxAttempts = 2, backoff = @Backoff(delay = 60000))
 	public int sendOtpMessage(String message, String otp, String mobile) {
-		log.info("Message: {} OTP: {} Mobile: {}", message, otp, mobile);
+		log.info("Components >> sendOtpMessage >> Message: {} OTP: {} Mobile: {}", message, otp, mobile);
 		try {
-			String apiKey = System.getenv("FAST2SMS_API_KEY");
+			String apiKey = environment.getProperty("fast2SmsApiKey");
 			String senderId = "&sender_id=" + "FSTSMS";
 			message = "&message=" + URLEncoder.encode(message, java.nio.charset.StandardCharsets.UTF_8.toString());
 			String variablesValues = "&variables_values=" + otp;
@@ -59,10 +61,10 @@ public class Components {
 				}
 				responce.append(line);
 			}
-			log.info("Response Code: {}", code, " Responce: {} ", responce);
+			log.info("Components >> sendOtpMessage >> Response Code: {}", code, " Responce: {} ", responce);
 			return code;
 		} catch (Exception e) {
-			log.error("Exception {}", e.getMessage());
+			log.error("Components >> sendOtpMessage >> Exception {}", e.getMessage());
 			return 0;
 		}
 	}

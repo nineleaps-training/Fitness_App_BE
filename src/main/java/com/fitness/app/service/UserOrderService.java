@@ -9,6 +9,7 @@ import javax.validation.Valid;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.fitness.app.dao.UserOrderDAO;
 import com.fitness.app.entity.GymClass;
@@ -30,6 +31,7 @@ import com.razorpay.RazorpayException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Service
 public class UserOrderService implements UserOrderDAO{
 
   

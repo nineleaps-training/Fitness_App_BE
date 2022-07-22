@@ -9,6 +9,7 @@ import com.fitness.app.repository.UserRepo;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.fitness.app.model.UserDetailsRequestModel;
 import com.fitness.app.repository.VendorDetailsRepo;
@@ -16,6 +17,7 @@ import com.fitness.app.repository.VendorDetailsRepo;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Service
 public class VendorDetailsService implements VendorDetailsDAO {
 
     private VendorDetailsRepo vendordetailsRepository;

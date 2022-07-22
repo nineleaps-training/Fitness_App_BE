@@ -61,7 +61,7 @@ class AttendanceControllerTest {
         Mockito.when(attendanceService.markUsersAttendance(markUserAttModel)).thenReturn(attendance);
         String content = objectMapper.writeValueAsString(markUserAttModel);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/mark/users/attendance").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/attendance/mark/users/attendance").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }
@@ -82,6 +82,6 @@ class AttendanceControllerTest {
         Mockito.when(attendanceService.userPerfomance(userAttendance.getEmail(), userAttendance.getGym()))
                 .thenReturn(list2);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/user-performance?email=email&gym=gym")).andExpect(status().isOk());
+                .get("/v1/attendance/userPerformance?email=email&gym=gym")).andExpect(status().isOk());
     }
 }

@@ -5,6 +5,10 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 import org.springframework.security.core.AuthenticationException;
@@ -23,11 +27,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fitness.app.dao.UserOrderDAO;
 import com.fitness.app.entity.UserOrder;
 import com.fitness.app.model.GymRepresentModel;
 import com.fitness.app.model.UserOrderModel;
 import com.fitness.app.model.UserPerfomanceModel;
-import com.fitness.app.service.UserOrderService;
 import com.razorpay.RazorpayException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -35,17 +40,18 @@ import io.swagger.annotations.ApiResponses;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@Validated
 public class UserOrderController {
 
     @Autowired
-    private UserOrderService userOrderService;
+    private UserOrderDAO userOrderService;
 
     @ApiOperation(value = "Check User Can Order", notes = "Checking if user can order or not")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "User can order", response = Boolean.class),
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @GetMapping("/v1/check-user-order/{email}")
-    public Boolean checkUserCanOrder(@PathVariable String email) {
+    @GetMapping("/v1/userOrder/checkUserOrder/{email}")
+    public Boolean checkUserCanOrder(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
         return userOrderService.canOrder(email);
     }
 
@@ -60,7 +66,7 @@ public class UserOrderController {
     @ApiResponses(value = { @ApiResponse(code = 200, message = "Payment Done", response = String.class),
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @PostMapping(value = "/v1/order/now", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
+    @PostMapping(value = "/v1/userOrder/order/now", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     @Validated
@@ -81,7 +87,7 @@ public class UserOrderController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @PutMapping(value = "/v1/update/order", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/v1/userOrder/update/order", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public UserOrder updatingOrder(@RequestBody Map<String, String> data) {
 
@@ -99,9 +105,9 @@ public class UserOrderController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @GetMapping(value = "/v1/pending/order/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v1/userOrder/pending/order/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> pedingOrerList(@PathVariable String email) {
+    public ResponseEntity<Object> pedingOrerList(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
         return new ResponseEntity<>(userOrderService.pendingListOrder(email), HttpStatus.OK); // Check the pending
                                                                                               // orders of the user
     }
@@ -118,9 +124,9 @@ public class UserOrderController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @GetMapping(value = "/order/history/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v1/userOrder/order/history/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> orderHistory(@PathVariable String email) {
+    public ResponseEntity<Object> orderHistory(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
         return new ResponseEntity<>(userOrderService.orderListOrder(email), HttpStatus.OK); // Fetching the order
                                                                                             // history by email id of
                                                                                             // the user
@@ -137,9 +143,9 @@ public class UserOrderController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @GetMapping(value = "/v1/my/users/{gymId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v1/userOrder/my/users/{gymId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Set<UserPerfomanceModel> allMyUsers(@PathVariable String gymId) {
+    public Set<UserPerfomanceModel> allMyUsers(@NotBlank @NotEmpty @NotNull @PathVariable String gymId) {
         return userOrderService.allMyUser(gymId); // Fetching the user of the particular Gym by gymId
     }
 
@@ -154,9 +160,9 @@ public class UserOrderController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @GetMapping(value = "/v1/booked/gyms/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v1/userOrder/booked/gyms/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public List<GymRepresentModel> bookedGym(@PathVariable String email) {
+    public List<GymRepresentModel> bookedGym(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
         return userOrderService.bookedGym(email); // Fetching gyms booked by a particular user by email
     }
 }

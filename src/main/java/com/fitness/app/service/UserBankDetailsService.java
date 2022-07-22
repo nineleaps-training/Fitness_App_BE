@@ -11,9 +11,12 @@ import com.fitness.app.repository.UserRepo;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.Optional;
 
 @Slf4j
+@Service
 public class UserBankDetailsService implements UserBankDetailsDAO {
 
     private UserBankDetailsRepo repository;

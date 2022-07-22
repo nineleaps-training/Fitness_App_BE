@@ -12,6 +12,7 @@ import javax.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
@@ -22,6 +23,7 @@ import com.fitness.app.model.GoogleAddressModel;
 import com.fitness.app.model.Response;
 
 @Slf4j
+@Service
 public class LocationService implements LocationDAO {
 
     private static final Object API_KEY = System.getenv("GOOGLE_API_KEY");

@@ -1,9 +1,9 @@
 package com.fitness.app.controller;
 
+import com.fitness.app.dao.PagingDAO;
+import com.fitness.app.dao.UserBankDetailsDAO;
 import com.fitness.app.entity.UserBankDetails;
 import com.fitness.app.model.UserBankDetailsRequestModel;
-import com.fitness.app.service.PagingService;
-import com.fitness.app.service.UserBankDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,6 +14,12 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotFoundException;
 import org.springframework.security.core.AuthenticationException;
@@ -23,13 +29,14 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
+@Validated
 public class UserBankDetailsController {
 
     @Autowired
-    UserBankDetailsService userBankDetailsService;
+    UserBankDetailsDAO userBankDetailsService;
 
     @Autowired
-    PagingService pagingService;
+    PagingDAO pagingService;
 
     /**
      * This controller is used to add or update the bank details of the user
@@ -42,7 +49,7 @@ public class UserBankDetailsController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @PutMapping(value = "/v1/user-bankdetails/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/v1/userBankDetails/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     @Validated
     public ResponseEntity<Object> addBankDetails(@Valid @RequestBody UserBankDetailsRequestModel details) {
@@ -68,9 +75,9 @@ public class UserBankDetailsController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @GetMapping(value = "/v1/user-bankdetails/get/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v1/userBankDetails/get/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public UserBankDetails getBankDetails(@PathVariable String email) {
+    public UserBankDetails getBankDetails(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
         return userBankDetailsService.getBankDetails(email); // Returning bank details of the user to make payment.
     }
 
@@ -86,9 +93,9 @@ public class UserBankDetailsController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @GetMapping(value = "/v1/user-bankdetails/getall/{pageNo}/{pageSize}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v1/userBankDetails/getall/{pageNo}/{pageSize}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public List<UserBankDetails> getAllDetails(@PathVariable int pageNo, @PathVariable int pageSize) {
+    public List<UserBankDetails> getAllDetails(@NotNull @Min(value = 1L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo, @NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 20L, message = "Page size can be maximum 19") @PathVariable int pageSize) {
         return pagingService.getallDetails(pageNo, pageSize); // List of user's bank.
     }
 }

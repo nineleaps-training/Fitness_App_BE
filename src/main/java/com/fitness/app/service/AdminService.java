@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.fitness.app.auth.Authenticate;
@@ -36,6 +37,7 @@ import com.razorpay.Order;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Service
 public class AdminService implements AdminDAO {
 
 	
@@ -82,6 +84,17 @@ public class AdminService implements AdminDAO {
 		log.info("AdminService >> getDataPay >> Initiated");
 
 		return adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due"); // Getting details of payment of vendor
+	}
+
+	/**
+	 * This controller is used to fetch all the registered fitness centers of a
+	 * particular vendor
+	 * 
+	 * @param email - Email id of vendor
+	 * @return - List of all the gyms of the vendor
+	 */
+	public List<GymClass> getAllGymsByEmail(String email) {
+		return gymRepo.findByEmail(email); // Returning list of registered fitness center by email id of vendor.
 	}
 
 	public ResponseEntity<SignUpResponceModel> loginAdmin(@Valid @RequestBody Authenticate authCredential)

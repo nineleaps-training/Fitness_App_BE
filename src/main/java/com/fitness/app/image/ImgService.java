@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -12,6 +13,7 @@ import com.fitness.app.exception.DataNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Service
 public class ImgService implements ImgDAO {
 
 	private ImgRepo imgRepo;

@@ -27,5 +27,7 @@ public interface GymDAO {
     public GymClass getGymByGymName(String gymName);
 
     public List<GymRepresentModel> getGymByCity(String city); 
+
+    public String wipingAll();
     
 }

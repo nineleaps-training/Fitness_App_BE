@@ -9,6 +9,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.fitness.app.components.Components;
 import com.fitness.app.config.JwtUtils;
@@ -22,6 +23,7 @@ import com.fitness.app.security.service.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Service
 public class UserService implements UserDAO {
 
 

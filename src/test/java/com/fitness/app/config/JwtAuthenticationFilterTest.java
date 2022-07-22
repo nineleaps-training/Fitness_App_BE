@@ -43,7 +43,7 @@ class JwtAuthenticationFilterTest {
     UserDetails userDetails;
 
     @Mock
-    JwtUtils jutil;
+    JwtUtils jUtil;
 
     HttpServletRequest request;
     HttpServletResponse response;
@@ -119,9 +119,9 @@ class JwtAuthenticationFilterTest {
             }
         };
 
-        Mockito.when(jutil.validateToken(Mockito.any(String.class),
+        Mockito.when(jUtil.validateToken(Mockito.any(String.class),
                 Mockito.any(org.springframework.security.core.userdetails.UserDetails.class))).thenReturn(true);
-        Mockito.when(jutil.extractUsername(Mockito.any(String.class))).thenReturn("jigmet");
+        Mockito.when(jUtil.extractUsername(Mockito.any(String.class))).thenReturn("jigmet");
         Mockito.when(customUserDetailsService.loadUserByUsername("jigmet")).thenReturn(userDetails);
 
         authenticationFilter.doFilterInternal(request, response, filterChain);
@@ -218,10 +218,10 @@ class JwtAuthenticationFilterTest {
         HttpServletResponse response = mock(HttpServletResponse.class);
         FilterChain filterChain = mock(FilterChain.class);
 
-        Mockito.when(jutil.validateToken(
+        Mockito.when(jUtil.validateToken(
                 "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYW5rYWouamFpbkBuaW5lbGVhcHMuY29tIiwiZXhwIjoxNjU3NTMxNzY4LCJpYXQiOjE2NTc1MzE3Mzh9.pj2x625PfTndZ3PISV4dIpNIBzE-jZ7rShR16i0dwYs",
                 userDetails)).thenReturn(false);
-        Mockito.when(jutil.extractUsername(Mockito.any(String.class))).thenReturn("jigmet");
+        Mockito.when(jUtil.extractUsername(Mockito.any(String.class))).thenReturn("jigmet");
 
         authenticationFilter.doFilterInternal(request, response, filterChain);
 
@@ -234,13 +234,13 @@ class JwtAuthenticationFilterTest {
     @DisplayName("Testing JWT Filter")
     void TestJwtFilter() throws ServletException, IOException {
 
-        filter = new JwtAuthenticationFilter(customUserDetailsService, jutil);
+        filter = new JwtAuthenticationFilter(customUserDetailsService, jUtil);
         FilterChain filterChain = mock(FilterChain.class);
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         Mockito.when(request.getHeader("Authorization")).thenReturn(
                 "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGl0LnJhajEwYUBnbWFpbC5jb20iLCJleHAiOjE2NTE4ODI2MjQsImlhdCI6MTY1MTUyMjYyNH0.hsMnTM5-k4JWnfMdT7i95Xc1kTHKvtClF1A0OGzigPo");
-        Mockito.when(jutil.extractUsername(
+        Mockito.when(jUtil.extractUsername(
                 "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGl0LnJhajEwYUBnbWFpbC5jb20iLCJleHAiOjE2NTE4ODI2MjQsImlhdCI6MTY1MTUyMjYyNH0.hsMnTM5-k4JWnfMdT7i95Xc1kTHKvtClF1A0OGzigPo"))
                 .thenReturn("pankaj.jain@nineleaps.com");
         filter.doFilterInternal(request, response, filterChain);
@@ -253,7 +253,7 @@ class JwtAuthenticationFilterTest {
     void TestJwtFilterauthHeaderNull() throws ServletException, IOException {
 
         FilterChain filterChain = mock(FilterChain.class);
-        filter = new JwtAuthenticationFilter(customUserDetailsService, jutil);
+        filter = new JwtAuthenticationFilter(customUserDetailsService, jUtil);
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         Mockito.when(request.getHeader("Authorization")).thenReturn(null);
@@ -267,7 +267,7 @@ class JwtAuthenticationFilterTest {
     void TestJwtFilterNonBererToken() throws ServletException, IOException {
 
         FilterChain filterChain = mock(FilterChain.class);
-        filter = new JwtAuthenticationFilter(customUserDetailsService, jutil);
+        filter = new JwtAuthenticationFilter(customUserDetailsService, jUtil);
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
         Mockito.when(request.getHeader("Authorization")).thenReturn(

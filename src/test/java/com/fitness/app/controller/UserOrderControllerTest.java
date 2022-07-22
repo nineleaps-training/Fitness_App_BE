@@ -64,7 +64,7 @@ class UserOrderControllerTest {
         set.add(userPerfomanceModel);
         Mockito.when(userOrderService.allMyUser(userPerfomanceModel.getGym())).thenReturn(set);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/my/users/GM6")).andExpect(status().isOk());
+                .get("/v1/userOrder/my/users/GM6")).andExpect(status().isOk());
 
     }
 
@@ -84,7 +84,7 @@ class UserOrderControllerTest {
 
         Mockito.when(userOrderService.bookedGym(gymRepresnt.getEmail())).thenReturn(list);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/booked/gyms/email")).andExpect(status().isOk());
+                .get("/v1/userOrder/booked/gyms/email")).andExpect(status().isOk());
 
     }
 
@@ -101,7 +101,7 @@ class UserOrderControllerTest {
 
         Mockito.when(userOrderService.canOrder(userOrder.getEmail())).thenReturn(true);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/check-user-order/email")).andExpect(status().isOk());
+                .get("/v1/userOrder/checkUserOrder/email")).andExpect(status().isOk());
 
     }
 
@@ -119,7 +119,7 @@ class UserOrderControllerTest {
         list.add(userOrder);
         Mockito.when(userOrderService.orderListOrder(userOrder.getEmail())).thenReturn(list);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/order/history/email")).andExpect(status().isOk());
+                .get("/v1/userOrder/order/history/email")).andExpect(status().isOk());
 
     }
 
@@ -137,7 +137,7 @@ class UserOrderControllerTest {
         list.add(userOrder);
         String content = objectMapper.writeValueAsString(userOrder);
         mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/order/now").contentType(MediaType.APPLICATION_JSON).content(content))
+                .post("/v1/userOrder/order/now").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isCreated());
 
     }
@@ -157,7 +157,7 @@ class UserOrderControllerTest {
         list.add(userOrder);
         Mockito.when(userOrderService.pendingListOrder(userOrder.getEmail())).thenReturn(list);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/pending/order/email")).andExpect(status().isOk());
+                .get("/v1/userOrder/pending/order/email")).andExpect(status().isOk());
     }
 
     @Test
@@ -178,7 +178,7 @@ class UserOrderControllerTest {
         data.put("status", "status");
         String content = objectMapper.writeValueAsString(data);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/update/order").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/userOrder/update/order").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isOk());
 
     }

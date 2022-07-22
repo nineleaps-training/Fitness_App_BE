@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.security.core.AuthenticationException;
-import com.fitness.app.service.LocationService;
+
+import com.fitness.app.dao.LocationDAO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ import javax.ws.rs.NotFoundException;
 public class LocationController {
 
     @Autowired
-    private LocationService locationService;
+    private LocationDAO locationService;
 
     /**
      * This controller is used to fetch the location by the provided address
@@ -43,7 +44,7 @@ public class LocationController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @GetMapping(value = "/v1/getLocation", produces = MediaType.TEXT_PLAIN_VALUE)
+    @GetMapping(value = "/v1/location/getLocation", produces = MediaType.TEXT_PLAIN_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public String getDetails(@NotBlank @NotNull @RequestParam String address) {
 
@@ -62,7 +63,7 @@ public class LocationController {
             @ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
             @ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-    @GetMapping(value = "/v1/get-fitness-center-by-location", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/v1/location/getFitnessCenterByLocation", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public Map<String, List<String>> getAddress(@NotBlank @NotNull @RequestParam String latlng) {
 

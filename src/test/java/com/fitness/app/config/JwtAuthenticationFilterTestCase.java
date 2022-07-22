@@ -37,7 +37,7 @@ class JwtAuthenticationFilterTestCase extends HttpServlet {
 	UserDetails userDetails;
 
 	@Mock
-	JwtUtils jutil;
+	JwtUtils jUtil;
 
 	HttpServletRequest request;
 	HttpServletResponse response;
@@ -48,7 +48,7 @@ class JwtAuthenticationFilterTestCase extends HttpServlet {
 
 	@BeforeEach
 	void initUseCase() {
-		filter = new JwtAuthenticationFilter(userService, jutil);
+		filter = new JwtAuthenticationFilter(userService, jUtil);
 	}
 
 	@BeforeEach
@@ -64,7 +64,7 @@ class JwtAuthenticationFilterTestCase extends HttpServlet {
 	void TestJwtFilter() throws ServletException, IOException {
 		Mockito.when(request.getHeader("Authorization")).thenReturn(
 				"Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGl0LnJhajEwYUBnbWFpbC5jb20iLCJleHAiOjE2NTE4ODI2MjQsImlhdCI6MTY1MTUyMjYyNH0.hsMnTM5-k4JWnfMdT7i95Xc1kTHKvtClF1A0OGzigPo");
-		Mockito.when(jutil.extractUsername(
+		Mockito.when(jUtil.extractUsername(
 				"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJoYXJzaGl0LnJhajEwYUBnbWFpbC5jb20iLCJleHAiOjE2NTE4ODI2MjQsImlhdCI6MTY1MTUyMjYyNH0.hsMnTM5-k4JWnfMdT7i95Xc1kTHKvtClF1A0OGzigPo"))
 				.thenReturn("pankaj.jain@nineleaps.com");
 		filter.doFilterInternal(request, response, chain);

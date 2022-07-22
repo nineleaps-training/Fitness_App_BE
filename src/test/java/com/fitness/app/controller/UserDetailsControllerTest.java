@@ -59,7 +59,7 @@ class UserDetailsControllerTest {
         String content = objectMapper.writeValueAsString(userDetailsRequestModel);
         Mockito.when(userDetailsService.addUserDetails(userDetailsRequestModel)).thenReturn(userDetails);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/add/user-details").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/userDetails/add").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isCreated());
 
     }
@@ -75,7 +75,7 @@ class UserDetailsControllerTest {
         String content = objectMapper.writeValueAsString(userDetailsRequestModel);
         Mockito.when(userDetailsService.addUserDetails(userDetailsRequestModel)).thenReturn(null);
         mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/add/user-details").contentType(MediaType.APPLICATION_JSON).content(content))
+                .put("/v1/userDetails/add").contentType(MediaType.APPLICATION_JSON).content(content))
                 .andExpect(status().isBadRequest());
 
     }
@@ -86,7 +86,7 @@ class UserDetailsControllerTest {
 
         Mockito.when(userDetailsService.getUserDetails("pankaj.jain@nineleaps.com")).thenReturn(userDetails);
         mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/user-details/pankaj.jain@nineleaps.com").contentType(MediaType.APPLICATION_JSON))
+                .get("/v1/userDetails/pankaj.jain@nineleaps.com").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
     }
