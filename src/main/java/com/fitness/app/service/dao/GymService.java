@@ -13,10 +13,10 @@ public interface GymService {
 
      ApiResponse addNewGym(GymClassModel gymClassModel);
      GymRepresent getGymByGymId(String gym_id);
-     List<GymRepresent> getGymByVendorEmail(String email);
+     List<GymRepresent> getGymByVendorEmail(String email, int offSet, int pageSize);
      GymAddressClass findTheAddress(String id);
      List<GymClass> getAllGym();
      GymClass getGymByGymName(String gymName);
-     List<GymRepresent> getGymByCity(String city) throws DataNotFoundException;
+     List<GymRepresent> getGymByCity(String city, int offSet, int pageSize) throws DataNotFoundException;
 
 }

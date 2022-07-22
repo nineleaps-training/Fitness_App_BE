@@ -101,8 +101,9 @@ public class AdminServiceImpl implements AdminService {
 
 
     @Override
-    public List<GymClass> getAllGymsByEmail(@PathVariable String email) {
-        return addGymRepository.findByEmail(email);
+    public List<GymClass> getAllGymsByEmail(@PathVariable String email, int offset, int pageSize) {
+        Pageable pageable=PageRequest.of(offset, pageSize);
+        return addGymRepository.findByEmailContaining(email,pageable );
     }
 
     @Override
@@ -201,7 +202,7 @@ public class AdminServiceImpl implements AdminService {
         List<UserClass> listOfAllUser = (List<UserClass>) userRepository.findAll();
         int user = listOfAllUser.stream().filter(e -> e.getRole().equals("USER")).collect(Collectors.toList()).size();
         int vendor = listOfAllUser.stream().filter(e -> e.getRole().equals("VENDOR")).collect(Collectors.toList()).size();
-        List<GymClass> gyms = addGymRepository.findAll();
+        List<GymClass> gyms = (List<GymClass>) addGymRepository.findAll();
         int fitnessCenter = gyms.size();
         List<String> response = new ArrayList<>();
         response.add(Integer.toString(user));

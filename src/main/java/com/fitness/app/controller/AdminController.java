@@ -113,8 +113,8 @@ public class AdminController {
     @Validated
     @ApiOperation(value = "Find fitness center of a vendor", notes = "Admin can get all fitness center of vendor")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "List of fitness centers", response = List.class),})
-    public ResponseEntity<?> getAllGymsByEmail(@Email @PathVariable String email) {
-        return new ResponseEntity<>(adminServiceImpl.getAllGymsByEmail(email), HttpStatus.OK);
+    public ResponseEntity<?> getAllGymsByEmail(@Email @PathVariable String email, int offSet, int pageSize) {
+        return new ResponseEntity<>(adminServiceImpl.getAllGymsByEmail(email, offSet, pageSize), HttpStatus.OK);
     }
 
 

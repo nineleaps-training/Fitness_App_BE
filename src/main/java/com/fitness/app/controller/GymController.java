@@ -6,11 +6,16 @@ import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.service.GymServiceImpl;
+import com.fitness.app.utils.InputStringValidate;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +40,11 @@ public class GymController {
      */
 // Adding new fitness center
     @PutMapping("/private/add-or-update-gym")
-    public ApiResponse addNewGym(@RequestBody GymClassModel gymClassModel) {
+    @Validated
+    @ApiOperation(value = "Vendor can add or update fitness center", notes = "vendor  can update fitness center or add new fitness center")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Successful", response = ApiResponse.class),
+    })
+    public ApiResponse addNewGym(@Valid @RequestBody GymClassModel gymClassModel) {
         return gymServiceImpl.addNewGym(gymClassModel);
     }
 
@@ -45,7 +54,6 @@ public class GymController {
      * @return the all gym
      */
 // getting list of all registered fitness center.
-    //TODO :: Add pagination here.
     @GetMapping("/private/gym-all")
     public ApiResponse getAllGym() {
         return new ApiResponse(HttpStatus.OK, gymServiceImpl.getAllGym());
@@ -58,10 +66,13 @@ public class GymController {
      * @return the all of vendor
      */
 // Search Fitness centers by vendor email.
-    //TODO :: Add pagination here.
+    @Validated
+    @ApiOperation(value = "fitness centers of Vendor", notes = "Get all Fitness Center of vendor")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "list of all fitness center in a page", response = ApiResponse.class),
+    })
     @GetMapping("/private/gym-by-username/{email}")
-    public ApiResponse getAllOfVendor(@PathVariable String email) {
-        return new ApiResponse(HttpStatus.OK, gymServiceImpl.getGymByVendorEmail(email));
+    public ApiResponse getAllOfVendor(@PathVariable @Valid String email, int offSet, int pageSize) {
+        return new ApiResponse(HttpStatus.OK, gymServiceImpl.getGymByVendorEmail(email,offSet, pageSize));
     }
 
 
@@ -73,7 +84,11 @@ public class GymController {
      */
 //get address of fitness center by its unique id.
     @GetMapping("/private/address-by-id/{id}")
-    public GymAddressClass getAddress(@PathVariable String id) {
+    @Validated
+    @ApiOperation(value = "Get Complete address of fitness Center", notes = "Complete address of a fitness center")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Address of Fitness center", response = GymAddressClass.class),
+    })
+    public GymAddressClass getAddress(@PathVariable @Valid String id) {
         return gymServiceImpl.findTheAddress(id);
     }
 
@@ -85,7 +100,11 @@ public class GymController {
      */
 // Search Fitness center by fitness id.
     @GetMapping("/private/by-id/{id}")
-    public ResponseEntity<?> getGymById(@PathVariable String id) {
+    @Validated
+    @ApiOperation(value = "Find fitness center", notes = "Vendor can get a fitness center by Center Id.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Successful", response = ApiResponse.class),
+    })
+    public ResponseEntity<?> getGymById(@PathVariable @Valid String id) {
         return new ResponseEntity<>(gymServiceImpl.getGymByGymId(id), HttpStatus.OK);
     }
 
@@ -98,10 +117,12 @@ public class GymController {
      */
 // Search gym by gymName
     @GetMapping("/private/by-gymName/{gymName}")
-    public ResponseEntity<?> getGymByGymName(@PathVariable("gymName") String gymName) {
-        List<GymClass> allGym = new ArrayList<GymClass>();
-        allGym.add(gymServiceImpl.getGymByGymName(gymName));
-        return new ResponseEntity<>(allGym, HttpStatus.OK);
+    @ApiOperation(value = "Find fitness center", notes = "Vendor can get a fitness center by Center Name.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Fitness Center", response =GymClass.class),
+    })
+    @InputStringValidate
+    public ResponseEntity<?> getGymByGymName(@Valid @PathVariable("gymName") String gymName) {
+        return new ResponseEntity<>(gymServiceImpl.getGymByGymName(gymName), HttpStatus.OK);
     }
 
 
@@ -112,8 +133,13 @@ public class GymController {
      * @return the g ym by city
      */
     @GetMapping("/public/by-city/{city}")
-    public ResponseEntity<?> getGYmByCity(@PathVariable String city) {
-        return new ResponseEntity<>(gymServiceImpl.getGymByCity(city), HttpStatus.OK);
+    @Validated
+    @ApiOperation(value = "Find fitness center", notes = "Vendor can get a fitness center by Center Name.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Fitness Center", response =GymClass.class),
+    })
+    @InputStringValidate
+    public ResponseEntity<?> getGYmByCity(@Valid @PathVariable String city, int offSet, int pageSize) {
+        return new ResponseEntity<>(gymServiceImpl.getGymByCity(city, offSet, pageSize), HttpStatus.OK);
     }
 
 

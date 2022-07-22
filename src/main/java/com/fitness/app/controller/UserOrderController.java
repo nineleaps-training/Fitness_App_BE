@@ -4,11 +4,16 @@ import com.fitness.app.dto.requestDtos.UserOrderModel;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.entity.UserOrderClass;
 import com.fitness.app.service.UserOrderServiceImpl;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +35,11 @@ public class UserOrderController {
      * @return the api response
      */
     @GetMapping("/check-user-order/{email}")
-    public ApiResponse checkUserCanOrder(@PathVariable String email) {
+    @ApiOperation(value = "User can order or not", notes = "Check if user can make order or not.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "True or false", response = ApiResponse.class),
+    })
+    @Validated
+    public ApiResponse checkUserCanOrder(@PathVariable @Email String email) {
         return new ApiResponse(HttpStatus.OK, userOrderServiceImpl.canOrder(email));
     }
 
@@ -44,7 +53,11 @@ public class UserOrderController {
 //order now
     @PostMapping("/order-now")
     @ResponseBody
-    public ApiResponse orderNow(@RequestBody UserOrderModel order) throws Exception {
+    @ApiOperation(value = "Make payment", notes = "initiate payment and get order id")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "order id and payment details", response = ApiResponse.class),
+    })
+    @Validated
+    public ApiResponse orderNow(@RequestBody @Valid UserOrderModel order) throws Exception {
         return new ApiResponse(HttpStatus.OK, userOrderServiceImpl.orderNow(order));
     }
 
@@ -57,6 +70,9 @@ public class UserOrderController {
      */
 //update_order after payment.
     @PutMapping("update-order")
+    @ApiOperation(value = "Update payment", notes = "update the status of payment")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Successful or Failed", response = ApiResponse.class),
+    })
     public ApiResponse updatingOrder(@RequestBody Map<String, String> data) {
         return userOrderServiceImpl.updateOrder(data);
 
@@ -70,7 +86,11 @@ public class UserOrderController {
      */
 //Check the pending orders by email id of the user
     @GetMapping("/pending-order/{email}")
-    public ResponseEntity<List<UserOrderClass>> pendingOrderList(@PathVariable String email) {
+    @ApiOperation(value = "Pending Order ", notes = "List of pending order.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Pending Orders list", response = UserOrderClass.class),
+    })
+    @Validated
+    public ResponseEntity<List<UserOrderClass>> pendingOrderList(@PathVariable @Email String email) {
 
         return new ResponseEntity<>(userOrderServiceImpl.pendingListOrder(email), HttpStatus.OK);
 
@@ -84,7 +104,11 @@ public class UserOrderController {
      */
 //Fetching the order history by email id of the user
     @GetMapping("/history/{email}")
-    public ResponseEntity<List<UserOrderClass>> orderHistory(@PathVariable String email) {
+    @ApiOperation(value = "Order History ", notes = "List of orders.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Orders list", response = UserOrderClass.class),
+    })
+    @Validated
+    public ResponseEntity<List<UserOrderClass>> orderHistory(@PathVariable @Valid @Email String email) {
 
         return new ResponseEntity<>(userOrderServiceImpl.orderListByEmail(email), HttpStatus.OK);
 
@@ -98,7 +122,11 @@ public class UserOrderController {
      */
 //Fetching the user of the particular Gym by gymId
     @GetMapping("/my-users/{gymId}")
-    public ApiResponse allMyUsers(@PathVariable String gymId) {
+    @ApiOperation(value = "All users of a fitness center ", notes = "List of Users.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "User list", response = List.class),
+    })
+    @Validated
+    public ApiResponse allMyUsers(@PathVariable @Valid @Email String gymId) {
 
         return userOrderServiceImpl.allMyUser(gymId);
 
@@ -112,7 +140,11 @@ public class UserOrderController {
      */
 //Fetching gyms booked by a particular user by email
     @GetMapping("/booked/gyms/{email}")
-    public ResponseEntity<?> bookedGym(@PathVariable String email) {
+    @ApiOperation(value = "All Booked fitness center ", notes = "List of Fitness center.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Fitness center list", response = List.class),
+    })
+    @Validated
+    public ResponseEntity<?> bookedGym(@PathVariable @Valid @Email String email) {
 
         return new ResponseEntity<>(userOrderServiceImpl.bookedGym(email), HttpStatus.OK);
 

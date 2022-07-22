@@ -5,11 +5,18 @@ import com.fitness.app.dto.requestDtos.RatingModel;
 import com.fitness.app.dto.responceDtos.ApiResponse;
 import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.service.RatingServiceImpl;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import java.util.List;
 
 /**
  * The type User rating controller.
@@ -29,7 +36,11 @@ public class UserRatingController {
      */
 //Rating Controller for vendor, user and gym
     @PostMapping("/rate-something")
-    public ResponseEntity<Boolean> rateVendor(@RequestBody RatingModel rating) {
+    @ApiOperation(value = "Rate Someone ", notes = "Rate user of Fitness center.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Successful", response =String.class),
+    })
+    @Validated
+    public ResponseEntity<Boolean> rateVendor(@RequestBody @Valid RatingModel rating) {
         return new ResponseEntity<>(ratingServiceImpl.ratingService(rating), HttpStatus.OK);
     }
 
@@ -42,7 +53,12 @@ public class UserRatingController {
      */
 //Fetching the rating of the gym by gymId
     @GetMapping("/get-rating-of-fitness/{gymId}")
-    public ApiResponse getRating(@PathVariable String gymId) throws DataNotFoundException {
+    @ApiOperation(value = "Get Rating ", notes = "Get rating of a fitness center.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Rating value", response =ApiResponse.class),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Not found or bad request ", response =DataNotFoundException.class)
+    })
+    @Validated
+    public ApiResponse getRating(@PathVariable @Valid String gymId) throws DataNotFoundException {
         try {
             return new ApiResponse(HttpStatus.OK, ratingServiceImpl.getRating(gymId));
         } catch (Exception e) {
@@ -59,7 +75,12 @@ public class UserRatingController {
      */
 //Fetching the rating of the user by email id
     @GetMapping("/get-rating-person/{email}")
-    public ApiResponse getRatingOfPerson(@PathVariable String email) {
+    @ApiOperation(value = "Get Rating ", notes = "Get rating of a person.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Rating Value", response =ApiResponse.class),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Not found or bad request ", response =DataNotFoundException.class)
+    })
+    @Validated
+    public ApiResponse getRatingOfPerson(@PathVariable @Valid @Email String email) {
 
         return new ApiResponse(HttpStatus.OK, ratingServiceImpl.getRatingOfPerson(email));
 

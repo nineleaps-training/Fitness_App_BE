@@ -3,10 +3,16 @@ package com.fitness.app.controller;
 import com.fitness.app.dto.requestDtos.UserBankModel;
 import com.fitness.app.entity.UserBankDetailsClass;
 import com.fitness.app.service.UserBankDetailsServiceImpl;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
 
 /**
  * The type User bank details controller.
@@ -26,7 +32,11 @@ public class UserBankDetailsController {
      */
 //Add or update bank details of the user.
     @PutMapping("/private/user-bankDetails/add")
-    public ResponseEntity<UserBankDetailsClass> addBankDetails(@RequestBody UserBankModel details) {
+    @ApiOperation(value = "Add Bank Details", notes = "Add bank Details of User.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Added or Successful", response = String.class),
+    })
+    @Validated
+    public ResponseEntity<UserBankDetailsClass> addBankDetails(@Valid @RequestBody UserBankModel details) {
         UserBankDetailsClass userBankDetailsClass = userBankDetailsServiceImpl.addBankDetails(details);
         return new ResponseEntity<UserBankDetailsClass>(userBankDetailsClass, HttpStatus.OK);
 
@@ -40,7 +50,12 @@ public class UserBankDetailsController {
      */
 //get bank details of the user to make payment.
     @GetMapping("/private/user-bankDetails/get/{email}")
-    public ResponseEntity<?> getBankDetails(@PathVariable String email) {
+    @ApiOperation(value = "Add Bank Details", notes = "Add bank Details of User.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Added or Successful", response = String.class),
+    })
+    @Validated
+    @Email
+    public ResponseEntity<?> getBankDetails(@Valid @PathVariable String email) {
         return new ResponseEntity<>(userBankDetailsServiceImpl.getBankDetails(email), HttpStatus.OK);
     }
 
@@ -51,6 +66,9 @@ public class UserBankDetailsController {
      */
 //List of user's bank.
     @GetMapping("/private/user-bankDetails/get-all")
+    @ApiOperation(value = "Bank Details", notes = "Get bank Details of User.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Bank Details", response = UserBankDetailsClass.class),
+    })
     public ResponseEntity<?> getAllDetails() {
         return new ResponseEntity<>(userBankDetailsServiceImpl.getAllDetails(), HttpStatus.OK);
 

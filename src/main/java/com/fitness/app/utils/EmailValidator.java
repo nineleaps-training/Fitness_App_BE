@@ -11,6 +11,6 @@ public class EmailValidator implements ConstraintValidator<EmailValidate, String
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return value!=null && value.matches("[a-z]+") && (value.contains("@"));
+        return value!=null && value.matches("[a-z]+")&& value.matches("[0-9]+") && (value.contains("@"));
     }
 }

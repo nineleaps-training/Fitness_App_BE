@@ -22,7 +22,7 @@ public interface AdminService {
     List<UserClass> getAllUsersService(int offSet, int pageSize);
     List<UserClass> getAllVendorService(int offSet, int pageSize);
 
-    List<GymClass> getAllGymsByEmail( String email);
+    List<GymClass> getAllGymsByEmail( String email, int offSet, int pageSize);
     Page<GymClass> getAllFitnessCenter(int offSet, int pageSize);
     AdminPayClass getDataPay(AdminPayModel adminPayModel);
     ApiResponse PayNow(AdminPayModel adminPayModel) throws RazorpayException;

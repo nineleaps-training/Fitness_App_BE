@@ -24,6 +24,8 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -152,13 +154,14 @@ class GymServiceImplTest {
      void gymByVendorEmail()
     {
        List<GymClass> gyms=new ArrayList<>( Arrays.asList(FITNESS1));
-       Mockito.when(gymRepository.findByEmail(FITNESS1.getEmail())).thenReturn(gyms);
+        Pageable pageable= PageRequest.of(0, 1);
+       Mockito.when(gymRepository.findByEmailContaining(FITNESS1.getEmail(),pageable)).thenReturn(gyms);
        Mockito.when(ratingServiceImpl.getRating(FITNESS1.getId())).thenReturn(4.3);
         Mockito.when(addressRepo.findById(FITNESS1.getId())).thenReturn(addressClass);
         Mockito.when(subscriptionRepo.findById(FITNESS1.getId())).thenReturn(subscriptionClass);
         Mockito.when(timeRepo.findById(FITNESS1.getId())).thenReturn(time);
 
-        List<GymRepresent> returnedGyms= gymServiceImpl.getGymByVendorEmail(FITNESS1.getEmail());
+        List<GymRepresent> returnedGyms= gymServiceImpl.getGymByVendorEmail(FITNESS1.getEmail(), 0, 1);
 
         Assertions.assertNotNull(returnedGyms);
         Assertions.assertEquals(100, returnedGyms.get(0).getCapacity());
@@ -176,7 +179,7 @@ class GymServiceImplTest {
         Mockito.when(subscriptionRepo.findById(FITNESS1.getId())).thenReturn(subscriptionClass);
         Mockito.when(timeRepo.findById(FITNESS1.getId())).thenReturn(time);
 
-        List<GymRepresent> returnedGyms= gymServiceImpl.getGymByCity(GYM_ADDRESS.getCity());
+        List<GymRepresent> returnedGyms= gymServiceImpl.getGymByCity(GYM_ADDRESS.getCity(), 0, 1);
 
         Assertions.assertNotNull(returnedGyms);
 
@@ -192,7 +195,7 @@ class GymServiceImplTest {
         String city= GYM_ADDRESS.getCity();
            Assertions.assertThrows(DataNotFoundException.class,()->{
 
-               gymServiceImpl.getGymByCity(city);
+               gymServiceImpl.getGymByCity(city,0,1);
 
            }," data not found;");
 

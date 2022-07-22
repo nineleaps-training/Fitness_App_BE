@@ -16,6 +16,8 @@ import com.fitness.app.repository.GymTimeRepository;
 import com.fitness.app.service.dao.GymService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -115,9 +117,10 @@ public class GymServiceImpl implements GymService {
 
     // Find All gym of a vendor by email id..
     @Override
-    public List<GymRepresent> getGymByVendorEmail(String email) {
+    public List<GymRepresent> getGymByVendorEmail(String email, int offSet, int pageSize) {
 
-        List<GymClass> gymList = gymRepo.findByEmail(email);
+        Pageable pageable= PageRequest.of(offSet, pageSize);
+        List<GymClass> gymList = gymRepo.findByEmailContaining(email,pageable);
         List<GymRepresent> gyms = new ArrayList<>();
 
         for (GymClass eachGym : gymList) {
@@ -156,7 +159,7 @@ public class GymServiceImpl implements GymService {
     // Find All gym from database..
     @Override
     public List<GymClass> getAllGym() {
-        return gymRepo.findAll();
+        return (List<GymClass>) gymRepo.findAll();
     }
 
     @Override
@@ -167,7 +170,7 @@ public class GymServiceImpl implements GymService {
     // Find by City
 
     @Override
-    public List<GymRepresent> getGymByCity(String city) throws DataNotFoundException {
+    public List<GymRepresent> getGymByCity(String city, int offSet, int pageSize) throws DataNotFoundException {
         try {
             List<GymAddressClass> addressList = addressRepo.findByCity(city);
             List<GymRepresent> gyms = new ArrayList<>();
