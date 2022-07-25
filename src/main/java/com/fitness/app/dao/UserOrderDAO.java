@@ -31,6 +31,4 @@ public interface UserOrderDAO {
 
     public Boolean canOrder(String email);
 
-
-    
 }

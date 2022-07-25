@@ -28,7 +28,7 @@ import org.springframework.validation.annotation.Validated;
 public class VendorBankDetailsController {
 
     @Autowired
-    private VendorBankDetailsDAO vendorBankDetailsService;
+    private VendorBankDetailsDAO vendorBankDetailsDAO;
 
     /**
      * This controller is used to add the bank details of the vendor
@@ -45,7 +45,7 @@ public class VendorBankDetailsController {
     @ResponseStatus(HttpStatus.CREATED)
     @Validated
     public ResponseEntity<Object> addDetails(@Valid @RequestBody UserBankDetailsRequestModel details) {
-        VendorBankDetails vendorBankDetails = vendorBankDetailsService.addDetails(details);
+        VendorBankDetails vendorBankDetails = vendorBankDetailsDAO.addDetails(details);
 
         if (vendorBankDetails != null) {
             return new ResponseEntity<>(vendorBankDetails, HttpStatus.CREATED); // Adding bank details of the vendor
@@ -55,7 +55,8 @@ public class VendorBankDetailsController {
     }
 
     /**
-     * This controller is used to fetch the bank details of the vendor from his email
+     * This controller is used to fetch the bank details of the vendor from his
+     * email
      * 
      * @param email - Email id of the vendor
      * @return - Bank details of the vendor
@@ -68,7 +69,7 @@ public class VendorBankDetailsController {
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
     @GetMapping(value = "/v1/vendorBankDetails/get/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public VendorBankDetails getBankDetails(@NotBlank @NotEmpty @NotNull @Email@PathVariable String email) {
-        return vendorBankDetailsService.getBankDetails(email); // Fetching bank details of the vendor by email id
+    public VendorBankDetails getBankDetails(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
+        return vendorBankDetailsDAO.getBankDetails(email); // Fetching bank details of the vendor by email id
     }
 }

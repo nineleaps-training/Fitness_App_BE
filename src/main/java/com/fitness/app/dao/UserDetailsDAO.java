@@ -11,5 +11,5 @@ public interface UserDetailsDAO {
     public UserDetails addUserDetails(UserDetailsRequestModel userDetails);
 
     public UserDetails getUserDetails(String email);
-    
+
 }

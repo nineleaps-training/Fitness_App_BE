@@ -24,10 +24,21 @@ public class Components {
 	@Autowired
 	Environment environment;
 
+	/**
+	 * 
+	 * @return 4 digit OTP generated randomly
+	 */
 	public String otpBuilder() {
 		return String.format("%04d", secureRandom.nextInt(10000));
 	}
 
+	/**
+	 * 
+	 * @param message
+	 * @param otp
+	 * @param mobile
+	 * @return Response code 200 if ok
+	 */
 	public int sendOtpMessage(String message, String otp, String mobile) {
 		log.info("Components >> sendOtpMessage >> Message: {} OTP: {} Mobile: {}", message, otp, mobile);
 		try {

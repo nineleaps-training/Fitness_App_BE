@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -30,7 +29,7 @@ public class UserDetailsService implements UserDetailsDAO {
      * @param userRepository2        - User Repository
      * @param userDetailsRepository2 - User Details Repository
      */
-    @Autowired
+
     public UserDetailsService(UserRepo userRepository2, UserDetailsRepo userDetailsRepository2) {
         this.userRepository = userRepository2;
         this.userDetailsRepository = userDetailsRepository2;

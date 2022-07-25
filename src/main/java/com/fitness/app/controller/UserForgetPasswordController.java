@@ -34,7 +34,7 @@ import org.springframework.security.core.AuthenticationException;
 public class UserForgetPasswordController {
 
 	@Autowired
-	UserForgotDAO userForgotService;
+	UserForgotDAO userForgotDAO;
 
 	/**
 	 * This controller is used for verifying the user
@@ -51,7 +51,7 @@ public class UserForgetPasswordController {
 	@ResponseStatus(HttpStatus.OK)
 	public UserForgotModel userForgot(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
 
-		return userForgotService.userForgot(email);
+		return userForgotDAO.userForgot(email);
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class UserForgetPasswordController {
 	@ResponseStatus(HttpStatus.OK)
 	@Validated
 	public boolean setPassword(@Valid @RequestBody Authenticate user) {
-		return userForgotService.setPassword(user);
+		return userForgotDAO.setPassword(user);
 	}
 
 }

@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -61,7 +60,6 @@ public class AdminService implements AdminDAO {
 	
 	private JwtUtils jwtUtils;
 
-	@Autowired
 	public AdminService(AdminPayRepo adminPayRepo2, VendorPayRepo vendorPayRepo, AuthenticationManager authenticationManager, UserDetailsServiceImpl userDetailsServiceImpl, JwtUtils jwtUtils, UserRepo userRepo, AddGymRepo gymRepo) {
 		// Initializing constructor
 		this.adminPayRepo = adminPayRepo2;

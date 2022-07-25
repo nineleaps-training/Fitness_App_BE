@@ -3,7 +3,6 @@ package com.fitness.app.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -39,7 +38,7 @@ public class PagingService implements PagingDAO {
      * @param userRepository2     - User Repository
      * @param userBankDetailsRepo - User Bank Details Repository
      */
-    @Autowired
+
     public PagingService(AddGymRepo addGymRepository, UserRepo userRepository2,
             UserBankDetailsRepo userBankDetailsRepo) {
         this.gymRepository = addGymRepository;

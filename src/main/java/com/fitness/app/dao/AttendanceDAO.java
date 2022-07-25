@@ -15,6 +15,4 @@ public interface AttendanceDAO {
 
     public Double calculateRating(String target);
 
-
-    
 }

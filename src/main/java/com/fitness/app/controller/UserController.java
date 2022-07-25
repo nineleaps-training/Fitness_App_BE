@@ -39,15 +39,14 @@ import io.swagger.annotations.ApiResponses;
 public class UserController {
 
 	@Autowired
-	private UserDAO userService;
+	private UserDAO userDAO;
 
 	private final Bucket bucket;
 
-	public UserController()
-	{
-		this.bucket=Bucket4j.builder()
-		.addLimit(Bandwidth.classic(3, Refill.intervally(3, Duration.ofHours(24))))
-		.build();
+	public UserController() {
+		this.bucket = Bucket4j.builder()
+				.addLimit(Bandwidth.classic(3, Refill.intervally(3, Duration.ofHours(24))))
+				.build();
 	}
 
 	/**
@@ -66,14 +65,15 @@ public class UserController {
 	@Validated
 	public SignUpResponceModel registerUser(@Valid @RequestBody UserModel user) {
 
-		return userService.registerNewUser(user);
+		return userDAO.registerNewUser(user);
 
 	}
 
 	/**
 	 * This controller is used to verify the user
 	 * 
-	 * @param authCredential - Authentication details (email and password) of the user
+	 * @param authCredential - Authentication details (email and password) of the
+	 *                       user
 	 * @return - Response with email and JWT Token
 	 */
 	@ApiOperation(value = "Verifying user", notes = "Verifying the user from his credentials")
@@ -85,11 +85,11 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	@Validated
 	public ResponseEntity<SignUpResponceModel> verifyTheUser(@Valid @RequestBody Authenticate authCredential) {
-		
-		UserClass user = userService.verifyUser(authCredential.getEmail());
+
+		UserClass user = userDAO.verifyUser(authCredential.getEmail());
 
 		if (user != null) {
-			return userService.logInFunctionality(authCredential.getEmail(), authCredential.getPassword()); // Verify User
+			return userDAO.logInFunctionality(authCredential.getEmail(), authCredential.getPassword()); // Verify User
 		}
 
 		return ResponseEntity.ok(new SignUpResponceModel(null, null));
@@ -100,7 +100,8 @@ public class UserController {
 	 * 
 	 * @param authCredential - Authentication details fof the user
 	 * @return - Response is okay if user is authenticated or else bad credentials
-	 * @throws ExceededNumberOfAttemptsException - throws Exception after 3 failed attempts
+	 * @throws ExceededNumberOfAttemptsException - throws Exception after 3 failed
+	 *                                           attempts
 	 */
 	@ApiOperation(value = "Logging in", notes = "User can log in")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "User Logged in", response = ResponseEntity.class),
@@ -109,14 +110,12 @@ public class UserController {
 	@PostMapping(value = "/v1/user/login/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	@Validated
-	public ResponseEntity<SignUpResponceModel> authenticateUser(@Valid @RequestBody Authenticate authCredential) throws ExceededNumberOfAttemptsException {
+	public ResponseEntity<SignUpResponceModel> authenticateUser(@Valid @RequestBody Authenticate authCredential)
+			throws ExceededNumberOfAttemptsException {
 
-		if(bucket.tryConsume(1))
-		{
-			return userService.logInFunctionality(authCredential.getEmail(), authCredential.getPassword()); // Log in user
-		}
-		else
-		{
+		if (bucket.tryConsume(1)) {
+			return userDAO.logInFunctionality(authCredential.getEmail(), authCredential.getPassword()); // Log in user
+		} else {
 			throw new ExceededNumberOfAttemptsException("Account Locked: Please try after 24 hours");
 		}
 	}
@@ -136,15 +135,15 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	@Validated
 	public ResponseEntity<SignUpResponceModel> googleSignInVendor(@Valid @RequestBody UserModel user) {
-		String pass = userService.randomPass();
+		String pass = userDAO.randomPass();
 		user.setPassword(pass);
-		UserClass localUser = userService.googleSignInMethod(user);
+		UserClass localUser = userDAO.googleSignInMethod(user);
 		if (localUser == null) {
 			return ResponseEntity.ok(new SignUpResponceModel(null, "This email is already in use!"));
 		} else if (localUser.getRole().equals("USER")) {
 			return ResponseEntity.ok(new SignUpResponceModel(null, "This email is already in use as USER!"));
 		} else {
-			return userService.logInFunctionality(localUser.getEmail(), user.getPassword());
+			return userDAO.logInFunctionality(localUser.getEmail(), user.getPassword());
 		}
 	}
 
@@ -163,15 +162,15 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	@Validated
 	public ResponseEntity<SignUpResponceModel> googleSignInUser(@Valid @RequestBody UserModel user) {
-		String pass = userService.randomPass();
+		String pass = userDAO.randomPass();
 		user.setPassword(pass);
-		UserClass localUser = userService.googleSignInMethod(user);
+		UserClass localUser = userDAO.googleSignInMethod(user);
 		if (localUser == null) {
 			return ResponseEntity.ok(new SignUpResponceModel(null, "This email is already in use!"));
 		} else if (localUser.getRole().equals("VENDOR")) {
 			return ResponseEntity.ok(new SignUpResponceModel(null, "This email is already in use as VENDOR!"));
 		} else {
-			return userService.logInFunctionality(localUser.getEmail(), user.getPassword());
+			return userDAO.logInFunctionality(localUser.getEmail(), user.getPassword());
 		}
 	}
 }

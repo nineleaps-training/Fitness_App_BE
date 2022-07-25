@@ -25,12 +25,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import com.fitness.app.dao.FilterBySubscriptionDAO;
 import com.fitness.app.dao.GymDAO;
 import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.model.GymClassModel;
 import com.fitness.app.model.GymRepresentModel;
-import com.fitness.app.service.FilterBySubscriptionService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
@@ -41,10 +41,10 @@ import io.swagger.annotations.ApiResponses;
 public class GymController {
 
 	@Autowired
-	private GymDAO gymService;
+	private GymDAO gymDAO;
 
 	@Autowired
-	private FilterBySubscriptionService filterSubscriptionService;
+	private FilterBySubscriptionDAO filterBySubscriptionDAO;
 
 	/**
 	 * This controller is used to add new fitness center in the application
@@ -61,7 +61,7 @@ public class GymController {
 	@Validated
 	@ResponseStatus(HttpStatus.OK)
 	public GymClass addNewGym(@Valid @RequestBody GymClassModel gymClassModel) {
-		return gymService.addNewGym(gymClassModel); // Adding new fitness center
+		return gymDAO.addNewGym(gymClassModel); // Adding new fitness center
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class GymController {
 	@GetMapping(value = "/v1/gym/all", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public List<GymClass> getAllGym() {
-		return gymService.getAllGym(); // Fetching list of all registered fitness center.
+		return gymDAO.getAllGym(); // Fetching list of all registered fitness center.
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class GymController {
 	@GetMapping(value = "/v1/gym/email/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public List<GymRepresentModel> getAllOfVendor(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
-		return gymService.getGymByVendorEmail(email); // Search Fitness centers by vendor email.
+		return gymDAO.getGymByVendorEmail(email); // Search Fitness centers by vendor email.
 	}
 
 	/**
@@ -114,8 +114,9 @@ public class GymController {
 	@PutMapping(value = "/v1/gym/edit/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@Validated
-	public GymClass editGym(@Valid @RequestBody GymClassModel newGym, @NotNull @NotBlank @NotEmpty @PathVariable String id) {
-		return gymService.editGym(newGym, id); // Update details and other in the fitness center.
+	public GymClass editGym(@Valid @RequestBody GymClassModel newGym,
+			@NotNull @NotBlank @NotEmpty @PathVariable String id) {
+		return gymDAO.editGym(newGym, id); // Update details and other in the fitness center.
 	}
 
 	/**
@@ -132,7 +133,7 @@ public class GymController {
 	@GetMapping(value = "/v1/gym/address/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public GymAddressClass getAddress(@NotBlank @NotEmpty @NotNull @PathVariable String id) {
-		return gymService.findTheAddress(id); // Returning address of fitness center by its unique id.
+		return gymDAO.findTheAddress(id); // Returning address of fitness center by its unique id.
 	}
 
 	/**
@@ -149,7 +150,7 @@ public class GymController {
 	@GetMapping(value = "/v1/gym/id/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public GymRepresentModel getGymById(@NotBlank @NotEmpty @NotNull @PathVariable String id) {
-		return gymService.getGymByGymId(id); // Search Fitness center by fitness id.
+		return gymDAO.getGymByGymId(id); // Search Fitness center by fitness id.
 	}
 
 	/**
@@ -165,7 +166,7 @@ public class GymController {
 	@DeleteMapping(value = "/v1/gym/delete/every")
 	@ResponseStatus(HttpStatus.OK)
 	public String deletingEvery() {
-		return gymService.wipingAll(); // Remove all Fitness centers.
+		return gymDAO.wipingAll(); // Remove all Fitness centers.
 	}
 
 	/**
@@ -183,7 +184,7 @@ public class GymController {
 	@ResponseStatus(HttpStatus.OK)
 	public List<GymClass> getGymByGymName(@NotBlank @NotEmpty @NotNull @PathVariable("gymName") String gymName) {
 		List<GymClass> allGym = new ArrayList<>();
-		allGym.add(gymService.getGymByGymName(gymName)); // Search gyms by gymName
+		allGym.add(gymDAO.getGymByGymName(gymName)); // Search gyms by gymName
 		return allGym;
 	}
 
@@ -201,7 +202,7 @@ public class GymController {
 	@GetMapping(value = "/v1/gym/city/{city}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public List<GymRepresentModel> getGYmByCity(@NotBlank @NotEmpty @NotNull @PathVariable String city) {
-		return gymService.getGymByCity(city); // Search gym By Locality
+		return gymDAO.getGymByCity(city); // Search gym By Locality
 	}
 
 	/**
@@ -218,9 +219,10 @@ public class GymController {
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	@GetMapping(value = "/v1/gym/filter/subscription/monthly/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<GymClassModel> filterMonthly(@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
+	public List<GymClassModel> filterMonthly(
+			@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
 			@RequestBody List<GymClassModel> listGym) {
-		return filterSubscriptionService.filterByMonthly(price, listGym); // Returning gyms by monthly price limit.
+		return filterBySubscriptionDAO.filterByMonthly(price, listGym); // Returning gyms by monthly price limit.
 	}
 
 	/**
@@ -237,10 +239,11 @@ public class GymController {
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	@GetMapping(value = "/v1/gym/filter/subscription/quarterly/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<GymClassModel> filterQuarterly(@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
+	public List<GymClassModel> filterQuarterly(
+			@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
 			@RequestBody List<GymClassModel> listGym) {
 
-		return filterSubscriptionService.filterByQuarterly(price, listGym); // Returning gyms by quaterly price limit.
+		return filterBySubscriptionDAO.filterByQuarterly(price, listGym); // Returning gyms by quaterly price limit.
 	}
 
 	/**
@@ -257,11 +260,12 @@ public class GymController {
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	@GetMapping(value = "/v1/gym/filter/subscription/halfYearly/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<GymClassModel> filterHalfYearly(@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
+	public List<GymClassModel> filterHalfYearly(
+			@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
 			@RequestBody List<GymClassModel> listGym) {
 
-		return filterSubscriptionService.filterByHalfYearly(price, listGym); // Returning gyms by half-yearly price
-																				// limit.
+		return filterBySubscriptionDAO.filterByHalfYearly(price, listGym); // Returning gyms by half-yearly price
+																			// limit.
 	}
 
 	/**
@@ -278,10 +282,11 @@ public class GymController {
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	@GetMapping(value = "/v1/gym/filter/subscription/yearly/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<GymClassModel> filterYearly(@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
+	public List<GymClassModel> filterYearly(
+			@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
 			@RequestBody List<GymClassModel> listGym) {
 
-		return filterSubscriptionService.filterByYearly(price, listGym); // Returning gyms by yearly price limit.
+		return filterBySubscriptionDAO.filterByYearly(price, listGym); // Returning gyms by yearly price limit.
 	}
 
 	/**
@@ -298,9 +303,10 @@ public class GymController {
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	@GetMapping(value = "/v1/gym/filter/subscription/oneWorkout/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<GymClassModel> filterOneWorkout(@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
+	public List<GymClassModel> filterOneWorkout(
+			@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
 			@RequestBody List<GymClassModel> listGym) {
 
-		return filterSubscriptionService.filterByOneWorkout(price, listGym); // Returning gyms by workout.
+		return filterBySubscriptionDAO.filterByOneWorkout(price, listGym); // Returning gyms by workout.
 	}
 }

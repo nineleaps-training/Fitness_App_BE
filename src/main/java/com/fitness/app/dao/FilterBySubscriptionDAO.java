@@ -17,6 +17,6 @@ public interface FilterBySubscriptionDAO {
 
     public List<GymClassModel> filterByYearly(int price, List<GymClassModel> listGym);
 
-    public List<GymClassModel> filterByOneWorkout(int price, List<GymClassModel> listGym) ;
+    public List<GymClassModel> filterByOneWorkout(int price, List<GymClassModel> listGym);
 
 }

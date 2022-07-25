@@ -30,7 +30,7 @@ import javax.ws.rs.NotFoundException;
 public class LocationController {
 
     @Autowired
-    private LocationDAO locationService;
+    private LocationDAO locationDAO;
 
     /**
      * This controller is used to fetch the location by the provided address
@@ -48,7 +48,7 @@ public class LocationController {
     @ResponseStatus(HttpStatus.OK)
     public String getDetails(@NotBlank @NotNull @RequestParam String address) {
 
-        return locationService.getDetails(address);
+        return locationDAO.getDetails(address);
     }
 
     /**
@@ -67,7 +67,7 @@ public class LocationController {
     @ResponseStatus(HttpStatus.OK)
     public Map<String, List<String>> getAddress(@NotBlank @NotNull @RequestParam String latlng) {
 
-        return locationService.getAddress(latlng);
-        
+        return locationDAO.getAddress(latlng);
+
     }
 }

@@ -10,7 +10,6 @@ import com.fitness.app.repository.*;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fitness.app.model.GymClassModel;
@@ -43,7 +42,6 @@ public class GymService implements GymDAO {
 
 	private GymClass gymClass;
 
-	@Autowired
 	public GymService(AddGymRepo addGymRepository, GymTimeRepo gymTimeRepo, GymAddressRepo gymAddressRepo,
 			GymSubscriptionRepo gymSubscriptionRepo, RatingService ratingService) {
 

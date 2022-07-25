@@ -55,7 +55,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         customResponse.setSuccess(false);
         return customResponse;
     }
-    
+
     // Handling Field Error Exceptions
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,

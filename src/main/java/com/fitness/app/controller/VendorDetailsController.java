@@ -36,7 +36,7 @@ import java.util.ArrayList;
 public class VendorDetailsController {
 
     @Autowired
-    private VendorDetailsDAO vendorDetailsService;
+    private VendorDetailsDAO vendorDetailsDAO;
 
     /**
      * This controller is used for adding the details of the vendor
@@ -53,7 +53,7 @@ public class VendorDetailsController {
     @ResponseStatus(HttpStatus.CREATED)
     @Validated
     public ResponseEntity<Object> addVendorDetails(@Valid @RequestBody UserDetailsRequestModel vendorDetails) {
-        VendorDetails vendorDetails1 = vendorDetailsService.addVendorDetails(vendorDetails);
+        VendorDetails vendorDetails1 = vendorDetailsDAO.addVendorDetails(vendorDetails);
 
         ArrayList<VendorDetails> vendor = new ArrayList<>();
         vendor.add(vendorDetails1);
@@ -80,6 +80,6 @@ public class VendorDetailsController {
     @GetMapping(value = "/v1/vendorDetails/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public VendorDetails getVendorDetails(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
-        return vendorDetailsService.getVendorDetails(email); // Fetching the details of the vendor by his email id
+        return vendorDetailsDAO.getVendorDetails(email); // Fetching the details of the vendor by his email id
     }
 }

@@ -56,18 +56,17 @@ import io.swagger.annotations.ApiResponses;
 public class AdminController {
 
 	@Autowired
-	private AdminDAO adminService;
+	private AdminDAO adminDAO;
 
 	@Autowired
-	private PagingDAO pagingService;
+	private PagingDAO pagingDAO;
 
 	private final Bucket bucket;
 
-	public AdminController()
-	{
-		this.bucket=Bucket4j.builder()
-		.addLimit(Bandwidth.classic(3, Refill.intervally(3, Duration.ofHours(24))))
-		.build();
+	public AdminController() {
+		this.bucket = Bucket4j.builder()
+				.addLimit(Bandwidth.classic(3, Refill.intervally(3, Duration.ofHours(24))))
+				.build();
 	}
 
 	/**
@@ -81,15 +80,14 @@ public class AdminController {
 	@Validated
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Admin Login", notes = "Admin can login for access")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Login Sucessfull", response = SignUpResponceModel.class),
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Login Sucessfull", response = SignUpResponceModel.class),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class) })
-	public ResponseEntity<SignUpResponceModel> authenticateUser(@Valid @RequestBody Authenticate authCredential) throws ExceededNumberOfAttemptsException {
-		if(bucket.tryConsume(1))
-		{
-			return adminService.loginAdmin(authCredential);
-		}
-		else
-		{
+	public ResponseEntity<SignUpResponceModel> authenticateUser(@Valid @RequestBody Authenticate authCredential)
+			throws ExceededNumberOfAttemptsException {
+		if (bucket.tryConsume(1)) {
+			return adminDAO.loginAdmin(authCredential);
+		} else {
 			throw new ExceededNumberOfAttemptsException("Account Locked: Please try after 24 hours");
 		}
 
@@ -108,9 +106,11 @@ public class AdminController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "List of users"),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	public List<UserClass> getAllUsers(@NotNull @Min(value = 1L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo, @NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 50L, message = "Page size can be maximum 49") @NotNull @PathVariable int pageSize) {
+	public List<UserClass> getAllUsers(
+			@NotNull @Min(value = 1L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
+			@NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 50L, message = "Page size can be maximum 49") @NotNull @PathVariable int pageSize) {
 
-		return pagingService.getallUsers(pageNo, pageSize); // Returning all users with pagenation.
+		return pagingDAO.getallUsers(pageNo, pageSize); // Returning all users with pagenation.
 	}
 
 	/**
@@ -127,8 +127,10 @@ public class AdminController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "List of vendors"),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	public List<UserClass> getAllVendors(@NotNull @Min(value = 1L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo, @NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 20L, message = "Page size can be maximum 19") @PathVariable int pageSize) {
-		return pagingService.getallVendors(pageNo, pageSize); // Returning all vendors with pagenation.
+	public List<UserClass> getAllVendors(
+			@NotNull @Min(value = 1L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
+			@NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 20L, message = "Page size can be maximum 19") @PathVariable int pageSize) {
+		return pagingDAO.getallVendors(pageNo, pageSize); // Returning all vendors with pagenation.
 	}
 
 	/**
@@ -144,8 +146,10 @@ public class AdminController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "List of gyms"),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	public List<GymClass> getAllGyms(@NotNull @Min(value = 1L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo, @NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 20L, message = "Page size can be maximum 19") @PathVariable int pageSize) {
-		return pagingService.getallGyms(pageNo, pageSize); // Returning all fitness centers with pagenation
+	public List<GymClass> getAllGyms(
+			@NotNull @Min(value = 1L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
+			@NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 20L, message = "Page size can be maximum 19") @PathVariable int pageSize) {
+		return pagingDAO.getallGyms(pageNo, pageSize); // Returning all fitness centers with pagenation
 	}
 
 	/**
@@ -162,7 +166,8 @@ public class AdminController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	public List<GymClass> getAllGymsByEmail(@NotNull @NotEmpty @NotBlank @Email @PathVariable String email) {
-		return adminService.getAllGymsByEmail(email); // Returning list of registered fitness center by email id of vendor.
+		return adminDAO.getAllGymsByEmail(email); // Returning list of registered fitness center by email id of
+													// vendor.
 	}
 
 	/**
@@ -181,7 +186,7 @@ public class AdminController {
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	public AdminPay vendorPayment(@NotBlank @NotNull @NotEmpty @PathVariable String vendor) {
-		return adminService.vendorPayment(vendor); // Returning the total amount be paid to the vendor.
+		return adminDAO.vendorPayment(vendor); // Returning the total amount be paid to the vendor.
 	}
 
 	/**
@@ -199,7 +204,7 @@ public class AdminController {
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	public AdminPay getDatapay(@RequestBody AdminPayRequestModel pay) {
-		return adminService.getDataPay(pay); // Returning the amount with details
+		return adminDAO.getDataPay(pay); // Returning the amount with details
 	}
 
 	/**
@@ -228,7 +233,7 @@ public class AdminController {
 
 		Order myOrder = razorpayClient.Orders.create(ob); // Initiating payment to the vendor
 
-		return adminService.payNow(payment, myOrder); // Retuning order details
+		return adminDAO.payNow(payment, myOrder); // Retuning order details
 	}
 
 	/**
@@ -246,7 +251,7 @@ public class AdminController {
 	@ResponseStatus(HttpStatus.OK)
 	public AdminPay updatingOrder(@RequestBody Map<String, String> data) {
 
-		return adminService.updatePayment(data); // Updating status of payment made to the vendor by Admin.
+		return adminDAO.updatePayment(data); // Updating status of payment made to the vendor by Admin.
 	}
 
 	/**
@@ -263,7 +268,7 @@ public class AdminController {
 	@GetMapping(value = "/v1/admin/paidHistory/{vendor}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public List<AdminPay> paidHistroy(@NotBlank @NotEmpty @NotNull @PathVariable String vendor) {
-		return adminService.paidHistroyVendor(vendor); // Finding payment history of the vendor.
+		return adminDAO.paidHistroyVendor(vendor); // Finding payment history of the vendor.
 	}
 
 	/**
@@ -282,7 +287,7 @@ public class AdminController {
 	@ResponseStatus(HttpStatus.OK)
 	public ResponseEntity<Object> getAllNumber() {
 
-		return adminService.getAllNumber();
+		return adminDAO.getAllNumber();
 	}
 
 }

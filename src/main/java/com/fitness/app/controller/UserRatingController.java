@@ -33,7 +33,7 @@ import org.springframework.validation.annotation.Validated;
 public class UserRatingController {
 
     @Autowired
-    private RatingDAO ratingService;
+    private RatingDAO ratingDAO;
 
     /**
      * This controller is used for rating vendor, user and gym registered in the
@@ -51,7 +51,7 @@ public class UserRatingController {
     @PostMapping(value = "/v1/userRating/rating", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @Validated
     public Rating rateVendor(@Valid @RequestBody RatingRequestModel rating) {
-        return ratingService.ratingService(rating); // Rating vendor, user or gym
+        return ratingDAO.ratingService(rating); // Rating vendor, user or gym
     }
 
     /**
@@ -68,7 +68,7 @@ public class UserRatingController {
     @GetMapping(value = "/v1/userRating/getRating/{gymId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public Double getRating(@NotBlank @NotEmpty @NotNull @PathVariable String gymId) {
-        return ratingService.getRating(gymId); // Fetching the rating of the gym by gymId
+        return ratingDAO.getRating(gymId); // Fetching the rating of the gym by gymId
     }
 
     /**
@@ -84,8 +84,8 @@ public class UserRatingController {
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
     @GetMapping(value = "/v1/userRating/getRatingPerson/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Double getRatingOfPerson(@NotBlank @NotEmpty @NotNull @Email@PathVariable String email) {
-        return ratingService.getRatingOfPerson(email); // Fetching the rating of the user by email id
+    public Double getRatingOfPerson(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
+        return ratingDAO.getRatingOfPerson(email); // Fetching the rating of the user by email id
     }
 
 }

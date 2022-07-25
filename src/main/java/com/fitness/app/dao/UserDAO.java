@@ -9,7 +9,7 @@ import com.fitness.app.model.UserModel;
 
 @Component
 public interface UserDAO {
-    
+
     public SignUpResponceModel registerNewUser(UserModel user);
 
     public ResponseEntity<SignUpResponceModel> logInFunctionality(String email, String password);

@@ -15,5 +15,5 @@ public interface LocationDAO {
     public String getDetails(@NotBlank @NotNull @RequestParam String address);
 
     public Map<String, List<String>> getAddress(@NotBlank @NotNull @RequestParam String latlng);
-    
+
 }

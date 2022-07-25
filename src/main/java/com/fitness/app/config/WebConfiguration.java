@@ -44,38 +44,6 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
 			"/v2/api-docs/**",
 			"/swagger-ui.html",
 			"/favicon.ico",
-			"/v1/get-rating/{gymId}",
-			"/v1/add/vendor-details",
-			"/v1/vendor-details/{email}",
-			"/v1/vendor-bankdetails/add",
-			"/v1/vendor-bankdetails/get/{email}",
-			"/v1/add/user-details",
-			"/v1/user-details/{email}",
-			"/v1/user-bankdetails/add",
-			"/v1/user-bankdetails/get/{email}",
-			"/v1/user-bankdetails/getall",
-			"/v1/user-bankdetails/getall/{pageNo}/{pageSize}",
-			"/v1/get-fitness-center-by-location",
-			"/v1/getLocation",
-			"/v1/rating",
-			"/v1/get-rating-person/{email}",
-			"/v1/uploadFile/{id}",
-			"/v1/downloadFile/{id}",
-			"/v1/user/set-password",
-			"/v1/forget/user/{email}",
-			"/v1/get-all-users/{pageNo}/{pageSize}",
-			"/v1/mark/users/attendance",
-			"/v1/user-performance",
-			"/v1/login/admin",
-			"/v1/get-all-vendors/{pageNo}/{pageSize}",
-			"/v1/get-all-gyms/{pageNo}/{pageSize}",
-			"/v1/get-all-gyms-by-email/{email}",
-			"/v1/vendor-payment/{vendor}",
-			"/v1/get-data-pay",
-			"/v1/pay-vendor-now",
-			"/v1/update-vendor-payment",
-			"/v1/paid-history/{vendor}",
-			"/v1/all-numbers",
 			"/actuator/**"
 	};
 
@@ -119,7 +87,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
 				.exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
 				.and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		
+
 		http.headers().xssProtection().and().contentSecurityPolicy("script-src 'self'");
 
 		http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

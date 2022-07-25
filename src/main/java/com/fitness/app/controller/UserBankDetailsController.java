@@ -33,10 +33,10 @@ import java.util.List;
 public class UserBankDetailsController {
 
     @Autowired
-    UserBankDetailsDAO userBankDetailsService;
+    UserBankDetailsDAO userBankDetailsDAO;
 
     @Autowired
-    PagingDAO pagingService;
+    PagingDAO pagingDAO;
 
     /**
      * This controller is used to add or update the bank details of the user
@@ -54,7 +54,8 @@ public class UserBankDetailsController {
     @Validated
     public ResponseEntity<Object> addBankDetails(@Valid @RequestBody UserBankDetailsRequestModel details) {
 
-        UserBankDetails userBankDetails = userBankDetailsService.addBankDetails(details); // Add or update bank details of the user.
+        UserBankDetails userBankDetails = userBankDetailsDAO.addBankDetails(details); // Add or update bank details of
+                                                                                      // the user.
 
         if (userBankDetails != null) {
             return new ResponseEntity<>(userBankDetails, HttpStatus.CREATED);
@@ -78,7 +79,7 @@ public class UserBankDetailsController {
     @GetMapping(value = "/v1/userBankDetails/get/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public UserBankDetails getBankDetails(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
-        return userBankDetailsService.getBankDetails(email); // Returning bank details of the user to make payment.
+        return userBankDetailsDAO.getBankDetails(email); // Returning bank details of the user to make payment.
     }
 
     /**
@@ -95,7 +96,9 @@ public class UserBankDetailsController {
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
     @GetMapping(value = "/v1/userBankDetails/getall/{pageNo}/{pageSize}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public List<UserBankDetails> getAllDetails(@NotNull @Min(value = 1L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo, @NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 20L, message = "Page size can be maximum 19") @PathVariable int pageSize) {
-        return pagingService.getallDetails(pageNo, pageSize); // List of user's bank.
+    public List<UserBankDetails> getAllDetails(
+            @NotNull @Min(value = 1L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
+            @NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 20L, message = "Page size can be maximum 19") @PathVariable int pageSize) {
+        return pagingDAO.getallDetails(pageNo, pageSize); // List of user's bank.
     }
 }

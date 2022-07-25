@@ -11,11 +11,11 @@ import java.util.UUID;
 
 @Component
 public class TraceInterceptor implements HandlerInterceptor {
-    
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        MDC.put("TRACE_ID", UUID.randomUUID().toString());
+        MDC.put("TRACE_ID", UUID.randomUUID().toString()); // Generating Random Trace id
         return true;
     }
 }

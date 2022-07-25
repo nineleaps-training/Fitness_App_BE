@@ -5,7 +5,6 @@ import java.util.List;
 
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fitness.app.dao.AttendanceDAO;
@@ -26,7 +25,7 @@ public class AttendanceService implements AttendanceDAO {
 	
 	private RatingRepo ratingRepo;
 
-	@Autowired
+
 	public AttendanceService(RatingRepo ratingRepo2, AttendanceRepo attendanceRepo2) {
 		this.ratingRepo = ratingRepo2;
 		this.attendanceRepo = attendanceRepo2;

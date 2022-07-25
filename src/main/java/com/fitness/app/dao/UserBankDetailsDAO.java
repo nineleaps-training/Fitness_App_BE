@@ -12,6 +12,4 @@ public interface UserBankDetailsDAO {
 
     public UserBankDetails getBankDetails(String email);
 
-
-    
 }

@@ -11,5 +11,5 @@ public interface VendorDetailsDAO {
     public VendorDetails addVendorDetails(UserDetailsRequestModel vendorDetails);
 
     public VendorDetails getVendorDetails(String email);
-    
+
 }

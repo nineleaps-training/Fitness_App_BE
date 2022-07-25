@@ -8,7 +8,6 @@ import com.fitness.app.repository.UserRepo;
 
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fitness.app.model.UserDetailsRequestModel;
@@ -31,7 +30,6 @@ public class VendorDetailsService implements VendorDetailsDAO {
      * @param userRepository2          - User Repository
      * @param vendorDetailsRepository2 - Vendor Details Repository
      */
-    @Autowired
     public VendorDetailsService(UserRepo userRepository2, VendorDetailsRepo vendorDetailsRepository2) {
         this.userRepository = userRepository2;
         this.vendordetailsRepository = vendorDetailsRepository2;

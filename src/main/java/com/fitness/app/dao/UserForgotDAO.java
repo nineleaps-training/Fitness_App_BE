@@ -11,5 +11,5 @@ public interface UserForgotDAO {
     public UserForgotModel userForgot(String email);
 
     public boolean setPassword(Authenticate user);
-    
+
 }

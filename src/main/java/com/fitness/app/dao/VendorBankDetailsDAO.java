@@ -15,5 +15,5 @@ public interface VendorBankDetailsDAO {
     public List<VendorBankDetails> getDetails();
 
     public VendorBankDetails getBankDetails(String email);
-    
+
 }

@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fitness.app.dao.UserOrderDAO;
@@ -65,7 +64,6 @@ public class UserOrderService implements UserOrderDAO{
      * @param gymService2      - Gym Service
      * @param vendorOrderRepo2 - Vendor Order Repository
      */
-    @Autowired
     public UserOrderService(UserRepo userRepository2, UserOrderRepo userOrderRepo2,
             AttendanceRepo attendanceRepo2, AddGymRepo gymRepo2, GymService gymService2,
             VendorPayRepo vendorOrderRepo2) {

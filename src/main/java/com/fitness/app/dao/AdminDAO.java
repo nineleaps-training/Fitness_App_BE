@@ -17,10 +17,10 @@ import com.fitness.app.model.SignUpResponceModel;
 import com.razorpay.Order;
 
 @Component
-public interface AdminDAO{
+public interface AdminDAO {
 
     public AdminPay getDataPay(AdminPayRequestModel payment);
-    
+
     public AdminPay payNow(AdminPayRequestModel payment, Order myOrder);
 
     public AdminPay vendorPayment(String vendor);

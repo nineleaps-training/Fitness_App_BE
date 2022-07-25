@@ -11,5 +11,5 @@ public interface ImgDAO {
     public Doc saveImage(MultipartFile file, String id) throws IOException;
 
     public Doc getImage(String id);
-    
+
 }

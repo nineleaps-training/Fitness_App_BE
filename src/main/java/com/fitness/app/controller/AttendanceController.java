@@ -33,7 +33,7 @@ import io.swagger.annotations.ApiResponses;
 public class AttendanceController {
 
 	@Autowired
-	private AttendanceDAO attendanceService;
+	private AttendanceDAO attendanceDAO;
 
 	/**
 	 * This controller is used to mark the attendance of the user by the vendor
@@ -50,7 +50,7 @@ public class AttendanceController {
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class)})
 	public String markUserAttendance(@Valid @RequestBody MarkUserAttModel userAttendance) {
-		return attendanceService.markUsersAttendance(userAttendance); // Mark attendance of the user for a specific fitness center by the vendor.
+		return attendanceDAO.markUsersAttendance(userAttendance); // Mark attendance of the user for a specific fitness center by the vendor.
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class AttendanceController {
 	@Validated
 	public ResponseEntity<Object> userPerformance(@Email @RequestParam String email,
 			@NotNull @NotBlank @RequestParam String gym) throws DataNotFoundException {
-		return new ResponseEntity<>(attendanceService.userPerfomance(email, gym), HttpStatus.OK); // Finding the total attendance of the user.
+		return new ResponseEntity<>(attendanceDAO.userPerfomance(email, gym), HttpStatus.OK); // Finding the total attendance of the user.
 
 	}
 }

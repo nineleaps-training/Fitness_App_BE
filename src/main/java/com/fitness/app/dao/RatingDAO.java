@@ -13,5 +13,5 @@ public interface RatingDAO {
     public Double getRating(String target);
 
     public Double getRatingOfPerson(String email);
-    
+
 }

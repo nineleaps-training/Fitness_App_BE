@@ -44,7 +44,7 @@ import io.swagger.annotations.ApiResponses;
 public class UserOrderController {
 
     @Autowired
-    private UserOrderDAO userOrderService;
+    private UserOrderDAO userOrderDAO;
 
     @ApiOperation(value = "Check User Can Order", notes = "Checking if user can order or not")
     @ApiResponses(value = { @ApiResponse(code = 200, message = "User can order", response = Boolean.class),
@@ -52,7 +52,7 @@ public class UserOrderController {
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
     @GetMapping("/v1/userOrder/checkUserOrder/{email}")
     public Boolean checkUserCanOrder(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
-        return userOrderService.canOrder(email);
+        return userOrderDAO.canOrder(email);
     }
 
     /**
@@ -70,9 +70,9 @@ public class UserOrderController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     @Validated
-    public String orderNow(@Valid @RequestBody UserOrderModel order) throws RazorpayException{
+    public String orderNow(@Valid @RequestBody UserOrderModel order) throws RazorpayException {
 
-        return userOrderService.orderNow(order); 
+        return userOrderDAO.orderNow(order);
 
     }
 
@@ -91,11 +91,12 @@ public class UserOrderController {
     @ResponseStatus(HttpStatus.OK)
     public UserOrder updatingOrder(@RequestBody Map<String, String> data) {
 
-        return userOrderService.updateOrder(data); // update_order after payment.
+        return userOrderDAO.updateOrder(data); // update_order after payment.
     }
 
     /**
-     * This controller is used for checking the pending order by email id of the user
+     * This controller is used for checking the pending order by email id of the
+     * user
      * 
      * @param email - Email of the user
      * @return - Response is okay if success or else bad request
@@ -108,8 +109,8 @@ public class UserOrderController {
     @GetMapping(value = "/v1/userOrder/pending/order/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> pedingOrerList(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
-        return new ResponseEntity<>(userOrderService.pendingListOrder(email), HttpStatus.OK); // Check the pending
-                                                                                              // orders of the user
+        return new ResponseEntity<>(userOrderDAO.pendingListOrder(email), HttpStatus.OK); // Check the pending
+                                                                                          // orders of the user
     }
 
     /**
@@ -127,13 +128,14 @@ public class UserOrderController {
     @GetMapping(value = "/v1/userOrder/order/history/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Object> orderHistory(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
-        return new ResponseEntity<>(userOrderService.orderListOrder(email), HttpStatus.OK); // Fetching the order
-                                                                                            // history by email id of
-                                                                                            // the user
+        return new ResponseEntity<>(userOrderDAO.orderListOrder(email), HttpStatus.OK); // Fetching the order
+                                                                                        // history by email id of
+                                                                                        // the user
     }
 
     /**
-     * This controller is used for fetching all the users of a particular gym from gym id
+     * This controller is used for fetching all the users of a particular gym from
+     * gym id
      * 
      * @param gymId - id of the gym
      * @return - List of users of the gym
@@ -146,11 +148,12 @@ public class UserOrderController {
     @GetMapping(value = "/v1/userOrder/my/users/{gymId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public Set<UserPerfomanceModel> allMyUsers(@NotBlank @NotEmpty @NotNull @PathVariable String gymId) {
-        return userOrderService.allMyUser(gymId); // Fetching the user of the particular Gym by gymId
+        return userOrderDAO.allMyUser(gymId); // Fetching the user of the particular Gym by gymId
     }
 
     /**
-     * This controller is used for fetching the booked gyms by a particular user by email
+     * This controller is used for fetching the booked gyms by a particular user by
+     * email
      * 
      * @param email - Email id of the user
      * @return - List of all the gyms booked by the user
@@ -163,6 +166,6 @@ public class UserOrderController {
     @GetMapping(value = "/v1/userOrder/booked/gyms/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public List<GymRepresentModel> bookedGym(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
-        return userOrderService.bookedGym(email); // Fetching gyms booked by a particular user by email
+        return userOrderDAO.bookedGym(email); // Fetching gyms booked by a particular user by email
     }
 }

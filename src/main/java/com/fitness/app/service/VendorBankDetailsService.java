@@ -10,7 +10,6 @@ import com.fitness.app.repository.UserRepo;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,7 +29,6 @@ public class VendorBankDetailsService implements VendorBankDetailsDAO {
      * @param bankDetailsRepository - Bank Details Repository
      * @param userRepository2       - User Repository
      */
-    @Autowired
     public VendorBankDetailsService(BankDetailsRepo bankDetailsRepository, UserRepo userRepository2) {
         this.repository = bankDetailsRepository;
         this.userRepository = userRepository2;

@@ -13,7 +13,6 @@ import com.fitness.app.repository.RatingRepo;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -31,7 +30,7 @@ public class RatingService implements RatingDAO{
      * @param ratingRepo2      - Rating Repository
      * @param addGymRepository - Gym Repository
      */
-    @Autowired
+
     public RatingService(RatingRepo ratingRepo2, AddGymRepo addGymRepository) {
         this.ratingRepo = ratingRepo2;
         this.gymRepo = addGymRepository;

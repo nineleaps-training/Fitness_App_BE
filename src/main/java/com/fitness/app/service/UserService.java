@@ -3,7 +3,6 @@ package com.fitness.app.service;
 import java.security.SecureRandom;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -58,7 +57,6 @@ public class UserService implements UserDAO {
 	 * @param componets       - Components
 	 * @param passwordEncoder - Password Encoder
 	 */
-	@Autowired
 	public UserService(UserRepo userRepository2, Components componets, PasswordEncoder passwordEncoder, UserRepo userRepo, AuthenticationManager authenticationManager, UserDetailsServiceImpl userDetailsServiceImpl, JwtUtils jwtUtils) {
 		this.userRepository = userRepository2;
 		this.sendMessage = componets;

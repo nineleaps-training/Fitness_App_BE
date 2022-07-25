@@ -30,7 +30,7 @@ import java.util.ArrayList;
 public class UserDetailsController {
 
     @Autowired
-    private UserDetailsDAO userDetailsService;
+    private UserDetailsDAO userDetailsDAO;
 
     /**
      * This controller is used for adding the user details
@@ -47,7 +47,7 @@ public class UserDetailsController {
     @ResponseStatus(HttpStatus.CREATED)
     @Validated
     public ResponseEntity<Object> addUserDetails(@Valid @RequestBody UserDetailsRequestModel userDetails) {
-        UserDetails userDetails1 = userDetailsService.addUserDetails(userDetails);
+        UserDetails userDetails1 = userDetailsDAO.addUserDetails(userDetails);
 
         ArrayList<UserDetails> user = new ArrayList<>();
         user.add(userDetails1);
@@ -73,7 +73,7 @@ public class UserDetailsController {
     @GetMapping(value = "/v1/userDetails/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public UserDetails getUserDetails(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
-        return userDetailsService.getUserDetails(email); // Fetching details of user by email
+        return userDetailsDAO.getUserDetails(email); // Fetching details of user by email
     }
 
 }

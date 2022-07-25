@@ -18,5 +18,5 @@ public interface PagingDAO {
     public List<UserClass> getallUsers(int pageNo, int pageSize);
 
     public List<UserBankDetails> getallDetails(int pageNo, int pageSize);
-    
+
 }
