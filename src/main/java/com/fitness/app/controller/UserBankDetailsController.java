@@ -1,41 +1,76 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.entity.UserBankDetails;
-import com.fitness.app.service.UserBankDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fitness.app.dto.request.UserBankModel;
+import com.fitness.app.entity.UserBankDetailsClass;
+import com.fitness.app.service.UserBankDetailsDaoImpl;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
 
+/**
+ * The type User bank details controller.
+ */
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/bank")
 public class UserBankDetailsController {
 
-    @Autowired
-    UserBankDetailsService userBankDetailsService;
+    private final UserBankDetailsDaoImpl userBankDetailsServiceImpl;
 
-    //Add or update bank details of the user.
-    @PutMapping("/user-bankdetails/add")
-    public ResponseEntity<?> addBankDetails(@RequestBody UserBankDetails details) {
+    /**
+     * Add bank details response entity.
+     *
+     * @param details the details
+     * @return the response entity
+     */
+//Add or update bank details of the user.
+    @PutMapping("/user/bankDetails/add")
+    @ApiOperation(value = "Add Bank Details", notes = "Add bank Details of User.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Added or Successful", response = String.class),
+    })
+    @Validated
+    public ResponseEntity<UserBankDetailsClass> addBankDetails(@Valid @RequestBody UserBankModel details) {
+        UserBankDetailsClass userBankDetailsClass = userBankDetailsServiceImpl.addBankDetails(details);
+        return new ResponseEntity<UserBankDetailsClass>(userBankDetailsClass, HttpStatus.OK);
 
-        UserBankDetails userBankDetails = userBankDetailsService.addBankDetails(details);
-
-        if (userBankDetails != null) {
-            return new ResponseEntity<>(userBankDetails, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
-    //get bank details of the user to make payment.
-    @GetMapping("/user-bankdetails/get/{email}")
-    public UserBankDetails getBankDetails(@PathVariable String email) {
-        return userBankDetailsService.getBankDetails(email);
+    /**
+     * Gets bank details.
+     *
+     * @param email the email
+     * @return the bank details
+     */
+//get bank details of the user to make payment.
+    @GetMapping("/user/bankDetails/get/{email}")
+    @ApiOperation(value = "Add Bank Details", notes = "Add bank Details of User.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Added or Successful", response = String.class),
+    })
+    @Validated
+    @Email
+    public ResponseEntity<?> getBankDetails(@Valid @PathVariable String email) {
+        return new ResponseEntity<>(userBankDetailsServiceImpl.getBankDetails(email), HttpStatus.OK);
     }
 
-    //List of user's bank.
-    @GetMapping("user-bankdetails/getall")
-    public List<UserBankDetails> getAllDetails() {
-        return userBankDetailsService.getAllDetails();
+    /**
+     * Gets all details.
+     *
+     * @return the all details
+     */
+//List of user's bank.
+    @GetMapping("/user/bankDetails/get-all")
+    @ApiOperation(value = "Bank Details", notes = "Get bank Details of User.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Bank Details", response = UserBankDetailsClass.class),
+    })
+    public ResponseEntity<?> getAllDetails() {
+        return new ResponseEntity<>(userBankDetailsServiceImpl.getAllDetails(), HttpStatus.OK);
+
     }
 }

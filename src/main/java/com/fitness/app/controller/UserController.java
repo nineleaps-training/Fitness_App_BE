@@ -1,202 +1,100 @@
 package com.fitness.app.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import com.fitness.app.dto.auth.Authenticate;
+import com.fitness.app.dto.request.UserModel;
+import com.fitness.app.dto.response.ApiResponse;
+import com.fitness.app.service.UserDaoImpl;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-import com.fitness.app.auth.Authenticate;
-import com.fitness.app.componets.Components;
-import com.fitness.app.config.JwtUtils;
-import com.fitness.app.entity.UserClass;
-import com.fitness.app.model.SignUpResponce;
-import com.fitness.app.model.UserModel;
-import com.fitness.app.repository.UserRepository;
-import com.fitness.app.security.service.UserDetailsServiceImpl;
-import com.fitness.app.service.UserService;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
 
+
+@Slf4j
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/user")
 public class UserController {
 
-	
-	
-	@Autowired
-	private UserService userService;
-	
-	 @Autowired
-	 private AuthenticationManager authenticationManager;
-	    
-	 @Autowired
-	 private UserDetailsServiceImpl userDetailsService;
-	    
-	 @Autowired
-	  private JwtUtils jwtUtils;
-	 
-	 @Autowired
-	 private Components sendMessage;
-	
-	 @Autowired
-	 private UserRepository userRepo;
-	 
-	 @Autowired
-	 private PasswordEncoder passwordEncoder;
-	 
 
-	 //Register a new user by custom option.
-	 @PostMapping("/register/user")
-	 public SignUpResponce registerUser(@RequestBody UserModel user) 
-	 { 
-		 
-		 
-		 UserClass localUser=userRepo.findByEmail(user.getEmail());
-		 SignUpResponce responce=new SignUpResponce();
-		 if(localUser!=null && localUser.getCustom())
-		 {
-			 localUser.setPassword(null);
-			 
-			 if(localUser.getActivated())
-			 {
-			      
-			      responce.setCurrentUser(localUser);
-			      responce.setMessage("Already In Use!");
-			      return responce;
-			 }
-			 else
-			 {
-				 String otp= sendMessage.otpBuilder();
-				 final  int code=sendMessage.sendOtpMessage("hello ", otp,user.getMobile()); 
-				 if(code==200)
-				 {
-					  responce.setCurrentUser(localUser);
-				      responce.setMessage(otp);
-				      return responce;
-				 }
-				 else
-				 {
-					 responce.setCurrentUser(null);
-					 responce.setMessage("Somting went wrong");
-					 return responce;
-				 }
-			  }
-			 }
-		 else
-		 {
+    private final UserDaoImpl userServiceImpl;
 
-		      String otp= sendMessage.otpBuilder();
-		      final  int code=sendMessage.sendOtpMessage("hello ", otp,user.getMobile());
-		      if(code==200) {
-		      responce.setCurrentUser(userService.registerUser(user));
-	          responce.setMessage(otp);
-	          return responce;
-		     }
-		     else {
-				  responce.setCurrentUser(null);
-				  responce.setMessage("Somthing went wrong");
-				  return responce;
-			  }
-		 }
-			 
-		 
-			 
-		 } 
-	 
-	 
-	 //Verify User
-	 @PutMapping("/verify/user")
-	 public ResponseEntity<?> verifyTheUser(@RequestBody Authenticate authCredential) throws Exception
-	 {
-		 UserClass user= userService.verifyUser(authCredential.getEmail());
-		 
-		 if(user!=null)
-		 {
-			 
-			 return logInFunctionality(authCredential.getEmail(), authCredential.getPassword());
-		 }
-		 
-		 return ResponseEntity.ok( new SignUpResponce(null, null));
-	 }
-	 
-	
-	 
-	 //Log in user
-	 @PostMapping("/login/user")
-	    public ResponseEntity<?> authenticateUser(@RequestBody Authenticate authCredential) throws Exception
-	    {
-	    	return logInFunctionality(authCredential.getEmail(), authCredential.getPassword() );
-	    	
-	    }
-	 
-	 
-	 //function to log in and return token
-	 public ResponseEntity<?> logInFunctionality(String email, String password) throws Exception
-	 {
-		 try {    		
-	    		authenticationManager.authenticate(
-	    				new UsernamePasswordAuthenticationToken(email, password)
-	    				);   		
-	    	}catch (Exception e) {
-	    		System.out.println(e.getMessage());
-	    		throw new Exception("Error");
-			}
-	    	final UserDetails usrDetails=userDetailsService.loadUserByUsername(email);
-	    	final String jwt= jwtUtils.generateToken(usrDetails);
-	    	final UserClass localUser=userRepo.findByEmail(email);
-	    	if(localUser.getRole()!="ADMIN")
-	    	{
-	    		localUser.setPassword(null);
-	    	return ResponseEntity.ok( new SignUpResponce( localUser, jwt));
-	    	}
-	    	else
-	    	{
-	    		return ResponseEntity.ok( new SignUpResponce(null, null));
-	    	}
-	    	
-	 }
-	 
-	 @PutMapping("/google-sign-in/vendor")
-	 public ResponseEntity<?> googleSignInVendor(@RequestBody UserModel user) throws Exception
-	 {
-		 String pass=userService.randomPass();
-		 user.setPassword(pass);
-		 UserClass localUser=userService.googleSignInMethod(user);
-		 if(localUser==null) {
-			 return ResponseEntity.ok( new SignUpResponce(null, "This email in use!"));
-		 }
-		 else if(localUser!=null && localUser.getRole().equals("USER"))
-		 {
-			 return ResponseEntity.ok( new SignUpResponce(null, "This email already in use as USER! "));
-		 }
-		 else
-		 {
-			 return logInFunctionality(localUser.getEmail(), user.getPassword());
-		 }
-	 }
-	 
-	 
-	 @PutMapping("/google-sign-in/user")
-	 public ResponseEntity<?> googleSignInUser(@RequestBody UserModel user) throws Exception
-	 {
-		 String pass=userService.randomPass();
-		 user.setPassword(pass);
-		 UserClass localUser=userService.googleSignInMethod(user);
-		 if(localUser==null) {
-			 return ResponseEntity.ok( new SignUpResponce(null, "This email in use!"));
-		 }
-		 else if(localUser!=null && localUser.getRole().equals("VENDOR"))
-		 {
-			 return ResponseEntity.ok( new SignUpResponce(null, "This email already in use as VENDOR! "));
-		 }
-		 else
-		 {
-			 return logInFunctionality(localUser.getEmail(), user.getPassword());
-		 }
-	 }
+    /**
+     * Register user api response.
+     *
+     * @param user the user
+     * @return the api response
+     */
+
+    @PostMapping("/public/register/user")
+    @ApiOperation(value = "Add new user", notes = "User can onboard in application.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Added or Successful", response = String.class),
+    })
+    @Validated
+    public ApiResponse registerUser(@RequestBody @Valid UserModel user) {
+        return userServiceImpl.registerUser(user);
+    }
+
+    /**
+     * Verify the user api response.
+     *
+     * @param email the email
+     * @param otp   the otp
+     * @return the api response
+     * @throws Exception the exception
+     */
+//Verify User
+    @PutMapping("/public/verify/user")
+    @ApiOperation(value = "Verify new added user", notes = "User Should verify via otp sent on mail.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Added or Successful", response = String.class),
+    })
+    @Validated
+    @Email
+    public ApiResponse verifyTheUser(@RequestParam @Valid String email, @RequestParam String otp) throws Exception {
+        return userServiceImpl.verifyUser(email, otp);
+    }
+
+
+    /**
+     * Authenticate user api response.
+     *
+     * @param authCredential the auth credential
+     * @return the api response
+     * @throws Exception the exception
+     */
+//Log in user
+    @PostMapping("/public/login/user")
+    @ApiOperation(value = "Sign in User", notes = "User Login or Sign up method.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Token for accessing application", response = String.class),
+            @io.swagger.annotations.ApiResponse(code = 203, message = "Invalid credentials", response = String.class)
+    })
+    @Validated
+    public ApiResponse authenticateUser(@Valid @RequestBody Authenticate authCredential) throws Exception {
+        return userServiceImpl.loginUser(authCredential);
+
+    }
+
+    /**
+     * Google sign in user api response.
+     *
+     * @param user the user
+     * @return the api response
+     * @throws Exception the exception
+     */
+    @PutMapping("/public/google/sign/in/user")
+    @ApiOperation(value = "Sign in User via 3rd party", notes = "User Login or Sign up method for google account.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Token for accessing application", response = String.class),
+            @io.swagger.annotations.ApiResponse(code = 500, message = "Something went Wrong", response = String.class)
+    })
+    @Validated
+    public ApiResponse googleSignInUser(@Valid @RequestBody UserModel user) throws Exception {
+        return userServiceImpl.googleSignInMethod(user);
+    }
 }
 
 

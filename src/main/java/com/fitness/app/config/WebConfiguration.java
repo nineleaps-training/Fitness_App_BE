@@ -1,6 +1,7 @@
 package com.fitness.app.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fitness.app.security.service.UserDetailsSecServiceImpl;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -14,133 +15,65 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
-import com.fitness.app.security.service.UserDetailsServiceImpl;
-
-
 @Configuration
 @EnableWebSecurity
-public class WebConfiguration extends WebSecurityConfigurerAdapter{
-   
-	private static String[] PUBLIC_API= {
-			"/gyms/locality/{locality}",
-			"/gym/city/{city}",
-			"/gym/id/**",
-			
-			"/login/user",
-			"/verify/user/**",
-			"/register/user",
-			"/hello",
-			"/login/admin",
+@RequiredArgsConstructor
+public class WebConfiguration extends WebSecurityConfigurerAdapter {
 
-			"/forget/user/**",
-			"/user/set-password",
+    private static String[] publicApi = {
 
-            "/user-performance",
-            "/all-numbers",
-			"/downloadFile/**",
-			"/google-sign-in/**",
+            "/api/v1/admin/public/**",
+            "/api/v1/fitness/public/**",
+            "/api/v1/image/**",
+            "/api/v1/reset/**",
+            "/api/v1/map/public/**",
+            "/api/v1/user/public/**",
 
-		
+            "/swagger-ui/*",
+            "/swagger-resources/**",
+            "/v2/api-docs/**",
+            "/swagger-ui.html",
+            "/favicon.ico",
 
-			"/swagger-ui/*",
-			"/swagger-resources/**",
-			"/v2/api-docs/**",
-			"/swagger-ui.html",
-			"/favicon.ico",
+    };
 
-			"/get-fitness-center-by-location",
+    private final UserDetailsSecServiceImpl userDetailsSecServiceImpl;
+    private final JwtAuthenticationEntryPoint unauthorizedHandler;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
-			"/qrcode",
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-			"/address-by-lat-lng",
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
 
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        super.configure(auth);
+        auth.userDetailsService(userDetailsSecServiceImpl).passwordEncoder(new BCryptPasswordEncoder());
+    }
 
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+                .headers().xssProtection().and().contentSecurityPolicy("script-src 'self'").and().and()
+                .cors()
+                .disable()
+                .authorizeRequests()
+                .antMatchers(publicApi).permitAll()
+                .antMatchers(org.springframework.http.HttpMethod.OPTIONS).permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+    }
 
-
-
-	};
-	
-
-	
-	@Autowired
-	private UserDetailsServiceImpl userDetailsServiceImpl;
-	
-	@Autowired
-    private JwtAuthenticationEntryPoint unauthorizedHandler;
-
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-	
-	@Bean
-	public PasswordEncoder passwordEncoder()
-	{
-		return new BCryptPasswordEncoder();
-	}
-	
-	
-	
-	
-	 @Override
-	    @Bean
-	    public AuthenticationManager authenticationManagerBean() throws Exception {
-	        return super.authenticationManagerBean();
-	    }
-
-
-
-
-	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-		 super.configure(auth);
-	        auth.userDetailsService(userDetailsServiceImpl );
-	}
-
-
-
-
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		 http
-         .csrf()
-         .disable()
-         .cors()
-         .disable()
-         .authorizeRequests()
-         .antMatchers(PUBLIC_API).permitAll()
-         .antMatchers(org.springframework.http.HttpMethod.OPTIONS).permitAll()
-         .anyRequest().authenticated()
-         .and()
-         .exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
-         .and()
-         .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
- http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-	}
-     
-//	http.csrf().disable();
-//	http.authorizeRequests().antMatchers("/", "/signup", "/login", "/logout").permitAll();
-//	http.authorizeRequests().antMatchers("/userInfo").access("hasRole('" + AppRole.ROLE_USER + "')");
-//	http.authorizeRequests().antMatchers("/admin").access("hasRole('" + AppRole.ROLE_ADMIN + "')");
-//	http.authorizeRequests().and().exceptionHandling().accessDeniedPage("/403");
-//	http.authorizeRequests().and().formLogin()
-//			.loginProcessingUrl("/j_spring_security_check") 
-//			.loginPage("/login")
-//			.defaultSuccessUrl("/userInfo")
-//			.failureUrl("/login?error=true")
-//			.usernameParameter("username")
-//			.passwordParameter("password");
-//	http.authorizeRequests().and().logout().logoutUrl("/logout").logoutSuccessUrl("/");
-//	http.apply(new SpringSocialConfigurer()).signupUrl("/signup");
-//}
-//
-//@Override
-//public UserDetailsService userDetailsService() {
-//    return userDetailsService;
-//}
-	 
-	
-	
-	
 }

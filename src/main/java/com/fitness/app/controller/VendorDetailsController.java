@@ -1,53 +1,70 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.entity.VendorDetails;
-import com.fitness.app.repository.UserOrderRepo;
-import com.fitness.app.service.VendorDetailsService;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fitness.app.dto.request.DetailsModel;
+import com.fitness.app.dto.response.ApiResponse;
+import com.fitness.app.entity.VendorBankDetailsClass;
+import com.fitness.app.entity.VendorDetailsClass;
+import com.fitness.app.exceptions.DataNotFoundException;
+import com.fitness.app.service.VendorDetailsDaoImpl;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
 
+/**
+ * The type Vendor details controller.
+ */
 @RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/vendor/details")
 public class VendorDetailsController {
 
-    @Autowired
-    private VendorDetailsService vendorDetailsService;
+    private final VendorDetailsDaoImpl vendorDetailsServiceImpl;
 
-    @Autowired
-    private UserOrderRepo userOrderRepo;
-    //Adding details of the vendor
-    @PutMapping("/add/vendor-details")
-    public ResponseEntity<?> addVendorDetails(@RequestBody VendorDetails vendorDetails) {
-        VendorDetails vendorDetails1 = vendorDetailsService.addVendorDetails(vendorDetails);
 
-        ArrayList<VendorDetails> vendor  = new ArrayList<>();
-        vendor.add(vendorDetails1);
+    /**
+     * Add vendor details api response.
+     *
+     * @param vendorDetails the vendor details
+     * @return the api response
+     */
+//Adding details of the vendor
+    @PutMapping("/add/vendor/details")
+    @ApiOperation(value = "Add Details", notes = "Add vendor details.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Successful", response = ApiResponse.class),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Not found or bad request ", response = DataNotFoundException.class)
+    })
+    @Validated
+    public ApiResponse addVendorDetails(@RequestBody @Valid @Email DetailsModel vendorDetails) {
+        return vendorDetailsServiceImpl.addVendorDetails(vendorDetails);
 
-        if (vendorDetails1 != null) {
-            return new ResponseEntity<>(vendor, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-    }
-    //Fetching the details of the vendor by his email id
-    @GetMapping("/vendor-details/{email}")
-    public VendorDetails getVendorDetails(@PathVariable String email) {
-        return vendorDetailsService.getVendorDetails(email);
+
     }
 
-    /*@GetMapping("/get-users/{id}")
-    public List<UserOrder> getUsers(@PathVariable String id)
-    {
-        List<UserOrder> u = userOrderRepo.findAll();
-        u=u.stream().filter(e -> e.getGym().equals(id)).collect(Collectors.toList());
-        return u;
-    }*/
+    /**
+     * Gets vendor details.
+     *
+     * @param email the email
+     * @return the vendor details
+     */
+//Fetching the details of the vendor by his email id
+    @GetMapping("/get/vendor/details/{email}")
+    @ApiOperation(value = "Get Vendor details ", notes = "Vendor Details.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Details of vendor", response = VendorBankDetailsClass.class),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Not found or bad request ", response = DataNotFoundException.class)
+    })
+    @Validated
+    public ResponseEntity<VendorDetailsClass> getVendorDetails(@PathVariable String email) {
+
+        return new ResponseEntity<VendorDetailsClass>(vendorDetailsServiceImpl.getVendorDetails(email), HttpStatus.OK);
+
+    }
+
 
 }

@@ -1,9 +1,10 @@
 package com.fitness.app.config;
 
 
-import com.fitness.app.security.service.UserDetailsServiceImpl;
+import com.fitness.app.security.service.UserDetailsSecServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,54 +18,42 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Slf4j
 @Component
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    private JwtUtils jwtUtil;
-
+    private final UserDetailsSecServiceImpl userDetailsService;
+    private final JwtUtils jwtUtil;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
         final String requestTokenHeader = request.getHeader("Authorization");
-        System.out.println(requestTokenHeader);
+        log.info("Request token header has been created:");
         String username = null;
         String jwtToken = null;
-
-        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")){
-
+        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7);
             try {
                 username = jwtUtil.extractUsername(jwtToken);
             } catch (ExpiredJwtException e) {
-                e.printStackTrace();
-                System.out.println("JWT Token Is Expired");
+                log.error("JwtAuthenticationFilter >> doFilterInternal >> Error found due to : {}", e.getMessage());
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("JwtAuthenticationFilter >> doFilterInternal >> A general error found due to : {}", e.getMessage());
             }
+        } else {
+            log.error("JwtAuthenticationFilter >> doFilterInternal >> Invalid Token or bad credentials : Not start with bearer");
         }
-
-        else {
-            System.out.println("Invalid Token : Not Start With Bearer");
-        }
-
         // Validating Token
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if (jwtUtil.validateToken(jwtToken, userDetails)) {
-
                 UsernamePasswordAuthenticationToken usernamePasswordAuthentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 usernamePasswordAuthentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthentication);
             }
+        } else {
+            log.error("JwtAuthenticationFilter >> doFilterInternal >> Invalid Token or bad credentials : Not start with bearer");
         }
-        else
-            System.out.println("Invalid Token");
-
         filterChain.doFilter(request, response);
     }
 }

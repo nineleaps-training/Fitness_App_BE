@@ -1,34 +1,65 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.entity.VendorBankDetails;
-import com.fitness.app.service.VendorBankDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fitness.app.dto.request.UserBankModel;
+import com.fitness.app.dto.response.ApiResponse;
+import com.fitness.app.entity.VendorBankDetailsClass;
+import com.fitness.app.exceptions.DataNotFoundException;
+import com.fitness.app.service.VendorBankDetailsDaoImpl;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-public class VendorBankDetailsController {
-    @Autowired
-    private VendorBankDetailsService vendorBankDetailsService;
-    //Adding bank details of the vendor
-    @PutMapping("/vendor-bankdetails/add")
-    public ResponseEntity<?> addDetails(@RequestBody VendorBankDetails details) {
-        VendorBankDetails vendorBankDetails = vendorBankDetailsService.addDetails(details);
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
 
-        if (vendorBankDetails != null) {
-            return new ResponseEntity<>(vendorBankDetails, HttpStatus.OK);
-        }
-        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+/**
+ * The type Vendor bank details controller.
+ */
+@RestController
+@RequestMapping("/api/v1/vendor-bank")
+@RequiredArgsConstructor
+public class VendorBankDetailsController {
+
+    private final VendorBankDetailsDaoImpl vendorBankDetailsServiceImpl;
+
+    /**
+     * Add details api response.
+     *
+     * @param details the details
+     * @return the api response
+     */
+//Adding bank details of the vendor
+    @PutMapping("/vendor/bank/details/add")
+    @ApiOperation(value = "Add Bank Details ", notes = "Add vendor details: .")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Successful", response = String.class),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Not found or bad request ", response = DataNotFoundException.class)
+    })
+    @Validated
+    public ApiResponse addDetails(@RequestBody @Valid UserBankModel details) {
+        return vendorBankDetailsServiceImpl.addDetails(details);
+
     }
-    //Febtching bank details of the vendor by email id
-    @GetMapping("/vendor-bankdetails/get/{email}")
-    public VendorBankDetails getBankDetails(@PathVariable String email) {
-        return vendorBankDetailsService.getBankDetails(email);
+
+    /**
+     * Gets bank details.
+     *
+     * @param email the email
+     * @return the bank details
+     */
+//Fetching bank details of the vendor by email id
+    @GetMapping("/vendor/bank/details/get/{email}")
+    @ApiOperation(value = "Get bank Details ", notes = "Get bank details of vendor.")
+    @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Bank Details", response = VendorBankDetailsClass.class),
+            @io.swagger.annotations.ApiResponse(code = 401, message = "Not found or bad request ", response = DataNotFoundException.class)
+    })
+    @Validated
+    public ResponseEntity<VendorBankDetailsClass> getBankDetails(@PathVariable @Valid @Email String email) {
+        return new ResponseEntity<VendorBankDetailsClass>(vendorBankDetailsServiceImpl.getBankDetails(email), HttpStatus.OK);
+
     }
-    //Fetching bank details of all the vendors (Testing)
-    /*@GetMapping("/vendor-bankdetails/get")
-    public List<VendorBankDetails> getDetails() {
-        return vendorBankDetailsService.getDetails();
-    }*/
+
 }
