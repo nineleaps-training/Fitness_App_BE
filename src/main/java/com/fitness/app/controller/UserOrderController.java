@@ -3,7 +3,7 @@ package com.fitness.app.controller;
 import com.fitness.app.dto.request.UserOrderModel;
 import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.entity.UserOrderClass;
-import com.fitness.app.service.UserOrderDaoImpl;
+import com.fitness.app.service.dao.UserOrderDao;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +26,7 @@ import java.util.Map;
 public class UserOrderController {
 
 
-    private final UserOrderDaoImpl userOrderServiceImpl;
+    private final UserOrderDao userOrderDao;
 
     /**
      * Check user can order api response.
@@ -40,7 +40,7 @@ public class UserOrderController {
     })
     @Validated
     public ApiResponse checkUserCanOrder(@PathVariable @Email String email) {
-        return new ApiResponse(HttpStatus.OK, userOrderServiceImpl.canOrder(email));
+        return new ApiResponse(HttpStatus.OK, userOrderDao.canOrder(email));
     }
 
     /**
@@ -58,7 +58,7 @@ public class UserOrderController {
     })
     @Validated
     public ApiResponse orderNow(@RequestBody @Valid UserOrderModel order) throws Exception {
-        return new ApiResponse(HttpStatus.OK, userOrderServiceImpl.orderNow(order));
+        return new ApiResponse(HttpStatus.OK, userOrderDao.orderNow(order));
     }
 
 
@@ -74,7 +74,7 @@ public class UserOrderController {
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Successful or Failed", response = ApiResponse.class),
     })
     public ApiResponse updatingOrder(@RequestBody Map<String, String> data) {
-        return userOrderServiceImpl.updateOrder(data);
+        return userOrderDao.updateOrder(data);
 
     }
 
@@ -92,7 +92,7 @@ public class UserOrderController {
     @Validated
     public ResponseEntity<List<UserOrderClass>> pendingOrderList(@PathVariable @Email String email) {
 
-        return new ResponseEntity<>(userOrderServiceImpl.pendingListOrder(email), HttpStatus.OK);
+        return new ResponseEntity<>(userOrderDao.pendingListOrder(email), HttpStatus.OK);
 
     }
 
@@ -110,7 +110,7 @@ public class UserOrderController {
     @Validated
     public ResponseEntity<List<UserOrderClass>> orderHistory(@PathVariable @Valid @Email String email) {
 
-        return new ResponseEntity<>(userOrderServiceImpl.orderListByEmail(email), HttpStatus.OK);
+        return new ResponseEntity<>(userOrderDao.orderListByEmail(email), HttpStatus.OK);
 
     }
 
@@ -128,7 +128,7 @@ public class UserOrderController {
     @Validated
     public ApiResponse allMyUsers(@PathVariable @Valid @Email String gymId) {
 
-        return userOrderServiceImpl.allMyUser(gymId);
+        return userOrderDao.allMyUser(gymId);
 
     }
 
@@ -146,7 +146,7 @@ public class UserOrderController {
     @Validated
     public ResponseEntity<?> bookedGym(@PathVariable @Valid @Email String email) {
 
-        return new ResponseEntity<>(userOrderServiceImpl.bookedGym(email), HttpStatus.OK);
+        return new ResponseEntity<>(userOrderDao.bookedGym(email), HttpStatus.OK);
 
     }
 

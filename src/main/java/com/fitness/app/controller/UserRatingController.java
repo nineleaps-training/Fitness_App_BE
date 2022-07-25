@@ -4,7 +4,7 @@ package com.fitness.app.controller;
 import com.fitness.app.dto.request.RatingModel;
 import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.exceptions.DataNotFoundException;
-import com.fitness.app.service.RatingDaoImpl;
+import com.fitness.app.service.dao.RatingDao;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import javax.validation.constraints.Email;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/rating")
 public class UserRatingController {
-    private final RatingDaoImpl ratingServiceImpl;
+    private final RatingDao ratingDao;
 
     /**
      * Rate vendor response entity.
@@ -40,7 +40,7 @@ public class UserRatingController {
     })
     @Validated
     public ResponseEntity<Boolean> rateVendor(@RequestBody @Valid RatingModel rating) {
-        return new ResponseEntity<>(ratingServiceImpl.ratingService(rating), HttpStatus.OK);
+        return new ResponseEntity<>(ratingDao.ratingService(rating), HttpStatus.OK);
     }
 
     /**
@@ -59,7 +59,7 @@ public class UserRatingController {
     @Validated
     public ApiResponse getRating(@PathVariable @Valid String gymId) throws DataNotFoundException {
         try {
-            return new ApiResponse(HttpStatus.OK, ratingServiceImpl.getRating(gymId));
+            return new ApiResponse(HttpStatus.OK, ratingDao.getRating(gymId));
         } catch (Exception e) {
             log.error("UserRatingController ::-> getRating :: Exception found due to: {}", e.getMessage());
             throw new DataNotFoundException("No fitness center with Exist:");
@@ -81,7 +81,7 @@ public class UserRatingController {
     @Validated
     public ApiResponse getRatingOfPerson(@PathVariable @Valid @Email String email) {
 
-        return new ApiResponse(HttpStatus.OK, ratingServiceImpl.getRatingOfPerson(email));
+        return new ApiResponse(HttpStatus.OK, ratingDao.getRatingOfPerson(email));
 
     }
 

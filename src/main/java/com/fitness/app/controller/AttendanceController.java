@@ -3,7 +3,7 @@ package com.fitness.app.controller;
 import com.fitness.app.dto.request.MarkUserAttModel;
 import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.exceptions.DataNotFoundException;
-import com.fitness.app.service.AttendanceDaoImpl;
+import com.fitness.app.service.dao.AttendanceDao;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import java.util.List;
 @RequestMapping("/api/v1/attendance")
 @RequiredArgsConstructor
 public class AttendanceController {
-    final private AttendanceDaoImpl attendanceServiceImpl;
+    final private AttendanceDao attendanceDao;
     /**
      * Mark user attendance api response.
      *
@@ -39,7 +39,7 @@ public class AttendanceController {
             @io.swagger.annotations.ApiResponse(code = 404, message = "No Data found or wrong access token.", response = DataNotFoundException.class)
     })
     public ApiResponse markUserAttendance(@Valid @RequestBody MarkUserAttModel userAttendance) throws DataNotFoundException {
-        return new ApiResponse(HttpStatus.OK, attendanceServiceImpl.markUsersAttendance(userAttendance));
+        return new ApiResponse(HttpStatus.OK, attendanceDao.markUsersAttendance(userAttendance));
     }
     /**
      * User performance response entity.
@@ -57,7 +57,7 @@ public class AttendanceController {
             @io.swagger.annotations.ApiResponse(code = 404, message = "No Data fon or Bad Credentials", response = DataNotFoundException.class)
     })
     public ResponseEntity<List<Integer>> userPerformance(@Valid @RequestParam String email,@Valid @RequestParam String gym) throws DataNotFoundException {
-        return new ResponseEntity<List<Integer>>(attendanceServiceImpl.userPerformance(email, gym), HttpStatus.OK);
+        return new ResponseEntity<List<Integer>>(attendanceDao.userPerformance(email, gym), HttpStatus.OK);
     }
 
 }

@@ -3,7 +3,7 @@ package com.fitness.app.controller;
 import com.fitness.app.dto.auth.Authenticate;
 import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.dto.response.UserForgot;
-import com.fitness.app.service.ForgetPassDaoImpl;
+import com.fitness.app.service.dao.ForgetPassDao;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import javax.validation.constraints.Email;
 public class UserForgetPasswordController {
 
 
-    private final ForgetPassDaoImpl forgetPassServiceImpl;
+    private final ForgetPassDao forgetPassDao;
 
 
     /**
@@ -41,7 +41,7 @@ public class UserForgetPasswordController {
     })
     @Validated
     public UserForgot userForgot(@PathVariable @Email @Valid String email) {
-        return forgetPassServiceImpl.userForgot(email);
+        return forgetPassDao.userForgot(email);
     }
 
     /**
@@ -58,7 +58,7 @@ public class UserForgetPasswordController {
     })
     @Validated
     public ApiResponse setPassword(@RequestBody @Valid Authenticate user) {
-        return new ApiResponse(HttpStatus.OK, forgetPassServiceImpl.setPassword(user));
+        return new ApiResponse(HttpStatus.OK, forgetPassDao.setPassword(user));
     }
 
 }

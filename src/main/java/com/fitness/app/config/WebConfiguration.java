@@ -61,7 +61,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .headers().xssProtection().and().contentSecurityPolicy("script-src 'self'").and().and()
+                .csrf().disable()
                 .cors()
                 .disable()
                 .authorizeRequests()

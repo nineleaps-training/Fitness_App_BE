@@ -4,7 +4,7 @@ import com.fitness.app.dto.request.UserBankModel;
 import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.entity.VendorBankDetailsClass;
 import com.fitness.app.exceptions.DataNotFoundException;
-import com.fitness.app.service.VendorBankDetailsDaoImpl;
+import com.fitness.app.service.dao.VendorBankDetailsDao;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import javax.validation.constraints.Email;
 @RequiredArgsConstructor
 public class VendorBankDetailsController {
 
-    private final VendorBankDetailsDaoImpl vendorBankDetailsServiceImpl;
+    private final VendorBankDetailsDao vendorBankDetailsDao;
 
     /**
      * Add details api response.
@@ -40,7 +40,7 @@ public class VendorBankDetailsController {
     })
     @Validated
     public ApiResponse addDetails(@RequestBody @Valid UserBankModel details) {
-        return vendorBankDetailsServiceImpl.addDetails(details);
+        return vendorBankDetailsDao.addDetails(details);
 
     }
 
@@ -58,7 +58,7 @@ public class VendorBankDetailsController {
     })
     @Validated
     public ResponseEntity<VendorBankDetailsClass> getBankDetails(@PathVariable @Valid @Email String email) {
-        return new ResponseEntity<VendorBankDetailsClass>(vendorBankDetailsServiceImpl.getBankDetails(email), HttpStatus.OK);
+        return new ResponseEntity<VendorBankDetailsClass>(vendorBankDetailsDao.getBankDetails(email), HttpStatus.OK);
 
     }
 

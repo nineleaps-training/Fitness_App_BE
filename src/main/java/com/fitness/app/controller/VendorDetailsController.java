@@ -5,7 +5,7 @@ import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.entity.VendorBankDetailsClass;
 import com.fitness.app.entity.VendorDetailsClass;
 import com.fitness.app.exceptions.DataNotFoundException;
-import com.fitness.app.service.VendorDetailsDaoImpl;
+import com.fitness.app.service.dao.VendorDetailsDao;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,7 @@ import javax.validation.constraints.Email;
 @RequestMapping("/api/v1/vendor/details")
 public class VendorDetailsController {
 
-    private final VendorDetailsDaoImpl vendorDetailsServiceImpl;
+    private final VendorDetailsDao vendorDetailsDao;
 
 
     /**
@@ -42,7 +42,7 @@ public class VendorDetailsController {
     })
     @Validated
     public ApiResponse addVendorDetails(@RequestBody @Valid @Email DetailsModel vendorDetails) {
-        return vendorDetailsServiceImpl.addVendorDetails(vendorDetails);
+        return vendorDetailsDao.addVendorDetails(vendorDetails);
 
 
     }
@@ -62,7 +62,7 @@ public class VendorDetailsController {
     @Validated
     public ResponseEntity<VendorDetailsClass> getVendorDetails(@PathVariable String email) {
 
-        return new ResponseEntity<VendorDetailsClass>(vendorDetailsServiceImpl.getVendorDetails(email), HttpStatus.OK);
+        return new ResponseEntity<VendorDetailsClass>(vendorDetailsDao.getVendorDetails(email), HttpStatus.OK);
 
     }
 

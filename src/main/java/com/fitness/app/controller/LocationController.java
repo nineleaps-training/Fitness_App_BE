@@ -1,6 +1,6 @@
 package com.fitness.app.controller;
 
-import com.fitness.app.service.LocationDaoImpl;
+import com.fitness.app.service.dao.LocationDao;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LocationController {
 
 
-    private final LocationDaoImpl locationServiceImpl;
+    private final LocationDao locationDao;
 
 
     /**
@@ -32,7 +32,7 @@ public class LocationController {
      */
     @GetMapping("/public/getLocation")
     public ResponseEntity<?> getDetails(@RequestParam String address) {
-        return new ResponseEntity<>(locationServiceImpl.getDetails(address), HttpStatus.OK);
+        return new ResponseEntity<>(locationDao.getDetails(address), HttpStatus.OK);
     }
 
     /**
@@ -43,7 +43,7 @@ public class LocationController {
      */
     @GetMapping("/public/get/fitness/center/by/location")
     public ResponseEntity<?> getAddress(@RequestParam String latlng) {
-        return new ResponseEntity<>(locationServiceImpl.getAddress(latlng), HttpStatus.OK);
+        return new ResponseEntity<>(locationDao.getAddress(latlng), HttpStatus.OK);
     }
 
 

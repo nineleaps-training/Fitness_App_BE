@@ -5,7 +5,7 @@ import com.fitness.app.dto.request.GymClassModel;
 import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.entity.GymAddressClass;
 import com.fitness.app.entity.GymClass;
-import com.fitness.app.service.GymDaoImpl;
+import com.fitness.app.service.dao.GymDao;
 import com.fitness.app.utils.InputStringValidate;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
@@ -27,7 +27,7 @@ import javax.validation.Valid;
 public class GymController {
 
 
-    final private GymDaoImpl gymServiceImpl;
+    final private GymDao gymDao;
 
 
     /**
@@ -43,7 +43,7 @@ public class GymController {
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Successful", response = ApiResponse.class),
     })
     public ApiResponse addNewGym(@Valid @RequestBody GymClassModel gymClassModel) {
-        return gymServiceImpl.addNewGym(gymClassModel);
+        return gymDao.addNewGym(gymClassModel);
     }
 
     /**
@@ -54,7 +54,7 @@ public class GymController {
 // getting list of all registered fitness center.
     @GetMapping("/gym/all")
     public ApiResponse getAllGym() {
-        return new ApiResponse(HttpStatus.OK, gymServiceImpl.getAllGym());
+        return new ApiResponse(HttpStatus.OK, gymDao.getAllGym());
     }
 
     /**
@@ -70,7 +70,7 @@ public class GymController {
     })
     @GetMapping("/private/gym/by/username/{email}")
     public ApiResponse getAllOfVendor(@PathVariable @Valid String email, int offSet, int pageSize) {
-        return new ApiResponse(HttpStatus.OK, gymServiceImpl.getGymByVendorEmail(email,offSet, pageSize));
+        return new ApiResponse(HttpStatus.OK, gymDao.getGymByVendorEmail(email,offSet, pageSize));
     }
 
 
@@ -87,7 +87,7 @@ public class GymController {
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Address of Fitness center", response = GymAddressClass.class),
     })
     public GymAddressClass getAddress(@PathVariable @Valid String id) {
-        return gymServiceImpl.findTheAddress(id);
+        return gymDao.findTheAddress(id);
     }
 
     /**
@@ -103,7 +103,7 @@ public class GymController {
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Successful", response = ApiResponse.class),
     })
     public ResponseEntity<?> getGymById(@PathVariable @Valid String id) {
-        return new ResponseEntity<>(gymServiceImpl.getGymByGymId(id), HttpStatus.OK);
+        return new ResponseEntity<>(gymDao.getGymByGymId(id), HttpStatus.OK);
     }
 
 
@@ -120,7 +120,7 @@ public class GymController {
     })
     @InputStringValidate
     public ResponseEntity<?> getGymByGymName(@Valid @PathVariable("gymName") String gymName) {
-        return new ResponseEntity<>(gymServiceImpl.getGymByGymName(gymName), HttpStatus.OK);
+        return new ResponseEntity<>(gymDao.getGymByGymName(gymName), HttpStatus.OK);
     }
 
 
@@ -137,7 +137,7 @@ public class GymController {
     })
     @InputStringValidate
     public ResponseEntity<?> getGYmByCity(@Valid @PathVariable String city, int offSet, int pageSize) {
-        return new ResponseEntity<>(gymServiceImpl.getGymByCity(city, offSet, pageSize), HttpStatus.OK);
+        return new ResponseEntity<>(gymDao.getGymByCity(city, offSet, pageSize), HttpStatus.OK);
     }
 
 

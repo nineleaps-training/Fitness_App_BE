@@ -2,7 +2,7 @@ package com.fitness.app.controller;
 
 import com.fitness.app.dto.request.UserBankModel;
 import com.fitness.app.entity.UserBankDetailsClass;
-import com.fitness.app.service.UserBankDetailsDaoImpl;
+import com.fitness.app.service.dao.UserBankDetailsDao;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import javax.validation.constraints.Email;
 @RequestMapping("/api/v1/bank")
 public class UserBankDetailsController {
 
-    private final UserBankDetailsDaoImpl userBankDetailsServiceImpl;
+    private final UserBankDetailsDao userBankDetailsDao;
 
     /**
      * Add bank details response entity.
@@ -37,7 +37,7 @@ public class UserBankDetailsController {
     })
     @Validated
     public ResponseEntity<UserBankDetailsClass> addBankDetails(@Valid @RequestBody UserBankModel details) {
-        UserBankDetailsClass userBankDetailsClass = userBankDetailsServiceImpl.addBankDetails(details);
+        UserBankDetailsClass userBankDetailsClass = userBankDetailsDao.addBankDetails(details);
         return new ResponseEntity<UserBankDetailsClass>(userBankDetailsClass, HttpStatus.OK);
 
     }
@@ -56,7 +56,7 @@ public class UserBankDetailsController {
     @Validated
     @Email
     public ResponseEntity<?> getBankDetails(@Valid @PathVariable String email) {
-        return new ResponseEntity<>(userBankDetailsServiceImpl.getBankDetails(email), HttpStatus.OK);
+        return new ResponseEntity<>(userBankDetailsDao.getBankDetails(email), HttpStatus.OK);
     }
 
     /**
@@ -70,7 +70,7 @@ public class UserBankDetailsController {
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "Bank Details", response = UserBankDetailsClass.class),
     })
     public ResponseEntity<?> getAllDetails() {
-        return new ResponseEntity<>(userBankDetailsServiceImpl.getAllDetails(), HttpStatus.OK);
+        return new ResponseEntity<>(userBankDetailsDao.getAllDetails(), HttpStatus.OK);
 
     }
 }

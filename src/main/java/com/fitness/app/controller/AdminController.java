@@ -1,5 +1,23 @@
 package com.fitness.app.controller;
 
+import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.fitness.app.dto.auth.Authenticate;
 import com.fitness.app.dto.request.AdminPayModel;
 import com.fitness.app.dto.response.ApiResponse;
@@ -8,25 +26,15 @@ import com.fitness.app.entity.UserClass;
 import com.fitness.app.exceptions.DataNotFoundException;
 import com.fitness.app.exceptions.UserNotFoundException;
 import com.fitness.app.service.dao.AdminDao;
+
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
-import javax.validation.constraints.Email;
-import java.util.List;
-import java.util.Map;
 
 /**
  * The type Admin controller.
  */
-@Slf4j
+
 @RequestMapping("/api/v1/admin")
 @RestController
 @RequiredArgsConstructor
@@ -34,7 +42,7 @@ public class AdminController {
 
 
 
-    final private AdminDao adminServiceImpl;
+    final private AdminDao adminDao;
 
 
     /**
@@ -51,7 +59,7 @@ public class AdminController {
             @io.swagger.annotations.ApiResponse(code = 404, message = "No Data fon or Bad Credentials", response = UserNotFoundException.class)
     })
     public ResponseEntity<ApiResponse> authenticateUser(@Valid @RequestBody Authenticate authCredential) throws UserNotFoundException {
-        String jwt = adminServiceImpl.authenticateAdmin(authCredential);
+        String jwt = adminDao.authenticateAdmin(authCredential);
         if (jwt == null) {
             return new ResponseEntity<>(new ApiResponse(HttpStatus.NO_CONTENT, null), HttpStatus.NOT_FOUND);
         }
@@ -72,7 +80,7 @@ public class AdminController {
             @io.swagger.annotations.ApiResponse(code = 401, message = "UnAuthorised")
     })
     public ResponseEntity<List<UserClass>> getAllUsers(@PathVariable int offSet, @PathVariable int pageSize) {
-        return new ResponseEntity<>(adminServiceImpl.getAllUsersService(offSet, pageSize), HttpStatus.OK);
+        return new ResponseEntity<>(adminDao.getAllUsersService(offSet, pageSize), HttpStatus.OK);
     }
 
 
@@ -86,7 +94,7 @@ public class AdminController {
     @ApiOperation(value = "get all vendor list page-vise", notes = "Admin can get list of vendors.")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "list of vendors", response = List.class),})
     public ResponseEntity<?> getAllVendors(@PathVariable int offSet, @PathVariable int pageSize) {
-        return new ResponseEntity<>(adminServiceImpl.getAllVendorService(offSet, pageSize), HttpStatus.OK);
+        return new ResponseEntity<>(adminDao.getAllVendorService(offSet, pageSize), HttpStatus.OK);
     }
 
     /**
@@ -100,7 +108,7 @@ public class AdminController {
     @ApiOperation(value = "list of all fitness centers page-vise", notes = "Admin can get list all fitness center")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "list of fitness centers", response = List.class),})
     public ResponseEntity<?> getAllGyms(@PathVariable int offSet, @PathVariable int pageSize) {
-        return new ResponseEntity<>(adminServiceImpl.getAllFitnessCenter(offSet, pageSize), HttpStatus.OK);
+        return new ResponseEntity<>(adminDao.getAllFitnessCenter(offSet, pageSize), HttpStatus.OK);
 
     }
 
@@ -116,7 +124,7 @@ public class AdminController {
     @ApiOperation(value = "Find fitness center of a vendor", notes = "Admin can get all fitness center of vendor")
     @ApiResponses(value = {@io.swagger.annotations.ApiResponse(code = 200, message = "List of fitness centers", response = List.class),})
     public ResponseEntity<?> getAllGymsByEmail(@Email @PathVariable String email, int offSet, int pageSize) {
-        return new ResponseEntity<>(adminServiceImpl.getAllGymsByEmail(email, offSet, pageSize), HttpStatus.OK);
+        return new ResponseEntity<>(adminDao.getAllGymsByEmail(email, offSet, pageSize), HttpStatus.OK);
     }
 
 
@@ -134,7 +142,7 @@ public class AdminController {
             @io.swagger.annotations.ApiResponse(code = 401, message = "UnAuthorised")
     })
     public ApiResponse vendorPayment(@Valid @PathVariable String vendor) {
-        return new ApiResponse(HttpStatus.OK, adminServiceImpl.vendorPayment(vendor));
+        return new ApiResponse(HttpStatus.OK, adminDao.vendorPayment(vendor));
 
     }
 
@@ -148,7 +156,7 @@ public class AdminController {
     @GetMapping("/get/data/pay")
     @Validated
     public ResponseEntity<?> getDataPay(@Valid @RequestBody AdminPayModel pay) {
-        return new ResponseEntity<>(adminServiceImpl.getDataPay(pay), HttpStatus.OK);
+        return new ResponseEntity<>(adminDao.getDataPay(pay), HttpStatus.OK);
     }
 
 
@@ -164,7 +172,7 @@ public class AdminController {
     @ResponseBody
     @Validated
     public ApiResponse payNow(@Valid @RequestBody AdminPayModel payment) throws Exception {
-        return adminServiceImpl.PayNow(payment);
+        return adminDao.PayNow(payment);
     }
 
 
@@ -178,7 +186,7 @@ public class AdminController {
     @PutMapping("/update/vendor/payment")
     @Validated
     public ApiResponse updatingOrder(@Valid @RequestBody Map<String, String> data) {
-        return new ApiResponse(HttpStatus.OK, adminServiceImpl.updatePayment(data));
+        return new ApiResponse(HttpStatus.OK, adminDao.updatePayment(data));
     }
 
 
@@ -194,7 +202,7 @@ public class AdminController {
     @Validated
     public ApiResponse paidHistory(@Valid @PathVariable String vendor) throws DataNotFoundException {
 
-        return new ApiResponse(HttpStatus.OK, adminServiceImpl.paidHistoryVendor(vendor));
+        return new ApiResponse(HttpStatus.OK, adminDao.paidHistoryVendor(vendor));
 
     }
 
@@ -211,7 +219,7 @@ public class AdminController {
             @io.swagger.annotations.ApiResponse(code = 401, message = "UnAuthorised")
     })
     public ResponseEntity<List<String>> getAllNumber() {
-        return new ResponseEntity<>(adminServiceImpl.getAllNumber(), HttpStatus.OK);
+        return new ResponseEntity<>(adminDao.getAllNumber(), HttpStatus.OK);
     }
 
 

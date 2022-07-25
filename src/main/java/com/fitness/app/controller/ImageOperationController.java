@@ -4,7 +4,7 @@ package com.fitness.app.controller;
 import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.entity.ImageOperationDoc;
 import com.fitness.app.exceptions.FileNotFoundException;
-import com.fitness.app.service.ImageOperationDaoImpl;
+import com.fitness.app.service.dao.ImageOperationDao;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -24,7 +24,7 @@ public class ImageOperationController {
 
 
     @Autowired
-    private ImageOperationDaoImpl imageOperationServiceImpl;
+    private ImageOperationDao imageOperationDao;
 
     /**
      * Save file api response.
@@ -37,7 +37,7 @@ public class ImageOperationController {
 // save file to database
     @PutMapping("/uploadFile/{id}")
     public ApiResponse saveFile(@RequestParam MultipartFile file, @PathVariable String id) throws FileNotFoundException {
-        return new ApiResponse(HttpStatus.OK, imageOperationServiceImpl.saveImage(file, id));
+        return new ApiResponse(HttpStatus.OK, imageOperationDao.saveImage(file, id));
     }
 
     /**
@@ -51,7 +51,7 @@ public class ImageOperationController {
     @GetMapping("/downloadFile/{id}")
     public ResponseEntity<ByteArrayResource> getImage(@PathVariable String id) throws FileNotFoundException {
         try {
-            ImageOperationDoc imageOperationDocFile = imageOperationServiceImpl.getImage(id);
+            ImageOperationDoc imageOperationDocFile = imageOperationDao.getImage(id);
             if (imageOperationDocFile != null) {
                 return ResponseEntity.ok()
                         .contentType(MediaType.parseMediaType(imageOperationDocFile.getFileType()))

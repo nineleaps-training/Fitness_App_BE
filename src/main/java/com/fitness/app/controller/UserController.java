@@ -3,7 +3,7 @@ package com.fitness.app.controller;
 import com.fitness.app.dto.auth.Authenticate;
 import com.fitness.app.dto.request.UserModel;
 import com.fitness.app.dto.response.ApiResponse;
-import com.fitness.app.service.UserDaoImpl;
+import com.fitness.app.service.dao.UserDao;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import javax.validation.constraints.Email;
 public class UserController {
 
 
-    private final UserDaoImpl userServiceImpl;
+    private final UserDao userDao;
 
     /**
      * Register user api response.
@@ -37,7 +37,7 @@ public class UserController {
     })
     @Validated
     public ApiResponse registerUser(@RequestBody @Valid UserModel user) {
-        return userServiceImpl.registerUser(user);
+        return userDao.registerUser(user);
     }
 
     /**
@@ -56,7 +56,7 @@ public class UserController {
     @Validated
     @Email
     public ApiResponse verifyTheUser(@RequestParam @Valid String email, @RequestParam String otp) throws Exception {
-        return userServiceImpl.verifyUser(email, otp);
+        return userDao.verifyUser(email, otp);
     }
 
 
@@ -75,7 +75,7 @@ public class UserController {
     })
     @Validated
     public ApiResponse authenticateUser(@Valid @RequestBody Authenticate authCredential) throws Exception {
-        return userServiceImpl.loginUser(authCredential);
+        return userDao.loginUser(authCredential);
 
     }
 
@@ -93,7 +93,7 @@ public class UserController {
     })
     @Validated
     public ApiResponse googleSignInUser(@Valid @RequestBody UserModel user) throws Exception {
-        return userServiceImpl.googleSignInMethod(user);
+        return userDao.googleSignInMethod(user);
     }
 }
 

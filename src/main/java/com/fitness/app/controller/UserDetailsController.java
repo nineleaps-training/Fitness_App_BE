@@ -3,7 +3,7 @@ package com.fitness.app.controller;
 import com.fitness.app.dto.request.DetailsModel;
 import com.fitness.app.dto.response.ApiResponse;
 import com.fitness.app.entity.UserDetailsClass;
-import com.fitness.app.service.DetailsDaoImpl;
+import com.fitness.app.service.dao.DetailsDao;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +23,7 @@ import javax.validation.constraints.Email;
 public class UserDetailsController {
 
 
-    private final DetailsDaoImpl userDetailsServiceImpl;
+    private final DetailsDao detailsDao;
 
     /**
      * Add user details api response.
@@ -40,7 +40,7 @@ public class UserDetailsController {
     @Validated
     public ApiResponse addUserDetails(@RequestBody @Valid DetailsModel userDetails) {
 
-        int status = userDetailsServiceImpl.addUserDetails(userDetails);
+        int status = detailsDao.addUserDetails(userDetails);
         return (status == 200) ? new ApiResponse(HttpStatus.OK, "Successful") : new ApiResponse(HttpStatus.OK, "Successful");
 
 
@@ -61,7 +61,7 @@ public class UserDetailsController {
     @Validated
     public ApiResponse getUserDetails(@Valid @Email @PathVariable String email) {
 
-        return new ApiResponse(HttpStatus.OK, userDetailsServiceImpl.getUserDetails(email));
+        return new ApiResponse(HttpStatus.OK, detailsDao.getUserDetails(email));
 
     }
 
