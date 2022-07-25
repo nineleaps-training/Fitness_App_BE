@@ -3,6 +3,7 @@ package com.fitness.app.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fitness.app.auth.Authenticate;
 import com.fitness.app.componets.Components;
+import com.fitness.app.dao.UserForgetPasswordDao;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.model.UserForgot;
 import com.fitness.app.repository.UserRepository;
@@ -39,15 +40,8 @@ class UserForgetPasswordControllerTest {
     Authenticate authenticate;
     String otp = "2468";
 
-
     @MockBean
-    private UserRepository userRepo;
-
-    @MockBean
-    private PasswordEncoder passwordEncoder;
-
-    @MockBean
-    Components components;
+    UserForgetPasswordDao userForgetPasswordDao;
 
     @Autowired
     UserForgetPasswordController userForgetPasswordController;
@@ -65,31 +59,8 @@ class UserForgetPasswordControllerTest {
 
     @Test
     void userForgotPasswordIfStatusCodeIs200() throws Exception {
-        when(userRepo.findByEmail(userClass.getEmail())).thenReturn(userClass);
-        when(components.otpBuilder()).thenReturn(otp);
-        when(components.sendOtpMessage("hello ", otp, userClass.getMobile())).thenReturn(200);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/forget/user/priyanshi.chaturvedi@nineleaps.com").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-
-
-    }
-
-    @Test
-    void userForgotPasswordIfStatusCodeIS400() throws Exception {
-        when(userRepo.findByEmail(userClass.getEmail())).thenReturn(userClass);
-        when(components.sendOtpMessage("hello ", otp, userClass.getMobile())).thenReturn(400);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/forget/user/priyanshi.chaturvedi@nineleaps.com").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-
-    }
-
-    @Test
-    void returnUserForgotIfUserClassIsNull() throws Exception {
-        when(userRepo.findByEmail(userClass.getEmail())).thenReturn(null);
-        when(components.sendOtpMessage("hello ", otp, userClass.getMobile())).thenReturn(200);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/forget/user/priyanshi.chaturvedi@nineleaps.com").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-
 
     }
 
@@ -97,7 +68,7 @@ class UserForgetPasswordControllerTest {
     void setPassword() throws Exception {
         String content = objectMapper.writeValueAsString(authenticate);
 
-        when(userRepo.findByEmail(authenticate.getEmail())).thenReturn(userClass);
+        when(userForgetPasswordDao.setPassword(authenticate)).thenReturn(true);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/user/set-password").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 

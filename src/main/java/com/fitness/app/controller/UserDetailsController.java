@@ -1,25 +1,33 @@
 package com.fitness.app.controller;
 
+import com.fitness.app.dao.UserDetailsDao;
 import com.fitness.app.entity.UserDetails;
 import com.fitness.app.model.UserDetailsModel;
-import com.fitness.app.service.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 
 @RestController
+@Validated
 public class UserDetailsController {
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsDao userDetailsDao;
 
     //Adding User Details
     @PutMapping("/add/user-details")
-    public ResponseEntity<ArrayList<UserDetails>> addUserDetails(@RequestBody UserDetailsModel userDetailsModel) {
-        UserDetails userDetails = userDetailsService.addUserDetails(userDetailsModel);
+    @Validated
+    public ResponseEntity<ArrayList<UserDetails>> addUserDetails(@Valid @RequestBody UserDetailsModel userDetailsModel) {
+        UserDetails userDetails = userDetailsDao.addUserDetails(userDetailsModel);
 
         ArrayList<UserDetails> user = new ArrayList<>();
         user.add(userDetails);
@@ -32,8 +40,8 @@ public class UserDetailsController {
 
     //Fetching details of user by email
     @GetMapping("/user-details/{email}")
-    public UserDetails getUserDetails(@PathVariable String email) {
-        return userDetailsService.getUserDetails(email);
+    public UserDetails getUserDetails(@NotNull @NotEmpty @NotBlank @Email @PathVariable String email) {
+        return userDetailsDao.getUserDetails(email);
     }
 
 }

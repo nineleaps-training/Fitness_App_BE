@@ -5,20 +5,19 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Random;
-import java.util.logging.Logger;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
 public class Components {
 
+    @Autowired
+    Environment environment;
     private final SecureRandom rand = new SecureRandom();
 
     public String otpBuilder() {
@@ -29,7 +28,7 @@ public class Components {
     public int sendOtpMessage(String message, String otp, String mobile) {
         try {
 
-            String apiKey = "vUSheoFsqykuK6T4P9YQMgEXpDrjC7NmR18Bz0OZlAGWd3tcJnjQftWidwxvqZSs1OyIuBMlkVpRgYeH";
+            String apiKey = environment.getProperty("apiKey");
             String senderId = "&senderId=" + "FSTSMS";
             message = "&message=" + URLEncoder.encode(message, java.nio.charset.StandardCharsets.UTF_8.toString());
             String variablesValues = "&variablesValues=" + otp;

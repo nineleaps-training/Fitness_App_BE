@@ -1,139 +1,132 @@
 package com.fitness.app.controller;
 
+import com.fitness.app.dao.AdminDao;
 import com.fitness.app.entity.AdminPay;
 import com.fitness.app.model.AdminPayModel;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import com.fitness.app.auth.Authenticate;
-import com.fitness.app.config.JwtUtils;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.model.SignUpResponse;
-import com.fitness.app.repository.AddGymRepository;
-import com.fitness.app.repository.UserRepository;
-import com.fitness.app.repository.VendorRepository;
-import com.fitness.app.security.service.UserDetailsServiceImpl;
-import com.fitness.app.service.AdminService;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 
 import javax.mail.AuthenticationFailedException;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
+
 
 @Slf4j
+@RequestMapping("/admin")
 @RestController
+@Validated
 public class AdminController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private UserDetailsServiceImpl userDetailsService;
-
-    @Autowired
-    private JwtUtils jwtUtils;
-
-    @Autowired
-    private UserRepository userRepo;
-
-    @Autowired
-    private VendorRepository vendorRepo;
-
-    @Autowired
-    private AddGymRepository gymRepo;
-
-    @Autowired
-    private AdminService adminService;
+    private AdminDao adminDao;
 
     // log in user....with custom sign option.
-    @PostMapping("/login/admin")
-    public ResponseEntity<SignUpResponse> authenticateUser(@RequestBody Authenticate authCredential) throws AuthenticationFailedException {
-        try {
-            authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(authCredential.getEmail(), authCredential.getPassword()));
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            throw new AuthenticationFailedException("Error");
-        }
-        final UserDetails usrDetails = userDetailsService.loadUserByUsername(authCredential.getEmail());
-        final String jwt = jwtUtils.generateToken(usrDetails);
-        final UserClass localUser = userRepo.findByEmail(authCredential.getEmail());
-        if (localUser.getRole().equals("ADMIN")) {
-            return ResponseEntity.ok(new SignUpResponse(localUser, jwt));
-        } else {
-            return ResponseEntity.ok(new SignUpResponse(null, null));
-        }
+    @PostMapping("/login")
+    @Validated
+    @ApiOperation(value = "Admin Login")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Login Successful", response = SignUpResponse.class),
+            @ApiResponse(code = 404, message = "User Not Found", response = ChangeSetPersister.NotFoundException.class)
+    })
+    public ResponseEntity<SignUpResponse> authenticateUser(@Valid @RequestBody Authenticate authCredential) {
+        return adminDao.authenticateUser(authCredential);
 
     }
 
-
     //finding all user details....
-    @GetMapping("/get-all-users")
-    public List<UserClass> getAllUsers() {
-        List<UserClass> l = userRepo.findAll();
-        l = l.stream().filter(e -> e.getRole().equals("USER")).collect(Collectors.toList());
-        return l;
+    @GetMapping("/getAllUsers/{pageNo}/{pageSize}")
+    @ApiOperation(value = "Get All Users")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "List of Users"),
+            @ApiResponse(code = 404, message = "Not Found", response = ChangeSetPersister.NotFoundException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationFailedException.class)
+    })
+    public List<UserClass> getAllUsers(@NotNull @Min(value = 1L) @Max(value = 1000L) @PathVariable int pageNo, @NotNull @Min (value = 1L) @Max(value = 25L) @PathVariable int pageSize) {
+        return adminDao.getAllUsers(pageNo, pageSize);
     }
 
     //finding all vendors from the database.
-    @GetMapping("/get-all-vendors")
-    public List<UserClass> getAllVendors() {
-        List<UserClass> l = userRepo.findAll();
-        l = l.stream().filter(e -> e.getRole().equals("VENDOR")).collect(Collectors.toList());
-        return l;
+    @GetMapping("/getAllVendors/{pageNo}/{pageSize}")
+    @ApiOperation(value = "Get All Vendors")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "List of Vendors"),
+            @ApiResponse(code = 404, message = "Not Found", response = ChangeSetPersister.NotFoundException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationFailedException.class)
+    })
+    public List<UserClass> getAllVendors(@NotNull @Min(value = 1L) @Max(value = 1000L) @PathVariable int pageNo, @NotNull @Min (value = 1L) @Max(value = 25L) @PathVariable int pageSize) {
+        return adminDao.getAllVendors(pageNo, pageSize);
     }
-
 
     //finding all fitness centers in the list.
-    @GetMapping("/get-all-gyms")
-    public List<GymClass> getAllGyms() {
-        return gymRepo.findAll();
+    @GetMapping("/getAllGyms/{pageNo}/{pageSize}")
+    @ApiOperation(value = "Get All Gyms")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "List of Gyms"),
+            @ApiResponse(code = 404, message = "Not Found", response = ChangeSetPersister.NotFoundException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationFailedException.class)
+    })
+    public List<GymClass> getAllGyms(@NotNull @Min(value = 1L) @Max(value = 1000L) @PathVariable int pageNo, @NotNull @Min (value = 1L) @Max(value = 25L) @PathVariable int pageSize) {
+        return adminDao.getAllGyms(pageNo, pageSize);
     }
 
-
     //finding list of registered fitness center by email id of vendor.
-    @GetMapping("/get-all-gyms-by-email/{email}")
-    public List<GymClass> getAllGymsByEmail(@PathVariable String email) {
-        return gymRepo.findByEmail(email);
+    @GetMapping("/getAllGymsByEmail/{email}")
+    @ApiOperation(value = "Get All Gyms by Email")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "List of Gyms by Email"),
+            @ApiResponse(code = 404, message = "Not Found", response = ChangeSetPersister.NotFoundException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationFailedException.class)
+    })
+    public List<GymClass> getAllGymsByEmail(@NotNull @NotEmpty @NotBlank @Email @PathVariable String email) {
+        return adminDao.getAllGymsByEmail(email);
     }
 
 
     //finding total amount to pay to the vendor.
-    @GetMapping("/vendor-payment/{vendor}")
-    public AdminPay vendorPayment(@PathVariable String vendor) {
-        return adminService.vendorPayment(vendor);
+    @GetMapping("/vendorPayment/{vendor}")
+    @ApiOperation(value = "Get Payment of Vendors")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Vendor due payments"),
+            @ApiResponse(code = 404, message = "Not Found", response = ChangeSetPersister.NotFoundException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationFailedException.class)
+    })
+    public AdminPay vendorPayment(@NotNull @NotEmpty @NotBlank @PathVariable String vendor) {
+        return adminDao.vendorPayment(vendor);
     }
 
     //demo api for payment.
-    @GetMapping("/get-data-pay")
+    @GetMapping("/getDataPay")
+    @ApiOperation(value = "Get Data Pay")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Payment details of vendor"),
+            @ApiResponse(code = 404, message = "Not Found", response = ChangeSetPersister.NotFoundException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationFailedException.class)
+    })
     public AdminPay getDataPay(@RequestBody AdminPayModel pay) {
 
-        return adminService.getDataPay(pay);
+        return adminDao.getDataPay(pay);
     }
 
-
     //Initiating payment to the vendor
-    @PutMapping("/pay-vendor-now")
+    @PutMapping("/payVendorNow")
+    @ApiOperation(value = "Payment to Vendor")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Payment done successfully"),
+            @ApiResponse(code = 404, message = "Not Found", response = ChangeSetPersister.NotFoundException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationFailedException.class)
+    })
     @ResponseBody
-    public String payNow(@RequestBody AdminPayModel payment) throws Exception {
+    public String payNow(@Valid @RequestBody AdminPayModel payment) throws Exception {
         RazorpayClient razorpayClient = new RazorpayClient("rzp_test_vmHcJh5Dj4v5EB", "SGff6EaJ7l3RzR47hnE4dYJz");
 
         JSONObject ob = new JSONObject();
@@ -143,7 +136,7 @@ public class AdminController {
 
         Order myOrder = razorpayClient.Orders.create(ob);
 
-        boolean flag = adminService.payNow(payment, myOrder);
+        boolean flag = adminDao.payNow(payment, myOrder);
         if (flag) {
             return myOrder.toString();
         } else {
@@ -151,38 +144,37 @@ public class AdminController {
         }
     }
 
-
     //updating status of payment maid to the vendor by admin.
-    @PutMapping("/update-vendor-payment")
+    @PutMapping("/updateVendorPayment")
+    @ApiOperation(value = "Update the order")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Order Updated"),
+            @ApiResponse(code = 404, message = "Not Found", response = ChangeSetPersister.NotFoundException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationFailedException.class)
+    })
     public AdminPay updatingOrder(@RequestBody Map<String, String> data) {
-
-        return adminService.updatePayment(data);
+        return adminDao.updatePayment(data);
     }
-
 
     //Finding payment history of the vendor.
-    @GetMapping("/paid-history/{vendor}")
-    public List<AdminPay> paidHistory(@PathVariable String vendor) {
-        return adminService.paidHistoryVendor(vendor);
+    @GetMapping("/paidHistory/{vendor}")
+    @ApiOperation(value = "Get Payment History of vendor")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "List of Payment History of particular Vendor"),
+            @ApiResponse(code = 404, message = "Not Found", response = ChangeSetPersister.NotFoundException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationFailedException.class)
+    })
+    public List<AdminPay> paidHistory(@NotNull @NotEmpty @NotBlank @PathVariable String vendor) {
+        return adminDao.paidHistoryVendor(vendor);
     }
-
 
     //finding total registered vendors, fitness center and fitness enthusiast.
-    @GetMapping("/all-numbers")
+    @GetMapping("/allNumbers")
+    @ApiOperation(value = "Get User, Vendor and Gyms")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "List of total numbers of User, Vendor and Gyms"),
+            @ApiResponse(code = 404, message = "Not Found", response = ChangeSetPersister.NotFoundException.class),
+            @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationFailedException.class)
+    })
     public ResponseEntity<List<String>> getAllNumber() {
-        List<UserClass> l = userRepo.findAll();
-        int u = l.stream().filter(e -> e.getRole().equals("USER")).collect(Collectors.toList()).size();
-        int v = l.stream().filter(e -> e.getRole().equals("VENDOR")).collect(Collectors.toList()).size();
-        List<GymClass> gyms = gymRepo.findAll();
-        int g = gyms.size();
-
-        List<String> nums = new ArrayList<>();
-        nums.add(Integer.toString(u));
-        nums.add(Integer.toString(v));
-        nums.add(Integer.toString(g));
-
-        return new ResponseEntity<>(nums, HttpStatus.OK);
+        return adminDao.getAllNumber();
     }
-
 
 }

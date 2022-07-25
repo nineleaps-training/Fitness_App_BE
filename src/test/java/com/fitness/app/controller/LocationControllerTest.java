@@ -2,6 +2,7 @@ package com.fitness.app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fitness.app.model.Response;
+import com.fitness.app.service.LocationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -10,6 +11,7 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -26,6 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class LocationControllerTest {
 
     MockMvc mockMvc;
+
+    @MockBean
+    LocationService locationService;
 
     @Autowired
     LocationController locationController;
@@ -38,6 +44,7 @@ class LocationControllerTest {
 
     @Test
     void getDetails() throws Exception {
+//        when(locationService.getDetails(""));
         mockMvc.perform(MockMvcRequestBuilders.get("/getLocation?address=Bangalore").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }

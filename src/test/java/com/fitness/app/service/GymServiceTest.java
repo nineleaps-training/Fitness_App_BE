@@ -7,9 +7,9 @@ import com.fitness.app.entity.GymTime;
 import com.fitness.app.model.GymClassModel;
 import com.fitness.app.model.GymRepresent;
 import com.fitness.app.repository.AddGymRepository;
-import com.fitness.app.repository.GymAddressRepo;
-import com.fitness.app.repository.GymSubscriptionRepo;
-import com.fitness.app.repository.GymTimeRepo;
+import com.fitness.app.repository.GymAddressRepository;
+import com.fitness.app.repository.GymSubscriptionRepository;
+import com.fitness.app.repository.GymTimeRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
@@ -39,13 +39,13 @@ class GymServiceTest {
     private AddGymRepository gymRepository;
 
     @MockBean
-    private GymAddressRepo gymAddressRepo;
+    private GymAddressRepository gymAddressRepository;
 
     @MockBean
-    private GymTimeRepo gymTimeRepo;
+    private GymTimeRepository gymTimeRepository;
 
     @MockBean
-    private GymSubscriptionRepo gymSubscriptionRepo;
+    private GymSubscriptionRepository gymSubscriptionRepository;
 
     @Autowired
     GymService gymService;
@@ -86,9 +86,9 @@ class GymServiceTest {
         GymRepresent gymRepresent = new GymRepresent("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", gymAddressClass, workout, gymTime, gymSubscriptionClass, 9685903290L, 4.2, 100);
 
         when(gymRepository.findById(gymClass.getId())).thenReturn(Optional.of(gymClass));
-        when(gymAddressRepo.findById(gymAddressClass.getId())).thenReturn(Optional.of(gymAddressClass));
-        when(gymTimeRepo.findById(gymTime.getId())).thenReturn(Optional.of(gymTime));
-        when(gymSubscriptionRepo.findById(gymSubscriptionClass.getId())).thenReturn(Optional.of(gymSubscriptionClass));
+        when(gymAddressRepository.findById(gymAddressClass.getId())).thenReturn(Optional.of(gymAddressClass));
+        when(gymTimeRepository.findById(gymTime.getId())).thenReturn(Optional.of(gymTime));
+        when(gymSubscriptionRepository.findById(gymSubscriptionClass.getId())).thenReturn(Optional.of(gymSubscriptionClass));
 
         String actual = gymService.getGymByGymId(gymRepresent.getId()).getId();
         assertEquals(gymRepresent.getId(), actual);
@@ -107,9 +107,9 @@ class GymServiceTest {
         GymRepresent gymRepresent1 = new GymRepresent();
 
         when(gymRepository.findById(gymClass.getId())).thenReturn(gymClassOptional);
-        when(gymAddressRepo.findById(gymAddressClass.getId())).thenReturn(gymAddressClassOptional);
-        when(gymTimeRepo.findById(gymTime.getId())).thenReturn(gymTimeOptional);
-        when(gymSubscriptionRepo.findById(gymSubscriptionClass.getId())).thenReturn(gymSubscriptionClassOptional);
+        when(gymAddressRepository.findById(gymAddressClass.getId())).thenReturn(gymAddressClassOptional);
+        when(gymTimeRepository.findById(gymTime.getId())).thenReturn(gymTimeOptional);
+        when(gymSubscriptionRepository.findById(gymSubscriptionClass.getId())).thenReturn(gymSubscriptionClassOptional);
 
         GymRepresent actual = gymService.getGymByGymId(gymRepresent.getId());
         assertEquals(gymRepresent1, actual);
@@ -126,9 +126,9 @@ class GymServiceTest {
         Optional<GymSubscriptionClass> gymSubscriptionClassOptional = Optional.empty();
 
         when(gymRepository.findById(gymClass.getId())).thenReturn(Optional.of(gymClass));
-        when(gymAddressRepo.findById(gymAddressClass.getId())).thenReturn(gymAddressClassOptional);
-        when(gymTimeRepo.findById(gymTime.getId())).thenReturn(gymTimeOptional);
-        when(gymSubscriptionRepo.findById(gymSubscriptionClass.getId())).thenReturn(gymSubscriptionClassOptional);
+        when(gymAddressRepository.findById(gymAddressClass.getId())).thenReturn(gymAddressClassOptional);
+        when(gymTimeRepository.findById(gymTime.getId())).thenReturn(gymTimeOptional);
+        when(gymSubscriptionRepository.findById(gymSubscriptionClass.getId())).thenReturn(gymSubscriptionClassOptional);
 
         String actual = gymService.getGymByGymId(gymRepresent.getId()).getId();
         assertEquals(gymRepresent.getId(), actual);
@@ -144,9 +144,9 @@ class GymServiceTest {
         Optional<GymSubscriptionClass> gymSubscriptionClassOptional = Optional.empty();
 
         when(gymRepository.findById(gymClass.getId())).thenReturn(Optional.of(gymClass));
-        when(gymAddressRepo.findById(gymAddressClass.getId())).thenReturn(Optional.of(gymAddressClass));
-        when(gymTimeRepo.findById(gymTime.getId())).thenReturn(gymTimeOptional);
-        when(gymSubscriptionRepo.findById(gymSubscriptionClass.getId())).thenReturn(gymSubscriptionClassOptional);
+        when(gymAddressRepository.findById(gymAddressClass.getId())).thenReturn(Optional.of(gymAddressClass));
+        when(gymTimeRepository.findById(gymTime.getId())).thenReturn(gymTimeOptional);
+        when(gymSubscriptionRepository.findById(gymSubscriptionClass.getId())).thenReturn(gymSubscriptionClassOptional);
 
         String actual = gymService.getGymByGymId(gymRepresent.getId()).getId();
         assertEquals(gymRepresent.getId(), actual);
@@ -165,9 +165,9 @@ class GymServiceTest {
         Optional<GymSubscriptionClass> gymSubscriptionClassOptional = Optional.empty();
 
         when(gymRepository.findById(gymClass.getId())).thenReturn(Optional.of(gymClass));
-        when(gymAddressRepo.findById(gymAddressClass.getId())).thenReturn(Optional.of(gymAddressClass));
-        when(gymTimeRepo.findById(gymTime.getId())).thenReturn(Optional.of(gymTime));
-        when(gymSubscriptionRepo.findById(gymSubscriptionClass.getId())).thenReturn(gymSubscriptionClassOptional);
+        when(gymAddressRepository.findById(gymAddressClass.getId())).thenReturn(Optional.of(gymAddressClass));
+        when(gymTimeRepository.findById(gymTime.getId())).thenReturn(Optional.of(gymTime));
+        when(gymSubscriptionRepository.findById(gymSubscriptionClass.getId())).thenReturn(gymSubscriptionClassOptional);
 
         String actual = gymService.getGymByGymId(gymRepresent.getId()).getId();
         assertEquals(gymRepresent.getId(), actual);
@@ -187,9 +187,9 @@ class GymServiceTest {
         gymRepresents.add(gymRepresent);
 
         when(gymRepository.findByEmail(gymClass.getEmail())).thenReturn(gymClasses);
-        when(gymAddressRepo.findById(gymAddressClass.getId())).thenReturn(Optional.of(gymAddressClass));
-        when(gymTimeRepo.findById(gymTime.getId())).thenReturn(Optional.ofNullable(gymTime));
-        when(gymSubscriptionRepo.findById(gymSubscriptionClass.getId())).thenReturn(Optional.ofNullable(gymSubscriptionClass));
+        when(gymAddressRepository.findById(gymAddressClass.getId())).thenReturn(Optional.of(gymAddressClass));
+        when(gymTimeRepository.findById(gymTime.getId())).thenReturn(Optional.ofNullable(gymTime));
+        when(gymSubscriptionRepository.findById(gymSubscriptionClass.getId())).thenReturn(Optional.ofNullable(gymSubscriptionClass));
 
         String actual = gymService.getGymByVendorEmail(gymClass.getEmail()).get(0).getId();
         assertEquals(gymRepresents.get(0).getId(), actual);
@@ -212,9 +212,9 @@ class GymServiceTest {
         Optional<GymSubscriptionClass> gymSubscriptionClassOptional = Optional.empty();
 
         when(gymRepository.findByEmail(gymClass.getEmail())).thenReturn(gymClasses);
-        when(gymAddressRepo.findById(gymAddressClass.getId())).thenReturn(gymAddressClassOptional);
-        when(gymTimeRepo.findById(gymTime.getId())).thenReturn(gymTimeOptional);
-        when(gymSubscriptionRepo.findById(gymSubscriptionClass.getId())).thenReturn(gymSubscriptionClassOptional);
+        when(gymAddressRepository.findById(gymAddressClass.getId())).thenReturn(gymAddressClassOptional);
+        when(gymTimeRepository.findById(gymTime.getId())).thenReturn(gymTimeOptional);
+        when(gymSubscriptionRepository.findById(gymSubscriptionClass.getId())).thenReturn(gymSubscriptionClassOptional);
 
         String actual = gymService.getGymByVendorEmail(gymClass.getEmail()).get(0).getId();
         assertEquals(gymRepresents.get(0).getId(), actual);
@@ -225,7 +225,7 @@ class GymServiceTest {
     void findTheAddress() {
         GymAddressClass gymAddressClass = new GymAddressClass("Add1", 123456.0, 654321.0, "Koramangala", "Bangalore");
 
-        when(gymAddressRepo.findById(gymAddressClass.getId())).thenReturn(Optional.of(gymAddressClass));
+        when(gymAddressRepository.findById(gymAddressClass.getId())).thenReturn(Optional.of(gymAddressClass));
 
         GymAddressClass actual = gymService.findTheAddress(gymAddressClass.getId());
         assertEquals(gymAddressClass, actual);
@@ -309,10 +309,10 @@ class GymServiceTest {
         List<GymRepresent> gymRepresents = new ArrayList<>();
         gymRepresents.add(gymRepresent);
 
-        when(gymAddressRepo.findByCity(gymAddressClass.getCity())).thenReturn(gymAddressClasses);
+        when(gymAddressRepository.findByCity(gymAddressClass.getCity())).thenReturn(gymAddressClasses);
         when(gymRepository.findById(gymClass.getId())).thenReturn(Optional.of(gymClass));
-        when(gymSubscriptionRepo.findById(gymSubscriptionClass.getId())).thenReturn(Optional.ofNullable(gymSubscriptionClass));
-        when(gymTimeRepo.findById(gymTime.getId())).thenReturn(Optional.of(gymTime));
+        when(gymSubscriptionRepository.findById(gymSubscriptionClass.getId())).thenReturn(Optional.ofNullable(gymSubscriptionClass));
+        when(gymTimeRepository.findById(gymTime.getId())).thenReturn(Optional.of(gymTime));
 
         List<GymRepresent> actual = gymService.getGymByCity(gymAddressClass.getCity());
         assertEquals(gymRepresents, actual);
@@ -340,10 +340,10 @@ class GymServiceTest {
         Optional<GymTime> gymTimeOptional = Optional.empty();
         Optional<GymSubscriptionClass> gymSubscriptionClassOptional = Optional.empty();
 
-        when(gymAddressRepo.findByCity(gymAddressClass.getCity())).thenReturn(gymAddressClasses);
+        when(gymAddressRepository.findByCity(gymAddressClass.getCity())).thenReturn(gymAddressClasses);
         when(gymRepository.findById(gymClass.getId())).thenReturn(gymClassOptional);
-        when(gymSubscriptionRepo.findById(gymSubscriptionClass.getId())).thenReturn(gymSubscriptionClassOptional);
-        when(gymTimeRepo.findById(gymTime.getId())).thenReturn(gymTimeOptional);
+        when(gymSubscriptionRepository.findById(gymSubscriptionClass.getId())).thenReturn(gymSubscriptionClassOptional);
+        when(gymTimeRepository.findById(gymTime.getId())).thenReturn(gymTimeOptional);
 
         GymAddressClass actual = gymService.getGymByCity(gymAddressClass.getCity()).get(0).getGymAddress();
         assertEquals(gymRepresents.get(0).getGymAddress(), actual);

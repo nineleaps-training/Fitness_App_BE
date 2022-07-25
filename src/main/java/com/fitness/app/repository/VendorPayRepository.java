@@ -10,7 +10,7 @@ import com.fitness.app.entity.VendorPayment;
 
 @Repository
 @EnableMongoRepositories
-public interface VendorPayRepo extends MongoRepository<VendorPayment, String> {
+public interface VendorPayRepository extends MongoRepository<VendorPayment, String> {
 
     public List<VendorPayment> findByVendor(String vendor);
 

@@ -1,25 +1,36 @@
 package com.fitness.app.service;
 
+import com.fitness.app.dao.VendorBankDetailsDao;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorBankDetails;
 import com.fitness.app.model.VendorBankDetailsModel;
 import com.fitness.app.repository.BankDetailsRepository;
 import com.fitness.app.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-@Service
-public class VendorBankDetailsService {
+@Component
+@Slf4j
+public class VendorBankDetailsService implements VendorBankDetailsDao {
 
-    @Autowired
     private BankDetailsRepository repository;
 
-    @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    public VendorBankDetailsService(BankDetailsRepository repository, UserRepository userRepository) {
+        this.repository = repository;
+        this.userRepository = userRepository;
+    }
+
     public VendorBankDetails addDetails(VendorBankDetailsModel bankDetailsModel) {
+        log.info("VendorBankDetailsService >> addDetails >> Initiated");
 
         UserClass vendor = userRepository.findByEmail(bankDetailsModel.getEmail());
 
@@ -36,17 +47,19 @@ public class VendorBankDetailsService {
             repository.save(vendorBankDetails);
             return vendorBankDetails;
         }
-
+        log.warn("VendorBankDetailsService >> addDetails >> Returns null");
         return null;
     }
 
-    public List<VendorBankDetails> getDetails() {
-
-        return repository.findAll();
+    public List<VendorBankDetails> getDetails(int pageNo, int pageSize) {
+        log.info("VendorBankDetailsService >> getDetails >> Initiated");
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Page<VendorBankDetails> page = repository.findAll(pageable);
+        return page.getContent();
     }
 
     public VendorBankDetails getBankDetails(String email) {
-
+        log.info("VendorBankDetailsService >> getBankDetails >> Initiated");
         return repository.findByEmail(email);
     }
 }

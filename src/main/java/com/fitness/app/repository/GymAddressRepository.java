@@ -10,7 +10,7 @@ import com.fitness.app.entity.GymAddressClass;
 
 @Repository
 @EnableMongoRepositories
-public interface GymAddressRepo extends MongoRepository<GymAddressClass, String> {
+public interface GymAddressRepository extends MongoRepository<GymAddressClass, String> {
 
     public List<GymAddressClass> findByCity(String city);
 

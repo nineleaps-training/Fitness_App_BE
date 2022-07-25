@@ -4,40 +4,43 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.fitness.app.dao.GymDao;
 import com.fitness.app.entity.*;
 import com.fitness.app.repository.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.fitness.app.model.GymClassModel;
 import com.fitness.app.model.GymRepresent;
 
-@Service
-public class GymService {
+@Component
+@Slf4j
+public class GymService implements GymDao {
 
-    @Autowired
     private AddGymRepository gymRepository;
 
-    @Autowired
-    private GymAddressRepo addressRepo;
+    private GymAddressRepository addressRepo;
 
-    @Autowired
-    private GymTimeRepo timeRepo;
+    private GymTimeRepository timeRepo;
 
-    @Autowired
-    private GymSubscriptionRepo subscriptionRepo;
+    private GymSubscriptionRepository subscriptionRepo;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private RatingService ratingService;
 
+
     @Autowired
-    private UserOrderRepo userOrderRepo;
+    public GymService(AddGymRepository gymRepository, GymAddressRepository addressRepo, GymTimeRepository timeRepo, GymSubscriptionRepository subscriptionRepo, RatingService ratingService) {
+        this.gymRepository = gymRepository;
+        this.addressRepo = addressRepo;
+        this.timeRepo = timeRepo;
+        this.subscriptionRepo = subscriptionRepo;
+        this.ratingService = ratingService;
+    }
 
     // Add New Gym
     public GymClass addNewGym(GymClassModel gymClassModel) {
+        log.info("GymService >> addNewGym >> Initiated");
         GymClass gym = gymRepository.findByName(gymClassModel.getGymName());
         Long idLast = gymRepository.count() + 1;
         String gymId = "GM" + idLast;
@@ -73,11 +76,13 @@ public class GymService {
         newGym.setCapacity(gymClassModel.getCapacity());
 
         gymRepository.save(newGym);
+        log.info("GymService >> addNewGym >> Ends");
         return newGym;
     }
 
     // Find gym by Gym_id
     public GymRepresent getGymByGymId(String gymId) {
+        log.info("GymService >> getGymByGymId >> Initiated");
         GymRepresent gym = new GymRepresent();
         GymClass gymClass;
         GymAddressClass gymAddressClass;
@@ -115,11 +120,13 @@ public class GymService {
             gym.setCapacity(gymClass.getCapacity());
             gym.setRating(gymClass.getRate());
         }
+        log.info("GymService >> getGymByGymId >> Ends");
         return gym;
     }
 
     // Find All gym of a vendor by email id..
     public List<GymRepresent> getGymByVendorEmail(String email) {
+        log.info("GymService >> getGymByVendorEmail >> Initiated");
 
         List<GymClass> gymList = gymRepository.findByEmail(email);
         List<GymRepresent> gyms = new ArrayList<>();
@@ -163,23 +170,28 @@ public class GymService {
 
             gyms.add(gym);
         }
+        log.info("GymService >> getGymByVendorEmail >> Ends");
         return gyms;
     }
 
     // Find gym address by gym id
     public GymAddressClass findTheAddress(String id) {
+        log.info("GymService >> findTheAddress >> Initiated");
         Optional<GymAddressClass> optional = addressRepo.findById(id);
+
+        log.info("GymService >> findTheAddress >> Ends");
         return optional.orElse(null);
     }
 
     // Find All gym from database..
     public List<GymClass> getAllGym() {
+        log.info("GymService >> getAllGym >> Initiated");
         return gymRepository.findAll();
     }
 
     // edit gym
     public GymClass editGym(GymClassModel gymClassModel, String gymId) {
-
+        log.info("GymService >> editGym >> Initiated");
         Optional<GymClass> optional = gymRepository.findById(gymId);
         GymClass theGym = new GymClass();
         if (optional.isPresent()) {
@@ -217,19 +229,23 @@ public class GymService {
         theGym.setCapacity(gymClassModel.getCapacity());
 
         gymRepository.save(theGym);
+        log.info("GymService >> editGym >> Ends");
         return theGym;
     }
 
     public String wipingAll() {
+        log.info("GymService >> wipingAll >> Initiated");
         timeRepo.deleteAll();
         subscriptionRepo.deleteAll();
         addressRepo.deleteAll();
         gymRepository.deleteAll();
 
+        log.info("GymService >> wipingAll >> Ends");
         return "done";
     }
 
     public GymClass getGymByGymName(String gymName) {
+        log.info("GymService >> getGymByGymName >> Initiated");
         return gymRepository.findByName(gymName);
     }
 
@@ -238,7 +254,7 @@ public class GymService {
 
     // Find by City
     public List<GymRepresent> getGymByCity(String city) {
-
+        log.info("GymService >> getGymByCity >> Initiated");
         List<GymAddressClass> addressList = addressRepo.findByCity(city);
         List<GymRepresent> gyms = new ArrayList<>();
         GymClass gymClass = new GymClass();
@@ -277,6 +293,7 @@ public class GymService {
 
             gyms.add(gym);
         }
+        log.info("GymService >> getGymByCity >> Ends");
         return gyms;
     }
 

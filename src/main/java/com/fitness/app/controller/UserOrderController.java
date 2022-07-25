@@ -3,14 +3,14 @@ package com.fitness.app.controller;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
+import com.fitness.app.dao.UserOrderDao;
 import com.fitness.app.model.GymRepresent;
-import org.json.JSONObject;
+import com.razorpay.RazorpayException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,58 +22,32 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fitness.app.entity.UserOrder;
 import com.fitness.app.model.UserOrderModel;
 import com.fitness.app.model.UserPerformanceModel;
-import com.fitness.app.service.UserOrderService;
-import com.razorpay.Order;
-import com.razorpay.RazorpayClient;
+
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @RestController
+@Validated
 public class UserOrderController {
 
-
     @Autowired
-    private UserOrderService userOrderService;
-
-    //key_id: rzp_test_vmHcJh5Dj4v5EB
-    //sec_key: SGff6EaJ7l3RzR47hnE4dYJz
-
+    private UserOrderDao userOrderDao;
 
     @GetMapping("/check-user-order/{email}")
-    public Boolean checkUserCanOrder(@PathVariable String email) {
-        return userOrderService.canOrder(email);
+    public Boolean checkUserCanOrder(@NotBlank @NotNull @NotEmpty @Email @PathVariable String email) {
+        return userOrderDao.canOrder(email);
     }
 
     //order now
     @PostMapping("/order/now")
     @ResponseBody
-    public String orderNow(@RequestBody UserOrderModel order) throws Exception {
-        RazorpayClient razorpayClient = new RazorpayClient("rzp_test_vmHcJh5Dj4v5EB", "SGff6EaJ7l3RzR47hnE4dYJz");
+    @Validated
+    public String orderNow(@Valid @RequestBody UserOrderModel order) throws RazorpayException {
 
-        LocalDate date = LocalDate.now();
-        LocalTime time = LocalTime.now();
-        JSONObject ob = new JSONObject();
-        ob.put("amount", order.getAmount() * 100);
-        ob.put("currency", "INR");
-        ob.put("receipt", "txn_201456");
-
-        Order myOrder = razorpayClient.Orders.create(ob);
-        UserOrder userOrder = new UserOrder();
-
-        userOrder.setId(myOrder.get("id"));
-        userOrder.setEmail(order.getEmail());
-        userOrder.setGym(order.getGym());
-        userOrder.setServices(order.getServices());
-        userOrder.setSubscription(order.getSubscription());
-        userOrder.setSlot(order.getSlot());
-        userOrder.setAmount(order.getAmount());
-        userOrder.setBooked("");
-        userOrder.setStatus(myOrder.get("status"));
-        userOrder.setPaymentId(null);
-        userOrder.setReceipt(myOrder.get("receipt"));
-        userOrder.setDate(date);
-        userOrder.setTime(time);
-
-        userOrderService.orderNow(userOrder);
-        return myOrder.toString();
+        return userOrderDao.orderNow(order);
     }
 
 
@@ -81,31 +55,31 @@ public class UserOrderController {
     @PutMapping("/update/order")
     public UserOrder updatingOrder(@RequestBody Map<String, String> data) {
 
-        return userOrderService.updateOrder(data);
+        return userOrderDao.updateOrder(data);
     }
 
     //Check the pending orders by email id of the user
     @GetMapping("/pending/order/{email}")
-    public ResponseEntity<List<UserOrder>> pendingOrderList(@PathVariable String email) {
-        return new ResponseEntity<>(userOrderService.pendingListOrder(email), HttpStatus.OK);
+    public ResponseEntity<List<UserOrder>> pendingOrderList(@NotBlank @NotNull @NotEmpty @Email @PathVariable String email) {
+        return new ResponseEntity<>(userOrderDao.pendingListOrder(email), HttpStatus.OK);
     }
 
     //Fetching the order history by email id of the user
     @GetMapping("/order/history/{email}")
-    public ResponseEntity<List<UserOrder>> orderHistory(@PathVariable String email) {
-        return new ResponseEntity<>(userOrderService.orderListOrder(email), HttpStatus.OK);
+    public ResponseEntity<List<UserOrder>> orderHistory(@NotBlank @NotNull @NotEmpty @Email @PathVariable String email) {
+        return new ResponseEntity<>(userOrderDao.orderListOrder(email), HttpStatus.OK);
     }
 
     //Fetching the user of the particular Gym by gymId
     @GetMapping("/my/users/{gymId}")
-    public Set<UserPerformanceModel> allMyUsers(@PathVariable String gymId) {
-        return userOrderService.allMyUser(gymId);
+    public Set<UserPerformanceModel> allMyUsers(@NotBlank @NotNull @NotEmpty @PathVariable String gymId) {
+        return userOrderDao.allMyUser(gymId);
     }
 
     //Fetching gyms booked by a particular user by email
     @GetMapping("/booked/gyms/{email}")
-    public List<GymRepresent> bookedGym(@PathVariable String email) {
-        return userOrderService.bookedGym(email);
+    public List<GymRepresent> bookedGym(@NotBlank @NotNull @NotEmpty @Email @PathVariable String email) {
+        return userOrderDao.bookedGym(email);
     }
 
 

@@ -1,13 +1,13 @@
 package com.fitness.app.repository;
 
+import com.fitness.app.entity.UserBankDetails;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.stereotype.Repository;
 
-import com.fitness.app.entity.GymSubscriptionClass;
-
-@Repository
 @EnableMongoRepositories
-public interface GymSubscriptionRepo extends MongoRepository<GymSubscriptionClass, String> {
+@Repository
+public interface UserBankDetailsRepository extends MongoRepository<UserBankDetails, String> {
+    public UserBankDetails findByUserEmail(String email);
 
 }

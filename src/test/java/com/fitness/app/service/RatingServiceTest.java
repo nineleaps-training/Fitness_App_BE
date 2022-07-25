@@ -4,8 +4,7 @@ import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.Rating;
 import com.fitness.app.model.RatingModel;
 import com.fitness.app.repository.AddGymRepository;
-import com.fitness.app.repository.RatingRepo;
-import org.junit.jupiter.api.BeforeAll;
+import com.fitness.app.repository.RatingRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
@@ -27,7 +26,7 @@ import static org.mockito.Mockito.when;
 class RatingServiceTest {
 
     @MockBean
-    private RatingRepo ratingRepo;
+    private RatingRepository ratingRepository;
 
     @MockBean
     private AddGymRepository gymRepo;
@@ -57,7 +56,7 @@ class RatingServiceTest {
         GymClass gymClass = new GymClass("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", workout, 9685903290L, 4.2, 100);
 
         when(gymRepo.findById(ratingModel.getTarget())).thenReturn(Optional.of(gymClass));
-        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(ratingList);
+        when(ratingRepository.findByTarget(ratingModel.getTarget())).thenReturn(ratingList);
 
         Double actual = ratingService.getRating(ratingModel.getTarget());
         assertEquals(rating.getRate(), actual);
@@ -68,7 +67,7 @@ class RatingServiceTest {
         RatingModel ratingModel = new RatingModel();
         List<RatingModel> ratings = new ArrayList<>();
 
-        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(null);
+        when(ratingRepository.findByTarget(ratingModel.getTarget())).thenReturn(null);
 
         Double actual = ratingService.getRating(ratingModel.getTarget());
         assertEquals(0.0, actual);
@@ -87,7 +86,7 @@ class RatingServiceTest {
 
         Optional<GymClass> optional = Optional.of(new GymClass("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", workout, 9685903290L, 4.2, 100));
 
-        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(ratingList);
+        when(ratingRepository.findByTarget(ratingModel.getTarget())).thenReturn(ratingList);
         when(gymRepo.findById(ratingModel.getTarget())).thenReturn(optional);
 
         Double actual = ratingService.getRating(ratingModel.getTarget());
@@ -102,7 +101,7 @@ class RatingServiceTest {
         List<Rating> ratingList = new ArrayList<>();
         ratingList.add(rating);
 
-        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(ratingList);
+        when(ratingRepository.findByTarget(ratingModel.getTarget())).thenReturn(ratingList);
 
         Double actual = ratingService.getRatingOfPerson(ratingModel.getTarget());
         assertEquals(rating.getRate(), actual);
@@ -114,7 +113,7 @@ class RatingServiceTest {
         RatingModel ratingModel = new RatingModel();
         List<RatingModel> ratings = new ArrayList<>();
 
-        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(null);
+        when(ratingRepository.findByTarget(ratingModel.getTarget())).thenReturn(null);
 
         Double actual = ratingService.getRatingOfPerson(ratingModel.getTarget());
         assertEquals(0.0, actual);

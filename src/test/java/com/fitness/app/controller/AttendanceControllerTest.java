@@ -63,7 +63,7 @@ class AttendanceControllerTest {
 
         when(attendanceService.markUsersAttendance(markUserAttModel)).thenReturn(markUserAttModel.getGym());
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/mark/users/attendance").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.put("/attendance/mark/users").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
     }
 
@@ -71,7 +71,7 @@ class AttendanceControllerTest {
     void userPerformance() throws Exception {
         when(attendanceService.userPerformance(userAttendance.getEmail(), userAttendance.getGym())).thenReturn(attendanceList);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/user-performance?email=priyanshi.chaturvedi@nineleaps.com&gym=Fitness").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get("/attendance/userPerformance?email=priyanshi.chaturvedi@nineleaps.com&gym=Fitness").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 }

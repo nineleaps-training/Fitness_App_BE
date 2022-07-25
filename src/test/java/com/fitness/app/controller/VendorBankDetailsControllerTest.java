@@ -37,6 +37,7 @@ class VendorBankDetailsControllerTest {
     List<VendorBankDetailsModel> vendorBankDetailsModelList = new ArrayList<>();
 
     VendorBankDetails vendorBankDetails;
+    List<VendorBankDetails> vendorBankDetailsList = new ArrayList<>();
 
     @MockBean
     VendorBankDetailsService vendorBankDetailsService;
@@ -83,5 +84,12 @@ class VendorBankDetailsControllerTest {
         when(vendorBankDetailsService.getBankDetails(vendorBankDetailsModel.getEmail())).thenReturn(vendorBankDetails);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/vendor-bankdetails/get/priyanshi.chaturvedi@nineleaps.com").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+    }
+
+    @Test
+    void getDetails() throws Exception {
+        when(vendorBankDetailsService.getDetails(0, 1)).thenReturn(vendorBankDetailsList);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/vendor-bankdetails/getall/0/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 }

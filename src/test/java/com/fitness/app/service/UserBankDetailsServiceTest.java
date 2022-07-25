@@ -3,7 +3,7 @@ package com.fitness.app.service;
 import com.fitness.app.entity.UserBankDetails;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.model.UserBankDetailsModel;
-import com.fitness.app.repository.UserBankDetailsRepo;
+import com.fitness.app.repository.UserBankDetailsRepository;
 import com.fitness.app.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -11,6 +11,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -25,7 +29,7 @@ import static org.mockito.Mockito.when;
 class UserBankDetailsServiceTest {
 
     @MockBean
-    private UserBankDetailsRepo repository;
+    private UserBankDetailsRepository repository;
 
     @MockBean
     private UserRepository userRepository;
@@ -112,10 +116,12 @@ class UserBankDetailsServiceTest {
 
         List<UserBankDetails> userBankDetailsList = new ArrayList<>();
         userBankDetailsList.add(userBankDetails);
+        Pageable pageable = PageRequest.of(0, 1);
+        Page<UserBankDetails> page = new PageImpl<>(userBankDetailsList);
 
-        when(repository.findAll()).thenReturn(userBankDetailsList);
+        when(repository.findAll(pageable)).thenReturn(page);
 
-        List<UserBankDetails> actual = userBankDetailsService.getAllDetails();
+        List<UserBankDetails> actual = userBankDetailsService.getAllDetails(0, 1);
         assertEquals(userBankDetailsList, actual);
     }
 

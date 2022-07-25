@@ -5,33 +5,40 @@ import java.util.List;
 
 import java.util.stream.Collectors;
 
+import com.fitness.app.dao.AttendanceDao;
 import com.fitness.app.entity.Rating;
-import com.fitness.app.model.RatingModel;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import com.fitness.app.entity.UserAttendance;
 
 import com.fitness.app.model.MarkUserAttModel;
 
-import com.fitness.app.repository.AttendanceRepo;
-import com.fitness.app.repository.RatingRepo;
+import com.fitness.app.repository.AttendanceRepository;
+import com.fitness.app.repository.RatingRepository;
+import org.springframework.stereotype.Component;
 
-@Service
-public class AttendanceService {
+@Component
+@Slf4j
+public class AttendanceService implements AttendanceDao {
+
+    private AttendanceRepository attendanceRepository;
+    private RatingRepository ratingRepository;
 
     @Autowired
-    private AttendanceRepo attendanceRepo;
-
-    @Autowired
-    private RatingRepo ratingRepo;
+    public AttendanceService(AttendanceRepository attendanceRepository, RatingRepository ratingRepository) {
+        this.attendanceRepository = attendanceRepository;
+        this.ratingRepository = ratingRepository;
+    }
 
     public String markUsersAttendance(MarkUserAttModel userAttendance) throws NullPointerException {
+        log.info("AttendanceService >> markUsersAttendance >> Initiated");
         try {
+            log.info("AttendanceService >> markUsersAttendance >> Try Block");
             List<String> users = userAttendance.getUsers();
 
             List<UserAttendance> allUser =
-                    attendanceRepo.findByVendorAndGym(userAttendance.getVendor(), userAttendance.getGym());
+                    attendanceRepository.findByVendorAndGym(userAttendance.getVendor(), userAttendance.getGym());
 
             List<String> allUsers = allUser.stream().map(p -> p.getEmail()).collect(Collectors.toList());
 
@@ -40,12 +47,13 @@ public class AttendanceService {
 
             for (String user : allUsers) {
                 UserAttendance userAtt =
-                        attendanceRepo.findByEmailAndVendorAndGym(user, userAttendance.getVendor(), userAttendance.getGym());
+                        attendanceRepository.findByEmailAndVendorAndGym(user, userAttendance.getVendor(), userAttendance.getGym());
                 userAtt.setRating(calculateRating(user));
                 List<Integer> attendanceList = userAtt.getAttendance();
                 if (users.contains(user)) {
 
                     if (attendanceList == null) {
+                        log.warn("AttendanceService >> markUsersAttendance >> AttendanceList is null");
                         attendanceList = new ArrayList<>();
                         attendanceList.add(1);
                     } else {
@@ -55,6 +63,7 @@ public class AttendanceService {
                 } else {
 
                     if (attendanceList == null) {
+                        log.warn("AttendanceService >> markUsersAttendance >> UserList is null");
                         attendanceList = new ArrayList<>();
                         attendanceList.add(0);
                     } else {
@@ -64,13 +73,14 @@ public class AttendanceService {
                 }
 
                 userAtt.setAttendance(attendanceList);
-                attendanceRepo.save(userAtt);
+                attendanceRepository.save(userAtt);
 
             }
-
+            log.info("AttendanceService >> markUsersAttendance >> Ends");
             return "Marked total: " + att + " and non attendy:  " + nonatt;
 
         } catch (Exception e) {
+            log.error("AttendanceService >> markUsersAttendance >> Exception Thrown");
             throw new NullPointerException(e.getMessage());
         }
 
@@ -79,10 +89,14 @@ public class AttendanceService {
 
 
     public List<Integer> userPerformance(String email, String gym) throws IndexOutOfBoundsException {
+        log.info("AttendanceService >> userPerformance >> Initiated");
+
         try {
-            UserAttendance user = attendanceRepo.findByEmailAndGym(email, gym);
+            log.info("AttendanceService >> userPerformance >> Try Block");
+            UserAttendance user = attendanceRepository.findByEmailAndGym(email, gym);
 
             if (user != null) {
+                log.info("AttendanceService >> userPerformance >> User is not null");
                 List<Integer> performance = new ArrayList<>();
                 List<Integer> attendanceList = user.getAttendance();
 
@@ -113,23 +127,29 @@ public class AttendanceService {
                     }
                     performance.add(count);
                 }
+                log.warn("AttendanceService >> userPerformance >> AttendanceList is null");
                 return performance;
             }
+            log.info("AttendanceService >> userPerformance >> Ends");
             return new ArrayList<>();
         } catch (Exception e) {
+            log.error("AttendanceService >> userPerformance >> Exception Thrown");
             throw new IndexOutOfBoundsException(e.getMessage() + "/t cause: " + e.getCause());
         }
     }
 
 
     public Double calculateRating(String target) {
-        List<Rating> ratings = ratingRepo.findByTarget(target);
+        log.info("AttendanceService >> calculateRating >> Initiated");
+
+        List<Rating> ratings = ratingRepository.findByTarget(target);
 
         int n = 0;
         if (ratings != null) {
             n = ratings.size();
         }
         if (n == 0) {
+            log.warn("AttendanceService >> calculateRating >> returns 0");
             return 0.0;
         } else {
             double rate = 0;
@@ -138,6 +158,7 @@ public class AttendanceService {
             }
             rate = rate / n;
             rate = Math.round(rate * 100) / 100.0d;
+            log.info("AttendanceService >> calculateRating >> Ends");
             return rate % 6;
         }
     }

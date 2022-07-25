@@ -25,6 +25,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -75,6 +76,8 @@ class UserOrderControllerTest {
     @Test
     void orderNow() throws Exception {
         String content = objectMapper.writeValueAsString(userOrderModel);
+
+        when(userOrderService.orderNow(userOrderModel)).thenReturn(anyString());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/order/now").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 

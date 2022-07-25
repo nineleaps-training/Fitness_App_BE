@@ -3,6 +3,8 @@ package com.fitness.app.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +15,9 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtils {
-    private String secretKey = "fitnessapp";
+
+    @Autowired
+    Environment environment;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -29,7 +33,7 @@ public class JwtUtils {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(environment.getProperty("secretKey")).parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {
@@ -44,8 +48,8 @@ public class JwtUtils {
     private String createToken(Map<String, Object> claims, String subject) {
 
         return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 604800000))
-                .signWith(SignatureAlgorithm.HS256, secretKey).compact();
+                .setExpiration(new Date(System.currentTimeMillis() + 1800000))
+                .signWith(SignatureAlgorithm.HS256, environment.getProperty("secretKey")).compact();
     }
 
     public Boolean validateToken(String token, UserDetails userDetails) {

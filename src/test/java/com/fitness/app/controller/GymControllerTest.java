@@ -83,7 +83,7 @@ class GymControllerTest {
 
         when(gymService.addNewGym(gymClassModel)).thenReturn(gymClass);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/add/gym").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.put("/gym/add").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
     }
 

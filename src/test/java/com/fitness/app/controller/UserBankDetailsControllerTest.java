@@ -90,8 +90,8 @@ class UserBankDetailsControllerTest {
 
     @Test
     void getAllDetails() throws Exception {
-        when(userBankDetailsService.getAllDetails()).thenReturn(userBankDetailsList);
+        when(userBankDetailsService.getAllDetails(0, 1)).thenReturn(userBankDetailsList);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/user-bankdetails/getall").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get("/user-bankdetails/getall/0/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 }

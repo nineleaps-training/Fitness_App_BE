@@ -2,8 +2,10 @@ package com.fitness.app.service;
 
 import com.fitness.app.entity.*;
 import com.fitness.app.model.GymRepresent;
+import com.fitness.app.model.UserOrderModel;
 import com.fitness.app.model.UserPerformanceModel;
 import com.fitness.app.repository.*;
+import com.razorpay.RazorpayException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -33,19 +35,19 @@ class UserOrderServiceTest {
     HashMap<String, String> data;
 
     @MockBean
-    private UserOrderRepo userOrderRepo;
+    private UserOrderRepository userOrderRepository;
 
     @MockBean
     private AddGymRepository gymRepo;
 
     @MockBean
-    private AttendanceRepo attendanceRepo;
+    private AttendanceRepository attendanceRepository;
 
     @MockBean
     private UserRepository userRepository;
 
     @MockBean
-    private VendorPayRepo vendorOrderRepo;
+    private VendorPayRepository vendorOrderRepo;
 
     @MockBean
     private GymService gymService;
@@ -65,12 +67,10 @@ class UserOrderServiceTest {
 
 
     @Test
-    void orderNow() {
+    void orderNow() throws RazorpayException {
         List<String> services = new ArrayList<>();
 
-        UserOrder userOrder = new UserOrder("1", "priyanshi.chaturvedi@nineleaps.com",
-                "Fitness", services, "monthly", "Evening", 500, "Expired",
-                "created", "123abc", "112233", LocalDate.now(), LocalTime.now());
+        UserOrderModel userOrder = new UserOrderModel("priyanshi.chaturvedi@nineleaps.com", "Fitness", services, "monthly", 500, "Evening");
 
         userOrderService.orderNow(userOrder);
         assertNotNull(userOrder);
@@ -84,7 +84,7 @@ class UserOrderServiceTest {
         GymClass gymClass = new GymClass("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", workout, 9685903290L, 4.2, 100);
         UserOrder userOrder = new UserOrder("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", services, "monthly", "Evening", 500, "Expired", "Due", "123abc", "112233", LocalDate.now(), LocalTime.now());
 
-        when(userOrderRepo.findById(data.get("order_id"))).thenReturn(Optional.of(userOrder));
+        when(userOrderRepository.findById(data.get("order_id"))).thenReturn(Optional.of(userOrder));
         when(gymRepo.findById(any())).thenReturn(Optional.of(gymClass));
 
         UserOrder actual = userOrderService.updateOrder(data);
@@ -99,7 +99,7 @@ class UserOrderServiceTest {
         GymClass gymClass = new GymClass("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", workout, 9685903290L, 4.2, 100);
         UserOrder userOrder = new UserOrder("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", services, "quarterly", "Evening", 500, "Expired", "Due", "123abc", "112233", LocalDate.now(), LocalTime.now());
 
-        when(userOrderRepo.findById(data.get("order_id"))).thenReturn(Optional.of(userOrder));
+        when(userOrderRepository.findById(data.get("order_id"))).thenReturn(Optional.of(userOrder));
         when(gymRepo.findById(any())).thenReturn(Optional.of(gymClass));
 
         UserOrder actual = userOrderService.updateOrder(data);
@@ -114,7 +114,7 @@ class UserOrderServiceTest {
         GymClass gymClass = new GymClass("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", workout, 9685903290L, 4.2, 100);
         UserOrder userOrder = new UserOrder("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", services, "half", "Evening", 500, "Expired", "Due", "123abc", "112233", LocalDate.now(), LocalTime.now());
 
-        when(userOrderRepo.findById(data.get("order_id"))).thenReturn(Optional.of(userOrder));
+        when(userOrderRepository.findById(data.get("order_id"))).thenReturn(Optional.of(userOrder));
         when(gymRepo.findById(any())).thenReturn(Optional.of(gymClass));
 
         UserOrder actual = userOrderService.updateOrder(data);
@@ -129,7 +129,7 @@ class UserOrderServiceTest {
         GymClass gymClass = new GymClass("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", workout, 9685903290L, 4.2, 100);
         UserOrder userOrder = new UserOrder("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", services, "Yearly", "Evening", 500, "Expired", "Due", "123abc", "112233", LocalDate.now(), LocalTime.now());
 
-        when(userOrderRepo.findById(data.get("order_id"))).thenReturn(Optional.of(userOrder));
+        when(userOrderRepository.findById(data.get("order_id"))).thenReturn(Optional.of(userOrder));
         when(gymRepo.findById(any())).thenReturn(Optional.of(gymClass));
 
         UserOrder actual = userOrderService.updateOrder(data);
@@ -144,7 +144,7 @@ class UserOrderServiceTest {
         List<UserOrder> orders = new ArrayList<>();
         orders.add(userOrder);
 
-        when(userOrderRepo.findByEmail(userOrder.getEmail())).thenReturn((orders));
+        when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn((orders));
 
         List<UserOrder> actual = userOrderService.pendingListOrder(userOrder.getEmail());
         assertEquals(orders, actual);
@@ -158,7 +158,7 @@ class UserOrderServiceTest {
         List<UserOrder> orders = new ArrayList<>();
         orders.add(userOrder);
 
-        when(userOrderRepo.findByEmail(userOrder.getEmail())).thenReturn((orders));
+        when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn((orders));
 
         List<UserOrder> actual = userOrderService.pendingListOrder(userOrder.getEmail());
         assertEquals(orders, actual);
@@ -173,7 +173,7 @@ class UserOrderServiceTest {
         List<UserOrder> orders = new ArrayList<>();
         orders.add(userOrder);
 
-        when(userOrderRepo.findByEmail(userOrder.getEmail())).thenReturn(orders);
+        when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn(orders);
 
         List<UserOrder> actual = userOrderService.orderListOrder(userOrder.getEmail());
         assertEquals(orders, actual);
@@ -194,7 +194,7 @@ class UserOrderServiceTest {
         orders.add(userOrder);
         orders.add(userOrder1);
 
-        when(userOrderRepo.findByEmail(userOrder.getEmail())).thenReturn(orders);
+        when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn(orders);
 
         List<UserOrder> actual = userOrderService.orderListOrder(userOrder.getEmail());
         assertEquals(orders, actual);
@@ -217,7 +217,7 @@ class UserOrderServiceTest {
 
         List<UserOrder> orderNull = new ArrayList<>();
 
-        when(userOrderRepo.findByEmail(userOrder.getEmail())).thenReturn(orders);
+        when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn(orders);
 
         List<UserOrder> actual = userOrderService.orderListOrder(userOrder.getEmail());
         assertEquals(orderNull, actual);
@@ -241,7 +241,7 @@ class UserOrderServiceTest {
         List<UserOrder> orderList = new ArrayList<>();
         orderList.add(userOrder);
 
-        when(userOrderRepo.findByEmail(userOrder.getEmail())).thenReturn(orders);
+        when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn(orders);
 
         List<UserOrder> actual = userOrderService.orderListOrder(userOrder.getEmail());
         assertEquals(orderList, actual);
@@ -254,7 +254,7 @@ class UserOrderServiceTest {
 
         List<UserOrder> orderNull = new ArrayList<>();
 
-        when(userOrderRepo.findByEmail(userOrder.getEmail())).thenReturn((orders));
+        when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn((orders));
 
         List<UserOrder> actual = userOrderService.orderListOrder(userOrder.getEmail());
         assertEquals(orderNull, actual);
@@ -281,9 +281,9 @@ class UserOrderServiceTest {
         Set<UserPerformanceModel> users = new HashSet<>();
         users.add(userPerformanceModel);
 
-        when(userOrderRepo.findByGym(userOrder.getId())).thenReturn(orders);
+        when(userOrderRepository.findByGym(userOrder.getId())).thenReturn(orders);
         when(gymRepo.findById(userOrder.getId())).thenReturn(Optional.of(gymClass));
-        when(attendanceRepo.findByEmailAndVendor(userOrder.getEmail(), userOrder.getEmail())).thenReturn(userAttendance);
+        when(attendanceRepository.findByEmailAndVendor(userOrder.getEmail(), userOrder.getEmail())).thenReturn(userAttendance);
         when(userRepository.findByEmail(any())).thenReturn(userClass);
 
         Set<UserPerformanceModel> actual = userOrderService.allMyUser(userOrder.getId());
@@ -312,9 +312,9 @@ class UserOrderServiceTest {
         Set<UserPerformanceModel> users = new HashSet<>();
         users.add(userPerformanceModel);
 
-        when(userOrderRepo.findByGym(userOrder.getId())).thenReturn(orders);
+        when(userOrderRepository.findByGym(userOrder.getId())).thenReturn(orders);
         when(gymRepo.findById(userOrder.getId())).thenReturn(Optional.of(gymClass));
-        when(attendanceRepo.findByEmailAndVendor(userOrder.getEmail(), userOrder.getEmail())).thenReturn(userAttendance);
+        when(attendanceRepository.findByEmailAndVendor(userOrder.getEmail(), userOrder.getEmail())).thenReturn(userAttendance);
         when(userRepository.findByEmail(any())).thenReturn(userClass);
 
         Set<UserPerformanceModel> actual = userOrderService.allMyUser(userOrder.getId());
@@ -341,7 +341,7 @@ class UserOrderServiceTest {
         List<GymRepresent> gymRepresents = new ArrayList<>();
         gymRepresents.add(gymRepresent);
 
-        when(userOrderRepo.findByEmail(userOrder.getEmail())).thenReturn(orders);
+        when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn(orders);
         when(gymService.getGymByGymId(any())).thenReturn(gymRepresent);
 
         List<GymRepresent> actual = userOrderService.bookedGym(userOrder.getEmail());
@@ -368,7 +368,7 @@ class UserOrderServiceTest {
         List<GymRepresent> gymRepresents = new ArrayList<>();
         gymRepresents.add(gymRepresent);
 
-        when(userOrderRepo.findByEmail(userOrder.getEmail())).thenReturn(orders);
+        when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn(orders);
         when(gymService.getGymByGymId(any())).thenReturn(gymRepresent);
 
         List<GymRepresent> actual = userOrderService.bookedGym(userOrder.getEmail());
@@ -384,7 +384,7 @@ class UserOrderServiceTest {
         GymRepresent gymRepresent = new GymRepresent();
         List<GymRepresent> gymRepresents = new ArrayList<>();
 
-        when(userOrderRepo.findByEmail(userOrder.getEmail())).thenReturn(orders);
+        when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn(orders);
         when(gymService.getGymByGymId(any())).thenReturn(gymRepresent);
 
         List<GymRepresent> actual = userOrderService.bookedGym(userOrder.getEmail());
@@ -398,7 +398,7 @@ class UserOrderServiceTest {
         UserOrder userOrder = new UserOrder();
         userOrder.setEmail("priyanshi.chaturvedi@nineleaps.com");
 
-        when(userOrderRepo.findByEmail(userOrder.getEmail())).thenReturn(orders);
+        when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn(orders);
 
         Boolean actual = userOrderService.canOrder(userOrder.getEmail());
         assertEquals(true, actual);
@@ -412,7 +412,7 @@ class UserOrderServiceTest {
         List<UserOrder> orders = new ArrayList<>();
         orders.add(userOrder);
 
-        when(userOrderRepo.findByEmail(userOrder.getEmail())).thenReturn(orders);
+        when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn(orders);
 
         Boolean actual = userOrderService.canOrder(userOrder.getEmail());
         assertEquals(false, actual);
@@ -426,7 +426,7 @@ class UserOrderServiceTest {
         List<UserOrder> orders = new ArrayList<>();
         orders.add(userOrder);
 
-        when(userOrderRepo.findByEmail(userOrder.getEmail())).thenReturn(orders);
+        when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn(orders);
 
         Boolean actual = userOrderService.canOrder(userOrder.getEmail());
         assertEquals(false, actual);
@@ -440,7 +440,7 @@ class UserOrderServiceTest {
         List<UserOrder> orders = new ArrayList<>();
         orders.add(userOrder);
 
-        when(userOrderRepo.findByEmail(userOrder.getEmail())).thenReturn(orders);
+        when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn(orders);
 
         Boolean actual = userOrderService.canOrder(userOrder.getEmail());
         assertEquals(false, actual);
@@ -454,7 +454,7 @@ class UserOrderServiceTest {
         List<UserOrder> orders = new ArrayList<>();
         orders.add(userOrder);
 
-        when(userOrderRepo.findByEmail(userOrder.getEmail())).thenReturn(orders);
+        when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn(orders);
 
         Boolean actual = userOrderService.canOrder(userOrder.getEmail());
         assertEquals(false, actual);
@@ -468,7 +468,7 @@ class UserOrderServiceTest {
         List<UserOrder> orders = new ArrayList<>();
         orders.add(userOrder);
 
-        when(userOrderRepo.findByEmail(userOrder.getEmail())).thenReturn(orders);
+        when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn(orders);
 
         Boolean actual = userOrderService.canOrder(userOrder.getEmail());
         assertEquals(false, actual);

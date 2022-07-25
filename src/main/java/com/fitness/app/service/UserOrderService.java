@@ -6,63 +6,105 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
+import com.fitness.app.dao.UserOrderDao;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.model.GymRepresent;
 
 
+import com.fitness.app.model.UserOrderModel;
+import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
+import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
 import com.fitness.app.entity.UserAttendance;
 import com.fitness.app.entity.UserOrder;
 import com.fitness.app.entity.VendorPayment;
 import com.fitness.app.model.UserPerformanceModel;
 import com.fitness.app.repository.AddGymRepository;
-import com.fitness.app.repository.AttendanceRepo;
-import com.fitness.app.repository.GymAddressRepo;
-import com.fitness.app.repository.UserOrderRepo;
+import com.fitness.app.repository.AttendanceRepository;
+import com.fitness.app.repository.UserOrderRepository;
 import com.fitness.app.repository.UserRepository;
-import com.fitness.app.repository.VendorPayRepo;
+import com.fitness.app.repository.VendorPayRepository;
 
-@Service
-public class UserOrderService {
+@Component
+@Slf4j
+public class UserOrderService implements UserOrderDao {
 
-    @Autowired
-    private UserOrderRepo userOrderRepo;
+    private UserOrderRepository userOrderRepository;
 
-    @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private AttendanceRepo attendanceRepo;
+    private AttendanceRepository attendanceRepository;
 
-    @Autowired
     private AddGymRepository gymRepo;
 
-    @Autowired
     private GymService gymService;
 
-    @Autowired
-    private VendorPayRepo vendorOrderRepo;
+    private VendorPayRepository vendorOrderRepo;
 
-    @Autowired
-    private RatingService ratingService;
+    Environment environment;
+
+
     String current = "Current";
 
-    //creating order
-    public void orderNow(UserOrder userOrder) {
-        userOrderRepo.save(userOrder);
+
+    @Autowired
+    public UserOrderService(UserOrderRepository userOrderRepository, UserRepository userRepository, AttendanceRepository attendanceRepository, AddGymRepository gymRepo, GymService gymService, VendorPayRepository vendorOrderRepo, Environment environment) {
+        this.userOrderRepository = userOrderRepository;
+        this.userRepository = userRepository;
+        this.attendanceRepository = attendanceRepository;
+        this.gymRepo = gymRepo;
+        this.gymService = gymService;
+        this.vendorOrderRepo = vendorOrderRepo;
+        this.environment = environment;
     }
 
+    //creating order
+    public String orderNow(UserOrderModel order) throws RazorpayException {
+        log.info("UserOrderService >> orderNow >> Initiated");
+        RazorpayClient razorpayClient = new RazorpayClient("rzp_test_vmHcJh5Dj4v5EB", "SGff6EaJ7l3RzR47hnE4dYJz");
+
+        LocalDate date = LocalDate.now();
+        LocalTime time = LocalTime.now();
+        JSONObject ob = new JSONObject();
+        ob.put("amount", order.getAmount() * 100);
+        ob.put("currency", "INR");
+        ob.put("receipt", "txn_201456");
+
+        Order myOrder = razorpayClient.Orders.create(ob);
+        UserOrder userOrder = new UserOrder();
+
+        userOrder.setId(myOrder.get("id"));
+        userOrder.setEmail(order.getEmail());
+        userOrder.setGym(order.getGym());
+        userOrder.setServices(order.getServices());
+        userOrder.setSubscription(order.getSubscription());
+        userOrder.setSlot(order.getSlot());
+        userOrder.setAmount(order.getAmount());
+        userOrder.setBooked("");
+        userOrder.setStatus(myOrder.get("status"));
+        userOrder.setPaymentId(null);
+        userOrder.setReceipt(myOrder.get("receipt"));
+        userOrder.setDate(date);
+        userOrder.setTime(time);
+        userOrderRepository.save(userOrder);
+        log.info("UserOrderService >> orderNow >> Ends");
+        return myOrder.toString();
+    }
 
     //updating order
-
     public UserOrder updateOrder(Map<String, String> data) {
+        log.info("UserOrderService >> updateOrder >> Initiated");
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();
         UserOrder order = new UserOrder();
 
-        Optional<UserOrder> optional = userOrderRepo.findById(data.get("order_id"));
+        Optional<UserOrder> optional = userOrderRepository.findById(data.get("order_id"));
         if (optional.isPresent()) {
             order = optional.get();
         }
@@ -101,7 +143,7 @@ public class UserOrderService {
         attendance.setAttended(0);
         attendance.setAttendance(null);
         attendance.setRating(0.0);
-        attendanceRepo.save(attendance);
+        attendanceRepository.save(attendance);
 
 
         VendorPayment vendorOrder = new VendorPayment();
@@ -115,15 +157,15 @@ public class UserOrderService {
 
         vendorOrderRepo.save(vendorOrder);
 
-        userOrderRepo.save(order);
+        userOrderRepository.save(order);
+        log.info("UserOrderService >> updateOrder >> Ends");
         return order;
     }
 
     //pending order list of user
-
-
     public List<UserOrder> pendingListOrder(String email) {
-        List<UserOrder> orders = userOrderRepo.findByEmail(email);
+        log.info("UserOrderService >> pendingListOrder >> Initiated");
+        List<UserOrder> orders = userOrderRepository.findByEmail(email);
         orders = orders.stream().filter(o -> o.getStatus().equals("created")).collect(Collectors.toList());
         for (UserOrder eachOrder : orders) {
             LocalDate date = eachOrder.getDate();
@@ -131,20 +173,25 @@ public class UserOrderService {
             LocalDate currentDate = LocalDate.now();
             int ans = currentDate.compareTo(date);
             if (ans < 0) {
-                userOrderRepo.delete(eachOrder);
+                log.info("UserOrderService >> pendingListOrder >> Deleted");
+                userOrderRepository.delete(eachOrder);
             }
         }
+        log.info("UserOrderService >> pendingListOrder >> Ends");
         return orders;
     }
 
     public List<UserOrder> orderListOrder(String email) {
-        List<UserOrder> orders = userOrderRepo.findByEmail(email);
+        log.info("UserOrderService >> orderListOrder >> Initiated");
+        List<UserOrder> orders = userOrderRepository.findByEmail(email);
         orders = orders.stream().filter(o -> o.getStatus().equals("Completed")).collect(Collectors.toList());
+        log.info("UserOrderService >> orderListOrder >> Ends");
         return orders;
     }
 
     public Set<UserPerformanceModel> allMyUser(String gymId) {
-        List<UserOrder> orders = userOrderRepo.findByGym(gymId);
+        log.info("UserOrderService >> allMyUser >> Initiated");
+        List<UserOrder> orders = userOrderRepository.findByGym(gymId);
         orders = orders.stream().filter(o -> o.getStatus().equals("Completed")).collect(Collectors.toList());
         Set<UserPerformanceModel> users = new HashSet<>();
 
@@ -155,7 +202,7 @@ public class UserOrderService {
         }
 
         for (UserOrder order : orders) {
-            UserAttendance newAtt = attendanceRepo.findByEmailAndVendor(order.getEmail(), vendor);
+            UserAttendance newAtt = attendanceRepository.findByEmailAndVendor(order.getEmail(), vendor);
             UserPerformanceModel user = new UserPerformanceModel();
             user.setName(userRepository.findByEmail(order.getEmail()).getFullName());
             user.setEmail(order.getEmail());
@@ -165,16 +212,16 @@ public class UserOrderService {
             user.setRating(newAtt.getRating());
             users.add(user);
         }
+        log.info("UserOrderService >> allMyUser >> Ends");
         return users;
     }
 
-    @Autowired
-    private GymAddressRepo gymAddressRepo;
-
     public List<GymRepresent> bookedGym(String email) {
+        log.info("UserOrderService >> bookedGym >> Initiated");
 
-        List<UserOrder> orders = userOrderRepo.findByEmail(email);
+        List<UserOrder> orders = userOrderRepository.findByEmail(email);
         if (orders == null) {
+            log.warn("UserOrderService >> bookedGym >> returns empty list");
             return Collections.emptyList();
         }
         List<GymRepresent> gyms = new ArrayList<>();
@@ -187,16 +234,19 @@ public class UserOrderService {
         for (UserOrder order : orders) {
             gyms.add(gymService.getGymByGymId(order.getGym()));
         }
+        log.info("UserOrderService >> bookedGym >> Ends");
         return gyms;
 
     }
 
 
     public Boolean canOrder(String email) {
-        List<UserOrder> orders = userOrderRepo.findByEmail(email);
+        log.info("UserOrderService >> canOrder >> Initiated");
+        List<UserOrder> orders = userOrderRepository.findByEmail(email);
         orders = orders.stream().filter(o -> o.getBooked().equals(current)).collect(Collectors.toList());
 
         if (orders.isEmpty()) {
+            log.info("UserOrderService >> canOrder >> UserOrder list is empty");
             return true;
         }
         LocalDate localDate = LocalDate.now();
@@ -222,9 +272,10 @@ public class UserOrderService {
             int comp = localDate.compareTo(currentDate);
             if (comp > 0) {
                 order.setBooked("Expired");
-                userOrderRepo.save(order);
+                userOrderRepository.save(order);
             }
         }
+        log.info("UserOrderService >> canOrder >> Ends");
         return orders.isEmpty();
     }
 }

@@ -4,17 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.stereotype.Service;
+import com.fitness.app.dao.FilterBySubscriptionDao;
 
 import com.fitness.app.entity.GymSubscriptionClass;
 import com.fitness.app.model.GymClassModel;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
-@Service
-public class FilterBySubscription {
-
+@Component
+@Slf4j
+public class FilterBySubscription implements FilterBySubscriptionDao {
 
     //Filter based on monthly subscription
     public List<GymClassModel> filterByMonthly(int price, List<GymClassModel> listGym) {
+        log.info("FilterBySubscription >> filterByMonthly >> Initiated");
 
         return listGym.stream()
                 .filter(gym -> gym.getSubscription().getMonthly() <= (price + 200))
@@ -23,7 +26,7 @@ public class FilterBySubscription {
 
     //Filter based on quarterly subscription
     public List<GymClassModel> filterByQuarterly(int price, List<GymClassModel> listGym) {
-
+        log.info("FilterBySubscription >> filterByQuarterly >> Initiated");
         List<GymClassModel> list = new ArrayList<>();
         for (GymClassModel gym : listGym) {
 
@@ -37,7 +40,7 @@ public class FilterBySubscription {
 
 
     public List<GymClassModel> filterByHalfYearly(int price, List<GymClassModel> listGym) {
-
+        log.info("FilterBySubscription >> filterByHalfYearly >> Initiated");
         List<GymClassModel> list = new ArrayList<>();
         for (GymClassModel gym : listGym) {
 
@@ -50,7 +53,7 @@ public class FilterBySubscription {
     }
 
     public List<GymClassModel> filterByYearly(int price, List<GymClassModel> listGym) {
-
+        log.info("FilterBySubscription >> filterByYearly >> Initiated");
         List<GymClassModel> list = new ArrayList<>();
         for (GymClassModel gym : listGym) {
 
@@ -63,7 +66,7 @@ public class FilterBySubscription {
     }
 
     public List<GymClassModel> filterByOneWorkout(int price, List<GymClassModel> listGym) {
-
+        log.info("FilterBySubscription >> filterByOneWorkout >> Initiated");
         List<GymClassModel> list = new ArrayList<>();
         for (GymClassModel gym : listGym) {
 

@@ -21,13 +21,11 @@
             **/com/fitness/app/auth/*,
             **/com/fitness/app/componets/*,
             **/com/fitness/app/config/*,
-            **/com/fitness/app/controller/UserController.java,
             **/com/fitness/app/entity/*,
             **/com/fitness/app/image/*,
             **/com/fitness/app/exceptions/*,
             **/com/fitness/app/model/*,
             **/com/fitness/app/repository/*,
-            **/com/fitness/app/service/GoogleMapService.java,
             **/com/fitness/app/security/service/*,
         </sonar.coverage.exclusions>
     </properties>
@@ -42,7 +40,6 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -61,6 +58,23 @@
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>8.0.0.CR1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.logstash.logback</groupId>
+            <artifactId>logstash-logback-encoder</artifactId>
+            <version>7.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
         </dependency>
 
         <dependency>

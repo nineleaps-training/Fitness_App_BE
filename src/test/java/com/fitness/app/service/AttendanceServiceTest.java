@@ -4,8 +4,8 @@ import com.fitness.app.entity.Rating;
 import com.fitness.app.entity.UserAttendance;
 import com.fitness.app.model.MarkUserAttModel;
 import com.fitness.app.model.RatingModel;
-import com.fitness.app.repository.AttendanceRepo;
-import com.fitness.app.repository.RatingRepo;
+import com.fitness.app.repository.AttendanceRepository;
+import com.fitness.app.repository.RatingRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.function.Executable;
@@ -28,10 +28,10 @@ import static org.mockito.Mockito.when;
 class AttendanceServiceTest {
 
     @MockBean
-    AttendanceRepo attendanceRepo;
+    AttendanceRepository attendanceRepository;
 
     @MockBean
-    RatingRepo ratingRepo;
+    RatingRepository ratingRepository;
 
     @Autowired
     AttendanceService attendanceService;
@@ -48,8 +48,8 @@ class AttendanceServiceTest {
         users.add("Aarohi");
         MarkUserAttModel markUserAttModel = new MarkUserAttModel("Fitness", "Priyanshi", users);
 
-        when(attendanceRepo.findByVendorAndGym(markUserAttModel.getVendor(), markUserAttModel.getGym())).thenReturn(userAttendanceList);
-        when(attendanceRepo.findByEmailAndVendorAndGym(userAttendance.getEmail(), markUserAttModel.getVendor(), markUserAttModel.getGym())).thenReturn(userAttendance);
+        when(attendanceRepository.findByVendorAndGym(markUserAttModel.getVendor(), markUserAttModel.getGym())).thenReturn(userAttendanceList);
+        when(attendanceRepository.findByEmailAndVendorAndGym(userAttendance.getEmail(), markUserAttModel.getVendor(), markUserAttModel.getGym())).thenReturn(userAttendance);
 
         int attended = 0;
         int nonAttended = 1;
@@ -70,8 +70,8 @@ class AttendanceServiceTest {
         users.add("Aarohi");
         MarkUserAttModel markUserAttModel = new MarkUserAttModel("Fitness", "Priyanshi", users);
 
-        when(attendanceRepo.findByVendorAndGym(markUserAttModel.getVendor(), markUserAttModel.getGym())).thenReturn(userAttendanceList);
-        when(attendanceRepo.findByEmailAndVendorAndGym(userAttendance.getEmail(), markUserAttModel.getVendor(), markUserAttModel.getGym())).thenReturn(userAttendance);
+        when(attendanceRepository.findByVendorAndGym(markUserAttModel.getVendor(), markUserAttModel.getGym())).thenReturn(userAttendanceList);
+        when(attendanceRepository.findByEmailAndVendorAndGym(userAttendance.getEmail(), markUserAttModel.getVendor(), markUserAttModel.getGym())).thenReturn(userAttendance);
 
         int attended = 0;
         int nonAttended = 1;
@@ -93,8 +93,8 @@ class AttendanceServiceTest {
         users.add("priyanshi.chaturvedi@nineleaps.com");
         MarkUserAttModel markUserAttModel = new MarkUserAttModel("Fitness", "Priyanshi", users);
 
-        when(attendanceRepo.findByVendorAndGym(markUserAttModel.getVendor(), markUserAttModel.getGym())).thenReturn(userAttendanceList);
-        when(attendanceRepo.findByEmailAndVendorAndGym(userAttendance.getEmail(), markUserAttModel.getVendor(), markUserAttModel.getGym())).thenReturn(userAttendance);
+        when(attendanceRepository.findByVendorAndGym(markUserAttModel.getVendor(), markUserAttModel.getGym())).thenReturn(userAttendanceList);
+        when(attendanceRepository.findByEmailAndVendorAndGym(userAttendance.getEmail(), markUserAttModel.getVendor(), markUserAttModel.getGym())).thenReturn(userAttendance);
 
         int attended = 1;
         int nonAttended = 0;
@@ -115,8 +115,8 @@ class AttendanceServiceTest {
         users.add("priyanshi.chaturvedi@nineleaps.com");
         MarkUserAttModel markUserAttModel = new MarkUserAttModel("Fitness", "Priyanshi", users);
 
-        when(attendanceRepo.findByVendorAndGym(markUserAttModel.getVendor(), markUserAttModel.getGym())).thenReturn(userAttendanceList);
-        when(attendanceRepo.findByEmailAndVendorAndGym(userAttendance.getEmail(), markUserAttModel.getVendor(), markUserAttModel.getGym())).thenReturn(userAttendance);
+        when(attendanceRepository.findByVendorAndGym(markUserAttModel.getVendor(), markUserAttModel.getGym())).thenReturn(userAttendanceList);
+        when(attendanceRepository.findByEmailAndVendorAndGym(userAttendance.getEmail(), markUserAttModel.getVendor(), markUserAttModel.getGym())).thenReturn(userAttendance);
 
         int attended = 1;
         int nonAttended = 0;
@@ -142,7 +142,7 @@ class AttendanceServiceTest {
         attendanceList.add(1);
         UserAttendance userAttendance = new UserAttendance("priyanshi.chaturvedi@nineleaps.com", "Fitness", "Priyanshi", 2, 1, attendanceList, 4.2);
 
-        when(attendanceRepo.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym())).thenReturn(userAttendance);
+        when(attendanceRepository.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym())).thenReturn(userAttendance);
 
         List<Integer> actual = attendanceService.userPerformance(userAttendance.getEmail(), userAttendance.getGym());
         assertEquals(attendanceList, actual);
@@ -153,7 +153,7 @@ class AttendanceServiceTest {
         List<Integer> attendanceList = new ArrayList<>();
         UserAttendance userAttendance = new UserAttendance();
 
-        when(attendanceRepo.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym())).thenReturn(null);
+        when(attendanceRepository.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym())).thenReturn(null);
 
         List<Integer> actual = attendanceService.userPerformance(userAttendance.getEmail(), userAttendance.getGym());
         assertEquals(attendanceList, actual);
@@ -165,7 +165,7 @@ class AttendanceServiceTest {
         List<Integer> performance = new ArrayList<>();
         UserAttendance userAttendance = new UserAttendance("priyanshi.chaturvedi@nineleaps.com", "Fitness", "Priyanshi", 2, 1, attendanceList, 4.2);
 
-        when(attendanceRepo.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym())).thenReturn(userAttendance);
+        when(attendanceRepository.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym())).thenReturn(userAttendance);
 
         List<Integer> actual = attendanceService.userPerformance(userAttendance.getEmail(), userAttendance.getGym());
         assertEquals(performance, actual);
@@ -176,7 +176,7 @@ class AttendanceServiceTest {
         List<Integer> attendanceList = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25));
         UserAttendance userAttendance = new UserAttendance("priyanshi.chaturvedi@nineleaps.com", "Fitness", "Priyanshi", 2, 1, attendanceList, 4.2);
 
-        when(attendanceRepo.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym())).thenReturn(userAttendance);
+        when(attendanceRepository.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym())).thenReturn(userAttendance);
 
         Executable executable = () -> attendanceService.userPerformance(userAttendance.getEmail(), userAttendance.getGym());
         assertThrows(Exception.class, executable);
@@ -189,7 +189,7 @@ class AttendanceServiceTest {
         List<Integer> performance = new ArrayList<>(Arrays.asList(1, 0));
         UserAttendance userAttendance = new UserAttendance("priyanshi.chaturvedi@nineleaps.com", "Fitness", "Priyanshi", 2, 1, attendanceList, 4.2);
 
-        when(attendanceRepo.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym())).thenReturn(userAttendance);
+        when(attendanceRepository.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym())).thenReturn(userAttendance);
 
         List<Integer> actual = attendanceService.userPerformance(userAttendance.getEmail(), userAttendance.getGym());
         assertEquals(performance, actual);
@@ -205,7 +205,7 @@ class AttendanceServiceTest {
         List<Rating> ratingList = new ArrayList<>();
         ratingList.add(rating);
 
-        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(ratingList);
+        when(ratingRepository.findByTarget(ratingModel.getTarget())).thenReturn(ratingList);
 
         Double actual = attendanceService.calculateRating(ratingModel.getTarget());
         assertEquals(ratingModel.getRate(), actual);
@@ -220,7 +220,7 @@ class AttendanceServiceTest {
         Rating rating = new Rating("1", "4", "Priyanshi", 4.2);
         List<Rating> ratingList = null;
 
-        when(ratingRepo.findByTarget(ratingModel.getTarget())).thenReturn(ratingList);
+        when(ratingRepository.findByTarget(ratingModel.getTarget())).thenReturn(ratingList);
 
         Double actual = attendanceService.calculateRating(ratingModel.getTarget());
         assertEquals(0.0, actual);

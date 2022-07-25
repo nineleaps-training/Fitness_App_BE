@@ -8,6 +8,6 @@ import com.fitness.app.entity.GymTime;
 
 @Repository
 @EnableMongoRepositories
-public interface GymTimeRepo extends MongoRepository<GymTime, String> {
+public interface GymTimeRepository extends MongoRepository<GymTime, String> {
 
 }

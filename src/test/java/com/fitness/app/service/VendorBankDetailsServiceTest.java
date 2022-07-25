@@ -1,5 +1,6 @@
 package com.fitness.app.service;
 
+import com.fitness.app.entity.UserBankDetails;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorBankDetails;
 import com.fitness.app.model.VendorBankDetailsModel;
@@ -11,6 +12,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
@@ -107,10 +112,12 @@ class VendorBankDetailsServiceTest {
 
         List<VendorBankDetails> vendorBankDetailsList = new ArrayList<>();
         vendorBankDetailsList.add(vendorBankDetails);
+        Pageable pageable = PageRequest.of(0, 1);
+        Page<VendorBankDetails> page = new PageImpl<>(vendorBankDetailsList);
 
-        when(repository.findAll()).thenReturn(vendorBankDetailsList);
+        when(repository.findAll(pageable)).thenReturn(page);
 
-        List<VendorBankDetails> actual = vendorBankDetailsService.getDetails();
+        List<VendorBankDetails> actual = vendorBankDetailsService.getDetails(0, 1);
         assertEquals(vendorBankDetailsList, actual);
 
     }

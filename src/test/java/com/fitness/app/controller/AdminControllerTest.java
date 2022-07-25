@@ -13,7 +13,6 @@ import com.fitness.app.repository.VendorRepository;
 import com.fitness.app.security.service.UserDetailsServiceImpl;
 import com.fitness.app.service.AdminService;
 import com.razorpay.Order;
-import com.razorpay.RazorpayClient;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,22 +23,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import javax.mail.AuthenticationFailedException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -118,7 +113,7 @@ class AdminControllerTest {
         adminPays.add(adminPay);
 
         userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
-                "9685903290", "12345", "ADMIN", false, false, true);
+                "9685903290", "12345", "USER", false, false, true);
         userClasses.add(userClass);
 
         gymClass = new GymClass("1", "priyanshi.chaturvedi@nineleaps.com", "Fitness", workout, 9685903290L, 4.2, 100);
@@ -130,66 +125,44 @@ class AdminControllerTest {
     void authenticateUser() throws Exception {
         String content = objectMapper.writeValueAsString(authenticate);
 
-        when(authenticationManager.authenticate(null)).thenReturn(null);
-        when(userDetailsService.loadUserByUsername(authenticate.getEmail())).thenReturn(userDetails);
-        when(jwtUtils.generateToken(userDetails)).thenReturn("");
-        when(userRepo.findByEmail(authenticate.getEmail())).thenReturn(userClass);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/login/admin").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.post("/admin/login").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
     }
-
-    @Test
-    void authenticateUserIfRoleIsNotAdmin() throws Exception {
-        Authentication authentication = null;
-        userClass = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
-                "9685903290", "12345", "Enthusiast", false, false, true);
-        String content = objectMapper.writeValueAsString(authenticate);
-
-        when(authenticationManager.authenticate(authentication)).thenReturn(authentication);
-        when(userDetailsService.loadUserByUsername(authenticate.getEmail())).thenReturn(userDetails);
-        when(jwtUtils.generateToken(userDetails)).thenReturn("");
-        when(userRepo.findByEmail(authenticate.getEmail())).thenReturn(userClass);
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/login/admin").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
-
-    }
-
 
     @Test
     void getAllUsers() throws Exception {
-        when(userRepo.findAll()).thenReturn(userClasses);
+        when(adminService.getAllUsers(0, 1)).thenReturn(userClasses);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/get-all-users").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin/getAllUsers/0/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
     void getAllVendors() throws Exception {
-        when(userRepo.findAll()).thenReturn(userClasses);
+        when(adminService.getAllVendors(0, 1)).thenReturn(userClasses);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/get-all-vendors").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin/getAllVendors/0/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
     @Test
     void getAllGyms() throws Exception {
-        when(gymRepo.findAll()).thenReturn(gymClasses);
+        when(adminService.getAllGyms(0, 1)).thenReturn(gymClasses);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/get-all-gyms").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin/getAllGyms/0/1").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
     void getAllGymsByEmail() throws Exception {
-        when(gymRepo.findByEmail(gymClass.getEmail())).thenReturn(gymClasses);
+        when(adminService.getAllGymsByEmail(gymClass.getEmail())).thenReturn(gymClasses);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/get-all-gyms-by-email/priyanshi.chaturvedi@nineleaps.com").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin/getAllGymsByEmail/priyanshi.chaturvedi@nineleaps.com").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
     }
 
     @Test
     void vendorPayment() throws Exception {
         when(adminService.vendorPayment(adminPayModel.getVendor())).thenReturn(adminPay);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/vendor-payment/Priyanshi").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin/vendorPayment/Priyanshi").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
@@ -202,7 +175,7 @@ class AdminControllerTest {
 
         when(adminService.getDataPay(adminPayModel)).thenReturn(adminPay);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/get-data-pay").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin/getDataPay").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
     }
 
@@ -212,7 +185,7 @@ class AdminControllerTest {
 
         when(adminService.payNow(adminPayModel, order)).thenReturn(true);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/pay-vendor-now").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.put("/admin/payVendorNow").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
     }
 
@@ -222,7 +195,7 @@ class AdminControllerTest {
 
         when(adminService.payNow(adminPayModel, order)).thenReturn(false);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/pay-vendor-now").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.put("/admin/payVendorNow").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
     }
 
@@ -232,7 +205,7 @@ class AdminControllerTest {
 
         when(adminService.updatePayment(data)).thenReturn(adminPay);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/update-vendor-payment").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.put("/admin/updateVendorPayment").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
     }
 
@@ -240,7 +213,7 @@ class AdminControllerTest {
     void paidHistory() throws Exception {
         when(adminService.paidHistoryVendor(adminPay.getVendor())).thenReturn(adminPays);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/paid-history/Priyanshi").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin/paidHistory/Priyanshi").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 
@@ -250,7 +223,7 @@ class AdminControllerTest {
         when(userRepo.findAll()).thenReturn(userClasses);
         when(gymRepo.findAll()).thenReturn(gymClasses);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/all-numbers").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin/allNumbers").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
 
     }
 

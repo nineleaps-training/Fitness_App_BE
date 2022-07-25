@@ -1,26 +1,34 @@
 package com.fitness.app.service;
 
+import com.fitness.app.dao.VendorDetailsDao;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.model.VendorDetailsModel;
 import com.fitness.app.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import com.fitness.app.entity.VendorDetails;
 import com.fitness.app.repository.VendorDetailsRepository;
 
-@Service
-public class VendorDetailsService {
+@Component
+@Slf4j
+public class VendorDetailsService implements VendorDetailsDao {
 
-    @Autowired
     private VendorDetailsRepository vendordetailsRepository;
 
-    @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    public VendorDetailsService(VendorDetailsRepository vendordetailsRepository, UserRepository userRepository) {
+        this.vendordetailsRepository = vendordetailsRepository;
+        this.userRepository = userRepository;
+    }
 
     // register new vendor service function.
     public VendorDetails addVendorDetails(VendorDetailsModel vendorDetailsModel) {
+        log.info("VendorDetailsService >> addVendorDetails >> Initiated");
 
         UserClass user = userRepository.findByEmail(vendorDetailsModel.getEmail());
 
@@ -35,11 +43,12 @@ public class VendorDetailsService {
             vendordetailsRepository.save(vendorDetails);
             return vendorDetails;
         }
+        log.warn("VendorDetailsService >> addVendorDetails >> Returns null");
         return null;
     }
 
     public VendorDetails getVendorDetails(String email) {
-
+        log.info("VendorDetailsService >> getVendorDetails >> Initiated");
         return vendordetailsRepository.findByEmail(email);
     }
 }
