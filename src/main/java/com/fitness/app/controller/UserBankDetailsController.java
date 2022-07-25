@@ -97,7 +97,7 @@ public class UserBankDetailsController {
     @GetMapping(value = "/v1/userBankDetails/getall/{pageNo}/{pageSize}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public List<UserBankDetails> getAllDetails(
-            @NotNull @Min(value = 1L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
+            @NotNull @Min(value = 0L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
             @NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 20L, message = "Page size can be maximum 19") @PathVariable int pageSize) {
         return pagingDAO.getallDetails(pageNo, pageSize); // List of user's bank.
     }

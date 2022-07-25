@@ -107,7 +107,7 @@ public class AdminController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	public List<UserClass> getAllUsers(
-			@NotNull @Min(value = 1L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
+			@NotNull @Min(value = 0L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
 			@NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 50L, message = "Page size can be maximum 49") @NotNull @PathVariable int pageSize) {
 
 		return pagingDAO.getallUsers(pageNo, pageSize); // Returning all users with pagenation.
@@ -128,7 +128,7 @@ public class AdminController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	public List<UserClass> getAllVendors(
-			@NotNull @Min(value = 1L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
+			@NotNull @Min(value = 0L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
 			@NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 20L, message = "Page size can be maximum 19") @PathVariable int pageSize) {
 		return pagingDAO.getallVendors(pageNo, pageSize); // Returning all vendors with pagenation.
 	}
@@ -147,7 +147,7 @@ public class AdminController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	public List<GymClass> getAllGyms(
-			@NotNull @Min(value = 1L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
+			@NotNull @Min(value = 0L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
 			@NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 20L, message = "Page size can be maximum 19") @PathVariable int pageSize) {
 		return pagingDAO.getallGyms(pageNo, pageSize); // Returning all fitness centers with pagenation
 	}
