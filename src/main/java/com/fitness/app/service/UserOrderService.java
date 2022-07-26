@@ -18,7 +18,6 @@ import com.razorpay.RazorpayException;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import com.fitness.app.entity.UserAttendance;
@@ -47,27 +46,26 @@ public class UserOrderService implements UserOrderDao {
 
     private VendorPayRepository vendorOrderRepo;
 
-    Environment environment;
 
+    private RazorpayClient razorpayClient;
 
     String current = "Current";
 
 
     @Autowired
-    public UserOrderService(UserOrderRepository userOrderRepository, UserRepository userRepository, AttendanceRepository attendanceRepository, AddGymRepository gymRepo, GymService gymService, VendorPayRepository vendorOrderRepo, Environment environment) {
+    public UserOrderService(UserOrderRepository userOrderRepository, UserRepository userRepository, AttendanceRepository attendanceRepository, AddGymRepository gymRepo, GymService gymService, VendorPayRepository vendorOrderRepo, RazorpayClient razorpayClient) {
         this.userOrderRepository = userOrderRepository;
         this.userRepository = userRepository;
         this.attendanceRepository = attendanceRepository;
         this.gymRepo = gymRepo;
         this.gymService = gymService;
         this.vendorOrderRepo = vendorOrderRepo;
-        this.environment = environment;
+        this.razorpayClient = razorpayClient;
     }
 
     //creating order
     public String orderNow(UserOrderModel order) throws RazorpayException {
         log.info("UserOrderService >> orderNow >> Initiated");
-        RazorpayClient razorpayClient = new RazorpayClient("rzp_test_vmHcJh5Dj4v5EB", "SGff6EaJ7l3RzR47hnE4dYJz");
 
         LocalDate date = LocalDate.now();
         LocalTime time = LocalTime.now();

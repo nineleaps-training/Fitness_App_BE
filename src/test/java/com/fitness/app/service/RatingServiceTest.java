@@ -8,6 +8,8 @@ import com.fitness.app.repository.RatingRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,13 +27,13 @@ import static org.mockito.Mockito.when;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RatingServiceTest {
 
-    @MockBean
+    @Mock
     private RatingRepository ratingRepository;
 
-    @MockBean
+    @Mock
     private AddGymRepository gymRepo;
 
-    @Autowired
+    @InjectMocks
     RatingService ratingService;
 
 

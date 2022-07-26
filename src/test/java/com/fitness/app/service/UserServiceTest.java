@@ -2,22 +2,22 @@ package com.fitness.app.service;
 
 import com.fitness.app.auth.Authenticate;
 import com.fitness.app.componets.Components;
+import com.fitness.app.config.JwtUtils;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.model.SignUpResponse;
 import com.fitness.app.model.UserModel;
 import com.fitness.app.repository.UserRepository;
 import com.fitness.app.security.service.UserDetailsServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
@@ -25,27 +25,32 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    @MockBean
+    @Mock
     private UserRepository userRepository;
 
-    @MockBean
+    @Mock
     private Components components;
 
-    @MockBean
+    @Mock
     private AuthenticationManager authenticationManager;
 
-    @MockBean
+    @Mock
     private UserDetailsServiceImpl userDetailsService;
 
-    @MockBean
+    @Mock
     UserDetails userDetails;
 
-    @Autowired
+    @Mock
+    PasswordEncoder passwordEncoder;
+
+    @Mock
+    JwtUtils jwtUtils;
+
+    @InjectMocks
     UserService userService;
 
     @Test
@@ -59,11 +64,9 @@ class UserServiceTest {
         String signUpResponse = new SignUpResponse(userClass, "Already In Use!").getMessage();
 
         when(userRepository.findByEmail(userModel.getEmail())).thenReturn(userClass);
-        when(components.otpBuilder()).thenReturn("hello");
-        when(components.sendOtpMessage(anyString(), anyString(), anyString())).thenReturn(200);
 
         String actual = userService.registerNewUser(userModel).getMessage();
-        assertEquals(actual, signUpResponse);
+        assertEquals(signUpResponse, actual);
     }
 
     @Test
@@ -81,7 +84,7 @@ class UserServiceTest {
         when(components.sendOtpMessage(anyString(), anyString(), anyString())).thenReturn(200);
 
         String actual = userService.registerNewUser(userModel).getMessage();
-        assertEquals(actual, signUpResponse);
+        assertEquals(signUpResponse, actual);
     }
 
     @Test
@@ -99,7 +102,7 @@ class UserServiceTest {
         when(components.sendOtpMessage(anyString(), anyString(), anyString())).thenReturn(400);
 
         String actual = userService.registerNewUser(userModel).getMessage();
-        assertEquals(actual, signUpResponse);
+        assertEquals(signUpResponse, actual);
     }
 
     @Test
@@ -116,7 +119,7 @@ class UserServiceTest {
         when(components.sendOtpMessage(anyString(), anyString(), anyString())).thenReturn(200);
 
         String actual = userService.registerNewUser(userModel).getMessage();
-        assertEquals(actual, signUpResponse);
+        assertEquals(signUpResponse, actual);
     }
 
     @Test
@@ -133,7 +136,7 @@ class UserServiceTest {
         when(components.sendOtpMessage(anyString(), anyString(), anyString())).thenReturn(400);
 
         String actual = userService.registerNewUser(userModel).getMessage();
-        assertEquals(actual, signUpResponse);
+        assertEquals(signUpResponse, actual);
     }
 
     @Test
@@ -146,9 +149,6 @@ class UserServiceTest {
                 "9685903290", "12345", "Enthusiast", true);
 
         String otp = "1234";
-
-        when(components.sendOtpMessage("hello ", otp, userModel.getMobile())).thenReturn(400);
-        when(userRepository.save(userClass)).thenReturn(userClass);
 
         UserClass actual = userService.registerUser(userModel);
         assertNull(actual);
@@ -243,7 +243,6 @@ class UserServiceTest {
                 "9685903290", "12345", "Enthusiast", true);
 
         when(userRepository.findByEmail(userClass.getEmail())).thenReturn(userClass);
-        when(userRepository.save(userClass)).thenReturn(userClass);
 
         UserClass actual = userService.googleSignInMethod(userModel);
         assertNull(actual);
@@ -253,10 +252,6 @@ class UserServiceTest {
     void signInWithGoogleIfUserIsNullAndCustomIsFalse() {
 
         UserModel userModel = new UserModel("priyanshi.chaturvedi@nineleaps.com", "Priyanshi", "9685903290", "password", "Enthusiast", false);
-
-        UserClass userClass = new UserClass();
-
-        when(userRepository.findByEmail(userClass.getEmail())).thenReturn(userClass);
 
         UserClass newUser = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
                 "9685903290", "password", "Enthusiast", true, false, false);
@@ -269,9 +264,6 @@ class UserServiceTest {
     void signInWithGoogleIfUserIsNullAndCustomIsTrue() {
 
         UserModel userModel = new UserModel("priyanshi.chaturvedi@nineleaps.com", "Priyanshi", "9685903290", "password", "Enthusiast", true);
-        UserClass userClass = new UserClass();
-
-        when(userRepository.findByEmail(userClass.getEmail())).thenReturn(userClass);
 
         UserClass newUser = new UserClass("priyanshi.chaturvedi@nineleaps.com", "Priyanshi",
                 "9685903290", "password", "Enthusiast", true, false, true);
@@ -298,13 +290,12 @@ class UserServiceTest {
         Authenticate authenticate = new Authenticate("priyanshi.chaturvedi@nineleaps.com", "12345");
         HttpStatus responseEntity = ResponseEntity.ok(new SignUpResponse(userClass, null)).getStatusCode();
 
-        when(authenticationManager.authenticate(null)).thenReturn(null);
         when(userDetailsService.loadUserByUsername(authenticate.getEmail())).thenReturn(userDetails);
         when(userRepository.findByEmail(userModel.getEmail())).thenReturn(userClass);
 
         HttpStatus actual = userService.logInFunctionality(userClass.getEmail(),userClass.getPassword()).getStatusCode();
 
-        assertEquals(actual, responseEntity);
+        assertEquals(responseEntity, actual);
     }
 
     @Test
@@ -318,11 +309,10 @@ class UserServiceTest {
         Authenticate authenticate = new Authenticate("priyanshi.chaturvedi@nineleaps.com", "12345");
         ResponseEntity<SignUpResponse> responseEntity = ResponseEntity.ok(new SignUpResponse(null, null));
 
-        when(authenticationManager.authenticate(null)).thenReturn(null);
         when(userDetailsService.loadUserByUsername(authenticate.getEmail())).thenReturn(userDetails);
         when(userRepository.findByEmail(userModel.getEmail())).thenReturn(userClass);
 
         ResponseEntity<SignUpResponse> actual = userService.logInFunctionality(userClass.getEmail(),userClass.getPassword());
-        assertEquals(actual, responseEntity);
+        assertEquals(responseEntity, actual);
     }
 }

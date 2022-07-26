@@ -26,7 +26,6 @@
             **/com/fitness/app/exceptions/*,
             **/com/fitness/app/model/*,
             **/com/fitness/app/repository/*,
-            **/com/fitness/app/security/service/*,
         </sonar.coverage.exclusions>
     </properties>
     <dependencies>

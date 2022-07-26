@@ -1,7 +1,9 @@
 package com.fitness.app.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
+@Data
 public class GoogleAddress {
 
     @JsonProperty("long_name")

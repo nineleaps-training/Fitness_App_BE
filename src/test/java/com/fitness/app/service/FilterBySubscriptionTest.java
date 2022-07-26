@@ -7,6 +7,7 @@ import com.fitness.app.model.GymClassModel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -16,10 +17,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class FilterBySubscriptionTest {
 
-    FilterBySubscription filterBySubscription = new FilterBySubscription();
+    @InjectMocks
+    FilterBySubscription filterBySubscription;
 
     @Test
     void returnAllTheGymsWhenTheirMonthlySubscriptionIsLessThanGivenPrice() {

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -39,10 +41,10 @@ class AttendanceControllerTest {
     List<Integer> attendanceList = new ArrayList<>();
     List<String> users = new ArrayList<>();
 
-    @MockBean
+    @Mock
     private AttendanceService attendanceService;
 
-    @Autowired
+    @InjectMocks
     AttendanceController attendanceController;
 
     @BeforeEach

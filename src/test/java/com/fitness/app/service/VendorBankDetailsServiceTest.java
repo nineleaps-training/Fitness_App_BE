@@ -9,6 +9,8 @@ import com.fitness.app.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -29,13 +31,13 @@ import static org.mockito.Mockito.when;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class VendorBankDetailsServiceTest {
 
-    @MockBean
+    @Mock
     private BankDetailsRepository repository;
 
-    @MockBean
+    @Mock
     private UserRepository userRepository;
 
-    @Autowired
+    @InjectMocks
     private  VendorBankDetailsService vendorBankDetailsService;
 
     @Test

@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,16 +38,16 @@ class UserForgetPasswordServiceTest {
     String otp = "2468";
 
 
-    @MockBean
+    @Mock
     private UserRepository userRepo;
 
-    @MockBean
+    @Mock
     private PasswordEncoder passwordEncoder;
 
-    @MockBean
+    @Mock
     Components components;
 
-    @Autowired
+    @InjectMocks
     UserForgetPasswordService userForgetPasswordService;
 
     @BeforeEach
@@ -73,7 +75,6 @@ class UserForgetPasswordServiceTest {
         UserForgot userForgot = new UserForgot("Something went wrong..Please try again!!", false);
 
         when(userRepo.findByEmail(userClass.getEmail())).thenReturn(userClass);
-        when(components.sendOtpMessage("hello ", otp, userClass.getMobile())).thenReturn(400);
 
         UserForgot actual = userForgetPasswordService.userForgot(userClass.getEmail());
         assertEquals(userForgot, actual);
@@ -84,7 +85,6 @@ class UserForgetPasswordServiceTest {
         UserForgot userForgot = new UserForgot(null, false);
 
         when(userRepo.findByEmail(userClass.getEmail())).thenReturn(null);
-        when(components.sendOtpMessage("hello ", otp, userClass.getMobile())).thenReturn(200);
 
         UserForgot actual = userForgetPasswordService.userForgot(userClass.getEmail());
         assertEquals(userForgot, actual);

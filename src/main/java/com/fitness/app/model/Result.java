@@ -14,6 +14,10 @@ public class Result {
         return allAddress;
     }
 
+    public void setAllAddress(GoogleAddress[] googleAddresses) {
+        this.allAddress = googleAddresses;
+    }
+
     public String getAddress() {
         return address;
     }

@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -53,13 +55,13 @@ class GymControllerTest {
     GymRepresent gymRepresent = new GymRepresent();
     List<GymRepresent> gymRepresents = new ArrayList<>();
 
-    @MockBean
+    @Mock
     private GymService gymService;
 
-    @MockBean
+    @Mock
     private FilterBySubscription filterBySubscription;
 
-    @Autowired
+    @InjectMocks
     GymController gymController;
 
     @BeforeEach
@@ -167,7 +169,7 @@ class GymControllerTest {
     void filterQuarterly() throws Exception {
         String content = objectMapper.writeValueAsString(gymClassModels);
 
-        when(filterBySubscription.filterByQuarterly(300, gymClassModels)).thenReturn(gymClassModels);
+//        when(filterBySubscription.filterByQuarterly(300, gymClassModels)).thenReturn(gymClassModels);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/filter/subscription/quarterly/200").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
@@ -177,7 +179,7 @@ class GymControllerTest {
     void filterHalfYearly() throws Exception {
         String content = objectMapper.writeValueAsString(gymClassModels);
 
-        when(filterBySubscription.filterByHalfYearly(600, gymClassModels)).thenReturn(gymClassModels);
+//        when(filterBySubscription.filterByHalfYearly(600, gymClassModels)).thenReturn(gymClassModels);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/filter/subscription/halfYearly/500").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
@@ -187,7 +189,7 @@ class GymControllerTest {
     void filterYearly() throws Exception {
         String content = objectMapper.writeValueAsString(gymClassModels);
 
-        when(filterBySubscription.filterByYearly(1200, gymClassModels)).thenReturn(gymClassModels);
+//        when(filterBySubscription.filterByYearly(1200, gymClassModels)).thenReturn(gymClassModels);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/filter/subscription/yearly/1000").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 
@@ -197,7 +199,7 @@ class GymControllerTest {
     void filterOneWorkout() throws Exception {
         String content = objectMapper.writeValueAsString(gymClassModels);
 
-        when(filterBySubscription.filterByOneWorkout(300, gymClassModels)).thenReturn(gymClassModels);
+//        when(filterBySubscription.filterByOneWorkout(300, gymClassModels)).thenReturn(gymClassModels);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/filter/subscription/oneWorkout/100").contentType(MediaType.APPLICATION_JSON).content(content)).andExpect(status().isOk());
 

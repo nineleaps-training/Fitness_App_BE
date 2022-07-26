@@ -18,6 +18,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -63,31 +65,31 @@ class AdminControllerTest {
     List<String> workout = new ArrayList<>();
 
 
-    @MockBean
+    @Mock
     private UserDetailsServiceImpl userDetailsService;
 
-    @MockBean
+    @Mock
     private AuthenticationManager authenticationManager;
 
-    @MockBean
+    @Mock
     UserDetails userDetails;
 
-    @MockBean
+    @Mock
     private JwtUtils jwtUtils;
 
-    @MockBean
+    @Mock
     private UserRepository userRepo;
 
-    @MockBean
+    @Mock
     private VendorRepository vendorRepo;
 
-    @MockBean
+    @Mock
     private AddGymRepository gymRepo;
 
-    @MockBean
+    @Mock
     private AdminService adminService;
 
-    @Autowired
+    @InjectMocks
     AdminController adminController;
 
     @BeforeEach

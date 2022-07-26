@@ -1,9 +1,6 @@
 package com.fitness.app.service;
 
-import com.fitness.app.entity.GymAddressClass;
-import com.fitness.app.entity.GymClass;
-import com.fitness.app.entity.GymSubscriptionClass;
-import com.fitness.app.entity.GymTime;
+import com.fitness.app.entity.*;
 import com.fitness.app.model.GymClassModel;
 import com.fitness.app.model.GymRepresent;
 import com.fitness.app.repository.AddGymRepository;
@@ -13,6 +10,8 @@ import com.fitness.app.repository.GymTimeRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -35,21 +34,23 @@ class GymServiceTest {
     GymSubscriptionClass gymSubscriptionClass = new GymSubscriptionClass();
     List<String> workout = new ArrayList<>();
 
-    @MockBean
+    @Mock
     private AddGymRepository gymRepository;
 
-    @MockBean
+    @Mock
     private GymAddressRepository gymAddressRepository;
 
-    @MockBean
+    @Mock
     private GymTimeRepository gymTimeRepository;
 
-    @MockBean
+    @Mock
     private GymSubscriptionRepository gymSubscriptionRepository;
 
-    @Autowired
-    GymService gymService;
+    @Mock
+    RatingService ratingService;
 
+    @InjectMocks
+    GymService gymService;
 
     @Test
     void returnExistingGymIfGymClassIsNotNull() {

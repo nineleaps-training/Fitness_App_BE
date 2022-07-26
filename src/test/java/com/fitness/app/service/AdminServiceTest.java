@@ -19,7 +19,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
@@ -54,31 +55,31 @@ class AdminServiceTest {
     List<String> workout = new ArrayList<>();
 
 
-    @MockBean
+    @Mock
     private AuthenticationManager authenticationManager;
 
-    @MockBean
+    @Mock
     private UserDetailsServiceImpl userDetailsService;
 
-    @MockBean
+    @Mock
     UserDetails userDetails;
 
     @MockBean
     private JwtUtils jwtUtils;
 
-    @MockBean
+    @Mock
     UserRepository userRepo;
 
-    @MockBean
+    @Mock
     AdminPayRepository adminPayRepository;
 
-    @MockBean
+    @Mock
     VendorPayRepository vendorPay;
 
-    @MockBean
+    @Mock
     AddGymRepository gymRepo;
 
-    @Autowired
+    @InjectMocks
     AdminService adminService;
 
     @BeforeEach
@@ -103,7 +104,6 @@ class AdminServiceTest {
                 "9685903290", "12345", "ADMIN", false, false, true);
         when(authenticationManager.authenticate(null)).thenReturn(null);
         when(userDetailsService.loadUserByUsername(authenticate.getEmail())).thenReturn(userDetails);
-//        when(jwtUtils.generateToken(userDetails)).thenReturn("");
         when(userRepo.findByEmail(authenticate.getEmail())).thenReturn(userClass);
 
         ResponseEntity<SignUpResponse> responseEntity = ResponseEntity.ok(new SignUpResponse(userClass, null));

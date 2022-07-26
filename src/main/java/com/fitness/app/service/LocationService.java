@@ -4,6 +4,8 @@ import com.fitness.app.dao.LocationDao;
 import com.fitness.app.model.GoogleAddress;
 import com.fitness.app.model.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -16,8 +18,11 @@ import java.util.*;
 @Slf4j
 public class LocationService implements LocationDao {
 
+    @Autowired
+    Environment environment;
 
-    private static final Object GOOGLE_API_KEY = "AIzaSyCgHNmyruLEfUzPbSoKUJrx1I-rL_NqJ2U";
+    @Autowired
+    RestTemplate restTemplate;
 
     public String getDetails(String address) {
         log.info("LocationService >> getDetails >> Initiated");
@@ -25,11 +30,11 @@ public class LocationService implements LocationDao {
                 .scheme("https")
                 .host("maps.googleapis.com")
                 .path("/maps/api/geocode/json")
-                .queryParam("key", GOOGLE_API_KEY)
+                .queryParam("key", environment.getProperty("googleApiKey"))
                 .queryParam("address", address)
                 .build();
         log.info(uri.toUriString());
-        ResponseEntity<Response> response = new RestTemplate().getForEntity(uri.toUriString(), Response.class);
+        ResponseEntity<Response> response = restTemplate.getForEntity(uri.toUriString(), Response.class);
         Response location = response.getBody();
         Double lat = Objects.requireNonNull(location).getResult()[0].getGeometry().getLocation().getLat();
         Double lng = location.getResult()[0].getGeometry().getLocation().getLng();
@@ -43,14 +48,14 @@ public class LocationService implements LocationDao {
                 .scheme("https")
                 .host("maps.googleapis.com")
                 .path("/maps/api/geocode/json")
-                .queryParam("key", GOOGLE_API_KEY)
+                .queryParam("key", environment.getProperty("googleApiKey"))
                 .queryParam("latlng", latlng)
                 .build();
         log.info(uri.toUriString());
 
 
         String city = "";
-        ResponseEntity<Response> response = new RestTemplate().getForEntity(uri.toUriString(), Response.class);
+        ResponseEntity<Response> response = restTemplate.getForEntity(uri.toUriString(), Response.class);
         Response formattedAddress = response.getBody();
         GoogleAddress[] address = Objects.requireNonNull(formattedAddress).getResult()[1].getAllAddress();
 

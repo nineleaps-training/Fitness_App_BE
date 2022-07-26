@@ -10,6 +10,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -36,10 +38,10 @@ class UserControllerTest {
     UserClass userClass;
     SignUpResponse signUpResponse;
 
-    @MockBean
+    @Mock
     private UserService userService;
 
-    @Autowired
+    @InjectMocks
     UserController userController;
 
     @BeforeEach

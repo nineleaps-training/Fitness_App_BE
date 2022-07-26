@@ -5,16 +5,23 @@ import com.fitness.app.model.GymRepresent;
 import com.fitness.app.model.UserOrderModel;
 import com.fitness.app.model.UserPerformanceModel;
 import com.fitness.app.repository.*;
+import com.razorpay.Order;
+import com.razorpay.OrderClient;
+import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDate;
@@ -26,42 +33,53 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+
 @ExtendWith(MockitoExtension.class)
 class UserOrderServiceTest {
 
     HashMap<String, String> data;
+    Order order;
+    JSONObject jsonObject;
+    RazorpayClient razorpayClient;
 
-    @MockBean
+    @Mock
     private UserOrderRepository userOrderRepository;
 
-    @MockBean
+    @Mock
     private AddGymRepository gymRepo;
 
-    @MockBean
+    @Mock
     private AttendanceRepository attendanceRepository;
 
-    @MockBean
+    @Mock
     private UserRepository userRepository;
 
-    @MockBean
+    @Mock
     private VendorPayRepository vendorOrderRepo;
 
-    @MockBean
+    @Mock
     private GymService gymService;
 
-    @Autowired
+
+    @Mock
+    OrderClient orderClient;
+
+    @InjectMocks
     UserOrderService userOrderService;
 
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws RazorpayException {
+        razorpayClient = new RazorpayClient("123456", "12ab34");
+        userOrderService = new UserOrderService(userOrderRepository, userRepository, attendanceRepository, gymRepo, gymService, vendorOrderRepo, razorpayClient);
+
+        jsonObject = new JSONObject();
+        order = new Order(new JSONObject());
+
         data = new HashMap<>();
-        data.put("order_id", "12345");
-        data.put("payment_id", "54321");
+        data.put("id", "12345");
         data.put("status", "Completed");
+        data.put("receipt", "1a2b3c4d");
 
     }
 
@@ -71,6 +89,14 @@ class UserOrderServiceTest {
         List<String> services = new ArrayList<>();
 
         UserOrderModel userOrder = new UserOrderModel("priyanshi.chaturvedi@nineleaps.com", "Fitness", services, "monthly", 500, "Evening");
+
+        razorpayClient.Orders = orderClient;
+
+        jsonObject.put("amount", userOrder.getAmount() * 100);
+        jsonObject.put("currency", "INR");
+        jsonObject.put("receipt", "txn_201456");
+
+        when(razorpayClient.Orders.create(any())).thenReturn(order);
 
         userOrderService.orderNow(userOrder);
         assertNotNull(userOrder);
@@ -385,7 +411,6 @@ class UserOrderServiceTest {
         List<GymRepresent> gymRepresents = new ArrayList<>();
 
         when(userOrderRepository.findByEmail(userOrder.getEmail())).thenReturn(orders);
-        when(gymService.getGymByGymId(any())).thenReturn(gymRepresent);
 
         List<GymRepresent> actual = userOrderService.bookedGym(userOrder.getEmail());
         assertEquals(gymRepresents, actual);

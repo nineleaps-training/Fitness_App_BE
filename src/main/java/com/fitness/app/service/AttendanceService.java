@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import com.fitness.app.dao.AttendanceDao;
 import com.fitness.app.entity.Rating;
+import com.fitness.app.exception.DataNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,7 +32,7 @@ public class AttendanceService implements AttendanceDao {
         this.ratingRepository = ratingRepository;
     }
 
-    public String markUsersAttendance(MarkUserAttModel userAttendance) throws NullPointerException {
+    public String markUsersAttendance(MarkUserAttModel userAttendance) {
         log.info("AttendanceService >> markUsersAttendance >> Initiated");
         try {
             log.info("AttendanceService >> markUsersAttendance >> Try Block");
@@ -81,14 +82,14 @@ public class AttendanceService implements AttendanceDao {
 
         } catch (Exception e) {
             log.error("AttendanceService >> markUsersAttendance >> Exception Thrown");
-            throw new NullPointerException(e.getMessage());
+            throw new DataNotFoundException("Data Not Found!");
         }
 
 
     }
 
 
-    public List<Integer> userPerformance(String email, String gym) throws IndexOutOfBoundsException {
+    public List<Integer> userPerformance(String email, String gym) {
         log.info("AttendanceService >> userPerformance >> Initiated");
 
         try {
@@ -134,7 +135,7 @@ public class AttendanceService implements AttendanceDao {
             return new ArrayList<>();
         } catch (Exception e) {
             log.error("AttendanceService >> userPerformance >> Exception Thrown");
-            throw new IndexOutOfBoundsException(e.getMessage() + "/t cause: " + e.getCause());
+                throw new DataNotFoundException("Data Not Found!");
         }
     }
 

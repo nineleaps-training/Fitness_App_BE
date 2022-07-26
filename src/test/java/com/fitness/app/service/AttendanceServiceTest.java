@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.function.Executable;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -27,13 +29,13 @@ import static org.mockito.Mockito.when;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class AttendanceServiceTest {
 
-    @MockBean
+    @Mock
     AttendanceRepository attendanceRepository;
 
-    @MockBean
+    @Mock
     RatingRepository ratingRepository;
 
-    @Autowired
+    @InjectMocks
     AttendanceService attendanceService;
 
     @Test

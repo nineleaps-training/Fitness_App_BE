@@ -1,5 +1,8 @@
 package com.fitness.app.model;
 
+import lombok.AllArgsConstructor;
+
+@AllArgsConstructor
 public class Location {
     private double lat;
     private double lng;
