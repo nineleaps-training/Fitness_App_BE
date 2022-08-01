@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.fitness.app.entity.UserOrder;
 import com.fitness.app.model.GymRepresentModel;
 import com.fitness.app.model.UserOrderModel;
-import com.fitness.app.model.UserPerfomanceModel;
+import com.fitness.app.model.UserPerformanceModel;
 import com.razorpay.RazorpayException;
 
 @Component
@@ -25,7 +25,7 @@ public interface UserOrderDAO {
 
     public List<UserOrder> orderListOrder(String email);
 
-    public Set<UserPerfomanceModel> allMyUser(String gymId);
+    public Set<UserPerformanceModel> allMyUser(String gymId);
 
     public List<GymRepresentModel> bookedGym(String email);
 

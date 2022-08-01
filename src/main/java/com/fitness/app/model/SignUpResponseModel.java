@@ -10,8 +10,8 @@ import io.swagger.annotations.ApiModelProperty;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "SignUpResponce")
-public class SignUpResponceModel {
+@ApiModel(description = "SignUpResponse")
+public class SignUpResponseModel {
 	@ApiModelProperty(name = "currentUser", notes = "Current User")
 	private UserClass currentUser;
 	@ApiModelProperty(name = "message", notes = "JWT Token")

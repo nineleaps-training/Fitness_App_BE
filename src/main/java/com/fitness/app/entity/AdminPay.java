@@ -24,19 +24,18 @@ public class AdminPay {
 	private String orderId;
 	@Field
 	private String vendor;
-
 	@Field
 	private int amount;
 	@Field
 	private String status;
 	@Field
+	private String receipt;
+	@Field
 	private String paymentId;
 	@Field
-	private String reciept;
+	private LocalTime time;
 	@Field
 	private LocalDate date;
-	@Field
-	private LocalTime time;
 
 	public AdminPay(String vendor, int amount) {
 		super();

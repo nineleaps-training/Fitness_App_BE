@@ -50,255 +50,274 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Slf4j
 class AdminControllerTest {
 
-    @InjectMocks
-    AdminController adminController;
+        @InjectMocks
+        AdminController adminController;
 
-    @Mock
-    UserRepo userRepo;
+        @Mock
+        UserRepo userRepo;
 
-    @Mock
-    AddGymRepo gymRepo;
+        @Mock
+        AddGymRepo gymRepo;
 
-    @Mock
-    AdminService adminService;
+        @Mock
+        AdminService adminService;
 
-    @Mock
-    AdminPayRepo adminPayRepo;
+        @Mock
+        AdminPayRepo adminPayRepo;
 
-    @Mock
-    AuthenticationManager authenticationManager;
+        @Mock
+        AuthenticationManager authenticationManager;
 
-    @Mock
-    UserDetailsServiceImpl userDetailsServiceImpl;
+        @Mock
+        UserDetailsServiceImpl userDetailsServiceImpl;
 
-    @Mock
-    JwtUtils jwtUtils;
+        @Mock
+        JwtUtils jwtUtils;
 
-    @Mock
-    PagingService pagingService;
+        @Mock
+        PagingService pagingService;
 
-    List<String> aList = new ArrayList<>(List.of("Hello"));
+        List<String> aList = new ArrayList<>(List.of("Hello"));
 
-    MockMvc mockMvc;
+        MockMvc mockMvc;
 
-    long l = 123;
+        long l = 123;
 
-    GymClass gymClass = new GymClass("GM6", "pankaj.jain@nineleaps.com", "Pankaj Jain", aList, l, 2.3, 15);
+        GymClass gymClass = new GymClass("GM6", "pankaj.jain@nineleaps.com", "Pankaj Jain", aList, l, 2.3, 15);
 
-    UserClass userClass = new UserClass("pankaj.jain@nineleaps.com", "Pankaj Jain", "8469492322", "hello@123", "USER",
-            true, true, true);
+        UserClass userClass = new UserClass("pankaj.jain@nineleaps.com", "Pankaj Jain", "8469492322", "hello@123",
+                        "USER",
+                        true, true, true);
 
-    UserClass userClass1 = new UserClass("pankaj.jain@nineleaps.com", "Pankaj Jain", "8469492322", "hello@123",
-            "VENDOR", true, true, true);
+        UserClass userClass1 = new UserClass("pankaj.jain@nineleaps.com", "Pankaj Jain", "8469492322", "hello@123",
+                        "VENDOR", true, true, true);
 
-    ObjectMapper objectMapper1 = new ObjectMapper();
+        ObjectMapper objectMapper1 = new ObjectMapper();
 
-    ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
-            .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-
-    List<GymClass> gymClasses = new ArrayList<>();
-    List<UserClass> userClasses = new ArrayList<>();
-
-    @BeforeEach
-    public void setup() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(adminController).build();
-    }
-
-    @Test
-    @DisplayName("Testing of authentication of user")
-    void testAuthenticateUser() throws Exception {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_admin"));
-        Authenticate authenticate = new Authenticate("pankaj.jain@nineleaps.com", "Pankaj@123");
-        String content = objectMapper.writeValueAsString(authenticate);
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/admin/login/admin").contentType(MediaType.APPLICATION_JSON).content(content))
-                .andExpect(status().isCreated());
-    }
-
-    @Test
-    @DisplayName("Testing when authentication of user is null")
-    void testAuthenticateUserNull() throws Exception {
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_user"));
-        Authenticate authenticate = new Authenticate("pankaj.jain@nineleaps.com", "Pankaj@123");
-        String content = objectMapper.writeValueAsString(authenticate);
-        mockMvc.perform(MockMvcRequestBuilders
-                .post("/v1/admin/login/admin").contentType(MediaType.APPLICATION_JSON).content(content))
-                .andExpect(status().isCreated());
-    }
-
-    @Test
-    @DisplayName("Testing to fetch all the gyms from the database")
-    void testGetAllGyms() throws Exception {
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/admin/getAllGyms/0/2").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-
-    }
-
-    @Test
-    @DisplayName("Testing if all the gyms are fecthed with the email id of the vendor")
-    void testGetAllGymsByEmail() throws Exception {
+        ObjectMapper objectMapper = new ObjectMapper().registerModule(new JavaTimeModule())
+                        .configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
         List<GymClass> gymClasses = new ArrayList<>();
-        gymClasses.add(gymClass);
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/admin/getAllGymsByEmail/pankaj.jain@nineleaps.com").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+        List<UserClass> userClasses = new ArrayList<>();
 
-    }
-
-    @Test
-    @DisplayName("Testing to fetch all registered enthusiasts,vendors and gyms")
-    void testGetAllNumber() throws Exception {
-        List<String> list = new ArrayList<>();
-        list.add("4");
-        list.add("1");
-        list.add("5");
-
-        userClasses.add(userClass);
-        userClasses.add(userClass1);
-        gymClasses.add(gymClass);
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/admin/allNumbers").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-
-    }
-
-    @Test
-    @DisplayName("Testing to fetch all the registered users")
-    void testGetAllUsers() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/admin/getAllUsers/0/2").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("Testing to fetch all the registered vendors")
-    void testGetAllVendors() throws Exception {
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/admin/getAllVendors/0/2").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-
-    }
-
-    @Test
-    @DisplayName("Testing to fetch the details of the order")
-    void testGetDatapay() throws Exception {
-
-        LocalDate localDate = LocalDate.now();
-        LocalTime localTime = LocalTime.now();
-        AdminPayRequestModel adminPayRequestModel = new AdminPayRequestModel("GM6", "orderid", "vendor", 123, "Due",
-                "string", "string", localDate, localTime);
-        AdminPay adminPay = new AdminPay("GM6", "orderid", "vendor", 123, "Due", "string", "string", localDate,
-                localTime);
-        String content = objectMapper.writeValueAsString(adminPayRequestModel);
-        Mockito.when(adminService.getDataPay(adminPayRequestModel)).thenReturn(adminPay);
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/admin/getDataPay").contentType(MediaType.APPLICATION_JSON).content(content))
-                .andExpect(status().isOk());
-    }
-
-    @Test
-    @DisplayName("Testing to fetch the payment history of vendor")
-    void testPaidHistroy() throws Exception {
-
-        LocalDate localDate = LocalDate.of(2022, 6, 24);
-        LocalTime localTime = LocalTime.of(12, 32, 4);
-        AdminPayRequestModel adminPayRequestModel = new AdminPayRequestModel("GM6", "orderid", "vendor", 123, "string",
-                "string", "string", localDate, localTime);
-        AdminPay adminPay = new AdminPay("GM6", "orderid", "vendor", 123, "string", "string", "string", localDate,
-                localTime);
-        List<AdminPayRequestModel> list = new ArrayList<>();
-        list.add(adminPayRequestModel);
-        List<AdminPay> list2 = new ArrayList<>();
-        list2.add(adminPay);
-        Mockito.when(adminService.paidHistroyVendor(adminPayRequestModel.getVendor())).thenReturn(list2);
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/admin/paidHistory/vendor").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
-
-    }
-
-    @Test
-    @DisplayName("Testing for payment to vendor")
-    void testPayNow() throws RazorpayException {
-
-        try {
-            Collection<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("ROLE_admin"));
-            LocalDate localDate = LocalDate.now();
-            LocalTime localTime = LocalTime.now();
-            AdminPayRequestModel adminPayRequestModel = new AdminPayRequestModel("GM6", "orderid", "vendor", 123,
-                    "Completed", "string", "string", localDate, localTime);
-            String content = objectMapper.writeValueAsString(adminPayRequestModel);
-            mockMvc.perform(MockMvcRequestBuilders
-                    .put("/v1/admin/payVendorNow").contentType(MediaType.APPLICATION_JSON).content(content))
-                    .andExpect(status().isOk());
-        } catch (RazorpayException e) {
-            Assertions.assertEquals("Cannot pay", e.getMessage());
-        } catch (Exception e) {
-            log.error("AdminControllerTest >> testPayNow >> Exception thrown");
+        @BeforeEach
+        public void setup() {
+                this.mockMvc = MockMvcBuilders.standaloneSetup(adminController).build();
         }
-    }
 
-    @Test
-    @DisplayName("Testing of payment exception")
-    void testPayNowNull() throws RazorpayException {
-
-        try {
-            Collection<GrantedAuthority> authorities = new ArrayList<>();
-            authorities.add(new SimpleGrantedAuthority("ROLE_admin"));
-            LocalDate localDate = LocalDate.now();
-            LocalTime localTime = LocalTime.now();
-            AdminPayRequestModel adminPayRequestModel = new AdminPayRequestModel("GM6", "orderid", "vendor", 123,
-                    "Completed", "string", "string", localDate, localTime);
-            String content = objectMapper.writeValueAsString(adminPayRequestModel);
-            mockMvc.perform(MockMvcRequestBuilders
-                    .put("/v1/admin/payVendorNow").contentType(MediaType.APPLICATION_JSON).content(content))
-                    .andExpect(status().isOk());
-        } catch (RazorpayException e) {
-            Assertions.assertEquals("Cannot pay", e.getMessage());
-        } catch (Exception e) {
-            log.error("AdminControllerTest >> testPayNowNull >> Exception thrown");
+        @Test
+        @DisplayName("Testing of authentication of user")
+        void testAuthenticateUser() throws Exception {
+                Collection<GrantedAuthority> authorities = new ArrayList<>();
+                authorities.add(new SimpleGrantedAuthority("ROLE_admin"));
+                Authenticate authenticate = new Authenticate("pankaj.jain@nineleaps.com", "Pankaj@123");
+                String content = objectMapper.writeValueAsString(authenticate);
+                mockMvc.perform(MockMvcRequestBuilders
+                                .post("/v1/admin/login/admin").contentType(MediaType.APPLICATION_JSON).content(content))
+                                .andExpect(status().isCreated());
         }
-    }
 
-    @Test
-    @DisplayName("Testing of updating the order details")
-    void testUpdatingOrder() throws Exception {
+        @Test
+        @DisplayName("Testing when authentication of user is null")
+        void testAuthenticateUserNull() throws Exception {
+                Collection<GrantedAuthority> authorities = new ArrayList<>();
+                authorities.add(new SimpleGrantedAuthority("ROLE_user"));
+                Authenticate authenticate = new Authenticate("pankaj.jain@nineleaps.com", "Pankaj@123");
+                String content = objectMapper.writeValueAsString(authenticate);
+                mockMvc.perform(MockMvcRequestBuilders
+                                .post("/v1/admin/login/admin").contentType(MediaType.APPLICATION_JSON).content(content))
+                                .andExpect(status().isCreated());
+        }
 
-        LocalDate localDate = LocalDate.now();
-        LocalTime localTime = LocalTime.now();
-        AdminPayRequestModel adminPayRequestModel = new AdminPayRequestModel("GM6", "orderid", "vendor", 123, "Due",
-                "string", "string", localDate, localTime);
-        AdminPay adminPay = new AdminPay("GM6", "orderid", "vendor", 123, "Due", "string", "string", localDate,
-                localTime);
-        List<AdminPayRequestModel> list = new ArrayList<>();
-        list.add(adminPayRequestModel);
-        Map<String, String> data = new HashMap<>();
-        data.put("order_id", "id");
-        data.put("payment_id", "id");
-        data.put("status", "Due");
-        Mockito.when(adminService.updatePayment(data)).thenReturn(adminPay);
-        String content = objectMapper.writeValueAsString(data);
-        mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/admin/updateVendorPayment").contentType(MediaType.APPLICATION_JSON).content(content))
-                .andExpect(status().isOk());
+        @Test
+        @DisplayName("Testing to fetch all the gyms from the database")
+        void testGetAllGyms() throws Exception {
 
-    }
+                mockMvc.perform(MockMvcRequestBuilders
+                                .get("/v1/admin/getAllGyms/0/2").contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk());
 
-    @Test
-    @DisplayName("Testing of Vendor Payment")
-    void testVendorPayment() throws Exception {
+        }
 
-        LocalDate localDate = LocalDate.of(2022, 6, 24);
-        LocalTime localTime = LocalTime.of(12, 32, 4);
-        AdminPayRequestModel adminPayRequestModel = new AdminPayRequestModel("GM6", "orderid", "vendor", 123, "string",
-                "string", "string", localDate, localTime);
-        AdminPay adminPay = new AdminPay("GM6", "orderid", "vendor", 123, "string", "string", "string", localDate,
-                localTime);
-        Mockito.when(adminService.vendorPayment(adminPayRequestModel.getVendor())).thenReturn(adminPay);
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/admin/vendorPayment/vendor").contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk());
+        @Test
+        @DisplayName("Testing if all the gyms are fetched with the email id of the vendor")
+        void testGetAllGymsByEmail() throws Exception {
 
-    }
+                List<GymClass> gymClasses = new ArrayList<>();
+                gymClasses.add(gymClass);
+                mockMvc.perform(MockMvcRequestBuilders
+                                .get("/v1/admin/getAllGymsByEmail/pankaj.jain@nineleaps.com")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk());
+
+        }
+
+        @Test
+        @DisplayName("Testing to fetch all registered enthusiasts,vendors and gyms")
+        void testGetAllNumber() throws Exception {
+                List<String> list = new ArrayList<>();
+                list.add("4");
+                list.add("1");
+                list.add("5");
+
+                userClasses.add(userClass);
+                userClasses.add(userClass1);
+                gymClasses.add(gymClass);
+                mockMvc.perform(MockMvcRequestBuilders
+                                .get("/v1/admin/allNumbers").contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk());
+
+        }
+
+        @Test
+        @DisplayName("Testing to fetch all the registered users")
+        void testGetAllUsers() throws Exception {
+                mockMvc.perform(MockMvcRequestBuilders
+                                .get("/v1/admin/getAllUsers/0/2").contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk());
+        }
+
+        @Test
+        @DisplayName("Testing to fetch all the registered vendors")
+        void testGetAllVendors() throws Exception {
+
+                mockMvc.perform(MockMvcRequestBuilders
+                                .get("/v1/admin/getAllVendors/0/2").contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk());
+
+        }
+
+        @Test
+        @DisplayName("Testing to fetch the details of the order")
+        void testGetDataPay() throws Exception {
+
+                LocalDate localDate = LocalDate.now();
+                LocalTime localTime = LocalTime.now();
+                AdminPayRequestModel adminPayRequestModel = new AdminPayRequestModel("GM6", "orderId", "vendor", 123,
+                                "Due",
+                                "string", "string", localDate, localTime);
+                AdminPay adminPay = new AdminPay("GM6", "orderId", "vendor", 123, "Due", "string", "string", localTime,
+                                localDate);
+                String content = objectMapper.writeValueAsString(adminPayRequestModel);
+                Mockito.when(adminService.getDataPay(adminPayRequestModel)).thenReturn(adminPay);
+                mockMvc.perform(MockMvcRequestBuilders
+                                .get("/v1/admin/getDataPay").contentType(MediaType.APPLICATION_JSON).content(content))
+                                .andExpect(status().isOk());
+        }
+
+        @Test
+        @DisplayName("Testing to fetch the payment history of vendor")
+        void testPaidHistory() throws Exception {
+
+                LocalDate localDate = LocalDate.of(2022, 6, 24);
+                LocalTime localTime = LocalTime.of(12, 32, 4);
+                AdminPayRequestModel adminPayRequestModel = new AdminPayRequestModel("GM6", "orderId", "vendor", 123,
+                                "string",
+                                "string", "string", localDate, localTime);
+                AdminPay adminPay = new AdminPay("GM6", "orderId", "vendor", 123, "string", "string", "string",
+                                localTime,
+                                localDate);
+                List<AdminPayRequestModel> list = new ArrayList<>();
+                list.add(adminPayRequestModel);
+                List<AdminPay> list2 = new ArrayList<>();
+                list2.add(adminPay);
+                Mockito.when(adminService.paidHistoryVendor(adminPayRequestModel.getVendor())).thenReturn(list2);
+                mockMvc.perform(MockMvcRequestBuilders
+                                .get("/v1/admin/paidHistory/vendor").contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk());
+
+        }
+
+        @Test
+        @DisplayName("Testing for payment to vendor")
+        void testPayNow() throws RazorpayException {
+
+                try {
+                        Collection<GrantedAuthority> authorities = new ArrayList<>();
+                        authorities.add(new SimpleGrantedAuthority("ROLE_admin"));
+                        LocalDate localDate = LocalDate.now();
+                        LocalTime localTime = LocalTime.now();
+                        AdminPayRequestModel adminPayRequestModel = new AdminPayRequestModel("GM6", "orderId", "vendor",
+                                        123,
+                                        "Completed", "string", "string", localDate, localTime);
+                        String content = objectMapper.writeValueAsString(adminPayRequestModel);
+                        mockMvc.perform(MockMvcRequestBuilders
+                                        .put("/v1/admin/payVendorNow").contentType(MediaType.APPLICATION_JSON)
+                                        .content(content))
+                                        .andExpect(status().isOk());
+                } catch (RazorpayException e) {
+                        Assertions.assertEquals("Cannot pay", e.getMessage());
+                } catch (Exception e) {
+                        log.error("AdminControllerTest >> testPayNow >> Exception thrown");
+                }
+        }
+
+        @Test
+        @DisplayName("Testing of payment exception")
+        void testPayNowNull() throws RazorpayException {
+
+                try {
+                        Collection<GrantedAuthority> authorities = new ArrayList<>();
+                        authorities.add(new SimpleGrantedAuthority("ROLE_admin"));
+                        LocalDate localDate = LocalDate.now();
+                        LocalTime localTime = LocalTime.now();
+                        AdminPayRequestModel adminPayRequestModel = new AdminPayRequestModel("GM6", "orderId", "vendor",
+                                        123,
+                                        "Completed", "string", "string", localDate, localTime);
+                        String content = objectMapper.writeValueAsString(adminPayRequestModel);
+                        mockMvc.perform(MockMvcRequestBuilders
+                                        .put("/v1/admin/payVendorNow").contentType(MediaType.APPLICATION_JSON)
+                                        .content(content))
+                                        .andExpect(status().isOk());
+                } catch (RazorpayException e) {
+                        Assertions.assertEquals("Cannot pay", e.getMessage());
+                } catch (Exception e) {
+                        log.error("AdminControllerTest >> testPayNowNull >> Exception thrown");
+                }
+        }
+
+        @Test
+        @DisplayName("Testing of updating the order details")
+        void testUpdatingOrder() throws Exception {
+
+                LocalDate localDate = LocalDate.now();
+                LocalTime localTime = LocalTime.now();
+                AdminPayRequestModel adminPayRequestModel = new AdminPayRequestModel("GM6", "orderId", "vendor", 123,
+                                "Due",
+                                "string", "string", localDate, localTime);
+                AdminPay adminPay = new AdminPay("GM6", "orderId", "vendor", 123, "Due", "string", "string", localTime,
+                                localDate);
+                List<AdminPayRequestModel> list = new ArrayList<>();
+                list.add(adminPayRequestModel);
+                Map<String, String> data = new HashMap<>();
+                data.put("order_id", "id");
+                data.put("payment_id", "id");
+                data.put("status", "Due");
+                Mockito.when(adminService.updatePayment(data)).thenReturn(adminPay);
+                String content = objectMapper.writeValueAsString(data);
+                mockMvc.perform(MockMvcRequestBuilders
+                                .put("/v1/admin/updateVendorPayment").contentType(MediaType.APPLICATION_JSON)
+                                .content(content))
+                                .andExpect(status().isOk());
+
+        }
+
+        @Test
+        @DisplayName("Testing of Vendor Payment")
+        void testVendorPayment() throws Exception {
+
+                LocalDate localDate = LocalDate.of(2022, 6, 24);
+                LocalTime localTime = LocalTime.of(12, 32, 4);
+                AdminPayRequestModel adminPayRequestModel = new AdminPayRequestModel("GM6", "orderId", "vendor", 123,
+                                "string",
+                                "string", "string", localDate, localTime);
+                AdminPay adminPay = new AdminPay("GM6", "orderId", "vendor", 123, "string", "string", "string",
+                                localTime,
+                                localDate);
+                Mockito.when(adminService.vendorPayment(adminPayRequestModel.getVendor())).thenReturn(adminPay);
+                mockMvc.perform(MockMvcRequestBuilders
+                                .get("/v1/admin/vendorPayment/vendor").contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk());
+
+        }
 }

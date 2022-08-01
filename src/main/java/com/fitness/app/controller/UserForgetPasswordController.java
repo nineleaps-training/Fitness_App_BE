@@ -42,7 +42,7 @@ public class UserForgetPasswordController {
 	 * @param email - Email id of the user
 	 * @return - Response is okay after success or else something went wrong
 	 */
-	@ApiOperation(value = "User Forgot Password", notes = "Verfiying the user")
+	@ApiOperation(value = "User Forgot Password", notes = "Verifying the user")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "User verified", response = UserForgotModel.class),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),

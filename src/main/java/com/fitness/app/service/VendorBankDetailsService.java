@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static com.fitness.app.components.Constants.*;
+
 @Slf4j
 @Service
 public class VendorBankDetailsService implements VendorBankDetailsDAO {
@@ -57,7 +59,7 @@ public class VendorBankDetailsService implements VendorBankDetailsDAO {
             log.info("VendorBankDetailsService >> addDetails >> Terminated");
             return repository.save(vendorBankDetails); // Adding Vendor Bank Details
         }
-        log.warn("Null is returned");
+        log.warn(NULL_RETURNED);
         return null;
     }
 
@@ -86,7 +88,7 @@ public class VendorBankDetailsService implements VendorBankDetailsDAO {
             return vendorBankDetails;
         } else {
             log.error("VendorBankDetailsService >> getBankDetails >> Exception thrown");
-            throw new DataNotFoundException("No vendor found with this email");
+            throw new DataNotFoundException(VENDOR_NOT_FOUND);
         }
 
     }

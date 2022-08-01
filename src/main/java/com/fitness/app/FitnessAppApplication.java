@@ -2,6 +2,7 @@ package com.fitness.app;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.retry.annotation.EnableRetry;
 
@@ -13,8 +14,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 @EnableRetry
 @EnableSwagger2
+@EnableCaching
 public class FitnessAppApplication {
-    
+
     // Main Method to run the application
     public static void main(String[] args) {
         SpringApplication.run(FitnessAppApplication.class, args);

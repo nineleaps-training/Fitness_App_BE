@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.fitness.app.components.Constants.*;
+
 @Slf4j
 @Service
 public class UserBankDetailsService implements UserBankDetailsDAO {
@@ -26,7 +28,7 @@ public class UserBankDetailsService implements UserBankDetailsDAO {
     /**
      * This constructor is used to initialize the repositories
      * 
-     * @param userBankDetailsRepo - User Bank Details Respository
+     * @param userBankDetailsRepo - User Bank Details Repository
      * @param userRepository2     - User Repository
      */
 
@@ -38,7 +40,7 @@ public class UserBankDetailsService implements UserBankDetailsDAO {
     /**
      * This function is used to add the bank details of the user
      * 
-     * @param bankDetails - Bank Detals of the user
+     * @param bankDetails - Bank Details of the user
      * @return - Bank Details
      */
     public UserBankDetails addBankDetails(UserBankDetailsRequestModel bankDetails) {
@@ -51,14 +53,14 @@ public class UserBankDetailsService implements UserBankDetailsDAO {
             UserBankDetails userBankDetails = new UserBankDetails();
             userBankDetails.setUEmail(bankDetails.getEmail()); // Adding Bank Details of User
             userBankDetails.setUName(bankDetails.getBankName());
-            userBankDetails.setUaccountNumber(bankDetails.getAccountNumber());
-            userBankDetails.setUbankIFSC(bankDetails.getBankIFSC());
-            userBankDetails.setUbankName(bankDetails.getBankName());
-            userBankDetails.setUbranchName(bankDetails.getBranchName());
+            userBankDetails.setUAccountNumber(bankDetails.getAccountNumber());
+            userBankDetails.setUBankIFSC(bankDetails.getBankIFSC());
+            userBankDetails.setUBankName(bankDetails.getBankName());
+            userBankDetails.setUBranchName(bankDetails.getBranchName());
             log.info("UserBankDetailsService >> addBankDetails >> Terminated");
             return repository.save(userBankDetails);
         }
-        log.warn("Null is returned");
+        log.warn(NULL_RETURNED);
         return null;
     }
 
@@ -76,7 +78,7 @@ public class UserBankDetailsService implements UserBankDetailsDAO {
             return optional.get(); // Fetching Bank Details of a particular User
         } else {
             log.error("UserBankDetailsService >> getBankDetails >> Error thrown");
-            throw new DataNotFoundException("No User Bank Details Found");
+            throw new DataNotFoundException(NO_USER_BANK_DETAILS_FOUND);
         }
     }
 }

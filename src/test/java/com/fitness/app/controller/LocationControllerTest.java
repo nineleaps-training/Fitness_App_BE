@@ -62,12 +62,12 @@ class LocationControllerTest {
     @Test
     @DisplayName("Testing of fetching the gym address from it's latitude and longitude")
     void testGetAddress() throws Exception {
-        
+
         List<String> list = new ArrayList<>();
         list.add("");
-        list.add("Bengaluru");
-        Map<String,List<String>> address = new HashMap<>();
-        address.put("data",list);
+        list.add("Bangalore");
+        Map<String, List<String>> address = new HashMap<>();
+        address.put("data", list);
         Mockito.when(locationService.getAddress("27.345436,74.253456")).thenReturn(address);
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/v1/location/getFitnessCenterByLocation?latlng=27.345436,74.253456")).andExpect(status().isOk());
@@ -78,7 +78,7 @@ class LocationControllerTest {
     @DisplayName("Testing of fetching the latitude and longitude from gym address")
     void testGetDetails() throws Exception {
 
-        String address="Nineleaps Pasta Street";
+        String address = "Nineleaps Pasta Street";
         Mockito.when(locationService.getDetails(address)).thenReturn("12.930779,77.633151");
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/v1/location/getLocation?address=Nineleaps Pasta Street")).andExpect(status().isOk());

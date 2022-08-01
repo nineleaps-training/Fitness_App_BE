@@ -32,7 +32,7 @@ import com.fitness.app.dao.UserOrderDAO;
 import com.fitness.app.entity.UserOrder;
 import com.fitness.app.model.GymRepresentModel;
 import com.fitness.app.model.UserOrderModel;
-import com.fitness.app.model.UserPerfomanceModel;
+import com.fitness.app.model.UserPerformanceModel;
 import com.razorpay.RazorpayException;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -79,7 +79,7 @@ public class UserOrderController {
     /**
      * This controller is used to update the order
      * 
-     * @param data - Updation details of the order
+     * @param data - Updated details of the order
      * @return - Updated order details
      */
     @ApiOperation(value = "Updating Order", notes = "User can update their orders")
@@ -108,7 +108,7 @@ public class UserOrderController {
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
     @GetMapping(value = "/v1/userOrder/pending/order/{email}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> pedingOrerList(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
+    public ResponseEntity<Object> pendingOrderList(@NotBlank @NotEmpty @NotNull @Email @PathVariable String email) {
         return new ResponseEntity<>(userOrderDAO.pendingListOrder(email), HttpStatus.OK); // Check the pending
                                                                                           // orders of the user
     }
@@ -147,7 +147,7 @@ public class UserOrderController {
             @ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
     @GetMapping(value = "/v1/userOrder/my/users/{gymId}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Set<UserPerfomanceModel> allMyUsers(@NotBlank @NotEmpty @NotNull @PathVariable String gymId) {
+    public Set<UserPerformanceModel> allMyUsers(@NotBlank @NotEmpty @NotNull @PathVariable String gymId) {
         return userOrderDAO.allMyUser(gymId); // Fetching the user of the particular Gym by gymId
     }
 

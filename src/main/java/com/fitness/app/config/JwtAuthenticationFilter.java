@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.fitness.app.components.Constants.*;
+
 @Component
 @Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -44,11 +46,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        final String requestTokenHeader = request.getHeader("Authorization");
+        final String requestTokenHeader = request.getHeader(AUTHORIZATION);
         String username = null;
         String jwtToken = null;
 
-        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+        if (requestTokenHeader != null && requestTokenHeader.startsWith(BEARER)) {
 
             jwtToken = requestTokenHeader.substring(7);
             username = jwtUtil.extractUsername(jwtToken);
@@ -67,7 +69,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthentication);
             }
         } else {
-            log.error("JwtAuthenticationFilter >> doFilterInternal >>Invalid Token");
+            log.error("JwtAuthenticationFilter >> doFilterInternal >> Invalid Token");
         }
 
         filterChain.doFilter(request, response);

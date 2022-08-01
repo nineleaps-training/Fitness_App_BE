@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(value = "subcription")
+@Document(value = "subscription")
 public class GymSubscriptionClass {
 
 	@Id
@@ -22,7 +22,7 @@ public class GymSubscriptionClass {
 	@Field
 	private int monthly;
 	@Field
-	private int quaterly;
+	private int quarterly;
 	@Field
 	private int half;
 	@Field
@@ -30,11 +30,11 @@ public class GymSubscriptionClass {
 	@Field
 	private int offer;
 
-	public GymSubscriptionClass(int oneWorkout, int monthly, int quaterly, int half, int yearly, int offer) {
+	public GymSubscriptionClass(int oneWorkout, int monthly, int quarterly, int half, int yearly, int offer) {
 		super();
 		this.oneWorkout = oneWorkout;
 		this.monthly = monthly;
-		this.quaterly = quaterly;
+		this.quarterly = quarterly;
 		this.half = half;
 		this.yearly = yearly;
 		this.offer = offer;

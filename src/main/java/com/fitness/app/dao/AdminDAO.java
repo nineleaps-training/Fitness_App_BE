@@ -13,7 +13,7 @@ import com.fitness.app.auth.Authenticate;
 import com.fitness.app.entity.AdminPay;
 import com.fitness.app.entity.GymClass;
 import com.fitness.app.model.AdminPayRequestModel;
-import com.fitness.app.model.SignUpResponceModel;
+import com.fitness.app.model.SignUpResponseModel;
 import com.razorpay.Order;
 
 @Component
@@ -27,9 +27,9 @@ public interface AdminDAO {
 
     public AdminPay updatePayment(Map<String, String> data);
 
-    public List<AdminPay> paidHistroyVendor(String vendor);
+    public List<AdminPay> paidHistoryVendor(String vendor);
 
-    public ResponseEntity<SignUpResponceModel> loginAdmin(@Valid @RequestBody Authenticate authCredential);
+    public ResponseEntity<SignUpResponseModel> loginAdmin(@Valid @RequestBody Authenticate authCredential);
 
     public ResponseEntity<Object> getAllNumber();
 

@@ -18,12 +18,12 @@ public class UserBankDetails {
     @Field
     private String uName;
     @Field
-    private String ubankName;
+    private String uBankName;
     @Field
-    private String ubranchName;
+    private String uBranchName;
     @Field
-    private Long uaccountNumber;
+    private Long uAccountNumber;
     @Field
-    private String ubankIFSC;
+    private String uBankIFSC;
 
 }

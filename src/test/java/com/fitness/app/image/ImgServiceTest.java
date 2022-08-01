@@ -36,7 +36,7 @@ class ImgServiceTest {
 
     String path = "/home/nineleaps/Documents/";
     String path2 = "/home/nineleaps/Downloads/";
-    String name = "qrcode.png";
+    String name = "qrCode.png";
 
     @BeforeEach
     public void initcase() {
@@ -46,7 +46,7 @@ class ImgServiceTest {
     @DisplayName("Downloading Image Test")
     @Test
     void testGetImage() throws IOException {
-        File file = new File("/home/nineleaps/Documents/qrcode.png");
+        File file = new File("/home/nineleaps/Documents/qrCode.png");
         FileInputStream input = new FileInputStream(file);
         MultipartFile multipartFile = new MockMultipartFile("file", file.getName(), "image/png",
                 IOUtils.toByteArray(input));
@@ -118,5 +118,4 @@ class ImgServiceTest {
         Assertions.assertEquals(docFile, doc);
     }
 
-    
 }

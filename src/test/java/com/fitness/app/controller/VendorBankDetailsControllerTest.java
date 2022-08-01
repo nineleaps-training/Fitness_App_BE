@@ -22,57 +22,61 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 class VendorBankDetailsControllerTest {
 
-    @InjectMocks
-    VendorBankDetailsController vendorBankDetailsController;
+        @InjectMocks
+        VendorBankDetailsController vendorBankDetailsController;
 
-    @Mock
-    VendorBankDetailsService vendorBankDetailsService;
-    long l = 1234;
-    UserBankDetailsRequestModel vendorBankDetailsRequestModel = new UserBankDetailsRequestModel(
-            "pankaj.jain@nineleaps.com", "Pankaj Jain", "ICICI", "Bhatar", l, "IFSC0022", "weeekly");
-    VendorBankDetails vendorBankDetails = new VendorBankDetails("pankaj.jain@nineleaps.com", "Pankaj Jain", "ICICI",
-            "Bhatar", l, "IFSC0022", "weeekly");
-    ObjectMapper objectMapper = new ObjectMapper();
-    MockMvc mockMvc;
+        @Mock
+        VendorBankDetailsService vendorBankDetailsService;
+        long l = 1234;
+        UserBankDetailsRequestModel vendorBankDetailsRequestModel = new UserBankDetailsRequestModel(
+                        "pankaj.jain@nineleaps.com", "Pankaj Jain", "ICICI", "Bhatar", l, "IFSC0022", "weekly");
+        VendorBankDetails vendorBankDetails = new VendorBankDetails("pankaj.jain@nineleaps.com", "Pankaj Jain", "ICICI",
+                        "Bhatar", l, "IFSC0022", "weekly");
+        ObjectMapper objectMapper = new ObjectMapper();
+        MockMvc mockMvc;
 
-    @BeforeEach
-    public void setup() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(vendorBankDetailsController).build();
-    }
+        @BeforeEach
+        public void setup() {
+                this.mockMvc = MockMvcBuilders.standaloneSetup(vendorBankDetailsController).build();
+        }
 
-    @Test
-    @DisplayName("Testing of adding the vendor details")
-    void testAddDetails() throws Exception {
+        @Test
+        @DisplayName("Testing of adding the vendor details")
+        void testAddDetails() throws Exception {
 
-        String content = objectMapper.writeValueAsString(vendorBankDetailsRequestModel);
-        Mockito.when(vendorBankDetailsService.addDetails(vendorBankDetailsRequestModel)).thenReturn(vendorBankDetails);
-        mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/vendorBankDetails/add").contentType(MediaType.APPLICATION_JSON).content(content))
-                .andExpect(status().isCreated());
+                String content = objectMapper.writeValueAsString(vendorBankDetailsRequestModel);
+                Mockito.when(vendorBankDetailsService.addDetails(vendorBankDetailsRequestModel))
+                                .thenReturn(vendorBankDetails);
+                mockMvc.perform(MockMvcRequestBuilders
+                                .put("/v1/vendorBankDetails/add").contentType(MediaType.APPLICATION_JSON)
+                                .content(content))
+                                .andExpect(status().isCreated());
 
-    }
+        }
 
-    @Test
-    @DisplayName("Testing of adding the vendor details with null values")
-    void testAddDetailsNull() throws Exception {
+        @Test
+        @DisplayName("Testing of adding the vendor details with null values")
+        void testAddDetailsNull() throws Exception {
 
-        String content = objectMapper.writeValueAsString(vendorBankDetailsRequestModel);
-        Mockito.when(vendorBankDetailsService.addDetails(vendorBankDetailsRequestModel)).thenReturn(null);
-        mockMvc.perform(MockMvcRequestBuilders
-                .put("/v1/vendorBankDetails/add").contentType(MediaType.APPLICATION_JSON).content(content))
-                .andExpect(status().isBadRequest());
+                String content = objectMapper.writeValueAsString(vendorBankDetailsRequestModel);
+                Mockito.when(vendorBankDetailsService.addDetails(vendorBankDetailsRequestModel)).thenReturn(null);
+                mockMvc.perform(MockMvcRequestBuilders
+                                .put("/v1/vendorBankDetails/add").contentType(MediaType.APPLICATION_JSON)
+                                .content(content))
+                                .andExpect(status().isBadRequest());
 
-    }
+        }
 
-    @Test
-    @DisplayName("Testing of fetching the vendor bank details")
-    void testGetBankDetails() throws Exception {
+        @Test
+        @DisplayName("Testing of fetching the vendor bank details")
+        void testGetBankDetails() throws Exception {
 
-        Mockito.when(vendorBankDetailsService.getBankDetails("pankaj.jain@nineleaps.com"))
-                .thenReturn(vendorBankDetails);
-        mockMvc.perform(MockMvcRequestBuilders
-                .get("/v1/vendorBankDetails/get/pankaj.jain@nineleaps.com").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+                Mockito.when(vendorBankDetailsService.getBankDetails("pankaj.jain@nineleaps.com"))
+                                .thenReturn(vendorBankDetails);
+                mockMvc.perform(MockMvcRequestBuilders
+                                .get("/v1/vendorBankDetails/get/pankaj.jain@nineleaps.com")
+                                .contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(status().isOk());
 
-    }
+        }
 }

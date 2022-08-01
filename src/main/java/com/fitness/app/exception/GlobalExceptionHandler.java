@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -20,6 +21,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import org.springframework.validation.FieldError;
 
 import com.fitness.app.entity.CustomResponse;
+
+import static com.fitness.app.components.Constants.*;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -35,7 +38,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public @ResponseBody CustomResponse dataNotFound(final DataNotFoundException exception) {
         CustomResponse customResponse = new CustomResponse();
         customResponse.setMessage(exception.getMessage());
-        customResponse.setStatus("NOT_FOUND");
+        customResponse.setStatus(NOT_FOUND);
         customResponse.setSuccess(false);
         return customResponse;
     }
@@ -51,7 +54,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public @ResponseBody CustomResponse exceededNumberOfAttempts(final ExceededNumberOfAttemptsException exception) {
         CustomResponse customResponse = new CustomResponse();
         customResponse.setMessage(exception.getMessage());
-        customResponse.setStatus("EXCEEDED_NUMBER_OF_ATTEMPTS");
+        customResponse.setStatus(EXCEEDED_NUMBER_OF_ATTEMPTS);
         customResponse.setSuccess(false);
         return customResponse;
     }
@@ -67,6 +70,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
             errors.put(fieldName, message);
         });
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * This function is used to handle missing request parameter exceptions
+     */
+    @Override
+    protected ResponseEntity<Object> handleMissingServletRequestParameter(MissingServletRequestParameterException ex,
+            HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     // Handling Internal Server Exceptions
@@ -95,7 +108,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleFileUploadError(Exception ex, HttpServletRequest request,
             HttpServletResponse response) {
 
-        return new ResponseEntity<>("File Size should be less than 2MB", HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(EXCEEDED_FILE_SIZE, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // Handling Incorrect File Upload Exceptions
@@ -109,7 +122,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public @ResponseBody CustomResponse incorrectFileUpload(final IncorrectFileUploadException exception) {
         CustomResponse customResponse = new CustomResponse();
         customResponse.setMessage(exception.getMessage());
-        customResponse.setStatus("FILE_TYPE_ERROR");
+        customResponse.setStatus(FILE_TYPE_ERROR);
         customResponse.setSuccess(false);
         return customResponse;
     }

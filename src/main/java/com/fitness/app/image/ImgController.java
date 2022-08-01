@@ -21,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fitness.app.exception.IncorrectFileUploadException;
 
+import static com.fitness.app.components.Constants.ALLOWED_FILE_TYPE;
+
 @RestController
 public class ImgController {
 
@@ -45,7 +47,7 @@ public class ImgController {
 				|| "image/jpeg".equals(file.getContentType())) {
 			return imgService.saveImage(file, id);
 		} else {
-			throw new IncorrectFileUploadException("Allowed file types: jpg, jpeg or png");
+			throw new IncorrectFileUploadException(ALLOWED_FILE_TYPE);
 		}
 	}
 

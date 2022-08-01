@@ -32,17 +32,17 @@ public class GymClassModel {
 	@NotEmpty
 	@Email
 	private String vendorEmail;
-	@ApiModelProperty(name = "mGymname", notes = "Name of Gym")
+	@ApiModelProperty(name = "mGymName", notes = "Name of Gym")
 	@NotNull
 	@NotBlank
 	@NotEmpty
 	@Size(max = 25)
-	private String mGymname;
-	@ApiModelProperty(name = "mGymaddress", notes = "Address of Gym")
-	private GymAddressClass mGymaddress;
-	@ApiModelProperty(name = "mWorkoutlist", notes = "List of workouts")
+	private String mGymName;
+	@ApiModelProperty(name = "mGymAddress", notes = "Address of Gym")
+	private GymAddressClass mGymAddress;
+	@ApiModelProperty(name = "mWorkoutList", notes = "List of workouts")
 	@NotEmpty
-	private List<String> mWorkoutlist;
+	private List<String> mWorkoutList;
 	@ApiModelProperty(name = "mTiming", notes = "Timings of gym")
 	private GymTime mTiming;
 	@ApiModelProperty(name = "mSubscription", notes = "Subscriptions of gym")

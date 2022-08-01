@@ -60,7 +60,7 @@ class RatingServiceTest {
 
     @Test
     @DisplayName("Testing of fetching the rating of the gym when Optional is empty")
-    void testGetRatingwithEmpty() {
+    void testGetRatingEmpty() {
         ratingRequestModel = new RatingRequestModel();
         ratingRequestModels = new ArrayList<>();
         ratingRequestModels.add(ratingRequestModel);
@@ -75,7 +75,7 @@ class RatingServiceTest {
 
     @Test
     @DisplayName("Testing of fetching the rating of the gym when returned null")
-    void testGetRatingOptionalwithNull() {
+    void testGetRatingOptionalNull() {
         List<String> workoutList = new ArrayList<>();
         workoutList.add("zumba");
         Optional<GymClass> optional = Optional.empty();
@@ -109,7 +109,7 @@ class RatingServiceTest {
 
     @Test
     @DisplayName("Testing of fetching the rating of the user when null returned")
-    void testGetRatingOfPersonwithNull() {
+    void testGetRatingOfPersonNull() {
         ratingRequestModel = new RatingRequestModel();
         ratingRequestModels = new ArrayList<>();
         ratingRequestModels.add(ratingRequestModel);

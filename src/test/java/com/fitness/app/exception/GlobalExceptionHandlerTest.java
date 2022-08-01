@@ -17,6 +17,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.context.request.WebRequest;
 
 import static org.mockito.Mockito.mock;
@@ -81,7 +82,8 @@ class GlobalExceptionHandlerTest {
         customResponse.setSuccess(false);
 
         CustomResponse customResponse2 = globalExceptionHandler
-                .exceededNumberOfAttempts(new ExceededNumberOfAttemptsException("Testing ExceededNumberOfAttempts Exception"));
+                .exceededNumberOfAttempts(
+                        new ExceededNumberOfAttemptsException("Testing ExceededNumberOfAttempts Exception"));
         Assertions.assertEquals(customResponse.getMessage(), customResponse2.getMessage());
         Assertions.assertEquals(customResponse.getStatus(), customResponse2.getStatus());
         Assertions.assertEquals(customResponse.isSuccess(), customResponse2.isSuccess());
@@ -333,5 +335,22 @@ class GlobalExceptionHandlerTest {
                 httpStatus, webRequest);
         Assertions.assertEquals(responseEntity, responseEntity2);
 
+    }
+
+    @Test
+    void testMissingServletRequestParameter() {
+
+        WebRequest webRequest = mock(WebRequest.class);
+        HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+        HttpHeaders httpHeaders = mock(HttpHeaders.class);
+        MissingServletRequestParameterException missingServletRequestParameterException = new MissingServletRequestParameterException(
+                "parameterName", "parameterType");
+        ResponseEntity<Object> responseEntity = new ResponseEntity<>(
+                missingServletRequestParameterException.getMessage(),
+                HttpStatus.BAD_REQUEST);
+        ResponseEntity<Object> responseEntity2 = globalExceptionHandler.handleMissingServletRequestParameter(
+                missingServletRequestParameterException, httpHeaders,
+                httpStatus, webRequest);
+        Assertions.assertEquals(responseEntity, responseEntity2);
     }
 }

@@ -15,11 +15,13 @@ import com.fitness.app.repository.VendorDetailsRepo;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static com.fitness.app.components.Constants.NO_VENDOR_DETAILS_FOUND;
+
 @Slf4j
 @Service
 public class VendorDetailsService implements VendorDetailsDAO {
 
-    private VendorDetailsRepo vendordetailsRepository;
+    private VendorDetailsRepo vendorDetailsRepository;
 
     private UserRepo userRepository;
 
@@ -32,7 +34,7 @@ public class VendorDetailsService implements VendorDetailsDAO {
      */
     public VendorDetailsService(UserRepo userRepository2, VendorDetailsRepo vendorDetailsRepository2) {
         this.userRepository = userRepository2;
-        this.vendordetailsRepository = vendorDetailsRepository2;
+        this.vendorDetailsRepository = vendorDetailsRepository2;
     }
 
     /**
@@ -47,14 +49,14 @@ public class VendorDetailsService implements VendorDetailsDAO {
         VendorDetails vDetails = new VendorDetails();
         vDetails.setVCity(vendorDetails.getCity());
         vDetails.setVEmail(vendorDetails.getEmail());
-        vDetails.setVFulladdress(vendorDetails.getFullAddress());
+        vDetails.setVFullAddress(vendorDetails.getFullAddress());
         vDetails.setVPostal(vendorDetails.getPostal());
         vDetails.setVGender(vendorDetails.getGender());
 
         UserClass user = userRepository.findByEmail(vDetails.getVEmail());
 
         if (user != null && user.getActivated()) {
-            return vendordetailsRepository.save(vDetails); // Register new vendor.
+            return vendorDetailsRepository.save(vDetails); // Register new vendor.
         }
 
         log.warn("VendorDetailsService >> addVendorDetails >> Null is returned");
@@ -70,12 +72,12 @@ public class VendorDetailsService implements VendorDetailsDAO {
      */
     public VendorDetails getVendorDetails(String email) {
         log.info("VendorDetailsService >> getVendorDetails >> Initiated");
-        Optional<VendorDetails> optional = vendordetailsRepository.findById(email);
+        Optional<VendorDetails> optional = vendorDetailsRepository.findById(email);
         if (optional.isPresent()) {
             return optional.get(); // Fetching Vendor Details from email
         } else {
             log.error("VendorDetailsService >> getVendorDetails >> Exception thrown");
-            throw new DataNotFoundException("No Vendor Details Found");
+            throw new DataNotFoundException(NO_VENDOR_DETAILS_FOUND);
         }
     }
 }

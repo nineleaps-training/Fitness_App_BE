@@ -25,7 +25,7 @@ import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.entity.VendorPayment;
 import com.fitness.app.model.AdminPayRequestModel;
-import com.fitness.app.model.SignUpResponceModel;
+import com.fitness.app.model.SignUpResponseModel;
 import com.fitness.app.repository.AddGymRepo;
 import com.fitness.app.repository.AdminPayRepo;
 import com.fitness.app.repository.UserRepo;
@@ -33,42 +33,39 @@ import com.fitness.app.repository.VendorPayRepo;
 import com.fitness.app.security.service.UserDetailsServiceImpl;
 import com.razorpay.Order;
 
+import static com.fitness.app.components.Constants.*;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 public class AdminService implements AdminDAO {
 
-	
 	private UserRepo userRepo;
-	
-	
+
 	private VendorPayRepo vendorPay;
 
-	
 	private AdminPayRepo adminPayRepo;
 
-	
 	private AuthenticationManager authenticationManager;
 
-	
 	private UserDetailsServiceImpl userDetailsService;
 
-	
 	private AddGymRepo gymRepo;
 
-	
 	private JwtUtils jwtUtils;
 
-	public AdminService(AdminPayRepo adminPayRepo2, VendorPayRepo vendorPayRepo, AuthenticationManager authenticationManager, UserDetailsServiceImpl userDetailsServiceImpl, JwtUtils jwtUtils, UserRepo userRepo, AddGymRepo gymRepo) {
+	public AdminService(AdminPayRepo adminPayRepo2, VendorPayRepo vendorPayRepo,
+			AuthenticationManager authenticationManager, UserDetailsServiceImpl userDetailsServiceImpl,
+			JwtUtils jwtUtils, UserRepo userRepo, AddGymRepo gymRepo) {
 		// Initializing constructor
 		this.adminPayRepo = adminPayRepo2;
 		this.vendorPay = vendorPayRepo;
-		this.authenticationManager=authenticationManager;
-		this.userDetailsService=userDetailsServiceImpl;
-		this.jwtUtils=jwtUtils;
-		this.userRepo=userRepo;
-		this.gymRepo=gymRepo;
+		this.authenticationManager = authenticationManager;
+		this.userDetailsService = userDetailsServiceImpl;
+		this.jwtUtils = jwtUtils;
+		this.userRepo = userRepo;
+		this.gymRepo = gymRepo;
 	}
 
 	/**
@@ -81,7 +78,12 @@ public class AdminService implements AdminDAO {
 
 		log.info("AdminService >> getDataPay >> Initiated");
 
-		return adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), "Due"); // Getting details of payment of vendor
+		return adminPayRepo.findByVendorAndAmountAndStatus(payment.getVendor(), payment.getAmount(), DUE); // Getting
+																											// details
+																											// of
+																											// payment
+																											// of
+																											// vendor
 	}
 
 	/**
@@ -95,20 +97,20 @@ public class AdminService implements AdminDAO {
 		return gymRepo.findByEmail(email); // Returning list of registered fitness center by email id of vendor.
 	}
 
-	public ResponseEntity<SignUpResponceModel> loginAdmin(@Valid @RequestBody Authenticate authCredential)
-	{
+	public ResponseEntity<SignUpResponseModel> loginAdmin(@Valid @RequestBody Authenticate authCredential) {
 		log.info("AdminService >> loginAdmin >> Initiated");
 		authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken(authCredential.getEmail(), authCredential.getPassword()));
 		final UserDetails usrDetails = userDetailsService.loadUserByUsername(authCredential.getEmail());
 		final String jwt = jwtUtils.generateToken(usrDetails);
 		final UserClass localUser = userRepo.findByEmail(authCredential.getEmail());
-		if (localUser.getRole().equals("ADMIN")) {
-			return ResponseEntity.ok(new SignUpResponceModel(localUser, jwt)); // Returning the response after authenticating
-																			// the ADMIN
+		if (localUser.getRole().equals(ADMIN)) {
+			return ResponseEntity.ok(new SignUpResponseModel(localUser, jwt)); // Returning the response after
+																				// authenticating
+																				// the ADMIN
 		} else {
 			log.warn("AdminService >> loginAdmin >> User is not an admin");
-			return ResponseEntity.ok(new SignUpResponceModel(null, null));
+			return ResponseEntity.ok(new SignUpResponseModel(null, null));
 		}
 	}
 
@@ -135,7 +137,7 @@ public class AdminService implements AdminDAO {
 		payVendor.setOrderId(myOrder.get("id"));
 		payVendor.setStatus(myOrder.get("status"));
 		payVendor.setPaymentId(null);
-		payVendor.setReciept(myOrder.get("receipt"));
+		payVendor.setReceipt(myOrder.get("receipt"));
 		payVendor.setDate(date);
 		payVendor.setTime(time);
 		adminPayRepo.save(payVendor); // Paying to Vendor
@@ -155,7 +157,7 @@ public class AdminService implements AdminDAO {
 		List<VendorPayment> payments = vendorPay.findByVendor(vendor);
 		int amount = 0;
 		if (!payments.isEmpty()) {
-			payments = payments.stream().filter(p -> p.getStatus().equals("Due")).collect(Collectors.toList());
+			payments = payments.stream().filter(p -> p.getStatus().equals(DUE)).collect(Collectors.toList());
 			if (!payments.isEmpty()) {
 				for (VendorPayment pay : payments) {
 					amount += pay.getAmount();
@@ -165,13 +167,13 @@ public class AdminService implements AdminDAO {
 
 		AdminPay payment = new AdminPay();
 		payment.setVendor(vendor);
-		payment.setStatus("Due");
+		payment.setStatus(DUE);
 		payment.setAmount(amount); // Creating Vendor Payment
 
 		int s = adminPayRepo.findAll().size();
 		String id = "P0" + s;
 		payment.setId(id);
-		AdminPay oldPay = adminPayRepo.findByVendorAndAmountAndStatus(vendor, amount, "Due");
+		AdminPay oldPay = adminPayRepo.findByVendorAndAmountAndStatus(vendor, amount, DUE);
 		if (oldPay != null) {
 			return oldPay;
 		}
@@ -191,17 +193,17 @@ public class AdminService implements AdminDAO {
 		LocalDate date = LocalDate.now();
 		LocalTime time = LocalTime.now();
 
-		AdminPay payment = adminPayRepo.findByOrderId(data.get("order_id"));
+		AdminPay payment = adminPayRepo.findByOrderId(data.get(ORDER_ID));
 
-		payment.setPaymentId(data.get("payment_id"));
-		payment.setStatus(data.get("status"));
+		payment.setPaymentId(data.get(PAYMENT_ID));
+		payment.setStatus(data.get(STATUS));
 		payment.setDate(date);
 		payment.setTime(time); // Updating the Payment Details
 
-		List<VendorPayment> vendorPaids = vendorPay.findByVendorAndStatus(payment.getVendor(), "Due");
+		List<VendorPayment> vendorPayments = vendorPay.findByVendorAndStatus(payment.getVendor(), DUE);
 
-		for (VendorPayment pays : vendorPaids) {
-			pays.setStatus("Paid");
+		for (VendorPayment pays : vendorPayments) {
+			pays.setStatus(PAID);
 			vendorPay.save(pays);
 		}
 
@@ -215,33 +217,38 @@ public class AdminService implements AdminDAO {
 	 * @param vendor - Email id of the vendor
 	 * @return - List of details of the order
 	 */
-	public List<AdminPay> paidHistroyVendor(String vendor) {
-		log.info("AdminService >> paidHistroyVendor >> Initiated");
+	public List<AdminPay> paidHistoryVendor(String vendor) {
+		log.info("AdminService >> paidHistoryVendor >> Initiated");
 		List<AdminPay> allPaid = adminPayRepo.findByVendor(vendor);
-		allPaid = allPaid.stream().filter(p -> p.getStatus().equals("Completed")).collect(Collectors.toList()); // Fetching Vendor History Payments
+		allPaid = allPaid.stream().filter(p -> p.getStatus().equals(COMPLETED)).collect(Collectors.toList()); // Fetching
+																												// Vendor
+																												// History
+																												// Payments
 		return allPaid;
 	}
 
-	public ResponseEntity<Object> getAllNumber(){
+	public ResponseEntity<Object> getAllNumber() {
 
 		log.info("AdminService >> getAllNumber >> Initiated");
 
 		List<UserClass> l = userRepo.findAll(); // Fetching all the registered users
 
-		int u = l.stream().filter(e -> e.getRole().equals("USER")).collect(Collectors.toList()).size(); // Filtering users
-		
-		int v = l.stream().filter(e -> e.getRole().equals("VENDOR")).collect(Collectors.toList()).size(); // Filtering vendors																									
+		int u = l.stream().filter(e -> e.getRole().equals("USER")).collect(Collectors.toList()).size(); // Filtering
+																										// users
+
+		int v = l.stream().filter(e -> e.getRole().equals("VENDOR")).collect(Collectors.toList()).size(); // Filtering
+																											// vendors
 
 		List<GymClass> gyms = gymRepo.findAll(); // Fetching all the registered gyms
 
 		int g = gyms.size();
 
-		List<String> nums = new ArrayList<>();
-		nums.add(Integer.toString(u));
-		nums.add(Integer.toString(v));
-		nums.add(Integer.toString(g));
+		List<String> lStrings = new ArrayList<>();
+		lStrings.add(Integer.toString(u));
+		lStrings.add(Integer.toString(v));
+		lStrings.add(Integer.toString(g));
 
 		log.info("AdminService >> getAllNumber >> Terminated");
-		return new ResponseEntity<>(nums, HttpStatus.OK);
+		return new ResponseEntity<>(lStrings, HttpStatus.OK);
 	}
 }

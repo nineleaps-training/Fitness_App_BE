@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("user_attendence")
+@Document("user_attendance")
 public class UserAttendance {
 
 	@Id

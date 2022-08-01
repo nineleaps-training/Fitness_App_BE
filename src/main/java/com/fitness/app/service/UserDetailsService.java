@@ -14,6 +14,8 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import static com.fitness.app.components.Constants.*;
+
 @Slf4j
 @Service
 public class UserDetailsService implements UserDetailsDAO {
@@ -48,7 +50,7 @@ public class UserDetailsService implements UserDetailsDAO {
         if (user != null && user.getActivated()) {
             UserDetails userDetails2 = new UserDetails();
             userDetails2.setUEmail(userDetails.getEmail()); // Adding User Details
-            userDetails2.setUFulladdress(userDetails.getFullAddress());
+            userDetails2.setUFullAddress(userDetails.getFullAddress());
             userDetails2.setUGender(userDetails.getGender());
             userDetails2.setUCity(userDetails.getCity());
             userDetails2.setUPostal(userDetails.getPostal());
@@ -56,7 +58,7 @@ public class UserDetailsService implements UserDetailsDAO {
             return userDetailsRepository.save(userDetails2);
         }
 
-        log.warn("Null is returned");
+        log.warn(NULL_RETURNED);
         return null;
     }
 
@@ -75,7 +77,7 @@ public class UserDetailsService implements UserDetailsDAO {
             return optional.get(); // Fetching User Details from email
         } else {
             log.error("UserDetailsService >> getUserDetails >> Exception thrown");
-            throw new DataNotFoundException("No User Details Found");
+            throw new DataNotFoundException(NO_USER_DETAILS_FOUND);
         }
     }
 }

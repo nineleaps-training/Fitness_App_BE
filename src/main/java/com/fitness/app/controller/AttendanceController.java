@@ -48,9 +48,10 @@ public class AttendanceController {
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "User Marked", response = String.class),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
-			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class)})
+			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	public String markUserAttendance(@Valid @RequestBody MarkUserAttModel userAttendance) {
-		return attendanceDAO.markUsersAttendance(userAttendance); // Mark attendance of the user for a specific fitness center by the vendor.
+		return attendanceDAO.markUsersAttendance(userAttendance); // Mark attendance of the user for a specific fitness
+																	// center by the vendor.
 	}
 
 	/**
@@ -72,7 +73,9 @@ public class AttendanceController {
 	@Validated
 	public ResponseEntity<Object> userPerformance(@Email @RequestParam String email,
 			@NotNull @NotBlank @RequestParam String gym) throws DataNotFoundException {
-		return new ResponseEntity<>(attendanceDAO.userPerfomance(email, gym), HttpStatus.OK); // Finding the total attendance of the user.
+		return new ResponseEntity<>(attendanceDAO.userPerformance(email, gym), HttpStatus.OK); // Finding the total
+																								// attendance of the
+																								// user.
 
 	}
 }

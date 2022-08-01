@@ -15,7 +15,7 @@ import com.fitness.app.model.UserModel;
 
 class JwtUtilsTest {
 
-    JwtUtils jwtutil = new JwtUtils();
+    JwtUtils jwtUtils = new JwtUtils();
 
     UserModel loginDetails = new UserModel("pankaj.jain@nineleaps.com", "Pankaj Jain", "8469492322", "Pankaj@123",
             "ADMIN", false);
@@ -65,8 +65,8 @@ class JwtUtilsTest {
     @DisplayName("Testing Extract Expiration")
     void testExtractExpiration() {
 
-        String token = jwtutil.generateToken(userDetails);
-        Date d = jwtutil.extractExpiration(token);
+        String token = jwtUtils.generateToken(userDetails);
+        Date d = jwtUtils.extractExpiration(token);
         Assertions.assertEquals(Date.class, d.getClass());
 
     }
@@ -75,8 +75,8 @@ class JwtUtilsTest {
     @DisplayName("Testing Extract Username")
     void testExtractUsername() {
 
-        String token = jwtutil.generateToken(userDetails);
-        String Username = jwtutil.extractUsername(token);
+        String token = jwtUtils.generateToken(userDetails);
+        String Username = jwtUtils.extractUsername(token);
         Assertions.assertEquals("pankaj.jain@nineleaps.com", Username);
 
     }
@@ -85,7 +85,7 @@ class JwtUtilsTest {
     @DisplayName("Testing Generate Token")
     void testGenerateToken() {
 
-        String token = jwtutil.generateToken(userDetails);
+        String token = jwtUtils.generateToken(userDetails);
         String actualToken = token;
         Assertions.assertEquals(actualToken, token);
 
@@ -95,8 +95,8 @@ class JwtUtilsTest {
     @DisplayName("Testing Validate Token")
     void testValidateToken() {
 
-        String token = jwtutil.generateToken(userDetails);
-        Boolean validate = jwtutil.validateToken(token, userDetails);
+        String token = jwtUtils.generateToken(userDetails);
+        Boolean validate = jwtUtils.validateToken(token, userDetails);
         Assertions.assertEquals(true, validate);
 
     }
@@ -105,7 +105,7 @@ class JwtUtilsTest {
     @DisplayName("Testing when Token is Expired")
     void testValidateTokenExpired() {
 
-        Assertions.assertEquals(false, jwtutil.validateToken(
+        Assertions.assertEquals(false, jwtUtils.validateToken(
                 "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJwYW5rYWouamFpbkBuaW5lbGVhcHMuY29tIiwiZXhwIjoxNjU3NTMxNzY4LCJpYXQiOjE2NTc1MzE3Mzh9.pj2x625PfTndZ3PISV4dIpNIBzE-jZ7rShR16i0dwYs",
                 userDetails));
     }

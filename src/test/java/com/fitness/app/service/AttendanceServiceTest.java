@@ -76,7 +76,7 @@ class AttendanceServiceTest {
 
     @Test
     @DisplayName("Testing of calculating the rating with null values")
-    void testCalculateRatingwithNull() {
+    void testCalculateRatingNull() {
 
         List<Integer> attendance = new ArrayList<>();
         attendance.add(1);
@@ -94,7 +94,7 @@ class AttendanceServiceTest {
     }
 
     @Test
-    @DisplayName("Testing to mark the user attendace")
+    @DisplayName("Testing to mark the user attendance")
     void testMarkUsersAttendance() {
         List<Integer> attendance = new ArrayList<>();
         attendance.add(1);
@@ -112,9 +112,9 @@ class AttendanceServiceTest {
         when(attendanceRepo.findByEmailAndVendorAndGym(userAttendance.getEmail(), userAttendance.getVendor(),
                 userAttendance.getGym())).thenReturn(userAttendance);
         String response = attendanceService.markUsersAttendance(markUserAttModel);
-        int att = 0;
-        int nonatt = 1;
-        String attendance1 = "Marked total: " + att + " and non attendy:  " + nonatt;
+        int attended = 0;
+        int nonAttended = 1;
+        String attendance1 = "Marked total - attended: " + attended + " and not attended:  " + nonAttended;
         Assertions.assertEquals(attendance1, response);
     }
 
@@ -163,15 +163,15 @@ class AttendanceServiceTest {
         when(attendanceRepo.findByEmailAndVendorAndGym(userAttendance.getEmail(), userAttendance.getVendor(),
                 userAttendance.getGym())).thenReturn(userAttendance);
         String response = attendanceService.markUsersAttendance(markUserAttModel);
-        int att = 1;
-        int nonatt = 0;
-        String attendance1 = "Marked total: " + att + " and non attendy:  " + nonatt;
+        int attended = 1;
+        int nonAttended = 0;
+        String attendance1 = "Marked total - attended: " + attended + " and not attended:  " + nonAttended;
         Assertions.assertEquals(attendance1, response);
     }
 
     @Test
     @DisplayName("Testing of marking the user attendance with user null")
-    void testMarkUsersAttendanceUserContainsUserwithNull() {
+    void testMarkUsersAttendanceUserContainsUserNull() {
 
         List<Integer> attendance = null;
         UserAttendance userAttendance = new UserAttendance("abc@gmail.com", "Fitness", "ABC", 2, 1, attendance, 4.2);
@@ -188,14 +188,14 @@ class AttendanceServiceTest {
         when(attendanceRepo.findByEmailAndVendorAndGym(userAttendance.getEmail(), userAttendance.getVendor(),
                 userAttendance.getGym())).thenReturn(userAttendance);
         String response = attendanceService.markUsersAttendance(markUserAttModel);
-        int att = 1;
-        int nonatt = 0;
-        String attendance1 = "Marked total: " + att + " and non attendy:  " + nonatt;
+        int attended = 1;
+        int nonAttended = 0;
+        String attendance1 = "Marked total - attended: " + attended + " and not attended:  " + nonAttended;
         Assertions.assertEquals(attendance1, response);
     }
 
     @Test
-    @DisplayName("Testing of marking the user attendace with fail if condition")
+    @DisplayName("Testing of marking the user attendance with fail if condition")
     void testMarkUsersAttendanceElse() {
         List<Integer> attendance = null;
         UserAttendance userAttendance = new UserAttendance("abc@gmail.com", "Fitness", "ABC", 2, 1, attendance, 4.2);
@@ -212,20 +212,19 @@ class AttendanceServiceTest {
         when(attendanceRepo.findByEmailAndVendorAndGym(userAttendance.getEmail(), userAttendance.getVendor(),
                 userAttendance.getGym())).thenReturn(userAttendance);
         String response = attendanceService.markUsersAttendance(markUserAttModel);
-        int att = 0;
-        int nonatt = 1;
-        String attendance1 = "Marked total: " + att + " and non attendy:  " + nonatt;
+        int attended = 0;
+        int nonAttended = 1;
+        String attendance1 = "Marked total - attended: " + attended + " and not attended:  " + nonAttended;
         Assertions.assertEquals(attendance1, response);
     }
 
     @Test
     @DisplayName("Testing to fetch the user performance")
-    void testUserPerfomance() {
+    void testUserPerformance() {
 
         List<Integer> attendance = new ArrayList<>();
         int i = 0;
-        while(i<30)
-        {
+        while (i < 30) {
             attendance.add(1);
             i++;
         }
@@ -245,7 +244,7 @@ class AttendanceServiceTest {
         Assertions.assertEquals(ratingRequestModel.getRating(), rating1);
         when(attendanceRepo.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym()))
                 .thenReturn(userAttendance);
-        List<Integer> list2 = attendanceService.userPerfomance(userAttendance.getEmail(), userAttendance.getGym());
+        List<Integer> list2 = attendanceService.userPerformance(userAttendance.getEmail(), userAttendance.getGym());
         List<Integer> list = new ArrayList<>();
         list.add(26);
         list.add(4);
@@ -255,12 +254,11 @@ class AttendanceServiceTest {
 
     @Test
     @DisplayName("Testing of fetching the user performance")
-    void testUserPerfomance1() {
+    void testUserPerformance1() {
 
         List<Integer> attendance = new ArrayList<>();
         int i = 0;
-        while(i<15)
-        {
+        while (i < 15) {
             attendance.add(1);
             attendance.add(0);
             i++;
@@ -281,7 +279,7 @@ class AttendanceServiceTest {
         Assertions.assertEquals(ratingRequestModel.getRating(), rating1);
         when(attendanceRepo.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym()))
                 .thenReturn(userAttendance);
-        List<Integer> list2 = attendanceService.userPerfomance(userAttendance.getEmail(), userAttendance.getGym());
+        List<Integer> list2 = attendanceService.userPerformance(userAttendance.getEmail(), userAttendance.getGym());
         List<Integer> list = new ArrayList<>();
         list.add(13);
         list.add(2);
@@ -291,7 +289,7 @@ class AttendanceServiceTest {
 
     @Test
     @DisplayName("Testing of fetching the user performance when exception is thrown")
-    void testUserPerfomanceException() {
+    void testUserPerformanceException() {
 
         List<Integer> attendance = null;
         UserAttendance userAttendance = new UserAttendance("abc@gmail.com", "Fitness", "ABC", 2, 1, attendance, 4.2);
@@ -311,7 +309,7 @@ class AttendanceServiceTest {
         when(attendanceRepo.findByEmailAndGym(userAttendance.getEmail(), userAttendance.getGym()))
                 .thenReturn(userAttendance);
         try {
-            attendanceService.userPerfomance(userAttendance.getEmail(), userAttendance.getGym());
+            attendanceService.userPerformance(userAttendance.getEmail(), userAttendance.getGym());
         } catch (DataNotFoundException d) {
             Assertions.assertEquals("Data Not Found", d.getMessage());
         }

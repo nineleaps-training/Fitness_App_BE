@@ -23,12 +23,12 @@ import io.swagger.annotations.ApiModelProperty;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "GymRepresnt")
+@ApiModel(description = "GymRepresent")
 public class GymRepresentModel {
 	@ApiModelProperty(name = "Gid", notes = "Gym id")
 	@NotNull
 	private String id;
-	@ApiModelProperty(name = "Vemail", notes = "Email of Vendor")
+	@ApiModelProperty(name = "VEmail", notes = "Email of Vendor")
 	@NotNull
 	@NotBlank
 	@Email
@@ -36,24 +36,24 @@ public class GymRepresentModel {
 	private String email;
 	@NotNull
 	@NotEmpty
-	@ApiModelProperty(name = "RgymName", notes = "Name of Gym")
+	@ApiModelProperty(name = "RGymName", notes = "Name of Gym")
 	@NotBlank
 	private String gymName;
-	@ApiModelProperty(name = "RgymAddress", notes = "Address of gym")
+	@ApiModelProperty(name = "RGymAddress", notes = "Address of gym")
 	private GymAddressClass gymAddress;
-	@ApiModelProperty(name = "RworkoutList", notes = "List of workouts")
+	@ApiModelProperty(name = "RWorkoutList", notes = "List of workouts")
 	private List<String> workoutList;
-	@ApiModelProperty(name = "Rtiming", notes = "Timings of gym")
+	@ApiModelProperty(name = "RTiming", notes = "Timings of gym")
 	private GymTime timing;
-	@ApiModelProperty(name = "Rsubscription", notes = "Subscription of gym")
+	@ApiModelProperty(name = "RSubscription", notes = "Subscription of gym")
 	private GymSubscriptionClass subscription;
-	@ApiModelProperty(name = "Vcontact", notes = "Contact Details of Vendor")
+	@ApiModelProperty(name = "VContact", notes = "Contact Details of Vendor")
 	private Long contact;
 	@ApiModelProperty(name = "Grating", notes = "Rating of gym")
 	@DecimalMax(value = "5.0", inclusive = true, message = "Value should not exceed 5.0")
 	@DecimalMin(value = "0.0", inclusive = true, message = "Value should not be less than 0.0")
 	private Double rating;
-	@ApiModelProperty(name = "Gcapacity", notes = "Capacity of gym")
+	@ApiModelProperty(name = "GCapacity", notes = "Capacity of gym")
 	@Positive(message = "Value should be positive")
 	private int capacity;
 }

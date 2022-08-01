@@ -20,12 +20,14 @@ import com.fitness.app.repository.UserRepo;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static com.fitness.app.components.Constants.*;
+
 @Slf4j
 @Service
 public class PagingService implements PagingDAO {
 
     AddGymRepo gymRepository;
-    
+
     UserRepo userRepository;
 
     UserBankDetailsRepo repo;
@@ -74,7 +76,7 @@ public class PagingService implements PagingDAO {
         l = l.stream().filter(e -> e.getRole().equals("VENDOR")).collect(Collectors.toList()); // Fetching all Vendors
         if (l.isEmpty()) {
             log.error("PagingService >> getallVendors >> Error thrown");
-            throw new DataNotFoundException("No Vendors are registered");
+            throw new DataNotFoundException(NO_VENDOR_REGISTERED);
         }
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<UserClass> page1 = new PageImpl<>(l, pageable, l.size());
@@ -95,7 +97,7 @@ public class PagingService implements PagingDAO {
         l = l.stream().filter(e -> e.getRole().equals("USER")).collect(Collectors.toList()); // Fetching all Users
         if (l.isEmpty()) {
             log.error("PagingService >> getallUsers >> Error thrown");
-            throw new DataNotFoundException("No Users are registered");
+            throw new DataNotFoundException(NO_USER_REGISTERED);
         }
         Pageable pageable = PageRequest.of(pageNo, pageSize);
         Page<UserClass> page1 = new PageImpl<>(l, pageable, l.size());

@@ -220,19 +220,19 @@ public class GymController {
 	@GetMapping(value = "/v1/gym/filter/subscription/monthly/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public List<GymClassModel> filterMonthly(
-			@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
+			@NotNull @Min(value = 1, message = "Price should be at least 1") @PathVariable int price,
 			@RequestBody List<GymClassModel> listGym) {
 		return filterBySubscriptionDAO.filterByMonthly(price, listGym); // Returning gyms by monthly price limit.
 	}
 
 	/**
-	 * This controller is used to filter the gyms by quaterly price
+	 * This controller is used to filter the gyms by quarterly price
 	 * 
 	 * @param price   - price of the service of the gym
 	 * @param listGym - List of all the gyms
-	 * @return - Filtered gyms by quaterly price
+	 * @return - Filtered gyms by quarterly price
 	 */
-	@ApiOperation(value = "Filter gym by quaterly subscription", notes = "Users can filter the gyms based on quaterly subscription")
+	@ApiOperation(value = "Filter gym by quarterly subscription", notes = "Users can filter the gyms based on quarterly subscription")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Gyms Fetched"),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
@@ -240,10 +240,10 @@ public class GymController {
 	@GetMapping(value = "/v1/gym/filter/subscription/quarterly/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public List<GymClassModel> filterQuarterly(
-			@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
+			@NotNull @Min(value = 1, message = "Price should be at least 1") @PathVariable int price,
 			@RequestBody List<GymClassModel> listGym) {
 
-		return filterBySubscriptionDAO.filterByQuarterly(price, listGym); // Returning gyms by quaterly price limit.
+		return filterBySubscriptionDAO.filterByQuarterly(price, listGym); // Returning gyms by quarterly price limit.
 	}
 
 	/**
@@ -261,7 +261,7 @@ public class GymController {
 	@GetMapping(value = "/v1/gym/filter/subscription/halfYearly/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public List<GymClassModel> filterHalfYearly(
-			@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
+			@NotNull @Min(value = 1, message = "Price should be at least 1") @PathVariable int price,
 			@RequestBody List<GymClassModel> listGym) {
 
 		return filterBySubscriptionDAO.filterByHalfYearly(price, listGym); // Returning gyms by half-yearly price
@@ -283,7 +283,7 @@ public class GymController {
 	@GetMapping(value = "/v1/gym/filter/subscription/yearly/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public List<GymClassModel> filterYearly(
-			@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
+			@NotNull @Min(value = 1, message = "Price should be at least 1") @PathVariable int price,
 			@RequestBody List<GymClassModel> listGym) {
 
 		return filterBySubscriptionDAO.filterByYearly(price, listGym); // Returning gyms by yearly price limit.
@@ -304,7 +304,7 @@ public class GymController {
 	@GetMapping(value = "/v1/gym/filter/subscription/oneWorkout/{price}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public List<GymClassModel> filterOneWorkout(
-			@NotNull @Min(value = 1, message = "Price should be atleast 1") @PathVariable int price,
+			@NotNull @Min(value = 1, message = "Price should be at least 1") @PathVariable int price,
 			@RequestBody List<GymClassModel> listGym) {
 
 		return filterBySubscriptionDAO.filterByOneWorkout(price, listGym); // Returning gyms by workout.

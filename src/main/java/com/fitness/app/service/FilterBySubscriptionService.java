@@ -24,11 +24,13 @@ public class FilterBySubscriptionService implements FilterBySubscriptionDAO {
 	 */
 	public List<GymClassModel> filterByMonthly(int price, List<GymClassModel> listGym) {
 
-		log.info("FilterBySubscriptionService >> filterByMonthly >> Initiateds");
+		log.info("FilterBySubscriptionService >> filterByMonthly >> Initiated");
 		List<GymClassModel> newList = new ArrayList<>();
 		for (GymClassModel gym : listGym) {
 			GymSubscriptionClass subscription = gym.getMSubscription();
-			if ((subscription.getMonthly() <= price) || (subscription.getMonthly() <= (price + 200))) // Filter based on monthly subscription
+			if ((subscription.getMonthly() <= price) || (subscription.getMonthly() <= (price + 200))) // Filter based on
+																										// monthly
+																										// subscription
 			{
 				newList.add(gym);
 			}
@@ -38,7 +40,7 @@ public class FilterBySubscriptionService implements FilterBySubscriptionDAO {
 	}
 
 	/**
-	 * This function is used to filter the gyms by quaterly subscription
+	 * This function is used to filter the gyms by quarterly subscription
 	 * 
 	 * @param price
 	 * @param listGym
@@ -50,7 +52,9 @@ public class FilterBySubscriptionService implements FilterBySubscriptionDAO {
 		for (GymClassModel gym : listGym) {
 
 			GymSubscriptionClass subscription = gym.getMSubscription();
-			if (subscription.getQuaterly() <= price || subscription.getQuaterly() <= (price + 500)) // Filter based on quarterly subscription
+			if (subscription.getQuarterly() <= price || subscription.getQuarterly() <= (price + 500)) // Filter based on
+																										// quarterly
+																										// subscription
 			{
 				list.add(gym);
 			}
@@ -72,7 +76,9 @@ public class FilterBySubscriptionService implements FilterBySubscriptionDAO {
 		for (GymClassModel gym : listGym) {
 
 			GymSubscriptionClass subscription = gym.getMSubscription();
-			if (subscription.getHalf() <= price || subscription.getHalf() <= (price + 1000)) // Filter based on half-yearly subscription
+			if (subscription.getHalf() <= price || subscription.getHalf() <= (price + 1000)) // Filter based on
+																								// half-yearly
+																								// subscription
 			{
 				list.add(gym);
 			}
@@ -94,7 +100,9 @@ public class FilterBySubscriptionService implements FilterBySubscriptionDAO {
 		for (GymClassModel gym : listGym) {
 
 			GymSubscriptionClass subscription = gym.getMSubscription();
-			if (subscription.getYearly() <= price || subscription.getYearly() <= (price + 1500)) // Filter based on yearly subscription
+			if (subscription.getYearly() <= price || subscription.getYearly() <= (price + 1500)) // Filter based on
+																									// yearly
+																									// subscription
 			{
 				list.add(gym);
 			}
@@ -116,7 +124,9 @@ public class FilterBySubscriptionService implements FilterBySubscriptionDAO {
 		for (GymClassModel gym : listGym) {
 
 			GymSubscriptionClass subscription = gym.getMSubscription();
-			if (subscription.getOneWorkout() <= price || subscription.getOneWorkout() <= (price + 200)) // Filter based on workout subscription
+			if (subscription.getOneWorkout() <= price || subscription.getOneWorkout() <= (price + 200)) // Filter based
+																										// on workout
+																										// subscription
 			{
 				list.add(gym);
 			}

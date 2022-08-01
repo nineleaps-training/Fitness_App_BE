@@ -23,7 +23,7 @@ public class JwtUtils {
     @Autowired
     Environment environment;
 
-    private String secretKEY = environment.getProperty("secretKey");
+    private String secretKEY = System.getenv("SECRET_KEY");
 
     /***
      * This function is used to extract Username from the token

@@ -16,9 +16,6 @@ public class ImgService implements ImgDAO {
 
 	private ImgRepo imgRepo;
 
-	Doc doc;
-
-	
 	/**
 	 * 
 	 * @param imgRepo2
@@ -27,19 +24,20 @@ public class ImgService implements ImgDAO {
 	public ImgService(ImgRepo imgRepo2) {
 		this.imgRepo = imgRepo2;
 	}
-	
+
 	/**
-	 * This 
+	 * This
+	 * 
 	 * @param multipart - Actual file
-	 * @param id - Gym id
+	 * @param id        - Gym id
 	 * @return - Doc
 	 */
 	public Doc saveImage(MultipartFile multipart, String id) throws IOException {
 		log.info("ImgService >> saveImage >> started"); // Upload Image function
 		String docName = multipart.getOriginalFilename();
-		Doc docmultipart = new Doc(id, docName, multipart.getContentType(), multipart.getBytes());
-		imgRepo.save(docmultipart);
-		return docmultipart;
+		Doc doc = new Doc(id, docName, multipart.getContentType(), multipart.getBytes());
+		imgRepo.save(doc);
+		return doc;
 
 	}
 
@@ -53,11 +51,10 @@ public class ImgService implements ImgDAO {
 		log.info("ImgService >> getImage >> started");
 		Optional<Doc> optional = imgRepo.findById(id);
 		if (optional.isPresent()) {
-			doc = optional.get();
-			return doc;
+			return optional.get();
 		} else {
 			log.error("ImgService >> saveImage >> Exception thrown");
-			throw new DataNotFoundException("multipart Not Found");
+			throw new DataNotFoundException("File Not Found");
 		}
 	}
 }

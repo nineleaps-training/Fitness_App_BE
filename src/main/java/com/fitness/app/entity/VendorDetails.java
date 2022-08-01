@@ -22,7 +22,7 @@ public class VendorDetails {
 	private String vGender;
 
 	@Field
-	private String vFulladdress;
+	private String vFullAddress;
 
 	@Field
 	private String vCity;

@@ -20,7 +20,7 @@ class LocationServiceTest {
     @Test
     void testGetAddress() {
 
-        String address="Nineleaps Pasta Street";
+        String address = "Nineleaps Pasta Street";
         String latlng = "12.930779 , 77.633151";
         String latlng1 = locationService.getDetails(address);
         Assertions.assertEquals(latlng, latlng1);
@@ -30,13 +30,10 @@ class LocationServiceTest {
     @Test
     void testGetAddressException() {
 
-        String address="N";
-        try
-        {
+        String address = "N";
+        try {
             locationService.getDetails(address);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             Assertions.assertEquals("Coordinates not found", e.getMessage());
         }
 
@@ -48,10 +45,10 @@ class LocationServiceTest {
         List<String> list = new ArrayList<>();
         list.add("");
         list.add("Bengaluru");
-        Map<String,List<String>> address = new HashMap<>();
-        address.put("data",list);
+        Map<String, List<String>> address = new HashMap<>();
+        address.put("data", list);
         String latlng = "12.930779,77.633151";
-        Map<String,List<String>> address1 = locationService.getAddress(latlng);
+        Map<String, List<String>> address1 = locationService.getAddress(latlng);
         Assertions.assertEquals(address, address1);
 
     }
@@ -61,16 +58,13 @@ class LocationServiceTest {
 
         List<String> list = new ArrayList<>();
         list.add("");
-        list.add("Bengaluru");
-        Map<String,List<String>> address = new HashMap<>();
-        address.put("data",list);
+        list.add("Bangalore");
+        Map<String, List<String>> address = new HashMap<>();
+        address.put("data", list);
         String latlng = "0,0";
-        try
-        {
+        try {
             locationService.getAddress(latlng);
-        }
-        catch(Exception e)
-        {
+        } catch (Exception e) {
             Assertions.assertEquals("Address Not Found", e.getMessage());
         }
 

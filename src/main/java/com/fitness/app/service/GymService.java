@@ -15,23 +15,20 @@ import org.springframework.stereotype.Service;
 import com.fitness.app.model.GymClassModel;
 import com.fitness.app.model.GymRepresentModel;
 
+import static com.fitness.app.components.Constants.*;
+
 @Slf4j
 @Service
 public class GymService implements GymDAO {
 
-	
 	private AddGymRepo gymRepository;
 
-	
 	private GymAddressRepo addressRepo;
 
-	
 	private GymTimeRepo timeRepo;
 
-	
-	private GymSubscriptionRepo subcriptionRepo;
+	private GymSubscriptionRepo subscriptionRepo;
 
-	
 	private RatingService ratingService;
 
 	private GymAddressClass gymAddressClass;
@@ -48,7 +45,7 @@ public class GymService implements GymDAO {
 		this.gymRepository = addGymRepository;
 		this.timeRepo = gymTimeRepo;
 		this.addressRepo = gymAddressRepo;
-		this.subcriptionRepo = gymSubscriptionRepo;
+		this.subscriptionRepo = gymSubscriptionRepo;
 		this.ratingService = ratingService;
 	}
 
@@ -60,7 +57,7 @@ public class GymService implements GymDAO {
 	 */
 	public GymClass addNewGym(GymClassModel gymClassModel) {
 		log.info("GymService >> addNewGym >> Initiated");
-		gymClass = gymRepository.findByName(gymClassModel.getMGymname());
+		gymClass = gymRepository.findByName(gymClassModel.getMGymName());
 		Long idLast = gymRepository.count() + 1;
 		String gId = "GM" + idLast;
 		if (gymClass != null) {
@@ -69,7 +66,7 @@ public class GymService implements GymDAO {
 
 		// Creating address of gym
 		GymAddressClass address;
-		address = gymClassModel.getMGymaddress();
+		address = gymClassModel.getMGymAddress();
 		address.setId(gId);
 
 		addressRepo.save(address);
@@ -84,13 +81,13 @@ public class GymService implements GymDAO {
 		GymSubscriptionClass subscription;
 		subscription = gymClassModel.getMSubscription();
 		subscription.setId(gId);
-		subcriptionRepo.save(subscription);
+		subscriptionRepo.save(subscription);
 
 		GymClass newGym = new GymClass();
 		newGym.setId(gId);
 		newGym.setEmail(gymClassModel.getVendorEmail());
-		newGym.setName(gymClassModel.getMGymname());
-		newGym.setWorkout(gymClassModel.getMWorkoutlist());
+		newGym.setName(gymClassModel.getMGymName());
+		newGym.setWorkout(gymClassModel.getMWorkoutList());
 		newGym.setContact(gymClassModel.getMContact());
 		newGym.setCapacity(gymClassModel.getMCapacity());
 		gymRepository.save(newGym); // Add New Gym
@@ -105,7 +102,7 @@ public class GymService implements GymDAO {
 	 * @return
 	 */
 	public GymRepresentModel getGymByGymId(String gymId) {
-		
+
 		log.info("GymService >> getGymByGymId >> Initiated");
 		GymRepresentModel gym = new GymRepresentModel();
 		Optional<GymClass> optional = gymRepository.findById(gymId); // Find gym by Gym_id
@@ -125,7 +122,7 @@ public class GymService implements GymDAO {
 				gymTime = optional3.get();
 				gym.setTiming(gymTime);
 			}
-			Optional<GymSubscriptionClass> optional4 = subcriptionRepo.findById(gymId);
+			Optional<GymSubscriptionClass> optional4 = subscriptionRepo.findById(gymId);
 			if (optional4.isPresent()) {
 				gSubscriptionClass = optional4.get();
 				gym.setSubscription(gSubscriptionClass);
@@ -137,7 +134,7 @@ public class GymService implements GymDAO {
 			log.info("GymService >> getGymByGymId >> Terminated");
 			return gym;
 		} else {
-			log.warn("Null is returned");
+			log.warn(NULL_RETURNED);
 			return null;
 		}
 	}
@@ -175,7 +172,7 @@ public class GymService implements GymDAO {
 				gymTime = optional3.get();
 				gym.setTiming(gymTime);
 			}
-			Optional<GymSubscriptionClass> optional4 = subcriptionRepo.findById(id);
+			Optional<GymSubscriptionClass> optional4 = subscriptionRepo.findById(id);
 			if (optional4.isPresent()) {
 				gSubscriptionClass = optional4.get();
 				gym.setSubscription(gSubscriptionClass);
@@ -237,7 +234,7 @@ public class GymService implements GymDAO {
 			// Creating address of gym
 			addressRepo.deleteById(theGym.getId());
 			GymAddressClass gClass;
-			gClass = gymClassModel.getMGymaddress();
+			gClass = gymClassModel.getMGymAddress();
 			gClass.setId(gymId);
 			addressRepo.save(gClass);
 
@@ -249,16 +246,16 @@ public class GymService implements GymDAO {
 			timeRepo.save(gTime);
 
 			// set subscription.
-			subcriptionRepo.deleteById(theGym.getId());
+			subscriptionRepo.deleteById(theGym.getId());
 			gSubscriptionClass = gymClassModel.getMSubscription();
 			gSubscriptionClass.setId(gymId);
-			subcriptionRepo.save(gSubscriptionClass);
+			subscriptionRepo.save(gSubscriptionClass);
 
 			gymRepository.delete(theGym);
 			theGym.setId(gymId); // edit gym
 			theGym.setEmail(gymClassModel.getVendorEmail());
-			theGym.setName(gymClassModel.getMGymname());
-			theGym.setWorkout(gymClassModel.getMWorkoutlist());
+			theGym.setName(gymClassModel.getMGymName());
+			theGym.setWorkout(gymClassModel.getMWorkoutList());
 			theGym.setContact(gymClassModel.getMContact());
 			theGym.setCapacity(gymClassModel.getMCapacity());
 
@@ -281,11 +278,11 @@ public class GymService implements GymDAO {
 	public String wipingAll() {
 		log.info("GymService >> wipingAll >> Initiated");
 		timeRepo.deleteAll(); // Deleting all Gyms
-		subcriptionRepo.deleteAll();
+		subscriptionRepo.deleteAll();
 		addressRepo.deleteAll();
 		gymRepository.deleteAll();
 		log.info("GymService >> wipingAll >> Terminated");
-		return "done";
+		return "Done";
 	}
 
 	/**
@@ -295,7 +292,7 @@ public class GymService implements GymDAO {
 	 * @return - Gym with the provided name
 	 */
 	public GymClass getGymByGymName(String gymName) {
-		log.info("GymService >> getGymByGymName >> Initated");
+		log.info("GymService >> getGymByGymName >> Initiated");
 		return gymRepository.findByName(gymName); // Fetching gym by gym name
 	}
 
@@ -322,7 +319,7 @@ public class GymService implements GymDAO {
 					gymTime = optional3.get();
 					gym.setTiming(gymTime);
 				}
-				Optional<GymSubscriptionClass> optional4 = subcriptionRepo.findById(id);
+				Optional<GymSubscriptionClass> optional4 = subscriptionRepo.findById(id);
 				if (optional4.isPresent()) {
 					gSubscriptionClass = optional4.get();
 					gym.setSubscription(gSubscriptionClass);

@@ -4,15 +4,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.fitness.app.entity.UserClass;
-import com.fitness.app.model.SignUpResponceModel;
+import com.fitness.app.model.SignUpResponseModel;
 import com.fitness.app.model.UserModel;
 
 @Component
 public interface UserDAO {
 
-    public SignUpResponceModel registerNewUser(UserModel user);
+    public SignUpResponseModel registerNewUser(UserModel user);
 
-    public ResponseEntity<SignUpResponceModel> logInFunctionality(String email, String password);
+    public ResponseEntity<SignUpResponseModel> logInFunctionality(String email, String password);
 
     public UserClass registerUser(UserModel user);
 

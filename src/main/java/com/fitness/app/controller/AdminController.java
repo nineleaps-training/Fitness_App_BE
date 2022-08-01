@@ -37,7 +37,7 @@ import com.fitness.app.entity.GymClass;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.exception.ExceededNumberOfAttemptsException;
 import com.fitness.app.model.AdminPayRequestModel;
-import com.fitness.app.model.SignUpResponceModel;
+import com.fitness.app.model.SignUpResponseModel;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
@@ -49,6 +49,8 @@ import io.github.bucket4j.Refill;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+
+import static com.fitness.app.components.Constants.ACCOUNT_LOCKED;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @Validated
@@ -81,14 +83,14 @@ public class AdminController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@ApiOperation(value = "Admin Login", notes = "Admin can login for access")
 	@ApiResponses(value = {
-			@ApiResponse(code = 200, message = "Login Sucessfull", response = SignUpResponceModel.class),
+			@ApiResponse(code = 200, message = "Login Successful", response = SignUpResponseModel.class),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class) })
-	public ResponseEntity<SignUpResponceModel> authenticateUser(@Valid @RequestBody Authenticate authCredential)
+	public ResponseEntity<SignUpResponseModel> authenticateUser(@Valid @RequestBody Authenticate authCredential)
 			throws ExceededNumberOfAttemptsException {
 		if (bucket.tryConsume(1)) {
 			return adminDAO.loginAdmin(authCredential);
 		} else {
-			throw new ExceededNumberOfAttemptsException("Account Locked: Please try after 24 hours");
+			throw new ExceededNumberOfAttemptsException(ACCOUNT_LOCKED);
 		}
 
 	}
@@ -107,10 +109,10 @@ public class AdminController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	public List<UserClass> getAllUsers(
-			@NotNull @Min(value = 0L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
-			@NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 50L, message = "Page size can be maximum 49") @NotNull @PathVariable int pageSize) {
+			@NotNull @Min(value = 0L, message = "Page number should be minimum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
+			@NotNull @Min(value = 1L, message = "Page size should be minimum 1") @Max(value = 50L, message = "Page size can be maximum 49") @NotNull @PathVariable int pageSize) {
 
-		return pagingDAO.getallUsers(pageNo, pageSize); // Returning all users with pagenation.
+		return pagingDAO.getallUsers(pageNo, pageSize); // Returning all users with pagination.
 	}
 
 	/**
@@ -128,9 +130,9 @@ public class AdminController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	public List<UserClass> getAllVendors(
-			@NotNull @Min(value = 0L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
-			@NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 20L, message = "Page size can be maximum 19") @PathVariable int pageSize) {
-		return pagingDAO.getallVendors(pageNo, pageSize); // Returning all vendors with pagenation.
+			@NotNull @Min(value = 0L, message = "Page number should be minimum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
+			@NotNull @Min(value = 1L, message = "Page size should be minimum 1") @Max(value = 20L, message = "Page size can be maximum 19") @PathVariable int pageSize) {
+		return pagingDAO.getallVendors(pageNo, pageSize); // Returning all vendors with pagination.
 	}
 
 	/**
@@ -147,9 +149,9 @@ public class AdminController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	public List<GymClass> getAllGyms(
-			@NotNull @Min(value = 0L, message = "Page number should be mininum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
-			@NotNull @Min(value = 1L, message = "Page size should be mininum 1") @Max(value = 20L, message = "Page size can be maximum 19") @PathVariable int pageSize) {
-		return pagingDAO.getallGyms(pageNo, pageSize); // Returning all fitness centers with pagenation
+			@NotNull @Min(value = 0L, message = "Page number should be minimum 1") @Max(value = 1000L, message = "Page number can be maximum 999") @PathVariable int pageNo,
+			@NotNull @Min(value = 1L, message = "Page size should be minimum 1") @Max(value = 20L, message = "Page size can be maximum 19") @PathVariable int pageSize) {
+		return pagingDAO.getallGyms(pageNo, pageSize); // Returning all fitness centers with pagination
 	}
 
 	/**
@@ -203,7 +205,7 @@ public class AdminController {
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
-	public AdminPay getDatapay(@RequestBody AdminPayRequestModel pay) {
+	public AdminPay getDataPay(@RequestBody AdminPayRequestModel pay) {
 		return adminDAO.getDataPay(pay); // Returning the amount with details
 	}
 
@@ -267,8 +269,8 @@ public class AdminController {
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	@GetMapping(value = "/v1/admin/paidHistory/{vendor}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<AdminPay> paidHistroy(@NotBlank @NotEmpty @NotNull @PathVariable String vendor) {
-		return adminDAO.paidHistroyVendor(vendor); // Finding payment history of the vendor.
+	public List<AdminPay> paidHistory(@NotBlank @NotEmpty @NotNull @PathVariable String vendor) {
+		return adminDAO.paidHistoryVendor(vendor); // Finding payment history of the vendor.
 	}
 
 	/**

@@ -36,7 +36,7 @@ public class LocationController {
      * This controller is used to fetch the location by the provided address
      * 
      * @param address - Address of the fitness center
-     * @return - Location(Latitude, Lonfituded)
+     * @return - Location(Latitude, Longitude)
      * @throws - ArrayIndexOutOfBoundsException
      */
     @ApiOperation(value = "Get Lat Lng", notes = "Fetching the latitude and longitude from address")
@@ -53,7 +53,7 @@ public class LocationController {
 
     /**
      * This controller is used to fetch the address from the given latitude and
-     * longitutde
+     * longitude
      * 
      * @param latlng - Latitude, Longitude
      * @return - Address of the gym

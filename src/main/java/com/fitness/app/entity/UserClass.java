@@ -28,7 +28,7 @@ public class UserClass {
 	@Field
 	private Boolean activated;
 	@Field
-	private Boolean loggedin;
+	private Boolean loggedIn;
 	@Field
 	private Boolean custom;
 }

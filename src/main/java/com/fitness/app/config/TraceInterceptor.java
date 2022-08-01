@@ -9,13 +9,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.util.UUID;
 
+import static com.fitness.app.components.Constants.TRACE_ID;
+
 @Component
 public class TraceInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws Exception {
-        MDC.put("TRACE_ID", UUID.randomUUID().toString()); // Generating Random Trace id
+        MDC.put(TRACE_ID, UUID.randomUUID().toString()); // Generating Random Trace id
         return true;
     }
 }

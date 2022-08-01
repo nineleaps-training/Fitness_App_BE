@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,14 +23,16 @@ import com.fitness.app.dao.LocationDAO;
 import com.fitness.app.model.GoogleAddressModel;
 import com.fitness.app.model.Response;
 
+import static com.fitness.app.components.Constants.*;
+
 @Slf4j
 @Service
 public class LocationService implements LocationDAO {
 
-    private static final Object API_KEY = System.getenv("GOOGLE_API_KEY");
+    private static final Object API_KEY = System.getenv(GOOGLE_API_KEY);
 
-    public String getDetails(@NotBlank @NotNull @RequestParam String address)
-    {
+    @Cacheable(value = "response")
+    public String getDetails(@NotBlank @NotNull @RequestParam String address) {
 
         log.info("LocationService >> getDetails >> address:{}", address);
         UriComponents uri = UriComponentsBuilder.newInstance()
@@ -48,12 +51,12 @@ public class LocationService implements LocationDAO {
             return lat.toString() + " , " + lng.toString();
         } catch (Exception e) {
             log.error("LocationService >> getDetails >> Exception thrown");
-            throw new ArrayIndexOutOfBoundsException("Coordinates not found");
+            throw new ArrayIndexOutOfBoundsException(COORDINATES_NOT_FOUND);
         }
     }
 
-    public Map<String, List<String>> getAddress(@NotBlank @NotNull @RequestParam String latlng)
-    {
+    @Cacheable(value = "res")
+    public Map<String, List<String>> getAddress(@NotBlank @NotNull @RequestParam String latlng) {
         log.info("LocationService >> getAddress >> LatLng:{}", latlng);
         UriComponents uri = UriComponentsBuilder.newInstance()
                 .scheme("https")
@@ -65,9 +68,9 @@ public class LocationService implements LocationDAO {
         String city = "";
         ResponseEntity<Response> response = new RestTemplate().getForEntity(uri.toUriString(), Response.class);
         try {
-            Response formatedAddress = response.getBody(); // Get Address from Location(Latitude,Longitude)
-            GoogleAddressModel[] address = Objects.requireNonNull(formatedAddress).getResult()[1].getAllAddress();
-            String complteAddress = "";
+            Response formattedAddress = response.getBody(); // Get Address from Location(Latitude,Longitude)
+            GoogleAddressModel[] address = Objects.requireNonNull(formattedAddress).getResult()[1].getAllAddress();
+            String cAddress = "";
             int size = address.length;
             for (int i = 0; i < size; i++) {
                 String[] type = address[i].getType();
@@ -78,16 +81,16 @@ public class LocationService implements LocationDAO {
                 completeAddress.append(address[i].getShortName() + " ");
             }
             List<String> addr = new ArrayList<>();
-            addr.add(complteAddress);
+            addr.add(cAddress);
             addr.add(city);
             HashMap<String, List<String>> res = new HashMap<>();
             res.put("data", addr);
-            log.info("Response: {}", res);
+            log.info(RESPONSE, res);
             return res;
         } catch (Exception e) {
             log.error("LocationService >> getAddress >> Exception thrown");
             throw new ArrayIndexOutOfBoundsException("Address Not Found");
         }
     }
-    
+
 }

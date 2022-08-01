@@ -14,100 +14,94 @@ import com.fitness.app.components.Components;
 import com.fitness.app.config.JwtUtils;
 import com.fitness.app.dao.UserDAO;
 import com.fitness.app.entity.UserClass;
-import com.fitness.app.model.SignUpResponceModel;
+import com.fitness.app.model.SignUpResponseModel;
 import com.fitness.app.model.UserModel;
 import com.fitness.app.repository.UserRepo;
 import com.fitness.app.security.service.UserDetailsServiceImpl;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static com.fitness.app.components.Constants.*;
+
 @Slf4j
 @Service
 public class UserService implements UserDAO {
 
-
 	private UserRepo userRepository;
-
 
 	private PasswordEncoder passwordEncoder;
 
-
 	private Components sendMessage;
-
 
 	private UserRepo userRepo;
 
-
 	private AuthenticationManager authenticationManager;
 
-	
 	private UserDetailsServiceImpl userDetailsService;
-	
 
 	private JwtUtils jwtUtils;
-
-	String message = "hello ";
-
 
 	// Initializing constructor
 	/**
 	 * This constructor is used to initialize the repositories
 	 * 
 	 * @param userRepository2 - User Repository
-	 * @param componets       - Components
+	 * @param components      - Components
 	 * @param passwordEncoder - Password Encoder
 	 */
-	public UserService(UserRepo userRepository2, Components componets, PasswordEncoder passwordEncoder, UserRepo userRepo, AuthenticationManager authenticationManager, UserDetailsServiceImpl userDetailsServiceImpl, JwtUtils jwtUtils) {
+	public UserService(UserRepo userRepository2, Components components, PasswordEncoder passwordEncoder,
+			UserRepo userRepo, AuthenticationManager authenticationManager,
+			UserDetailsServiceImpl userDetailsServiceImpl, JwtUtils jwtUtils) {
 		this.userRepository = userRepository2;
-		this.sendMessage = componets;
+		this.sendMessage = components;
 		this.passwordEncoder = passwordEncoder;
 		this.userRepo = userRepo;
-		this.authenticationManager=authenticationManager;
-		this.userDetailsService=userDetailsServiceImpl;
-		this.jwtUtils=jwtUtils;
+		this.authenticationManager = authenticationManager;
+		this.userDetailsService = userDetailsServiceImpl;
+		this.jwtUtils = jwtUtils;
 	}
 
-	public SignUpResponceModel registerNewUser(UserModel user) {
+	public SignUpResponseModel registerNewUser(UserModel user) {
 		log.info("UserService >> registerNewUser >> Initiated");
 		UserClass localUser = userRepo.findByEmail(user.getEmail());
-		SignUpResponceModel responce = new SignUpResponceModel();
+		SignUpResponseModel response = new SignUpResponseModel();
 		if (localUser != null && localUser.getCustom()) {
 			localUser.setPassword(null);
 
 			if (Boolean.TRUE.equals(localUser.getActivated())) {
 
-				responce.setCurrentUser(localUser);
-				responce.setMessage("Already In Use!");
-				return responce;
+				response.setCurrentUser(localUser);
+				response.setMessage(ALREADY_IN_USE);
+				return response;
 			} else {
 				String otp = sendMessage.otpBuilder();
-				final int code = sendMessage.sendOtpMessage(message, otp, user.getMobile());
+				final int code = sendMessage.sendOtpMessage(HELLO, otp, user.getMobile());
 				log.info("UserService >> registerNewUser >> Code: {}", code);
 				if (code == 200) {
-					responce.setCurrentUser(localUser);
-					responce.setMessage(otp);
-					return responce;
+					response.setCurrentUser(localUser);
+					response.setMessage(otp);
+					return response;
 				} else {
 					log.error("UserService >> registerNewUser >> Response Code is not Ok");
-					responce.setCurrentUser(null);
-					responce.setMessage("Something went wrong");
-					return responce;
+					response.setCurrentUser(null);
+					response.setMessage(WRONG);
+					return response;
 				}
 			}
 		} else {
 
 			String otp = sendMessage.otpBuilder();
-			final int code = sendMessage.sendOtpMessage(message, otp, user.getMobile());
+			final int code = sendMessage.sendOtpMessage(HELLO, otp, user.getMobile());
 			log.info("UserService >> registerNewUser >> Code : {}", code);
 			if (code == 200) {
-				responce.setCurrentUser(registerUser(user)); // Register a new user by custom option.
-				responce.setMessage(otp);
-				return responce;
+				response.setCurrentUser(registerUser(user)); // Register a new user by custom option.
+				response.setMessage(otp);
+				return response;
 			} else {
 				log.error("UserService >> registerNewUser >> Response Code is not okay");
-				responce.setCurrentUser(null);
-				responce.setMessage("Something went wrong");
-				return responce;
+				response.setCurrentUser(null);
+				response.setMessage(WRONG);
+				return response;
 			}
 		}
 	}
@@ -119,18 +113,19 @@ public class UserService implements UserDAO {
 	 * @param password - Password of the user
 	 * @return - Response is okay or else bad request
 	 */
-	public ResponseEntity<SignUpResponceModel> logInFunctionality(String email, String password) {
+	public ResponseEntity<SignUpResponseModel> logInFunctionality(String email, String password) {
 		log.info("UserService >> logInFunctionality >> Initiated");
-		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password)); // Authenticating the user
+		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password)); // Authenticating
+																										// the user
 		final UserDetails usrDetails = userDetailsService.loadUserByUsername(email);
 		final String jwt = jwtUtils.generateToken(usrDetails); // Generating the token for the user
 		final UserClass localUser = userRepo.findByEmail(email);
 		if (!"ADMIN".equals(localUser.getRole())) {
 			localUser.setPassword(null);
-			return ResponseEntity.ok(new SignUpResponceModel(localUser, jwt));
+			return ResponseEntity.ok(new SignUpResponseModel(localUser, jwt));
 		} else {
 			log.warn("UserService >> logInFunctionality >> Null values are returned");
-			return ResponseEntity.ok(new SignUpResponceModel(null, null));
+			return ResponseEntity.ok(new SignUpResponseModel(null, null));
 		}
 
 	}
@@ -144,8 +139,8 @@ public class UserService implements UserDAO {
 	public UserClass registerUser(UserModel user) {
 		log.info("UserService >> registerUser >> Initiated");
 		String otp = sendMessage.otpBuilder();
-		final int code = sendMessage.sendOtpMessage(message, otp, user.getMobile());
-		log.info("Code : {}", code);
+		final int code = sendMessage.sendOtpMessage(HELLO, otp, user.getMobile());
+		log.info(CODE, code);
 		if (code == 200) {
 			UserClass newUser = new UserClass();
 			newUser.setEmail(user.getEmail());
@@ -154,7 +149,7 @@ public class UserService implements UserDAO {
 			newUser.setPassword(passwordEncoder.encode(user.getPassword()));
 			newUser.setRole(user.getRole());
 			newUser.setActivated(false);
-			newUser.setLoggedin(false);
+			newUser.setLoggedIn(false);
 			newUser.setCustom(user.getCustom());
 			userRepository.save(newUser); // Register user
 			return newUser;
@@ -180,7 +175,7 @@ public class UserService implements UserDAO {
 			userRepository.save(user);
 			return user;
 		} else {
-			log.warn("Optional is not present");
+			log.warn(OPTIONAL_NOT_PRESENT);
 			return user;
 		}
 	}
@@ -203,16 +198,16 @@ public class UserService implements UserDAO {
 			newUser.setPassword(passwordEncoder.encode(user.getPassword()));
 			newUser.setRole(user.getRole());
 			newUser.setActivated(true);
-			newUser.setLoggedin(false);
+			newUser.setLoggedIn(false);
 			newUser.setCustom(user.getCustom());
 			return userRepository.save(newUser);
 
 		} else if (Boolean.FALSE.equals(localUser.getCustom())) { // Google sign in
-			log.info("Custom is false");
+			log.info(CUSTOM_FALSE);
 			localUser.setPassword(passwordEncoder.encode(user.getPassword()));
 			return userRepository.save(localUser);
 		} else {
-			log.warn("Null is returned");
+			log.warn(NULL_RETURNED);
 			return null;
 		}
 	}

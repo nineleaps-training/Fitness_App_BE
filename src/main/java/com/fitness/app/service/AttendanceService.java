@@ -15,6 +15,8 @@ import com.fitness.app.model.MarkUserAttModel;
 import com.fitness.app.repository.AttendanceRepo;
 import com.fitness.app.repository.RatingRepo;
 
+import static com.fitness.app.components.Constants.*;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -22,9 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 public class AttendanceService implements AttendanceDAO {
 
 	private AttendanceRepo attendanceRepo;
-	
-	private RatingRepo ratingRepo;
 
+	private RatingRepo ratingRepo;
 
 	public AttendanceService(RatingRepo ratingRepo2, AttendanceRepo attendanceRepo2) {
 		this.ratingRepo = ratingRepo2;
@@ -48,8 +49,8 @@ public class AttendanceService implements AttendanceDAO {
 
 			List<String> allUsers = allUser.stream().map(UserAttendance::getEmail).collect(Collectors.toList());
 
-			int att = 0;
-			int nonatt = 0;
+			int attended = 0;
+			int notAttended = 0;
 
 			for (String user : allUsers) {
 				UserAttendance userAtt = attendanceRepo.findByEmailAndVendorAndGym(user, userAttendance.getVendor(),
@@ -65,7 +66,7 @@ public class AttendanceService implements AttendanceDAO {
 						log.warn("Attendance Service >> markUsersAttendance >> List is null");
 						attendanceList.add(1);
 					}
-					att++;
+					attended++;
 				} else {
 
 					if (attendanceList == null) {
@@ -75,7 +76,7 @@ public class AttendanceService implements AttendanceDAO {
 						log.warn("Attendance Service >> markUsersAttendance >> List is null");
 						attendanceList.add(0);
 					}
-					nonatt++;
+					notAttended++;
 				}
 
 				userAtt.setAttendance(attendanceList); // Marking Users Attendance
@@ -83,10 +84,10 @@ public class AttendanceService implements AttendanceDAO {
 
 			}
 			log.info("Attendance Service >> markUsersAttendance >> ends");
-			return "Marked total: " + att + " and non attendy:  " + nonatt;
+			return "Marked total - attended: " + attended + " and not attended:  " + notAttended;
 		} catch (Exception e) {
 			log.error("Attendance Service >> markUsersAttendance >> Exception thrown");
-			throw new DataNotFoundException("Data Not Found");
+			throw new DataNotFoundException(DATA_NOT_FOUND);
 		}
 	}
 
@@ -98,13 +99,13 @@ public class AttendanceService implements AttendanceDAO {
 	 * @return - List of integers of user performances
 	 * @throws DataNotFoundException
 	 */
-	public List<Integer> userPerfomance(String email, String gym) {
+	public List<Integer> userPerformance(String email, String gym) {
 		try {
-			log.info("Attendance Service >> userPerfomance >> Initiated");
+			log.info("Attendance Service >> userPerformance >> Initiated");
 			UserAttendance user = attendanceRepo.findByEmailAndGym(email, gym);
-			List<Integer> perfomance = new ArrayList<>();
-			List<Integer> attendenceList = user.getAttendance();
-			int s = attendenceList.size();
+			List<Integer> performance = new ArrayList<>();
+			List<Integer> attendanceList = user.getAttendance();
+			int s = attendanceList.size();
 			int div = s / 25;
 			int count = 0;
 			int i = 0;
@@ -112,27 +113,27 @@ public class AttendanceService implements AttendanceDAO {
 			for (int k = 0; k < div; k++) { // Calculating User Performance
 				count = 0;
 				while (i <= j) {
-					if (attendenceList.get(i) == 1) {
+					if (attendanceList.get(i) == 1) {
 						count++;
 					}
 					i++;
 				}
-				perfomance.add(count);
+				performance.add(count);
 				j += 25;
 			}
 			count = 0;
 			while (i < s) {
-				if (attendenceList.get(i) == 1) {
+				if (attendanceList.get(i) == 1) {
 					count++;
 				}
 				i++;
 			}
-			perfomance.add(count); // Adding User Performance
-			log.info("Attendance Service >> userPerfomance >> Terminated");
-			return perfomance;
+			performance.add(count); // Adding User Performance
+			log.info("Attendance Service >> userPerformance >> Terminated");
+			return performance;
 		} catch (Exception e) {
-			log.error("Attendance Service >> userPerfomance >> Exception thrown");
-			throw new DataNotFoundException("Data Not Found");
+			log.error("Attendance Service >> userPerformance >> Exception thrown");
+			throw new DataNotFoundException(DATA_NOT_FOUND);
 		}
 	}
 

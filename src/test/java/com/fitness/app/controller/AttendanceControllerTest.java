@@ -45,11 +45,11 @@ class AttendanceControllerTest {
     }
 
     @Test
-    @DisplayName("Testing to mark the user attendace")
+    @DisplayName("Testing to mark the user attendance")
     void testMarkUserAttendance() throws Exception {
-        int att = 0;
-        int nonatt = 0;
-        String attendance = "Marked total: " + att + " and non attendy:  " + nonatt;
+        int attended = 0;
+        int nonAttended = 0;
+        String attendance = "Marked total - attended: " + attended + " and not attended:  " + nonAttended;
         List<String> list = new ArrayList<>();
         list.add("string");
         MarkUserAttModel markUserAttModel = new MarkUserAttModel("gym", "vendor", list);
@@ -79,7 +79,7 @@ class AttendanceControllerTest {
         userAttendances.add(userAttendance);
         List<Integer> list2 = new ArrayList<>();
         list2.add(1);
-        Mockito.when(attendanceService.userPerfomance(userAttendance.getEmail(), userAttendance.getGym()))
+        Mockito.when(attendanceService.userPerformance(userAttendance.getEmail(), userAttendance.getGym()))
                 .thenReturn(list2);
         mockMvc.perform(MockMvcRequestBuilders
                 .get("/v1/attendance/userPerformance?email=email&gym=gym")).andExpect(status().isOk());

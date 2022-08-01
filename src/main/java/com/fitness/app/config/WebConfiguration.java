@@ -17,6 +17,8 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import com.fitness.app.security.service.UserDetailsServiceImpl;
 
+import static com.fitness.app.components.Constants.POLICY_DIRECTIVES;
+
 @Configuration
 @EnableWebSecurity
 @EnableRetry
@@ -88,7 +90,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter {
 				.and()
 				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-		http.headers().xssProtection().and().contentSecurityPolicy("script-src 'self'");
+		http.headers().xssProtection().and().contentSecurityPolicy(POLICY_DIRECTIVES);
 
 		http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	}

@@ -22,7 +22,7 @@ import com.fitness.app.auth.Authenticate;
 import com.fitness.app.dao.UserDAO;
 import com.fitness.app.entity.UserClass;
 import com.fitness.app.exception.ExceededNumberOfAttemptsException;
-import com.fitness.app.model.SignUpResponceModel;
+import com.fitness.app.model.SignUpResponseModel;
 import com.fitness.app.model.UserModel;
 
 import io.github.bucket4j.Bucket;
@@ -56,14 +56,14 @@ public class UserController {
 	 * @return - Response created if user is registered or else bad request
 	 */
 	@ApiOperation(value = "Registering User", notes = "Registering new user")
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "User Registered", response = SignUpResponceModel.class),
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "User Registered", response = SignUpResponseModel.class),
 			@ApiResponse(code = 404, message = "Not Found", response = NotFoundException.class),
 			@ApiResponse(code = 403, message = "Forbidden", response = ForbiddenException.class),
 			@ApiResponse(code = 401, message = "Unauthorized", response = AuthenticationException.class) })
 	@PostMapping(value = "/v1/user/register/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	@Validated
-	public SignUpResponceModel registerUser(@Valid @RequestBody UserModel user) {
+	public SignUpResponseModel registerUser(@Valid @RequestBody UserModel user) {
 
 		return userDAO.registerNewUser(user);
 
@@ -84,7 +84,7 @@ public class UserController {
 	@PutMapping(value = "/v1/user/verify/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@Validated
-	public ResponseEntity<SignUpResponceModel> verifyTheUser(@Valid @RequestBody Authenticate authCredential) {
+	public ResponseEntity<SignUpResponseModel> verifyTheUser(@Valid @RequestBody Authenticate authCredential) {
 
 		UserClass user = userDAO.verifyUser(authCredential.getEmail());
 
@@ -92,7 +92,7 @@ public class UserController {
 			return userDAO.logInFunctionality(authCredential.getEmail(), authCredential.getPassword()); // Verify User
 		}
 
-		return ResponseEntity.ok(new SignUpResponceModel(null, null));
+		return ResponseEntity.ok(new SignUpResponseModel(null, null));
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class UserController {
 	@PostMapping(value = "/v1/user/login/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
 	@Validated
-	public ResponseEntity<SignUpResponceModel> authenticateUser(@Valid @RequestBody Authenticate authCredential)
+	public ResponseEntity<SignUpResponseModel> authenticateUser(@Valid @RequestBody Authenticate authCredential)
 			throws ExceededNumberOfAttemptsException {
 
 		if (bucket.tryConsume(1)) {
@@ -124,7 +124,7 @@ public class UserController {
 	 * This controller is used for logging in the vendor by Google
 	 * 
 	 * @param user - Details of the vendor
-	 * @return - Response is okay after successfull log in
+	 * @return - Response is okay after successful log in
 	 */
 	@ApiOperation(value = "Google Sign In(Vendor)", notes = "Logging in through google by vendor")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "Vendor Logged In", response = ResponseEntity.class),
@@ -134,14 +134,14 @@ public class UserController {
 	@PutMapping(value = "/v1/user/googleSignIn/vendor", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@Validated
-	public ResponseEntity<SignUpResponceModel> googleSignInVendor(@Valid @RequestBody UserModel user) {
+	public ResponseEntity<SignUpResponseModel> googleSignInVendor(@Valid @RequestBody UserModel user) {
 		String pass = userDAO.randomPass();
 		user.setPassword(pass);
 		UserClass localUser = userDAO.googleSignInMethod(user);
 		if (localUser == null) {
-			return ResponseEntity.ok(new SignUpResponceModel(null, "This email is already in use!"));
+			return ResponseEntity.ok(new SignUpResponseModel(null, "This email is already in use!"));
 		} else if (localUser.getRole().equals("USER")) {
-			return ResponseEntity.ok(new SignUpResponceModel(null, "This email is already in use as USER!"));
+			return ResponseEntity.ok(new SignUpResponseModel(null, "This email is already in use as USER!"));
 		} else {
 			return userDAO.logInFunctionality(localUser.getEmail(), user.getPassword());
 		}
@@ -151,7 +151,7 @@ public class UserController {
 	 * This controller is used for logging in the user by Google
 	 * 
 	 * @param user - Details of the user
-	 * @return - Response is okay after successfull log in
+	 * @return - Response is okay after successful log in
 	 */
 	@ApiOperation(value = "Google Sign In(User)", notes = "Logging in through google by user")
 	@ApiResponses(value = { @ApiResponse(code = 200, message = "User Logged In", response = ResponseEntity.class),
@@ -161,14 +161,14 @@ public class UserController {
 	@PutMapping(value = "/v1/user/googleSignIn/user", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	@Validated
-	public ResponseEntity<SignUpResponceModel> googleSignInUser(@Valid @RequestBody UserModel user) {
+	public ResponseEntity<SignUpResponseModel> googleSignInUser(@Valid @RequestBody UserModel user) {
 		String pass = userDAO.randomPass();
 		user.setPassword(pass);
 		UserClass localUser = userDAO.googleSignInMethod(user);
 		if (localUser == null) {
-			return ResponseEntity.ok(new SignUpResponceModel(null, "This email is already in use!"));
+			return ResponseEntity.ok(new SignUpResponseModel(null, "This email is already in use!"));
 		} else if (localUser.getRole().equals("VENDOR")) {
-			return ResponseEntity.ok(new SignUpResponceModel(null, "This email is already in use as VENDOR!"));
+			return ResponseEntity.ok(new SignUpResponseModel(null, "This email is already in use as VENDOR!"));
 		} else {
 			return userDAO.logInFunctionality(localUser.getEmail(), user.getPassword());
 		}

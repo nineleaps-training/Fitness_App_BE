@@ -15,10 +15,12 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
 
+import static com.fitness.app.components.Constants.*;
+
 @Slf4j
 @Service
-public class RatingService implements RatingDAO{
- 
+public class RatingService implements RatingDAO {
+
     private RatingRepo ratingRepo;
 
     private AddGymRepo gymRepo;
@@ -66,7 +68,7 @@ public class RatingService implements RatingDAO{
         List<Rating> ratings = ratingRepo.findByTarget(target);
         if (ratings.isEmpty()) {
             log.error("RatingService >> getRating >> Exception thrown");
-            throw new DataNotFoundException("No Gym exists with the provided id");
+            throw new DataNotFoundException(NO_GYM_EXISTS);
         } else {
             int n = ratings.size();
             double rate = 0;
@@ -99,7 +101,7 @@ public class RatingService implements RatingDAO{
         List<Rating> ratings = ratingRepo.findByTarget(email); // Fetching the rating of User
         if (ratings.isEmpty()) {
             log.error("RatingService >> getRatingOfPerson >> Exception thrown");
-            throw new DataNotFoundException("No User exists with the provided email");
+            throw new DataNotFoundException(NO_USER_EXISTS);
         } else {
             int size = ratings.size();
             double r = 0;

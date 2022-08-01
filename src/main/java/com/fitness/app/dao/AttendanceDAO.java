@@ -11,7 +11,7 @@ public interface AttendanceDAO {
 
     public String markUsersAttendance(MarkUserAttModel userAttendance);
 
-    public List<Integer> userPerfomance(String email, String gym);
+    public List<Integer> userPerformance(String email, String gym);
 
     public Double calculateRating(String target);
 

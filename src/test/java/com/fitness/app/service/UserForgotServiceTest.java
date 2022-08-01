@@ -38,7 +38,7 @@ class UserForgotServiceTest {
         Authenticate authenticate = new Authenticate("pankaj.jain@nineleaps.com", "Pankaj@123");
         Mockito.when(userRepo.findByEmail(authenticate.getEmail())).thenReturn(userClass);
         Boolean boo = true;
-        Boolean boo1=userForgotService.setPassword(authenticate);
+        Boolean boo1 = userForgotService.setPassword(authenticate);
         Assertions.assertEquals(boo, boo1);
 
     }
@@ -53,7 +53,7 @@ class UserForgotServiceTest {
         Mockito.when(components.sendOtpMessage("hello ", null, userClass.getMobile())).thenReturn(200);
         UserForgotModel userForgotModel = userForgotService.userForgot(userClass.getEmail());
         Assertions.assertEquals(userForgot, userForgotModel);
-    
+
     }
 
     @Test
@@ -65,7 +65,7 @@ class UserForgotServiceTest {
         Mockito.when(userRepo.findByEmail(userClass.getEmail())).thenReturn(null);
         UserForgotModel userForgotModel = userForgotService.userForgot(userClass.getEmail());
         Assertions.assertEquals(userForgot, userForgotModel);
-    
+
     }
 
     @Test
@@ -73,11 +73,11 @@ class UserForgotServiceTest {
 
         UserClass userClass = new UserClass("pankaj.jain@nineleaps.com", "Pankaj Jain", "8469492322", "Pankaj@123",
                 "VENDOR", false, false, false);
-        UserForgotModel userForgot = new UserForgotModel("Something went wrong..Please try again!!", false);
+        UserForgotModel userForgot = new UserForgotModel("Something went wrong", false);
         Mockito.when(userRepo.findByEmail(userClass.getEmail())).thenReturn(userClass);
         Mockito.when(components.sendOtpMessage("hello ", null, userClass.getMobile())).thenReturn(400);
         UserForgotModel userForgotModel = userForgotService.userForgot(userClass.getEmail());
         Assertions.assertEquals(userForgot, userForgotModel);
-    
+
     }
 }

@@ -18,8 +18,8 @@ import io.swagger.annotations.ApiModelProperty;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ApiModel(description = "UserPerfomanceModel")
-public class UserPerfomanceModel {
+@ApiModel(description = "UserPerformanceModel")
+public class UserPerformanceModel {
 
 	@ApiModelProperty(name = "name", notes = "Name of User")
 	@NotNull
@@ -42,7 +42,7 @@ public class UserPerfomanceModel {
 	@NotBlank
 	@NotEmpty
 	private String vendor;
-	@ApiModelProperty(name = "attendance", notes = "Attendace of User")
+	@ApiModelProperty(name = "attendance", notes = "Attendance of User")
 	@NotEmpty
 	private List<Integer> attendance;
 	@ApiModelProperty(name = "rating", notes = "Rating of user")

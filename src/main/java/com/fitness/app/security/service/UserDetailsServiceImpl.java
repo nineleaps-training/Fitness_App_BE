@@ -15,6 +15,8 @@ import com.fitness.app.repository.UserRepo;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static com.fitness.app.components.Constants.INVALID_CREDENTIALS;
+
 @Slf4j
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -35,7 +37,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			user = optional.get();
 		} else {
 			log.warn("UserDetailsServiceImpl >> loadUserByUsername >>User Not Found");
-			throw new UsernameNotFoundException("Invalid Credentials : " + email);
+			throw new UsernameNotFoundException(INVALID_CREDENTIALS + email);
 		}
 		return new User(user.getEmail(), user.getPassword(), new ArrayList<>());
 	}

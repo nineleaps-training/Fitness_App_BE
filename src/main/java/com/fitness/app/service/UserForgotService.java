@@ -12,21 +12,21 @@ import com.fitness.app.repository.UserRepo;
 
 import lombok.extern.slf4j.Slf4j;
 
+import static com.fitness.app.components.Constants.*;
 
 @Slf4j
 @Service
 public class UserForgotService implements UserForgotDAO {
-   
+
 	private UserRepo userRepo;
 
 	private Components sendMessage;
-   
+
 	private PasswordEncoder passwordEncoder;
 
-    public UserForgotModel userForgot(String email)
-    {
+	public UserForgotModel userForgot(String email) {
 		log.info("UserForgotService >> userForgot >> Initiated");
-        UserClass userClass = userRepo.findByEmail(email);
+		UserClass userClass = userRepo.findByEmail(email);
 		UserForgotModel userForgot = new UserForgotModel();
 		if (userClass == null) {
 			userForgot.setBool(false);
@@ -34,8 +34,8 @@ public class UserForgotService implements UserForgotDAO {
 			return userForgot;
 		} else {
 			String otp = sendMessage.otpBuilder();
-			final int code = sendMessage.sendOtpMessage("hello ", otp, userClass.getMobile());
-			log.info("Code : {}", code);
+			final int code = sendMessage.sendOtpMessage(HELLO, otp, userClass.getMobile());
+			log.info(CODE, code);
 			if (code == 200) {
 				userForgot.setBool(true);
 				userForgot.setOtp(otp);
@@ -43,17 +43,17 @@ public class UserForgotService implements UserForgotDAO {
 			} else {
 				log.warn("UserForgotService >> userForgot >> Response code not Ok");
 				userForgot.setBool(false);
-				userForgot.setOtp("Something went wrong..Please try again!!");
+				userForgot.setOtp(WRONG);
 				return userForgot;
 			}
-        }
-    }
+		}
+	}
 
-    public boolean setPassword(Authenticate user) {
+	public boolean setPassword(Authenticate user) {
 		log.info("UserForgotService >> setPassword >> Initiated");
 		UserClass localUser = userRepo.findByEmail(user.getEmail());
 		localUser.setPassword(passwordEncoder.encode(user.getPassword())); // Setting the new password for the user
 		userRepo.save(localUser);
 		return true;
-    }
+	}
 }

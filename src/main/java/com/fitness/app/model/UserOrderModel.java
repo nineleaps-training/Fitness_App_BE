@@ -37,7 +37,7 @@ public class UserOrderModel {
 	private String subscription;
 	@ApiModelProperty(name = "amount", notes = "Amount to be paid")
 	@NotNull
-	@Min(value = 1, message = "Amount should be atleast 1")
+	@Min(value = 1, message = "Amount should be at least 1")
 	private int amount;
 	@ApiModelProperty(name = "slot", notes = "Slot of the gym")
 	private String slot;
